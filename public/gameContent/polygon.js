@@ -4,7 +4,7 @@ import Player from "./player";
 
 export default class Polygon extends PolygonObject {
     #color = new Color(0, 0, 0);
-    #player = 
+    #player = new Player(this.app);
 
     constructor(app) {
         super(app);
@@ -21,6 +21,26 @@ export default class Polygon extends PolygonObject {
             wall.setLayer(this.getLayer());
             wall.draw();
         })
+    }
+
+    setSkew(v) {
+        super.setSkew(v)
+        this.#player.setSkew(this.getSkew());
+    }
+
+    setThickness(v) {
+        super.setThickness(v)
+        this.#player.setDistance(this.getThickness() * 1.3)
+    }
+
+    setLayer(v) {
+        super.setLayer(v)
+        this.#player.setLayer(this.getLayer());
+    }
+
+    setRotation(v) {
+        super.setRotation(v)
+        this.#player.setRotation(this.getRotation());
     }
 
     setColor({r, g, b, a}) {
