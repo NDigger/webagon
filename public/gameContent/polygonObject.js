@@ -1,0 +1,54 @@
+import GameObject from "./gameObject";
+import Wall from "./wall";
+
+export default class PolygonObject extends GameObject {
+    _walls = [];
+    #sides = 6;
+    #skew = 0;
+    #rotation = 0;
+    #layer = 0;
+    #thickness = 0;
+    #distance = 0;
+
+    draw() {
+        const sidesChanged = (this._walls[0]?.getSides() ?? -1) !== this.#sides;
+        if (sidesChanged) {
+            this._walls.forEach(wall => wall.destroy?.());
+            this._walls = [];
+            for (let i = 0; i < this.#sides; i++) {
+                const wall = new Wall(this.app);
+                wall.setSide(i);
+                wall.setSides(this.#sides);
+                this._walls.push(wall);
+            }
+            this.updateWallsProps();
+        } else this.updateWallsProps();
+    }
+
+    setSides(v) { if (typeof v === 'number') { this.#sides = v; this.scheduleDraw(); } }
+    getSides() { return this.#sides; }
+    setRotation(v) { if (typeof v === 'number') { this.#rotation = v; this.scheduleDraw(); } }
+    getRotation() { return this.#rotation; }
+    setSkew(v) { if (typeof v === 'number') { this.#skew = v; this.scheduleDraw(); } }
+    getSkew() { return this.#skew; }
+    setLayer(v) { if (typeof v === 'number') { this.#layer = v; this.scheduleDraw(); } }
+    getLayer() { return this.#layer; }
+    setThickness(v) {
+        if (typeof(v) !== 'number') return
+        this.#thickness = v;
+        this.scheduleDraw();
+    }
+    getThickness() {
+        return this.#thickness;
+    }
+    setDistance(v) {
+        if (typeof(v) !== 'number') return
+        this.#distance = v;
+        this.scheduleDraw();
+    }
+    getDistance() {
+        return this.#distance;
+    }
+    
+    updateWallsProps() {}
+}
