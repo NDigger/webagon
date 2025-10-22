@@ -12,7 +12,6 @@ export default class Background extends PolygonObject {
     }
 
     updateWallsProps() {
-        console.log(this.tileColors)
         this._walls.forEach((wall, i) => {
             wall.setDistance(this.getDistance());         
             wall.setThickness(this.getThickness());

@@ -19,7 +19,7 @@ import { Vector2, Color } from './gameContent';
     ])
     background.setSkew(2);
 
-    const shape = new Game.Shape(app);
+    const shape = new Game.Polygon(app);
     shape.setColor(new Color(155, 160, 215));
     shape.setLayer(0.01);
     
