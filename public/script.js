@@ -11,6 +11,15 @@ import Game from './gameContent/game';
     app.canvas.style.position = 'absolute';
 
     const game = new Game(app);
+    let time = 0;
+    game.onUpdate = ft => {
+        time += ft;
+        game.setSkew(Math.sin(time / 500)* .5 + 1);
+    }
+
+    setInterval(() => {
+        game.createWall(Math.random() * 6, 40)
+    }, 100)
 
     app.stage.sortableChildren = true;
     app.stage.sortChildren();

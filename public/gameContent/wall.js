@@ -37,7 +37,7 @@ export default class Wall extends CustomWall {
     }
 
     setSide(v) {
-        if (typeof(v) === 'number') this.#side = v;
+        if (typeof(v) === 'number') this.#side = Math.floor(v);
         this.scheduleDraw();
     }
 
@@ -46,7 +46,7 @@ export default class Wall extends CustomWall {
     }
 
     setSides(v) {
-        if (typeof(v) === 'number') this.#sides = v;
+        if (typeof(v) === 'number') this.#sides = Math.floor(v);
         this.scheduleDraw();
     }
 

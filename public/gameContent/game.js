@@ -18,7 +18,7 @@ export default class Game extends GameObject {
 
     #mainColor = new Color(0, 0, 0);
     #wallSpawnDistance = 1000;
-    #wallSpeedMult = 1;
+    #wallSpeedMult = 2;
 
     onUpdate = () => {}
 
