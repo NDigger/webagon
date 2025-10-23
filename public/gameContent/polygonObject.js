@@ -1,5 +1,6 @@
 import GameObject from "./gameObject";
 import Wall from "./wall";
+import { Color } from './structures';
 
 export default class PolygonObject extends GameObject {
     _walls = [];
@@ -9,6 +10,7 @@ export default class PolygonObject extends GameObject {
     #layer = 0;
     #thickness = 0;
     #distance = 0;
+    #color = new Color(0, 0, 0);
 
     draw() {
         const sidesChanged = (this._walls[0]?.getSides() ?? -1) !== this.#sides;
@@ -48,6 +50,13 @@ export default class PolygonObject extends GameObject {
     }
     getDistance() {
         return this.#distance;
+    }
+    setColor({r, g, b, a}) {
+        this.#color = new Color(r, g, b, a);
+        this.scheduleDraw();
+    }
+    getColor() {
+        return this.#color;
     }
     
     updateWallsProps() {}

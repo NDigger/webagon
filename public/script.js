@@ -19,6 +19,7 @@ import Game from './gameContent/game';
     game.onUpdate = ft => {
         time += ft;
         game.setSkew(Math.sin(time / 500)* .5 + 1);
+        game.setRadius(Math.sin(time / 100)* 5 + 60);
     }
 
     setInterval(() => {

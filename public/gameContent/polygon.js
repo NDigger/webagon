@@ -2,10 +2,7 @@ import PolygonObject from "./polygonObject";
 import { Color, Vector2 } from "./structures";
 import Player from "./player";
 
-
 class PolygonBorder extends PolygonObject {
-    #color = new Color(0, 0, 0);
-
     constructor(app) {
         super(app);
         this.setThickness(5);
@@ -15,7 +12,7 @@ class PolygonBorder extends PolygonObject {
     updateWallsProps() {
         this._walls.forEach(wall => {
             wall.setThickness(this.getThickness());
-            wall.setColor(this.#color);
+            wall.setColor(this.getColor());
             wall.setSkew(this.getSkew());
             wall.setDistance(this.getDistance());
             wall.setRotation(this.getRotation());
@@ -24,12 +21,10 @@ class PolygonBorder extends PolygonObject {
         })
     }
 }
+
 export default class Polygon extends PolygonObject {
-    #color = new Color(0, 0, 0);
     #player = new Player(this.app);
     #border = new PolygonBorder(this.app);
-
-    #borderColor = new Color(0, 0, 0);
 
     constructor(app) {
         super(app);
@@ -40,7 +35,7 @@ export default class Polygon extends PolygonObject {
     updateWallsProps() {
         this._walls.forEach(wall => {
             wall.setThickness(this.getThickness());
-            wall.setColor(this.#color);
+            wall.setColor(this.getColor());
             wall.setSkew(this.getSkew());
             wall.setRotation(this.getRotation());
             wall.setLayer(this.getLayer());
@@ -73,20 +68,17 @@ export default class Polygon extends PolygonObject {
         this.#border.setRotation(v);
     }
 
-    setColor({r, g, b, a}) {
-        this.#color = new Color(r, g, b, a);
-        this.scheduleDraw();
-    }
-
-    getColor() {
-        return this.#color;
-    }
-
     setBorderColor({r, g, b, a}) {
         this.#border.setColor(new Color(r, g, b, a))
     }
-
     getBorderColor() {
         return this.#border.getColor();
+    }
+
+    setPlayerColor({r, g, b, a}) {
+        this.#border.setColor(new Color(r, g, b, a))
+    }
+    getPlayerColor() {
+        return this.#player.getColor();
     }
 }

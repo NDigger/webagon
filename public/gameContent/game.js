@@ -11,6 +11,8 @@ export default class Game extends GameObject {
     #backgroundSwapped = false;
     #backgroundRotationOffset = 0;
 
+    #layer = 0;
+
     #polygon;
 
     #walls = [];
@@ -31,13 +33,15 @@ export default class Game extends GameObject {
         super(app)
         this.#background = new Background(app);
         this.#polygon = new Polygon(app);
+        this.#polygon.setLayer(this.#layer + 0.002);
 
+        this.setMainColor(new Color(100, 0, 0))
         this.setBackgroundTileColors([
             new Color(245, 245, 245),
             new Color(235, 235, 235),
         ])
 
-        this.setRotationSpeed(0.1);
+        this.setRotationSpeed(0.5);
         this.setSkew(0.5);
 
         requestAnimationFrame(time => this.#update(time));
@@ -57,18 +61,12 @@ export default class Game extends GameObject {
         const frameTime = time - this.#lasttime;
         this.#lasttime = time;
         this.#rotation += this.#rotationSpeed * frameTime;
-        this.#updateBackgroundRotation()
-        this.#polygon.setRotation(this.#rotation)
-        this.onUpdate(frameTime);
 
-        this.#backgroundSwapTimer -= frameTime;
-        if (this.#backgroundSwapTimer < 0) {
-            this.#backgroundSwapTimer = this.#backgroundSwapTime;
-            this.#swapBackground();
-        }
+        this.#polygon.setRotation(this.#rotation)
 
         this.#walls = this.#walls.filter(wall => {
             wall.setRotation(this.#rotation)
+            console.log(wall.getRotation(), this.#background.getRotation())
             if (wall.getDistance() > 0) {
                 wall.setDistance(wall.getDistance() - frameTime * this.#wallSpeedMult / 5)
             } else if (wall.getThickness() > 0) {
@@ -80,6 +78,16 @@ export default class Game extends GameObject {
             }
             return true
         })
+        
+        this.#updateBackgroundRotation()
+        this.onUpdate(frameTime);
+
+        this.#backgroundSwapTimer -= frameTime;
+        if (this.#backgroundSwapTimer < 0) {
+            this.#backgroundSwapTimer = this.#backgroundSwapTime;
+            this.#swapBackground();
+        }
+        
         requestAnimationFrame(time => this.#update(time));
     }
 
@@ -90,6 +98,7 @@ export default class Game extends GameObject {
         wall.setThickness(thickness);
         wall.setColor(this.#mainColor);
         wall.setDistance(this.#wallSpawnDistance);
+        wall.setLayer(this.#layer + 0.001);
         wall.draw();
         this.#walls.push(wall);
     }
