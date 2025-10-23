@@ -1,12 +1,12 @@
 import PolygonObject from "./polygonObject.js";
-import Wall  from "./wall.js";
+import Wall from "./wall.js";
 import { Color } from "./structures.js";
 
 export default class Background extends PolygonObject {
     tileColors = [new Color(0, 0, 0)];
 
-    constructor(app) {
-        super(app)
+    constructor(appContext) {
+        super(appContext)
         this.setThickness(1800);
         this.draw()
     }

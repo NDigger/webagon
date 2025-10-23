@@ -17,11 +17,12 @@ const rotatePoint = (point, center, angleDeg) => {
 }
 
 export default class CustomWall extends Mesh {
-    #layers3d = new Layers3d(this.app);
+    #layers3d = new Layers3d(this.appContext);
     #skew = 0;
     #rotation = 0;
-    
-    #depth3d;
+
+    #depth3d = 0;
+    #distance3d = 0;
 
     draw() {
         const screenCenter = getScreenCenter();
@@ -44,7 +45,8 @@ export default class CustomWall extends Mesh {
     }
 
     setRotation(v) {
-        if (typeof(v) === 'number') this.#rotation = v;
+        if (typeof(v) !== 'number') return 
+        this.#rotation = v;
         this.scheduleDraw();
     }
 
@@ -53,7 +55,9 @@ export default class CustomWall extends Mesh {
     }
 
     setSkew(v) {
-        if (typeof(v) === 'number') this.#skew = v;
+        if (typeof(v) !== 'number') return 
+        this.#skew = v;
+        this.#layers3d.setSkew(v);
         this.scheduleDraw();
     }
 
@@ -62,7 +66,15 @@ export default class CustomWall extends Mesh {
     }
 
     set3dDepth(v) {
-        if (typeof(v) === 'number') this.#depth3d = v
+        if (typeof(v) !== 'number') return 
+        this.#depth3d = v;
+        this.#layers3d.setDepth(v);
+    }
+
+    set3dDistance(v) {
+        if (typeof(v) !== 'number') return
+        this.#distance3d = v;
+        this.#layers3d.setDistance(v);
     }
 
     setLayer(v) {
@@ -71,7 +83,7 @@ export default class CustomWall extends Mesh {
     }
 
     destroy() {
-        super.destroy()
         this.#layers3d.destroy();
+        super.destroy()
     }
 }

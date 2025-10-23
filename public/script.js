@@ -2,6 +2,7 @@
 import * as PIXI from 'pixi.js';
 import { Vector2, Color } from './gameContent';
 import Game from './gameContent/game';
+import DrawHandler from './gameContent/drawHandler';
 
 (async () => {
     const app = new PIXI.Application();
@@ -14,25 +15,29 @@ import Game from './gameContent/game';
     app.canvas.style.maxWidth = '100vw';
     app.canvas.style.maxHeight = '100vh';
 
-    const game = new Game(app);
+    const game = new Game({
+        pixiApp: app,
+        drawHandler: new DrawHandler(),
+    });
 
     game.setRotationSpeed(0.1);
-    game.setWallSpeedMult(4);
-    game.setWallSpawnDistance(1000);
+    game.setWallSpeedMult(3);
+    game.setWallSpawnDistance(800);
+    game.setSides(8);
+    game.setSkew(0.5);
+    // game.setRadius(00);
 
     let time = 0;
     game.onUpdate = ft => {
         time += ft;
         game.setBackgroundTileColors([
-            Color.hsvToRgb(time / 1000, .1, .8),
-            Color.hsvToRgb(time / 1000, .1, .7)
+            Color.hsvToRgb(time * 0.0002, 1, .2),
+            Color.hsvToRgb(time * 0.0002, 1, .25)
         ])
-        game.setMainColor(Color.hsvToRgb(time * 0.001, 1., 1.))
-        game.setSkew(Math.sin(time / 500)* .5+ 1);
-        game.setRadius(Math.sin(time / 100)* 5 + 60);
+        game.setMainColor(Color.hsvToRgb(time * 0.0002, 1., 1.))
+        game.setSkew(Math.sin(time / 400)*1+1);
+        // game.setRadius(Math.sin(time / 100)* 5 + 60);
     }
-
-        game.createWall(Math.random() * 6, 40)
 
     setInterval(() => {
         game.createWall(Math.random() * 6, 40)

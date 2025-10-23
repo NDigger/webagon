@@ -9,21 +9,26 @@ export default class Player extends CustomWall {
     #rightKeyPressed = false;
     #distance = 0;
     #speedMult = 0.6;
+    #updateId;
 
-    constructor(app) {
-        super(app)
+    constructor(appContext) {
+        super(appContext)
         this.setDistance(this.#distance);
         this.setColor(new Color(0, 0, 0))
         
-        document.addEventListener('keydown', e => {
-            if (e.keyCode === 37) this.#leftKeyPressed = true;
-            if (e.keyCode === 39) this.#rightKeyPressed = true;
-        })
-        document.addEventListener('keyup', e => {
-            if (e.keyCode === 37) this.#leftKeyPressed = false;
-            if (e.keyCode === 39) this.#rightKeyPressed = false;
-        })
-        requestAnimationFrame(time => this.#update(time));
+        window.addEventListener('keydown', this.#onKeyDown);
+        window.addEventListener('keyup', this.#onKeyUp);
+        this.#updateId = requestAnimationFrame(time => this.#update(time));
+    }
+
+    #onKeyDown = e => {
+        if (e.keyCode === 37) this.#leftKeyPressed = true;
+        if (e.keyCode === 39) this.#rightKeyPressed = true;
+    }
+
+    #onKeyUp = e => {
+        if (e.keyCode === 37) this.#leftKeyPressed = false;
+        if (e.keyCode === 39) this.#rightKeyPressed = false;
     }
 
     #update(time) {
@@ -31,7 +36,7 @@ export default class Player extends CustomWall {
         this.#lasttime = time;
         if (this.#leftKeyPressed) this.#rotationOffset -= frameTime * this.#speedMult;
         if (this.#rightKeyPressed) this.#rotationOffset += frameTime * this.#speedMult;
-        requestAnimationFrame(time => this.#update(time));
+        this.#updateId = requestAnimationFrame(time => this.#update(time));
     }
     
     setDistance(v) {
@@ -47,5 +52,12 @@ export default class Player extends CustomWall {
 
     setRotation(v) {
         super.setRotation(v + this.#rotationOffset);
+    }
+
+    destroy() {
+        super.destroy()
+        document.removeEventListener('keydown', this.#onKeyDown);
+        document.removeEventListener('keyup', this.#onKeyUp);
+        cancelAnimationFrame(this.#updateId);
     }
 }

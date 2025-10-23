@@ -18,8 +18,8 @@ export default class Mesh extends GameObject {
     #layer;
     #color = new Color(0, 0, 0);
 
-    constructor(app) {
-        super(app)
+    constructor(appContext) {
+        super(appContext)
 
         this._geometry = new PIXI.MeshGeometry({
             positions: new Float32Array(this._positions),
@@ -31,7 +31,7 @@ export default class Mesh extends GameObject {
         this.addStageChild();
         this.setColor(new Color(0, 0, 0));
 
-        window.addEventListener('resize', () => this.draw());
+        window.addEventListener('resize', this.draw);
     };
 
     draw() {
@@ -77,11 +77,15 @@ export default class Mesh extends GameObject {
     }
 
     addStageChild() {
-        this.app.stage.addChild(this.#object);
+        this.appContext.pixiApp.stage.addChild(this.#object);
     }
 
     destroy() {
-        this.app.stage.removeChild(this.#object)
+        this.appContext.pixiApp.stage.removeChild(this.#object)
+        window.removeEventListener('resize', this.draw);
+        // this.#object.geometry.destroy();
+        this.#object.destroy();
+        // this.#object = null;
     }
 
     setLayer(v) {

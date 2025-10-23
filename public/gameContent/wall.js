@@ -7,10 +7,6 @@ export default class Wall extends CustomWall {
     #thickness = 40;
     #distance = 0;
 
-    constructor(app) {
-        super(app)
-    }
-
     draw() {
         const [pos1, pos2, pos3, pos4] = this.#getWallVertex4();
         this.setVertexPos4(pos1, pos2, pos3, pos4);

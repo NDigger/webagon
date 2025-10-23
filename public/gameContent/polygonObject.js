@@ -18,7 +18,7 @@ export default class PolygonObject extends GameObject {
             this._walls.forEach(wall => wall.destroy?.());
             this._walls = [];
             for (let i = 0; i < this.#sides; i++) {
-                const wall = new Wall(this.app);
+                const wall = new Wall(this.appContext);
                 wall.setSide(i);
                 wall.setSides(this.#sides);
                 this._walls.push(wall);

@@ -1,22 +1,30 @@
 export default class GameObject {
-    app;
-    #needsRedraw = false;
+    appContext;
+    needsRedraw = false;
+    redrawEnabled = true;
 
-    constructor(app) {
-        this.app = app;
+    constructor(appContext) {
+        this.appContext = appContext;
     }
 
     scheduleDraw() {
-        if (this.#needsRedraw) return;
-        this.#needsRedraw = true;
+        // -- This shit causes delays I can't fix without crutches
+        // if (this.#needsRedraw) return;
+        // this.#needsRedraw = true;
         // requestAnimationFrame(() => {
-            // this.#needsRedraw = false;
-            // this.draw();
+        //     this.#needsRedraw = false;
+        //     this.draw();
         // });
-        setTimeout(() => {
-            this.#needsRedraw = false;
-            this.draw();
-        }, 0);
+        
+        // if (this.needsRedraw) return;
+        // this.needsRedraw = true;
+        this.appContext.drawHandler.requestDraw(this);
+
+        // -- This shit causes lag
+        // setTimeout(() => {
+            // this.needsRedraw = false;
+            // this.draw();
+        // }, 0);
     }
 
     draw() {}

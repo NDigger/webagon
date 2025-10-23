@@ -3,8 +3,8 @@ import { Color, Vector2 } from "./structures";
 import Player from "./player";
 
 class PolygonBorder extends PolygonObject {
-    constructor(app) {
-        super(app);
+    constructor(appContext) {
+        super(appContext);
         this.setThickness(5);
         this.draw();
     }
@@ -23,11 +23,11 @@ class PolygonBorder extends PolygonObject {
 }
 
 export default class Polygon extends PolygonObject {
-    #player = new Player(this.app);
-    #border = new PolygonBorder(this.app);
+    #player = new Player(this.appContext);
+    #border = new PolygonBorder(this.appContext);
 
-    constructor(app) {
-        super(app);
+    constructor(appContext) {
+        super(appContext);
         this.setThickness(60);
         this.draw();
     }
@@ -41,6 +41,11 @@ export default class Polygon extends PolygonObject {
             wall.setLayer(this.getLayer());
             wall.draw();
         })
+    }
+
+    setSides(v) {
+        super.setSides(v);
+        this.#border.setSides(v);
     }
 
     setSkew(v) {
