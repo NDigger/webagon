@@ -71,25 +71,28 @@ export default class Game extends GameObject {
         this.#updateBackgroundRotation()
 
         for (const wall of this.#walls) {
-            if (wall.getDistance() > 0) {
+            if (wall.getDistance() > this.#polygon.getDistance() + this.#polygon.getThickness()) {
                 wall.setDistance(wall.getDistance() - frameTime * this.#wallSpeedMult / 5)
             } else if (wall.getThickness() > 0) {
                 wall.setThickness(wall.getThickness() - frameTime * this.#wallSpeedMult / 5)
-            } else {
-                wall.destroy()
             }
             wall.setRotation(this.#rotation)
-            this.#background.setRotation(this.#rotation);
         }
 
-        this.#walls = this.#walls.filter(wall => wall.getThickness() > 0 || wall.getDistance() > 0)
+        this.#walls = this.#walls.filter(wall => {
+            if (wall.getThickness() < 0 || wall.getDistance() < 0) {
+                wall.destroy()
+                return false;
+            }
+            return true
+        })
         
         this.onUpdate(frameTime);
 
         this.#backgroundSwapTimer -= frameTime;
         if (this.#backgroundSwapTimer < 0) {
             this.#backgroundSwapTimer = this.#backgroundSwapTime;
-            // this.#swapBackground();
+            this.#swapBackground();
         }
     
         requestAnimationFrame(time => this.#update(time));
@@ -124,15 +127,17 @@ export default class Game extends GameObject {
         this.#background.setTileColors(arr);
         this.#polygon.setColor(arr[this.#backgroundSwapped ? 0 : 1]);
     }
-    setBackgroundRotationOffset() {
-        this.#background.setRotation
+    setBackgroundRotationOffset(v) {
+        if (typeof(v) === 'number') this.#backgroundRotationOffset = v
     }
     setMainColor({r, g, b, a}) {
+        console.log(r, g, b, a)
         const color = new Color(r, g, b, a)
         this.#mainColor = color;
         this.#polygon.setBorderColor(color);
         this.#polygon.setPlayerColor(color);
-        console.log(this.#polygon.getPlayerColor());
+
+        this.#walls.forEach(w => w.setColor(color));
     }
     setPolygonColor({r, g, b, a}) {
         this.#polygon.setColor(new Color(r, g, b, a))

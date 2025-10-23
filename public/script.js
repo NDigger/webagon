@@ -16,12 +16,19 @@ import Game from './gameContent/game';
 
     const game = new Game(app);
 
-    game.setRotationSpeed(0.5);
+    game.setRotationSpeed(0.1);
+    game.setWallSpeedMult(4);
+    game.setWallSpawnDistance(1000);
 
     let time = 0;
     game.onUpdate = ft => {
         time += ft;
-        game.setSkew(Math.sin(time / 500)* .5 + 1);
+        game.setBackgroundTileColors([
+            Color.hsvToRgb(time / 1000, .1, .8),
+            Color.hsvToRgb(time / 1000, .1, .7)
+        ])
+        game.setMainColor(Color.hsvToRgb(time * 0.001, 1., 1.))
+        game.setSkew(Math.sin(time / 500)* .5+ 1);
         game.setRadius(Math.sin(time / 100)* 5 + 60);
     }
 

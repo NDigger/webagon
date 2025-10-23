@@ -41,8 +41,9 @@ export default class Mesh extends GameObject {
     setColor({r, g, b, a}) {
         this.#color = new Color(r, g, b, a);
         this.#object.tint = rgbToHex(r, g, b);
-        if (typeof(a) === "number") this.#object.alpha = a;
+        if (typeof(a) === "number") this.#object.alpha = a/255;
     }
+
     getColor() {
         return this.#color
     }
@@ -87,7 +88,7 @@ export default class Mesh extends GameObject {
         this.#layer = v;
         this.#object.zIndex = v;
     }
-    getLayer(v) {
+    getLayer() {
         return this.#layer
     }
 

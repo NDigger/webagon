@@ -1,5 +1,6 @@
 import Mesh from "./mesh";
 import { Vector2 } from "./structures";
+import Layers3d from "./layers3d";
 
 const getScreenCenter = () => new Vector2(window.innerWidth/2, window.innerHeight/2)
 
@@ -16,8 +17,11 @@ const rotatePoint = (point, center, angleDeg) => {
 }
 
 export default class CustomWall extends Mesh {
+    #layers3d = new Layers3d(this.app);
     #skew = 0;
     #rotation = 0;
+    
+    #depth3d;
 
     draw() {
         const screenCenter = getScreenCenter();
@@ -36,8 +40,8 @@ export default class CustomWall extends Mesh {
             pos[2].x, pos[2].y,
             pos[3].x, pos[3].y
         ]);
+        this.#layers3d.setVertexPos4(pos[0], pos[1], pos[2], pos[3])
     }
-        
 
     setRotation(v) {
         if (typeof(v) === 'number') this.#rotation = v;
@@ -55,5 +59,19 @@ export default class CustomWall extends Mesh {
 
     getSkew() {
         return this.#skew;
+    }
+
+    set3dDepth(v) {
+        if (typeof(v) === 'number') this.#depth3d = v
+    }
+
+    setLayer(v) {
+        super.setLayer(v)
+        this.#layers3d.setLayer(v - 0.001);
+    }
+
+    destroy() {
+        super.destroy()
+        this.#layers3d.destroy();
     }
 }
