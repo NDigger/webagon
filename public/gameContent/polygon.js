@@ -8,7 +8,7 @@ class PolygonBorder extends PolygonObject {
 
     constructor(app) {
         super(app);
-        this.setThickness(10);
+        this.setThickness(5);
         this.draw();
     }
 
@@ -59,8 +59,6 @@ export default class Polygon extends PolygonObject {
         super.setThickness(v - borderThickness)
         this.#player.setDistance(v * 1.3)
         this.#border.setDistance(v - borderThickness);
-        this.#border.setLayer(10);
-        console.log(this.#border.getDistance())
     }
 
     setLayer(v) {

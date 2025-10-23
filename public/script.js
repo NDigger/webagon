@@ -7,8 +7,12 @@ import Game from './gameContent/game';
     const app = new PIXI.Application();
     await app.init({
         resizeTo: window,
+        resolution: devicePixelRatio,
+        antialias: true
     });
     app.canvas.style.position = 'absolute';
+    app.canvas.style.maxWidth = '100vw';
+    app.canvas.style.maxHeight = '100vh';
 
     const game = new Game(app);
     let time = 0;
