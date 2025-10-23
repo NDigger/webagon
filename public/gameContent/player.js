@@ -1,5 +1,6 @@
 import CustomWall from "./customWall";
 import { Vector2 } from "./structures";
+import { Color } from "./structures";
 
 export default class Player extends CustomWall {
     #rotationOffset = 0;
@@ -12,6 +13,7 @@ export default class Player extends CustomWall {
     constructor(app) {
         super(app)
         this.setDistance(this.#distance);
+        this.setColor(new Color(0, 0, 0))
         
         document.addEventListener('keydown', e => {
             if (e.keyCode === 37) this.#leftKeyPressed = true;
