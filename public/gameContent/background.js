@@ -19,7 +19,7 @@ export default class Background extends PolygonObject {
             wall.setSkew(this.getSkew());
             wall.setRotation(this.getRotation());
             wall.setLayer(this.getLayer());
-            wall.draw();
+            wall.draw()
         })
     }
 

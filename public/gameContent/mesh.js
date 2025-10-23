@@ -1,6 +1,6 @@
 import GameObject from "./gameObject";
 import * as PIXI from "pixi.js";
-import { Vector2 } from "./structures";
+import { Vector2, Color } from "./structures";
 
 const componentToHex = c => {
   var hex = c.toString(16);
@@ -16,6 +16,7 @@ export default class Mesh extends GameObject {
     _geometry;
     _positions = [0, 0, 0, 0, 0, 0, 0, 0];
     #layer;
+    #color = new Color(0, 0, 0);
 
     constructor(app) {
         super(app)
@@ -28,6 +29,8 @@ export default class Mesh extends GameObject {
         this.#object = new PIXI.Mesh({geometry: this._geometry});
 
         this.addStageChild();
+        this.setColor(new Color(0, 0, 0));
+
         window.addEventListener('resize', () => this.draw());
     };
 
@@ -36,8 +39,12 @@ export default class Mesh extends GameObject {
     }
 
     setColor({r, g, b, a}) {
+        this.#color = new Color(r, g, b, a);
         this.#object.tint = rgbToHex(r, g, b);
         if (typeof(a) === "number") this.#object.alpha = a;
+    }
+    getColor() {
+        return this.#color
     }
 
     setVertexPos(point, {x, y}) {
@@ -79,6 +86,9 @@ export default class Mesh extends GameObject {
     setLayer(v) {
         this.#layer = v;
         this.#object.zIndex = v;
+    }
+    getLayer(v) {
+        return this.#layer
     }
 
     getPositions() {

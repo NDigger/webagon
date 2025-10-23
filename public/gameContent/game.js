@@ -11,6 +11,7 @@ export default class Game extends GameObject {
     #backgroundSwapped = false;
     #backgroundRotationOffset = 0;
 
+    #died = false;
     #layer = 0;
 
     #polygon;
@@ -35,16 +36,17 @@ export default class Game extends GameObject {
         this.#polygon = new Polygon(app);
         this.#polygon.setLayer(this.#layer + 0.002);
 
-        this.setMainColor(new Color(100, 0, 0))
+        this.setMainColor(new Color(40, 40, 0))
         this.setBackgroundTileColors([
             new Color(245, 245, 245),
             new Color(235, 235, 235),
         ])
 
-        this.setRotationSpeed(0.5);
-        this.setSkew(0.5);
-
         requestAnimationFrame(time => this.#update(time));
+    }
+
+    kill() {
+        this.#died = true;
     }
 
     #updateBackgroundRotation() {
@@ -60,34 +62,36 @@ export default class Game extends GameObject {
     #update(time) {
         const frameTime = time - this.#lasttime;
         this.#lasttime = time;
+
+        if (this.#died) return
         this.#rotation += this.#rotationSpeed * frameTime;
 
         this.#polygon.setRotation(this.#rotation)
 
-        this.#walls = this.#walls.filter(wall => {
-            wall.setRotation(this.#rotation)
-            console.log(wall.getRotation(), this.#background.getRotation())
+        this.#updateBackgroundRotation()
+
+        for (const wall of this.#walls) {
             if (wall.getDistance() > 0) {
                 wall.setDistance(wall.getDistance() - frameTime * this.#wallSpeedMult / 5)
             } else if (wall.getThickness() > 0) {
                 wall.setThickness(wall.getThickness() - frameTime * this.#wallSpeedMult / 5)
-            } else //(wall.getThickness() < 0 && wall.getDistance() < 0) 
-            {
+            } else {
                 wall.destroy()
-                return false
             }
-            return true
-        })
+            wall.setRotation(this.#rotation)
+            this.#background.setRotation(this.#rotation);
+        }
+
+        this.#walls = this.#walls.filter(wall => wall.getThickness() > 0 || wall.getDistance() > 0)
         
-        this.#updateBackgroundRotation()
         this.onUpdate(frameTime);
 
         this.#backgroundSwapTimer -= frameTime;
         if (this.#backgroundSwapTimer < 0) {
             this.#backgroundSwapTimer = this.#backgroundSwapTime;
-            this.#swapBackground();
+            // this.#swapBackground();
         }
-        
+    
         requestAnimationFrame(time => this.#update(time));
     }
 
@@ -99,9 +103,9 @@ export default class Game extends GameObject {
         wall.setColor(this.#mainColor);
         wall.setDistance(this.#wallSpawnDistance);
         wall.setLayer(this.#layer + 0.001);
-        wall.draw();
         this.#walls.push(wall);
     }
+    setRotation(v) { if (typeof(v) === 'number') this.#rotation = v; }
     setRotationSpeed(v) { if (typeof(v) === 'number') this.#rotationSpeed = v; }
     setRadius(v) { if (typeof(v) === 'number') this.#polygon.setThickness(v); }
     setSkew(v) {
@@ -127,6 +131,8 @@ export default class Game extends GameObject {
         const color = new Color(r, g, b, a)
         this.#mainColor = color;
         this.#polygon.setBorderColor(color);
+        this.#polygon.setPlayerColor(color);
+        console.log(this.#polygon.getPlayerColor());
     }
     setPolygonColor({r, g, b, a}) {
         this.#polygon.setColor(new Color(r, g, b, a))

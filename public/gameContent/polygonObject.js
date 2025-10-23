@@ -24,7 +24,9 @@ export default class PolygonObject extends GameObject {
                 this._walls.push(wall);
             }
             this.updateWallsProps();
-        } else this.updateWallsProps();
+        } else {
+            this.updateWallsProps();
+        }
     }
 
     setSides(v) { if (typeof v === 'number') { this.#sides = v; this.scheduleDraw(); } }
@@ -58,6 +60,4 @@ export default class PolygonObject extends GameObject {
     getColor() {
         return this.#color;
     }
-    
-    updateWallsProps() {}
 }

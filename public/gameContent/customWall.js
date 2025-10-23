@@ -37,6 +37,7 @@ export default class CustomWall extends Mesh {
             pos[3].x, pos[3].y
         ]);
     }
+        
 
     setRotation(v) {
         if (typeof(v) === 'number') this.#rotation = v;

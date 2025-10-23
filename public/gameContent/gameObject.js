@@ -9,10 +9,14 @@ export default class GameObject {
     scheduleDraw() {
         if (this.#needsRedraw) return;
         this.#needsRedraw = true;
-        requestAnimationFrame(() => {
+        // requestAnimationFrame(() => {
+            // this.#needsRedraw = false;
+            // this.draw();
+        // });
+        setTimeout(() => {
             this.#needsRedraw = false;
             this.draw();
-        });
+        }, 0);
     }
 
     draw() {}

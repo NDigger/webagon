@@ -76,7 +76,7 @@ export default class Polygon extends PolygonObject {
     }
 
     setPlayerColor({r, g, b, a}) {
-        this.#border.setColor(new Color(r, g, b, a))
+        this.#player.setColor(new Color(r, g, b, a))
     }
     getPlayerColor() {
         return this.#player.getColor();

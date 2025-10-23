@@ -15,6 +15,9 @@ import Game from './gameContent/game';
     app.canvas.style.maxHeight = '100vh';
 
     const game = new Game(app);
+
+    game.setRotationSpeed(0.5);
+
     let time = 0;
     game.onUpdate = ft => {
         time += ft;
@@ -22,9 +25,16 @@ import Game from './gameContent/game';
         game.setRadius(Math.sin(time / 100)* 5 + 60);
     }
 
+        game.createWall(Math.random() * 6, 40)
+
     setInterval(() => {
         game.createWall(Math.random() * 6, 40)
+        // game.setRotation(Math.random() * 360)
     }, 100)
+
+    setTimeout(() => {
+        // game.kill()
+    }, 2500)
 
     app.stage.sortableChildren = true;
     app.stage.sortChildren();
