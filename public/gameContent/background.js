@@ -12,14 +12,13 @@ export default class Background extends PolygonObject {
     }
 
     updateWallsProps() {
+        super.updateWallsProps();
         this._walls.forEach((wall, i) => {
-            wall.setDistance(this.getDistance());         
-            wall.setThickness(this.getThickness());
-            wall.setColor(this.tileColors[i % this.tileColors.length])
-            wall.setSkew(this.getSkew());
-            wall.setRotation(this.getRotation());
-            wall.setLayer(this.getLayer());
-            wall.draw()
+            const tileColor = this.tileColors[i % this.tileColors.length];
+            const color = (i === (this.getSides() - 1) && this.getSides() % 2 === 1) 
+                        ? tileColor
+                        : new Color(tileColor.r * .9, tileColor.g * .9, tileColor.b * .9, tileColor.a)
+            wall.setColor(color)
         })
     }
 

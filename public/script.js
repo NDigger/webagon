@@ -5,15 +5,19 @@ import Game from './gameContent/game';
 import DrawHandler from './gameContent/drawHandler';
 
 (async () => {
+    // APP DEFINITION && CONFIGURATION
     const app = new PIXI.Application();
     await app.init({
         resizeTo: window,
         resolution: devicePixelRatio,
         antialias: true
     });
-    app.canvas.style.position = 'absolute';
-    app.canvas.style.maxWidth = '100vw';
-    app.canvas.style.maxHeight = '100vh';
+
+    app.stage.sortableChildren = true;
+    app.stage.sortChildren();
+    document.querySelector('body').appendChild(app.canvas);
+
+    // GAME
 
     const game = new Game({
         pixiApp: app,
@@ -26,7 +30,7 @@ import DrawHandler from './gameContent/drawHandler';
     game.setSides(5);
     game.setSkew(0.5);
     game.set3dDepth(5);
-    game.set3dDistance(100);
+    game.set3dDistance(2);
 
     let time = 0;
     game.onUpdate = ft => {
@@ -48,11 +52,7 @@ import DrawHandler from './gameContent/drawHandler';
         }
     }, 500)
 
-    setTimeout(() => {
-        game.kill()
-    }, 2400)
-
-    app.stage.sortableChildren = true;
-    app.stage.sortChildren();
-    document.querySelector('body').appendChild(app.canvas);
+    // setTimeout(() => {
+    //     game.kill()
+    // }, 2840)
 })()

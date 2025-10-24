@@ -69,9 +69,9 @@ export default class Player extends CustomWall {
     #update(time) {
         const frameTime = time - this.#lasttime;
         this.#lasttime = time;
+        console.log(this.getPointPosition())
         if (this.#leftKeyPressed) this.#rotationOffset -= frameTime * this.#speedMult;
         if (this.#rightKeyPressed) this.#rotationOffset += frameTime * this.#speedMult;
-        console.log(this.#rotationOffset)
         this.#updateId = requestAnimationFrame(time => this.#update(time));
     }
 

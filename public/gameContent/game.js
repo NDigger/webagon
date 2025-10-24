@@ -66,17 +66,17 @@ export default class Game extends GameObject {
     #get3dColor() { return this.#color3d ?? this.#getDefault3dColor() }
 
     kill() {
-        // const d = new Death(this.appContext);
-        // d.setSkew(this.#skew);
-        // d.setRotation(this.#rotation);
-        // d.setOffset(this.#polygon.getPlayerPosition())
-        // d.set3dLayer(this.#get3dLayer());
+        const d = new Death(this.appContext);
+        d.setSkew(this.#skew);
+        d.setOffset(this.#polygon.getPlayerPosition())
+        d.setRotation(this.#polygon.getPlayerRotation());
+        d.set3dLayer(this.#get3dLayer());
 
-        // d.set3dColor(this.#get3dColor());
-        // d.set3dDepth(this.#depth3d);
-        // d.set3dDistance(this.#distance3d);
-        // d.setSides(this.#sides)
-        // this.#died = true;
+        d.set3dColor(this.#get3dColor());
+        d.set3dDepth(this.#depth3d);
+        d.set3dDistance(this.#distance3d);
+        d.setSides(this.#sides)
+        this.#died = true;
     }
 
     #updateBackgroundRotation() {

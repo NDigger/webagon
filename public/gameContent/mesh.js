@@ -31,11 +31,12 @@ export default class Mesh extends GameObject {
         this.addStageChild();
         this.setColor(new Color(0, 0, 0));
 
+        this.draw = this.draw.bind(this);
         window.addEventListener('resize', this.draw);
     };
 
     draw() {
-        this._geometry.positions = new Float32Array(this._positions);
+        if (this?._geometry?.positions) this._geometry.positions = new Float32Array(this._positions);
     }
 
     setColor({r, g, b, a}) {

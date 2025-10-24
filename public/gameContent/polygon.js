@@ -89,4 +89,5 @@ export default class Polygon extends PolygonObject {
     }
 
     getPlayerPosition() { return this.#player.getPointPosition() }
+    getPlayerRotation() { return this.#player.getRotation() }
 }
