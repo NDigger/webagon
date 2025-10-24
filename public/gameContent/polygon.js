@@ -87,4 +87,6 @@ export default class Polygon extends PolygonObject {
         this.#player.set3dColor(v);
         this.#border.set3dColor(v);
     }
+
+    getPlayerPosition() { return this.#player.getPointPosition() }
 }

@@ -1,6 +1,6 @@
 import GameObject from "./gameObject";
 import Wall from "./wall";
-import { Color } from './structures';
+import { Color, Vector2 } from './structures';
 
 export default class PolygonObject extends GameObject {
     _walls = [];
@@ -11,6 +11,9 @@ export default class PolygonObject extends GameObject {
     #thickness = 0;
     #distance = 0;
     #color = new Color(0, 0, 0);
+
+    #centerOffset = new Vector2(0, 0);
+    #offset = new Vector2(0, 0);
 
     #depth3d = 0;
     #distance3d = 0;
@@ -59,6 +62,15 @@ export default class PolygonObject extends GameObject {
         this.scheduleDraw();
     }
     getColor() { return this.#color; }
+    setCenterOffset({x, y}) {
+        this.#centerOffset = new Vector2(x, y);
+        this.scheduleDraw();
+    }
+    getCenterOffset() { return this.#centerOffset }
+    setOffset({x, y}) {
+        this.#offset = new Vector2(x, y);
+        this.scheduleDraw();
+    }
 
     set3dDepth(v) {
         if (typeof(v) !== 'number') return 
@@ -92,12 +104,13 @@ export default class PolygonObject extends GameObject {
             wall.setDistance(this.#distance);
             wall.setRotation(this.#rotation);
             wall.setLayer(this.#layer);
+            wall.setCenterOffset(this.#centerOffset);
+            wall.setOffset(this.#offset);
 
             wall.set3dDistance(this.#distance3d);
             wall.set3dDepth(this.#depth3d);
             wall.set3dLayer(this.#layer3d);
             wall.set3dColor(this.#color3d);
-            console.log(this.#color3d);
             
             wall.draw();
         })

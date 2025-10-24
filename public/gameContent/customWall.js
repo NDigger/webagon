@@ -25,6 +25,7 @@ export default class CustomWall extends Mesh {
     #depth3d = 0;
     #distance3d = 0;
     #layersCount3d = 0;
+    #centerOffset = new Vector2(0, 0);
 
     draw() {
         const screenCenter = getScreenCenter();
@@ -32,9 +33,9 @@ export default class CustomWall extends Mesh {
         // i % 2 === 1: y coord
         const pos = this.getVector2VertexPos4().map(vec2 => {
             let newPos = rotatePoint(vec2, new Vector2(0, 0), this.#rotation)
-            newPos.x += screenCenter.x 
+            newPos.x += screenCenter.x + this.#centerOffset.x
             newPos.y /= this.#skew + 1;
-            newPos.y +=  screenCenter.y;
+            newPos.y +=  screenCenter.y + this.#centerOffset.y;
             return newPos;
         });
         this._geometry.positions = new Float32Array([
@@ -51,8 +52,12 @@ export default class CustomWall extends Mesh {
         this.#rotation = v;
         this.scheduleDraw();
     }
-
     getRotation() { return this.#rotation; }
+    setCenterOffset({x, y}) {
+        this.#centerOffset = new Vector2(x, y);
+        this.scheduleDraw();
+    }
+    getCenterOffset() { return this.#centerOffset; }
 
     setSkew(v) {
         if (typeof(v) !== 'number') return 

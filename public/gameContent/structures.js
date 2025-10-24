@@ -6,6 +6,11 @@ export class Vector2 {
         this.x = x;
         this.y = y;
     }
+
+    add(vec2) { return new Vector2(this.x + vec2.x, this.y + vec2.y) }
+    sub(vec2) { return new Vector2(this.x - vec2.x, this.y - vec2.y) }
+    mul(vec2) { return new Vector2(this.x * vec2.x, this.y * vec2.y) }
+    div(vec2) { return new Vector2(this.x / vec2.x, this.y / vec2.y) }
 }
 
 export class Color {

@@ -6,13 +6,11 @@ export default class Wall extends CustomWall {
     #sides = 0;
     #thickness = 40;
     #distance = 0;
+    #offset = new Vector2(0, 0);
 
-    draw() {
-        const [pos1, pos2, pos3, pos4] = this.#getWallVertex4();
-        this.setVertexPos4(pos1, pos2, pos3, pos4);
-        super.draw();
+    constructor(appContext) {
+        super(appContext)
     }
-
     #getWallVertex4() {
         const firstAngle = this.#side * Math.PI / (this.#sides / 2) + Math.PI / this.#sides;
         const secondAngle = (firstAngle + 0.5 * Math.PI / (this.#sides / 2) + Math.PI / this.#sides);
@@ -32,41 +30,45 @@ export default class Wall extends CustomWall {
         ]
     }
 
-    setSide(v) {
-        if (typeof(v) === 'number') this.#side = Math.floor(v);
-        this.scheduleDraw();
+    draw() {
+        const [pos1, pos2, pos3, pos4] = this.#getWallVertex4();
+        this.setVertexPos4(pos1.add(this.#offset), pos2.add(this.#offset), pos3.add(this.#offset), pos4.add(this.#offset));
+        super.draw();
     }
 
-    getSide() {
-        return this.#side;
+    setSide(v) {
+        if (typeof(v) !== 'number') return;
+         this.#side = Math.floor(v);
+        this.scheduleDraw();
     }
+    getSide() { return this.#side; }
 
     setSides(v) {
-        if (typeof(v) === 'number') this.#sides = Math.floor(v);
+        if (typeof(v) !== 'number') return;
+        this.#sides = Math.floor(v);
         this.scheduleDraw();
     }
-
-    getSides() {
-        return this.#sides;
-    }
+    getSides() { return this.#sides; }
 
     setThickness(v) {
-        if (typeof(v) === 'number') this.#thickness = v;
+        if (typeof(v) !== 'number') return;
+        this.#thickness = v;
         this.scheduleDraw();
     }
-
-    getThickness() {
-        return this.#thickness;
-    }
+    getThickness() { return this.#thickness; }
 
     setDistance(v) {
-        if (typeof(v) === 'number') this.#distance = v;
+        if (typeof(v) !== 'number') return;
+        this.#distance = v;
         this.scheduleDraw();
     }
-
-    getDistance() {
-        return this.#distance;
+    getDistance() { return this.#distance; }
+    
+    setOffset({x, y}) {
+        this.#offset = new Vector2(x, y);
+        this.scheduleDraw();
     }
+    getOffset() { return this.#offset }
 }
 
 const getWallVertex4 = ({sides, side, thickness, distance}) => {

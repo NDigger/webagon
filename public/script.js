@@ -23,10 +23,10 @@ import DrawHandler from './gameContent/drawHandler';
     // game.setRotationSpeed(0.1);
     game.setWallSpeedMult(3);
     game.setWallSpawnDistance(1500);
-    game.setSides(6);
+    game.setSides(5);
     game.setSkew(0.5);
     game.set3dDepth(5);
-    game.set3dDistance(10);
+    game.set3dDistance(100);
 
     let time = 0;
     game.onUpdate = ft => {
@@ -35,7 +35,7 @@ import DrawHandler from './gameContent/drawHandler';
             Color.hsvToRgb(time * 0.0002, 1, .2),
             Color.hsvToRgb(time * 0.0002, 1, .25),
         ])
-        game.setRotation(game.getRotation())
+        game.setRotation(game.getRotation() - ((time / 970 - Math.ceil(time / 970)) * 15 + 10))
         game.setMainColor(Color.hsvToRgb(time * 0.0002, 1., 1.))
         game.setSkew(Math.sin(time / 200)*.3+1.);
         game.setRadius(Math.sin(time / 100)* 5 + 60);
@@ -49,8 +49,8 @@ import DrawHandler from './gameContent/drawHandler';
     }, 500)
 
     setTimeout(() => {
-        // game.kill()
-    }, 2500)
+        game.kill()
+    }, 2400)
 
     app.stage.sortableChildren = true;
     app.stage.sortChildren();

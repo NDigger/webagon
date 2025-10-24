@@ -3,6 +3,7 @@ import Polygon from "./polygon";
 import { Vector2, Color } from "./structures";
 import Background from "./background";
 import GameObject from "./gameObject";
+import Death from "./death";
 
 export default class Game extends GameObject {
     #background;
@@ -62,9 +63,20 @@ export default class Game extends GameObject {
         const brightness = .5
         return new Color(this.#mainColor.r * brightness, this.#mainColor.g * brightness, this.#mainColor.b * brightness) 
     }
+    #get3dColor() { return this.#color3d ?? this.#getDefault3dColor() }
 
     kill() {
-        this.#died = true;
+        // const d = new Death(this.appContext);
+        // d.setSkew(this.#skew);
+        // d.setRotation(this.#rotation);
+        // d.setOffset(this.#polygon.getPlayerPosition())
+        // d.set3dLayer(this.#get3dLayer());
+
+        // d.set3dColor(this.#get3dColor());
+        // d.set3dDepth(this.#depth3d);
+        // d.set3dDistance(this.#distance3d);
+        // d.setSides(this.#sides)
+        // this.#died = true;
     }
 
     #updateBackgroundRotation() {
@@ -82,17 +94,11 @@ export default class Game extends GameObject {
         const frameTime = time - this.#lasttime;
         this.#lasttime = time;
 
-        if (this.#died) return
-
-        this.onUpdate(frameTime);
-
-        this.#rotation += this.#rotationSpeed * frameTime;
-
-        this.#polygon.setRotation(this.#rotation)
-
-        this.#updateBackgroundRotation()
-
         this.#walls = this.#walls.filter(wall => {
+            if (this.#died) {
+                return true
+            };
+            
             if (wall.getDistance() > this.#polygon.getDistance() + this.#polygon.getThickness()) {
                 wall.setDistance(wall.getDistance() - frameTime * this.#wallSpeedMult / 5)
             } else if (wall.getThickness() > 0) {
@@ -108,9 +114,16 @@ export default class Game extends GameObject {
         })
 
         this.#backgroundSwapTimer -= frameTime;
-        if (this.#backgroundSwapTimer < 0) {
+        if (this.#backgroundSwapTimer < 0 && !this.#died) {
             this.#backgroundSwapTimer = this.#backgroundSwapTime;
             this.#swapBackground();
+        }
+
+        if (!this.#died) {
+            this.#rotation += this.#rotationSpeed * frameTime;
+            this.#polygon.setRotation(this.#rotation)
+            this.#updateBackgroundRotation()
+            this.onUpdate(frameTime);
         }
 
         requestAnimationFrame(time => this.#update(time));
@@ -130,7 +143,7 @@ export default class Game extends GameObject {
         wall.set3dDistance(this.#distance3d);
         wall.set3dLayer(this.#get3dLayer());
 
-        wall.set3dColor(this.#color3d ?? this.#getDefault3dColor());
+        wall.set3dColor(this.#get3dColor());
 
         this.#walls.push(wall);
     }
