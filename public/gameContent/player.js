@@ -74,6 +74,10 @@ export default class Player extends CustomWall {
         console.log(this.#rotationOffset)
         this.#updateId = requestAnimationFrame(time => this.#update(time));
     }
+
+    setRotation(v) {
+        super.setRotation(v + this.#rotationOffset);
+    }
     
     setDistance(v) {
         if (typeof(v) !== 'number') return
