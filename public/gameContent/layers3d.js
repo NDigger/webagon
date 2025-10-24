@@ -10,6 +10,7 @@ export default class Layers3d extends GameObject {
     #depth = 0;
     #distance = 10;
     #skew = 0;
+    #color = new Color(0, 0, 0);
 
     constructor(appContext) {
         super(appContext)
@@ -20,7 +21,7 @@ export default class Layers3d extends GameObject {
         this.#meshes = [];
         for (let i = 1; i <= this.#depth; i++) {
             const mesh = new Mesh(this.appContext)
-            mesh.setColor(new Color(0, 0, 0, 255))
+            mesh.setColor(this.#color);
             mesh.setLayer(this.#layer)
             this.#meshes.push(mesh);
         }
@@ -51,6 +52,11 @@ export default class Layers3d extends GameObject {
     setLayer(v) {
         this.#layer = v;
         this.#meshes.forEach(mesh => mesh.setLayer(v))
+    }
+
+    setColor({r, g, b, a}) {
+        this.#color = new Color(r, g, b, a);
+        this.scheduleDraw()
     }
 
     destroy() {

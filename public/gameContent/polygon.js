@@ -8,22 +8,6 @@ class PolygonBorder extends PolygonObject {
         this.setThickness(5);
         this.draw();
     }
-
-    updateWallsProps() {
-        this._walls.forEach(wall => {
-            wall.setThickness(this.getThickness());
-            wall.setColor(this.getColor());
-            wall.setSkew(this.getSkew());
-            wall.setDistance(this.getDistance());
-            wall.setRotation(this.getRotation());
-            wall.setLayer(this.getLayer());
-            wall.set3dDistance(this.get3dDistance());
-            wall.set3dDepth(this.get3dDepth());
-            wall.set3dLayer(this.get3dLayer());
-            
-            wall.draw();
-        })
-    }
 }
 
 export default class Polygon extends PolygonObject {
@@ -34,17 +18,6 @@ export default class Polygon extends PolygonObject {
         super(appContext);
         this.setThickness(60);
         this.draw();
-    }
-
-    updateWallsProps() {
-        this._walls.forEach(wall => {
-            wall.setThickness(this.getThickness());
-            wall.setColor(this.getColor());
-            wall.setSkew(this.getSkew());
-            wall.setRotation(this.getRotation());
-            wall.setLayer(this.getLayer());
-            wall.draw();
-        })
     }
 
     setSides(v) {
@@ -108,5 +81,10 @@ export default class Polygon extends PolygonObject {
         super.set3dLayer(v);
         this.#player.set3dLayer(v);
         this.#border.set3dLayer(v);
+    }
+
+    set3dColor(v) {
+        this.#player.set3dColor(v);
+        this.#border.set3dColor(v);
     }
 }

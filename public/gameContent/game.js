@@ -24,8 +24,9 @@ export default class Game extends GameObject {
     #rotation = 0;
     #sides = 6;
 
-    #depth3d;
-    #distance3d;
+    #depth3d = 0;
+    #distance3d = 0;
+    #color3d = null;
 
     #mainColor = new Color(0, 0, 0);
     #wallSpawnDistance = 1000;
@@ -56,6 +57,11 @@ export default class Game extends GameObject {
     #getWallsLayer() { return this.#layer + 0.003}
     #get3dLayer() { return this.#layer + 0.002}
     #getBackgroundLayer() { return this.#layer + 0.001}
+
+    #getDefault3dColor() { 
+        const brightness = .5
+        return new Color(this.#mainColor.r * brightness, this.#mainColor.g * brightness, this.#mainColor.b * brightness) 
+    }
 
     kill() {
         this.#died = true;
@@ -124,10 +130,13 @@ export default class Game extends GameObject {
         wall.set3dDistance(this.#distance3d);
         wall.set3dLayer(this.#get3dLayer());
 
+        wall.set3dColor(this.#color3d ?? this.#getDefault3dColor());
+
         this.#walls.push(wall);
     }
     
     setRotation(v) { if (typeof(v) === 'number') this.#rotation = v; }
+    getRotation() { return this.#rotation }
     setRotationSpeed(v) { if (typeof(v) === 'number') this.#rotationSpeed = v; }
     setRadius(v) { if (typeof(v) === 'number') this.#polygon.setThickness(v); }
     setSkew(v) {
@@ -160,7 +169,11 @@ export default class Game extends GameObject {
         this.#polygon.setBorderColor(color);
         this.#polygon.setPlayerColor(color);
 
-        this.#walls.forEach(w => w.setColor(color));
+        this.#walls.forEach(w => {
+            w.setColor(color)
+            if (this.#color3d === null) w.set3dColor(this.#getDefault3dColor());
+        });
+        if (this.#color3d === null) this.#polygon.set3dColor(this.#getDefault3dColor());
     }
     setPolygonColor({r, g, b, a}) {
         this.#polygon.setColor(new Color(r, g, b, a))
@@ -183,5 +196,14 @@ export default class Game extends GameObject {
         this.#distance3d = v;
         this.#walls.forEach(wall => wall.set3dDistance(v));
         this.#polygon.set3dDistance(v)
+    }
+    set3dColor({r, g, b, a}) {
+        if (r && g && b) {
+            const color = new Color(r, g, b, a);
+            this.#color3d = color;
+            this.#walls.forEach(wall => wall.set3dColor(color));
+        } else {
+            this.#walls.forEach(wall => wall.set3dColor(this.#getDefault3dColor()));
+        }
     }
 }

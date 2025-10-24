@@ -11,9 +11,11 @@ export default class PolygonObject extends GameObject {
     #thickness = 0;
     #distance = 0;
     #color = new Color(0, 0, 0);
+
     #depth3d = 0;
     #distance3d = 0;
     #layer3d = 0;
+    #color3d = new Color(0, 0, 0);
 
     draw() {
         const sidesChanged = (this._walls[0]?.getSides() ?? -1) !== this.#sides;
@@ -45,46 +47,59 @@ export default class PolygonObject extends GameObject {
         this.#thickness = v;
         this.scheduleDraw();
     }
-    getThickness() {
-        return this.#thickness;
-    }
+    getThickness() { return this.#thickness; }
     setDistance(v) {
         if (typeof(v) !== 'number') return
         this.#distance = v;
         this.scheduleDraw();
     }
-    getDistance() {
-        return this.#distance;
-    }
+    getDistance() { return this.#distance; }
     setColor({r, g, b, a}) {
         this.#color = new Color(r, g, b, a);
         this.scheduleDraw();
     }
-    getColor() {
-        return this.#color;
-    }
+    getColor() { return this.#color; }
+
     set3dDepth(v) {
         if (typeof(v) !== 'number') return 
         this.#depth3d = v;
         this.scheduleDraw();
     }
-    get3dDepth() {
-        return this.#depth3d;
-    }
+    get3dDepth() { return this.#depth3d; }
     set3dDistance(v) {
         if (typeof(v) !== 'number') return
         this.#distance3d = v;
         this.scheduleDraw();
     }
-    get3dDistance() {
-        return this.#distance3d;
-    }
+    get3dDistance() { return this.#distance3d; }
     set3dLayer(v) {
         if (typeof(v) !== 'number') return
         this.#layer3d = v;
         this.scheduleDraw();
     }
-    get3dLayer() {
-        return this.#layer3d
+    get3dLayer() { return this.#layer3d; }
+    set3dColor({r, g, b, a}) {
+        this.#color3d = new Color(r, g, b, a);
+        this.scheduleDraw();
+    }
+    get3dColor() { return this.#color3d; }
+
+    updateWallsProps() {
+        this._walls.forEach(wall => {
+            wall.setThickness(this.#thickness);
+            wall.setColor(this.#color);
+            wall.setSkew(this.#skew);
+            wall.setDistance(this.#distance);
+            wall.setRotation(this.#rotation);
+            wall.setLayer(this.#layer);
+
+            wall.set3dDistance(this.#distance3d);
+            wall.set3dDepth(this.#depth3d);
+            wall.set3dLayer(this.#layer3d);
+            wall.set3dColor(this.#color3d);
+            console.log(this.#color3d);
+            
+            wall.draw();
+        })
     }
 }

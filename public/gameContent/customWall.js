@@ -1,5 +1,5 @@
 import Mesh from "./mesh";
-import { Vector2 } from "./structures";
+import { Vector2, Color } from "./structures";
 import Layers3d from "./layers3d";
 
 const getScreenCenter = () => new Vector2(window.innerWidth/2, window.innerHeight/2)
@@ -21,6 +21,7 @@ export default class CustomWall extends Mesh {
     #skew = 0;
     #rotation = 0;
 
+    #color3d = new Color(0, 0, 0);
     #depth3d = 0;
     #distance3d = 0;
     #layersCount3d = 0;
@@ -51,9 +52,7 @@ export default class CustomWall extends Mesh {
         this.scheduleDraw();
     }
 
-    getRotation() {
-        return this.#rotation;
-    }
+    getRotation() { return this.#rotation; }
 
     setSkew(v) {
         if (typeof(v) !== 'number') return 
@@ -61,44 +60,37 @@ export default class CustomWall extends Mesh {
         this.#layers3d.setSkew(v);
         this.scheduleDraw();
     }
-
-    getSkew() {
-        return this.#skew;
-    }
+    getSkew() { return this.#skew; }
 
     set3dDepth(v) {
         if (typeof(v) !== 'number') return 
         this.#depth3d = v;
         this.#layers3d.setDepth(v);
     }
-    get3dDepth() {
-        return this.#depth3d
-    }
-
+    get3dDepth() { return this.#depth3d; }
     set3dDistance(v) {
         if (typeof(v) !== 'number') return
         this.#distance3d = v;
         this.#layers3d.setDistance(v);
     }
-
-    get3dDistance() {
-        return this.#distance3d;
-    }
-
-    // setLayer(v) {
-    //     super.setLayer(v)
-    //     this.#layers3d.setLayer(v - 0.001);
-    // }
-
+    get3dDistance() { return this.#distance3d; }
     set3dLayer(v) {
         if (typeof(v) !== 'number') return
         this.#layersCount3d = v;
         this.#layers3d.setLayer(v);
     }
-
-    get3dLayer(v) {
-        return this.#layersCount3d;
+    get3dLayer() { return this.#layersCount3d; }
+    set3dColor({r, g, b, a}) {
+        const color = new Color(r, g, b, a);
+        this.#color3d = color;
+        this.#layers3d.setColor(color);
     }
+    get3DColor() { return this.#color3d }
+
+    // setLayer(v) {
+    //     super.setLayer(v)
+    //     this.#layers3d.setLayer(v - 0.001);
+    // }
 
     destroy() {
         this.#layers3d.destroy();
