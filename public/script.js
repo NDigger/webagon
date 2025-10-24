@@ -1,6 +1,7 @@
 
 import * as PIXI from 'pixi.js';
 import { Vector2, Color } from './gameContent';
+import Lerp from './utils/interpolation';
 import Game from './gameContent/game';
 import DrawHandler from './gameContent/drawHandler';
 
@@ -24,11 +25,11 @@ import DrawHandler from './gameContent/drawHandler';
         drawHandler: new DrawHandler(),
     });
 
-    game.setRotationSpeed(0.1);
-    game.setWallSpeedMult(4);
+    game.setRotationSpeed(0.05);
+    game.setWallSpeedMult(2);
     game.setWallSpawnDistance(1000);
     game.setSides(3);
-    game.set3dDepth(1);
+    game.set3dDepth(5);
     game.set3dDistance(10);
 
     let time = 0;
@@ -40,7 +41,7 @@ import DrawHandler from './gameContent/drawHandler';
         ])
         // game.setRotation(game.getRotation() - ((time / 960 - Math.ceil(time / 970)) * 5 + 2))
         game.setMainColor(Color.hsvToRgb(time * 0.0002, 1., 1.))
-        game.setSkew(Math.sin(time / 200)*.3+1.);
+        game.setSkew(Math.sin(time / 120)*.1+.1);
         game.setRadius(Math.sin(time / 100)* 5 + 60);
     }
 

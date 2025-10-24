@@ -11,6 +11,17 @@ const rgbToHex = (r, g, b) => {
   return "#" + componentToHex(Math.floor(r)) + componentToHex(Math.floor(g)) + componentToHex(Math.floor(b));
 }
 
+let shakeTimer = 0 
+const f = () => {
+    shakeTimer = performance.now();
+    requestAnimationFrame(f)
+}
+requestAnimationFrame(f)
+
+const pseudoRndShake = (power) => {
+    return new Vector2(Math.sin(shakeTimer * 2.4104) * power, Math.cos(shakeTimer * 42.4215) * power);
+}
+
 export default class Mesh extends GameObject {
     #object;
     _geometry;
@@ -36,7 +47,9 @@ export default class Mesh extends GameObject {
     };
 
     draw() {
-        if (this?._geometry?.positions) this._geometry.positions = new Float32Array(this._positions);
+        const s = pseudoRndShake(globalThis.shakePower ?? 0)
+        const positions = this._positions.map((v, i) => i % 2 === 0 ? v+s.x : v+s.y)
+        if (this?._geometry?.positions) this._geometry.positions = new Float32Array(positions);
     }
 
     setColor({r, g, b, a}) {

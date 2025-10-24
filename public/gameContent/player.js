@@ -30,6 +30,7 @@ export default class Player extends CustomWall {
     #onKeyDown = e => {
         if (e.keyCode === 37) this.#leftKeyPressed = true;
         if (e.keyCode === 39) this.#rightKeyPressed = true;
+        if (e.keyCode === 32) this.#rotationOffset += 180;
     }
 
     #onKeyUp = e => {
@@ -59,6 +60,16 @@ export default class Player extends CustomWall {
             new Vector2(v, 0),
             new Vector2(v, 12),
         )
+    }
+
+    draw() {
+        this.setVertexPos4(
+            new Vector2(this.#distance + 10, 0),
+            new Vector2(this.#distance , -12),
+            new Vector2(this.#distance , 0),
+            new Vector2(this.#distance , 12),
+        )
+        super.draw();
     }
 
     destroy() {

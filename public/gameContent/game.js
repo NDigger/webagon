@@ -4,6 +4,7 @@ import { Vector2, Color } from "./structures";
 import Background from "./background";
 import GameObject from "./gameObject";
 import Death from "./death";
+import Lerp from "../utils/interpolation";
 
 const area = (a, b, c) => {
   return Math.abs(
@@ -55,6 +56,8 @@ export default class Game extends GameObject {
 
     #skew = 0;
 
+    #handleVisibilityChange;
+
     onUpdate = () => {}
 
     constructor(appContext) {
@@ -71,11 +74,11 @@ export default class Game extends GameObject {
             new Color(235, 235, 235),
         ])
 
-        document.addEventListener("visibilitychange", () => {
-        if (document.hidden) {
-            this.kill()
-        }
-        });
+        this.#handleVisibilityChange = () => {
+            if (document.hidden) this.kill();
+        };
+
+        document.addEventListener('visibilitychange', this.#handleVisibilityChange);
 
 
         requestAnimationFrame(time => this.#update(time));
@@ -93,6 +96,14 @@ export default class Game extends GameObject {
     #get3dColor() { return this.#color3d ?? this.#getDefault3dColor() }
 
     kill() {
+        document.removeEventListener('visibilitychange', this.#handleVisibilityChange);
+
+        const lerp = new Lerp(v => {
+            this.setShakePower(v)
+            this.#background.scheduleDraw()
+            this.#polygon.scheduleDraw()
+        }).apply(50).run(0, 0.7);
+        this.setShakePower(10);
         const d = new Death(this.appContext);
         d.setSkew(this.#skew);
         d.setOffset(this.#polygon.getPlayerPosition())
@@ -134,16 +145,19 @@ export default class Game extends GameObject {
             const pos = wall.getVertexAbsolutePos4();
             if (pointInQuad(this.#polygon.getPlayerAbsolutePosition(), pos[0], pos[1], pos[2], pos[3])
             && !this.#died) {
+                document.removeEventListener('visibilitychange', this.#handleVisibilityChange)
                 this.kill();
                 this.#polygon.draw();
             }
-            // wall.setRotation(this.#rotation)
+            wall.setRotation(this.#rotation)
         })
 
         this.#walls = this.#walls.filter(wall => {
             if (this.#died) {
                 return true
             };
+
+            wall.draw();
             
             if (wall.getDistance() > this.#polygon.getDistance() + this.#polygon.getThickness()) {
                 wall.setDistance(wall.getDistance() - frameTime * this.#wallSpeedMult / 5)
@@ -173,7 +187,7 @@ export default class Game extends GameObject {
         wall.setSides(this.#sides)
         wall.setSide(side)
         wall.setThickness(thickness);
-        // wall.setRotation(this.#rotation)
+        wall.setRotation(this.#rotation)
         wall.setColor(this.#mainColor);
         wall.setDistance(this.#wallSpawnDistance);
         wall.setLayer(this.#getWallsLayer());
@@ -257,5 +271,10 @@ export default class Game extends GameObject {
         } else {
             this.#walls.forEach(wall => wall.set3dColor(this.#getDefault3dColor()));
         }
+    }
+    setShakePower(v) {
+        if (typeof(v) !== 'number') return
+        console.log(v);
+        globalThis.shakePower = v;
     }
 }
