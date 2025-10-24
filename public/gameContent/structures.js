@@ -11,6 +11,15 @@ export class Vector2 {
     sub(vec2) { return new Vector2(this.x - vec2.x, this.y - vec2.y) }
     mul(vec2) { return new Vector2(this.x * vec2.x, this.y * vec2.y) }
     div(vec2) { return new Vector2(this.x / vec2.x, this.y / vec2.y) }
+
+    rotate(angle) {
+    const cos = Math.cos(angle);
+    const sin = Math.sin(angle);
+    return new Vector2(
+        this.x * cos - this.y * sin,
+        this.x * sin + this.y * cos
+    )
+}
 }
 
 export class Color {

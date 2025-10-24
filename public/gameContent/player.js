@@ -33,6 +33,8 @@ class Death extends PolygonObject {
     }
 }
 
+const degToRad = deg => deg * Math.PI / 180;
+
 export default class Player extends CustomWall {
     #lasttime = performance.now();
     #leftKeyPressed = false;
@@ -54,7 +56,8 @@ export default class Player extends CustomWall {
         this.#updateId = requestAnimationFrame(time => this.#update(time));
     }
 
-    getPointPosition() { return this.getVector2VertexPos4()[0] }
+    getPointPosition() { return this.getVector2VertexPos4()[0] } 
+    getPointRotatedPosition() { return this.getPointPosition().rotate(degToRad(this.#rotationOffset)) }
 
     #onKeyDown = e => {
         if (e.keyCode === 37) this.#leftKeyPressed = true;
@@ -69,9 +72,10 @@ export default class Player extends CustomWall {
     #update(time) {
         const frameTime = time - this.#lasttime;
         this.#lasttime = time;
-        console.log(this.getPointPosition())
         if (this.#leftKeyPressed) this.#rotationOffset -= frameTime * this.#speedMult;
         if (this.#rightKeyPressed) this.#rotationOffset += frameTime * this.#speedMult;
+        console.log(this.getPointRotatedPosition());
+
         this.#updateId = requestAnimationFrame(time => this.#update(time));
     }
 

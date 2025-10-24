@@ -5,6 +5,24 @@ import Background from "./background";
 import GameObject from "./gameObject";
 import Death from "./death";
 
+const area = (a, b, c) => {
+  return Math.abs(
+    (a.x * (b.y - c.y) +
+     b.x * (c.y - a.y) +
+     c.x * (a.y - b.y)) / 2
+  );
+}
+
+const pointInTriangle = (p, a, b, c) => {
+  const A = area(a, b, c);
+  const A1 = area(p, b, c);
+  const A2 = area(a, p, c);
+  const A3 = area(a, b, p);
+  return Math.abs(A - (A1 + A2 + A3)) < 1e-9;
+}
+
+const pointInQuad = (p, a, b, c, d) => pointInTriangle(p, a, b, c) || pointInTriangle(p, a, c, d);
+
 export default class Game extends GameObject {
     #background;
     #backgroundSwapTime = 1000;
@@ -51,6 +69,13 @@ export default class Game extends GameObject {
             new Color(235, 235, 235),
         ])
 
+        document.addEventListener("visibilitychange", () => {
+        if (document.hidden) {
+            this.kill()
+        }
+        });
+
+
         requestAnimationFrame(time => this.#update(time));
     }
 
@@ -77,6 +102,7 @@ export default class Game extends GameObject {
         d.set3dDistance(this.#distance3d);
         d.setSides(this.#sides)
         this.#died = true;
+        
     }
 
     #updateBackgroundRotation() {
@@ -93,6 +119,22 @@ export default class Game extends GameObject {
     #update(time) {
         const frameTime = time - this.#lasttime;
         this.#lasttime = time;
+
+        if (!this.#died) {
+            this.#rotation += this.#rotationSpeed * frameTime;
+            this.#polygon.setRotation(this.#rotation)
+            this.#updateBackgroundRotation()
+            this.onUpdate(frameTime);
+        }
+        
+        this.#walls.forEach(wall => {
+            const pos = wall.getVector2VertexPos4();
+            if (pointInQuad(this.#polygon.getPlayerAbsolutePosition(), pos[0], pos[1], pos[2], pos[3])
+            && !this.#died) {
+                this.kill();
+                this.#polygon.draw();
+            }
+        })
 
         this.#walls = this.#walls.filter(wall => {
             if (this.#died) {
@@ -119,17 +161,11 @@ export default class Game extends GameObject {
             this.#swapBackground();
         }
 
-        if (!this.#died) {
-            this.#rotation += this.#rotationSpeed * frameTime;
-            this.#polygon.setRotation(this.#rotation)
-            this.#updateBackgroundRotation()
-            this.onUpdate(frameTime);
-        }
-
         requestAnimationFrame(time => this.#update(time));
     }
 
     createWall(side, thickness) {
+        if (this.#died) return; 
         const wall = new Wall(this.appContext);
         wall.setSides(this.#sides)
         wall.setSide(side)

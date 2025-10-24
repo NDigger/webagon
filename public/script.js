@@ -25,12 +25,12 @@ import DrawHandler from './gameContent/drawHandler';
     });
 
     // game.setRotationSpeed(0.1);
-    game.setWallSpeedMult(3);
+    game.setWallSpeedMult(6);
     game.setWallSpawnDistance(1500);
     game.setSides(5);
     game.setSkew(0.5);
     game.set3dDepth(5);
-    game.set3dDistance(2);
+    game.set3dDistance(1);
 
     let time = 0;
     game.onUpdate = ft => {
@@ -39,7 +39,7 @@ import DrawHandler from './gameContent/drawHandler';
             Color.hsvToRgb(time * 0.0002, 1, .2),
             Color.hsvToRgb(time * 0.0002, 1, .25),
         ])
-        game.setRotation(game.getRotation() - ((time / 970 - Math.ceil(time / 970)) * 15 + 10))
+        game.setRotation(game.getRotation() - ((time / 960 - Math.ceil(time / 970)) * 15 + 10))
         game.setMainColor(Color.hsvToRgb(time * 0.0002, 1., 1.))
         game.setSkew(Math.sin(time / 200)*.3+1.);
         game.setRadius(Math.sin(time / 100)* 5 + 60);
@@ -50,7 +50,7 @@ import DrawHandler from './gameContent/drawHandler';
         for (let i = 1; i < game.getSides(); i++) {
             game.createWall(i + rnd, 40)
         }
-    }, 500)
+    }, 300)
 
     // setTimeout(() => {
     //     game.kill()
