@@ -24,6 +24,9 @@ export default class Game extends GameObject {
     #rotation = 0;
     #sides = 6;
 
+    #depth3d;
+    #distance3d;
+
     #mainColor = new Color(0, 0, 0);
     #wallSpawnDistance = 1000;
     #wallSpeedMult = 2;
@@ -35,8 +38,10 @@ export default class Game extends GameObject {
     constructor(appContext) {
         super(appContext)
         this.#background = new Background(appContext);
+        this.#background.setLayer(this.#getBackgroundLayer());
         this.#polygon = new Polygon(appContext);
-        this.#polygon.setLayer(this.#layer + 0.002);
+        this.#polygon.setLayer(this.#getPolygonLayer());
+        this.#polygon.set3dLayer(this.#get3dLayer());
 
         this.setMainColor(new Color(40, 40, 0))
         this.setBackgroundTileColors([
@@ -47,13 +52,19 @@ export default class Game extends GameObject {
         requestAnimationFrame(time => this.#update(time));
     }
 
+    #getPolygonLayer() { return this.#layer + 0.004}
+    #getWallsLayer() { return this.#layer + 0.003}
+    #get3dLayer() { return this.#layer + 0.002}
+    #getBackgroundLayer() { return this.#layer + 0.001}
+
     kill() {
         this.#died = true;
     }
 
     #updateBackgroundRotation() {
         this.#background.setRotation(this.#rotation + this.#backgroundRotationOffset + this.#backgroundSwapped * (360 / this.#sides));
-        this.#polygon.setColor(this.#background.getTileColors()[this.#backgroundSwapped ? 0 : 1]);
+        const bgTileColors = this.#background.getTileColors();
+        this.#polygon.setColor(bgTileColors[this.#backgroundSwapped || bgTileColors.length === 1 ? 0 : 1]);
     }
 
     #swapBackground() {
@@ -106,12 +117,16 @@ export default class Game extends GameObject {
         wall.setThickness(thickness);
         wall.setColor(this.#mainColor);
         wall.setDistance(this.#wallSpawnDistance);
-        wall.setLayer(this.#layer + 0.001);
-        wall.set3dDepth(20);
-        wall.set3dDistance(20);
+        wall.setLayer(this.#getWallsLayer());
         wall.setSkew(this.#skew);
+
+        wall.set3dDepth(this.#depth3d);
+        wall.set3dDistance(this.#distance3d);
+        wall.set3dLayer(this.#get3dLayer());
+
         this.#walls.push(wall);
     }
+    
     setRotation(v) { if (typeof(v) === 'number') this.#rotation = v; }
     setRotationSpeed(v) { if (typeof(v) === 'number') this.#rotationSpeed = v; }
     setRadius(v) { if (typeof(v) === 'number') this.#polygon.setThickness(v); }
@@ -128,9 +143,13 @@ export default class Game extends GameObject {
         this.#polygon.setSides(v);
         this.#sides = v;
     }
+    getSides() {
+        return this.#sides;
+    }
     setBackgroundTileColors(arr) {
         this.#background.setTileColors(arr);
-        this.#polygon.setColor(arr[this.#backgroundSwapped ? 0 : 1]);
+        const bgTileColors = this.#background.getTileColors();
+        this.#polygon.setColor(arr[this.#backgroundSwapped || bgTileColors.length === 1 ? 0 : 1]);
     }
     setBackgroundRotationOffset(v) {
         if (typeof(v) === 'number') this.#backgroundRotationOffset = v
@@ -151,5 +170,18 @@ export default class Game extends GameObject {
     }
     setWallSpeedMult(v) {
         if (typeof(v) === 'number') this.#wallSpeedMult = v;
+    }
+    set3dDepth(v) {
+        if (typeof(v) !== 'number') return
+        const depth = Math.floor(v);
+        this.#depth3d = depth;
+        this.#walls.forEach(wall => wall.set3dDepth(depth));
+        this.#polygon.set3dDepth(depth)
+    }
+    set3dDistance(v) {
+        if (typeof(v) !== 'number') return
+        this.#distance3d = v;
+        this.#walls.forEach(wall => wall.set3dDistance(v));
+        this.#polygon.set3dDistance(v)
     }
 }

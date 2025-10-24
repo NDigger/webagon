@@ -23,6 +23,7 @@ export default class CustomWall extends Mesh {
 
     #depth3d = 0;
     #distance3d = 0;
+    #layersCount3d = 0;
 
     draw() {
         const screenCenter = getScreenCenter();
@@ -70,6 +71,9 @@ export default class CustomWall extends Mesh {
         this.#depth3d = v;
         this.#layers3d.setDepth(v);
     }
+    get3dDepth() {
+        return this.#depth3d
+    }
 
     set3dDistance(v) {
         if (typeof(v) !== 'number') return
@@ -77,9 +81,23 @@ export default class CustomWall extends Mesh {
         this.#layers3d.setDistance(v);
     }
 
-    setLayer(v) {
-        super.setLayer(v)
-        this.#layers3d.setLayer(v - 0.001);
+    get3dDistance() {
+        return this.#distance3d;
+    }
+
+    // setLayer(v) {
+    //     super.setLayer(v)
+    //     this.#layers3d.setLayer(v - 0.001);
+    // }
+
+    set3dLayer(v) {
+        if (typeof(v) !== 'number') return
+        this.#layersCount3d = v;
+        this.#layers3d.setLayer(v);
+    }
+
+    get3dLayer(v) {
+        return this.#layersCount3d;
     }
 
     destroy() {

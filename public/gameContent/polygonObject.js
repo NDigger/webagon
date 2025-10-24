@@ -11,11 +11,14 @@ export default class PolygonObject extends GameObject {
     #thickness = 0;
     #distance = 0;
     #color = new Color(0, 0, 0);
+    #depth3d = 0;
+    #distance3d = 0;
+    #layer3d = 0;
 
     draw() {
         const sidesChanged = (this._walls[0]?.getSides() ?? -1) !== this.#sides;
         if (sidesChanged) {
-            this._walls.forEach(wall => wall.destroy?.());
+            this._walls.forEach(wall => wall.destroy());
             this._walls = [];
             for (let i = 0; i < this.#sides; i++) {
                 const wall = new Wall(this.appContext);
@@ -59,5 +62,29 @@ export default class PolygonObject extends GameObject {
     }
     getColor() {
         return this.#color;
+    }
+    set3dDepth(v) {
+        if (typeof(v) !== 'number') return 
+        this.#depth3d = v;
+        this.scheduleDraw();
+    }
+    get3dDepth() {
+        return this.#depth3d;
+    }
+    set3dDistance(v) {
+        if (typeof(v) !== 'number') return
+        this.#distance3d = v;
+        this.scheduleDraw();
+    }
+    get3dDistance() {
+        return this.#distance3d;
+    }
+    set3dLayer(v) {
+        if (typeof(v) !== 'number') return
+        this.#layer3d = v;
+        this.scheduleDraw();
+    }
+    get3dLayer() {
+        return this.#layer3d
     }
 }

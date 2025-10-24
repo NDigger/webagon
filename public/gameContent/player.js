@@ -44,9 +44,9 @@ export default class Player extends CustomWall {
         this.#distance = v;
         this.setVertexPos4(
             new Vector2(v, 0),
-            new Vector2(v, 10),
+            new Vector2(v, 12),
             new Vector2(v + 10, 0),
-            new Vector2(v, -10),
+            new Vector2(v, -12),
         )
     }
 

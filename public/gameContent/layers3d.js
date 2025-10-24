@@ -20,7 +20,7 @@ export default class Layers3d extends GameObject {
         this.#meshes = [];
         for (let i = 1; i <= this.#depth; i++) {
             const mesh = new Mesh(this.appContext)
-            mesh.setColor(new Color(0, 0, 0, 20))
+            mesh.setColor(new Color(0, 0, 0, 255))
             mesh.setLayer(this.#layer)
             this.#meshes.push(mesh);
         }

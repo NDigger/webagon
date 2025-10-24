@@ -17,6 +17,10 @@ class PolygonBorder extends PolygonObject {
             wall.setDistance(this.getDistance());
             wall.setRotation(this.getRotation());
             wall.setLayer(this.getLayer());
+            wall.set3dDistance(this.get3dDistance());
+            wall.set3dDepth(this.get3dDepth());
+            wall.set3dLayer(this.get3dLayer());
+            
             wall.draw();
         })
     }
@@ -57,7 +61,7 @@ export default class Polygon extends PolygonObject {
     setThickness(v) {
         const borderThickness = this.#border.getThickness();
         super.setThickness(v - borderThickness)
-        this.#player.setDistance(v * 1.3)
+        this.#player.setDistance(v * 1.25)
         this.#border.setDistance(v - borderThickness);
     }
 
@@ -83,7 +87,26 @@ export default class Polygon extends PolygonObject {
     setPlayerColor({r, g, b, a}) {
         this.#player.setColor(new Color(r, g, b, a))
     }
+
     getPlayerColor() {
         return this.#player.getColor();
+    }
+
+    set3dDepth(v) {
+        super.set3dDepth(v);
+        this.#player.set3dDepth(v);
+        this.#border.set3dDepth(v);
+    }
+
+    set3dDistance(v) {
+        super.set3dDepth(v);
+        this.#player.set3dDistance(v);
+        this.#border.set3dDistance(v);
+    }
+
+    set3dLayer(v) {
+        super.set3dLayer(v);
+        this.#player.set3dLayer(v);
+        this.#border.set3dLayer(v);
     }
 }
