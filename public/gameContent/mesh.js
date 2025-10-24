@@ -56,12 +56,34 @@ export default class Mesh extends GameObject {
         this.scheduleDraw();
     }
 
-    getVector2VertexPos4() {
+    getVertexPos(point) {
+        const pos = this._positions;
+        const inc = point * 2;
+        return new Vector2(pos[0 + inc], pos[1 + inc])
+    }
+
+    getVertexPos4() {
         return [
             new Vector2(this._positions[0], this._positions[1]),
             new Vector2(this._positions[2], this._positions[3]),
             new Vector2(this._positions[4], this._positions[5]),
             new Vector2(this._positions[6], this._positions[7])
+        ]
+    }
+
+    getVertexAbsolutePos(point) {
+        const pos = this._geometry.positions;
+        const inc = point * 2;
+        return new Vector2(pos[0 + inc], pos[1 + inc])
+    }
+
+    getVertexAbsolutePos4() {
+        const pos = this._geometry.positions;
+        return [
+            new Vector2(pos[0], pos[1]),
+            new Vector2(pos[2], pos[3]),
+            new Vector2(pos[4], pos[5]),
+            new Vector2(pos[6], pos[7])
         ]
     }
 
@@ -74,6 +96,7 @@ export default class Mesh extends GameObject {
         this._positions[5] = vec3.y;
         this._positions[6] = vec4.x;
         this._positions[7] = vec4.y;
+        // if (this?._geometry?.positions) this._geometry.positions = new Float32Array(this._positions);
         this.scheduleDraw();
     }
 

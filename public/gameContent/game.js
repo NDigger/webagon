@@ -23,6 +23,8 @@ const pointInTriangle = (p, a, b, c) => {
 
 const pointInQuad = (p, a, b, c, d) => pointInTriangle(p, a, b, c) || pointInTriangle(p, a, c, d);
 
+const degToRad = deg => deg * Math.PI / 180;
+
 export default class Game extends GameObject {
     #background;
     #backgroundSwapTime = 1000;
@@ -126,14 +128,16 @@ export default class Game extends GameObject {
             this.#updateBackgroundRotation()
             this.onUpdate(frameTime);
         }
-        
+
         this.#walls.forEach(wall => {
-            const pos = wall.getVector2VertexPos4();
+            // Wall absolute position
+            const pos = wall.getVertexAbsolutePos4();
             if (pointInQuad(this.#polygon.getPlayerAbsolutePosition(), pos[0], pos[1], pos[2], pos[3])
             && !this.#died) {
                 this.kill();
                 this.#polygon.draw();
             }
+            // wall.setRotation(this.#rotation)
         })
 
         this.#walls = this.#walls.filter(wall => {
@@ -146,7 +150,6 @@ export default class Game extends GameObject {
             } else if (wall.getThickness() > 0) {
                 wall.setThickness(wall.getThickness() - frameTime * this.#wallSpeedMult / 5)
             }
-            wall.setRotation(this.#rotation)
 
             if (wall.getThickness() < 0 || wall.getDistance() < 0) {
                 wall.destroy()
@@ -170,6 +173,7 @@ export default class Game extends GameObject {
         wall.setSides(this.#sides)
         wall.setSide(side)
         wall.setThickness(thickness);
+        // wall.setRotation(this.#rotation)
         wall.setColor(this.#mainColor);
         wall.setDistance(this.#wallSpawnDistance);
         wall.setLayer(this.#getWallsLayer());
@@ -178,7 +182,6 @@ export default class Game extends GameObject {
         wall.set3dDepth(this.#depth3d);
         wall.set3dDistance(this.#distance3d);
         wall.set3dLayer(this.#get3dLayer());
-
         wall.set3dColor(this.#get3dColor());
 
         this.#walls.push(wall);

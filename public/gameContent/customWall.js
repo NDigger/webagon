@@ -27,24 +27,28 @@ export default class CustomWall extends Mesh {
     #layersCount3d = 0;
     #centerOffset = new Vector2(0, 0);
 
-    draw() {
+    getAbsoluteVertex4() {
         const screenCenter = getScreenCenter();
-        // i % 2 === 0: x coord
-        // i % 2 === 1: y coord
-        const pos = this.getVector2VertexPos4().map(vec2 => {
+        return this.getVertexPos4().map(vec2 => {
             let newPos = rotatePoint(vec2, new Vector2(0, 0), this.#rotation)
             newPos.x += screenCenter.x + this.#centerOffset.x
             newPos.y /= this.#skew + 1;
             newPos.y +=  screenCenter.y + this.#centerOffset.y;
             return newPos;
         });
+    }
+    
+    draw() {
+        // i % 2 === 0: x coord
+        // i % 2 === 1: y coord
+        const pos = this.getAbsoluteVertex4()
         this._geometry.positions = new Float32Array([
             pos[0].x, pos[0].y,
             pos[1].x, pos[1].y,
             pos[2].x, pos[2].y,
             pos[3].x, pos[3].y
         ]);
-        this.#layers3d.setVertexPos4(pos[0], pos[1], pos[2], pos[3])
+        this.#layers3d.setVertexPos4(pos[0], pos[1], pos[2], pos[3]);
     }
 
     setRotation(v) {

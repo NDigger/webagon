@@ -18,7 +18,7 @@ export default class GameObject {
         
         // if (this.needsRedraw) return;
         // this.needsRedraw = true;
-        this.appContext.drawHandler.requestDraw(this);
+        this.appContext.drawHandler.requestDraw(this); // 👍 nice 👍
 
         // -- This shit causes lag
         // setTimeout(() => {

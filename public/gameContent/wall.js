@@ -8,12 +8,10 @@ export default class Wall extends CustomWall {
     #distance = 0;
     #offset = new Vector2(0, 0);
 
-    constructor(appContext) {
-        super(appContext)
-    }
-    #getWallVertex4() {
-        const firstAngle = this.#side * Math.PI / (this.#sides / 2) + Math.PI / this.#sides;
-        const secondAngle = (firstAngle + 0.5 * Math.PI / (this.#sides / 2) + Math.PI / this.#sides);
+    #getWallVertexPos4() {
+        const halfSides = this.#sides / 2;
+        const firstAngle = this.#side * Math.PI / halfSides + Math.PI / this.#sides;
+        const secondAngle = (firstAngle + 0.5 * Math.PI / halfSides + Math.PI / this.#sides);
         const x1 = (this.#distance * Math.cos(firstAngle));
         const y1 = (this.#distance * Math.sin(firstAngle));
         const x2 = ((this.#thickness + this.#distance) * Math.cos(firstAngle));
@@ -31,7 +29,7 @@ export default class Wall extends CustomWall {
     }
 
     draw() {
-        const [pos1, pos2, pos3, pos4] = this.#getWallVertex4();
+        const [pos1, pos2, pos3, pos4] = this.#getWallVertexPos4();
         this.setVertexPos4(pos1.add(this.#offset), pos2.add(this.#offset), pos3.add(this.#offset), pos4.add(this.#offset));
         super.draw();
     }
@@ -45,7 +43,7 @@ export default class Wall extends CustomWall {
 
     setSides(v) {
         if (typeof(v) !== 'number') return;
-        this.#sides = Math.floor(v);
+        this.#sides = Math.max(Math.floor(v), 3);
         this.scheduleDraw();
     }
     getSides() { return this.#sides; }
