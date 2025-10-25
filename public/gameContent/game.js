@@ -169,8 +169,6 @@ export default class Game extends GameObject {
             if (this.#died) {
                 return true
             };
-
-            wall.draw();
             
             if (wall.getDistance() > this.#polygon.getDistance() + this.#polygon.getThickness()) {
                 wall.setDistance(wall.getDistance() - frameTime * this.#wallSpeedMult / 5)
@@ -182,7 +180,6 @@ export default class Game extends GameObject {
                 wall.destroy()
                 return false;
             }
-            wall.scheduleDraw();
             return true
         })
 

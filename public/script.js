@@ -36,10 +36,11 @@ import DrawHandler from './gameContent/drawHandler';
     let time = 0;
     game.onUpdate = ft => {
         game.setBackgroundTileColors([
-            Lerp.interpolate(Color.hsvToRgb(time * 0.0002, 1, .25), Color.hsvToRgb(time * 0.0002, 0, .95), time/960-Math.floor(time/960)),
+            // Lerp.interpolate(Color.hsvToRgb(time * 0.0002, 1, .25), Color.hsvToRgb(time * 0.0002, 0, .95), time/960-Math.floor(time/960)),
             Color.hsvToRgb(time * 0.0002, 1, .25),
+            Color.hsvToRgb(time * 0.0002, 1, .2),
         ])
-        game.setRotation(game.getRotation() - ((time / 960 - Math.ceil(time / 960)) * 5 + 2))
+        // game.setRotation(game.getRotation() - ((time / 960 - Math.ceil(time / 960)) * 5 + 2))
         game.setMainColor(Color.hsvToRgb(time * 0.0002, 1., 1.))
         game.setRadius(Math.sin(time / 100)* 5 + 60);
         game.setSkew(Math.sin(time / 120)*.1+.1);
