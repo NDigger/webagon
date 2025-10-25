@@ -2,24 +2,47 @@ import Game from "./game";
 import DrawHandler from './drawHandler';
 
 export default class Level {
+    #pixiApp;
     game;
     #gameOver = false;
+
+    #updateId = null;
     #lastUpdateTime = performance.now();
+    #lastRestartTime = 0;
+
     onInit = () => {};
     onUpdate = () => {};
 
     constructor(pixiApp) {
-        const game = new Game({
-            pixiApp: pixiApp,
-            drawHandler: new DrawHandler(),
+        this.#pixiApp = pixiApp
+
+        window.addEventListener('keydown', e => {
+            if (e.keyCode === 82) this.restart()
         })
-        this.game = game;
-        requestAnimationFrame(t => this.#update(t))
+    }
+
+    restart() {
+        this.#lastUpdateTime = performance.now();
+        this.#lastRestartTime = performance.now();
+        this.#gameOver = false;
+        this.game.destroy()
+        cancelAnimationFrame(this.#updateId);
+        this.start();
     }
 
     start() {
-        this.onInit(this.game)
-        this.game.onDeath = () => this.#gameOver = true
+        this.#updateId = requestAnimationFrame(t => this.#update(t))
+        const game = new Game({
+            pixiApp: this.#pixiApp,
+            drawHandler: new DrawHandler(),
+        })
+        this.game = game;
+
+        this.onInit(game)
+        this.game.onDeath = () => {
+            cancelAnimationFrame(this.#updateId);
+            this.#gameOver = true
+        }
     }
 
     #update(time) {
@@ -29,9 +52,9 @@ export default class Level {
         this.onUpdate(this.game, frameTime);
 
         const timer = document.getElementById('timer');
-        timer.textContent = Math.floor(time)/1000;
-        timer.style.color = this.game.getMainColor().getRGBStyle();
+        timer.textContent = Math.floor(time - this.#lastRestartTime)/1000;
+        if (this.game) timer.style.color = this.game.getMainColor().getRGBStyle();
         
-        requestAnimationFrame(t => this.#update(t));
+        this.#updateId = requestAnimationFrame(t => this.#update(t));
     }
 }

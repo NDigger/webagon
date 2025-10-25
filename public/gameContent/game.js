@@ -335,4 +335,12 @@ export default class Game extends GameObject {
         this.#walls.forEach(wall => wall.destroy());
         this.#walls = [];
     }
+    destroy() {
+        requestAnimationFrame(() => {
+            this.clearWalls()
+            this.#polygon.destroy()
+            this.#background.destroy();
+            if (this.#deathEffect != undefined) this.#deathEffect.destroy();
+        })
+    }
 }

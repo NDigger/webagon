@@ -111,6 +111,12 @@ export default class Polygon extends PolygonObject {
         this.#border.clear3dFalloffColor();
     }
 
+    destroy() {
+        super.destroy();
+        this.#player.destroy();
+        this.#border.destroy();
+    }
+
     setPlayerSwapEnabled(v) { 
         if (typeof(v) !== 'boolean') return
         this.#player.setSwapEnabled(v);

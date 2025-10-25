@@ -111,6 +111,12 @@ export default class PolygonObject extends GameObject {
         this.#falloffColor3d = null;
         this.scheduleDraw();
     }
+    destroy() {
+        this._walls.forEach(wall => {
+            wall.destroy()
+        })
+        this.redrawEnabled = false
+    }
 
     updateWallsProps() {
         this._walls.forEach(wall => {

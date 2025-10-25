@@ -15,9 +15,10 @@ export default class Background extends PolygonObject {
         super.updateWallsProps();
         this._walls.forEach((wall, i) => {
             const tileColor = this.tileColors[i % this.tileColors.length];
+            const brightness = .7
             const color = (i === (this.getSides() - 1) && this.getSides() % 2 === 1) 
-                        ? tileColor
-                        : new Color(tileColor.r * .9, tileColor.g * .9, tileColor.b * .9, tileColor.a)
+                        ? new Color(tileColor.r * brightness, tileColor.g * brightness, tileColor.b * brightness, tileColor.a)
+                        : tileColor
             wall.setColor(color)
         })
     }

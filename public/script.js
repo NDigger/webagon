@@ -2,7 +2,6 @@
 import * as PIXI from 'pixi.js';
 import { Vector2, Color } from './gameContent';
 import Lerp from './utils/interpolation';
-import Game from './gameContent/game';
 import Level from './gameContent/level';
 
 (async () => {
@@ -28,7 +27,7 @@ import Level from './gameContent/level';
         game.setRotationSpeed(.05);
         game.setWallSpeedMult(3);
         game.setWallSpawnDistance(1500);
-        game.setSides(4);
+        game.setSides(7);
         game.set3dDepth(5);
         game.set3dDistance(5);
         // game.set3dColor(new Color(255, 255, 255));
