@@ -94,6 +94,10 @@ export default class Polygon extends PolygonObject {
         this.#border.set3dColor(v);
     }
 
+    setPlayerSwapEnabled(v) { 
+        if (typeof(v) !== 'boolean') return
+        this.#player.setSwapEnabled(v);
+    };
     getPlayerPosition() { return this.#player.getPointPosition() }
     getPlayerAbsolutePosition() { return this.#player.getVertexAbsolutePos(0) }
     getPlayerRotation() { return this.#player.getRotation() }

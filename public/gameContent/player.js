@@ -9,6 +9,8 @@ export default class Player extends CustomWall {
     #leftKeyPressed = false;
     #rightKeyPressed = false;
 
+    #swapEnabled = false;
+
     #updateId;
     
     #distance = 0;
@@ -30,7 +32,7 @@ export default class Player extends CustomWall {
     #onKeyDown = e => {
         if (e.keyCode === 37) this.#leftKeyPressed = true;
         if (e.keyCode === 39) this.#rightKeyPressed = true;
-        if (e.keyCode === 32) this.#rotationOffset += 180;
+        if (e.keyCode === 32 && this.#swapEnabled) this.#rotationOffset += 180;
     }
 
     #onKeyUp = e => {
@@ -45,6 +47,11 @@ export default class Player extends CustomWall {
         if (this.#rightKeyPressed) this.#rotationOffset += frameTime * this.#speedMult;
 
         this.#updateId = requestAnimationFrame(time => this.#update(time));
+    }
+
+    setSwapEnabled(v) {
+        if (typeof(v) !== 'boolean') return
+        this.#swapEnabled = v;
     }
 
     setRotation(v) {

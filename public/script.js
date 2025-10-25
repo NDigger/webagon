@@ -25,6 +25,7 @@ import DrawHandler from './gameContent/drawHandler';
         drawHandler: new DrawHandler(),
     });
 
+    game.setSwapEnabled(true);
     game.setRotationSpeed(0.05);
     game.setWallSpeedMult(2);
     game.setWallSpawnDistance(1000);

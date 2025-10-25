@@ -277,4 +277,8 @@ export default class Game extends GameObject {
         console.log(v);
         globalThis.shakePower = v;
     }
+    setSwapEnabled(v) {
+        if (typeof(v) !== 'boolean') return
+        this.#polygon.setPlayerSwapEnabled(v)
+    }
 }
