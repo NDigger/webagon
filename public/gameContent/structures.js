@@ -35,6 +35,9 @@ export class Color {
         if (a != null) this.a = a;
     }
     
+    getRGBStyle() { return `rgb(${this.r}, ${this.g}, ${this.b})` };
+    getRGBAStyle() { return `rgba(${this.r}, ${this.g}, ${this.b}, ${this.a})` };
+    
     static hsvToRgb(h, s, v) {
         let r, g, b;
 

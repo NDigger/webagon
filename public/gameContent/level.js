@@ -2,38 +2,36 @@ import Game from "./game";
 import DrawHandler from './drawHandler';
 
 export default class Level {
-    #pixiApp
     game;
-
-    #updateId;
+    #gameOver = false;
     #lastUpdateTime = performance.now();
+    onInit = () => {};
+    onUpdate = () => {};
 
-    onInit = () => {}
-    onUpdate = () => {}
-
-    constructor (pixiApp) {
-        this.#pixiApp = pixiApp;
+    constructor(pixiApp) {
+        const game = new Game({
+            pixiApp: pixiApp,
+            drawHandler: new DrawHandler(),
+        })
+        this.game = game;
+        requestAnimationFrame(t => this.#update(t))
     }
 
     start() {
-        const game = new Game({
-            pixiApp: this.#pixiApp,
-            drawHandler: new DrawHandler(),
-        });
-        this.game = game;
         this.onInit(this.game)
-
-        this.#updateId = requestAnimationFrame(t => this.#update(t))
+        this.game.onDeath = () => this.#gameOver = true
     }
 
     #update(time) {
+        if (this.#gameOver) return
         const frameTime = time - this.#lastUpdateTime;
         this.#lastUpdateTime = time;
-        this.onUpdate(this.game, frameTime)
-        this.#updateId = requestAnimationFrame(t => this.#update(t))
-    }
+        this.onUpdate(this.game, frameTime);
 
-    static createTimeLevel(pixiApp) {
-        return new Level(pixiApp)
+        const timer = document.getElementById('timer');
+        timer.textContent = Math.floor(time)/1000;
+        timer.style.color = this.game.getMainColor().getRGBStyle();
+        
+        requestAnimationFrame(t => this.#update(t));
     }
 }

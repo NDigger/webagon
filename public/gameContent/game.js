@@ -110,18 +110,14 @@ export default class Game extends GameObject {
             this.setShakePower(v)
             this.#background.scheduleDraw()
             this.#polygon.scheduleDraw()
-        }).apply(50).run(0, 0.7);
+        }).apply(30).run(0, 0.35);
 
         this.setShakePower(10);
         const d = new Death(this.appContext);
         d.setSkew(this.#skew);
-        console.log(this.#polygon.getPlayerPosition());
-        d.setOffset(this.#polygon.getPlayerPosition().mul(new Vector2(.1, .1)))
-        console.log(d.getOffset())
-        // d.setRotation(this.#polygon.getPlayerRotation());
+        d.setOffset(this.#polygon.getPlayerPosition())
         d.set3dLayer(this.#get3dLayer());
         d.setScale(this.#scale);
-
 
         d.set3dColor(this.#get3dColor());
         d.set3dDepth(this.#depth3d);
@@ -268,6 +264,7 @@ export default class Game extends GameObject {
         });
         if (this.#color3d === null) this.#polygon.set3dColor(this.#getDefault3dColor());
     }
+    getMainColor() { return this.#mainColor }
     setPolygonColor({r, g, b, a}) {
         this.#polygon.setColor(new Color(r, g, b, a))
     }
@@ -331,7 +328,7 @@ export default class Game extends GameObject {
         this.#scale = scale;
         this.#polygon.setScale(scale)
         this.#background.setScale(scale)
-        if (this.#deathEffect !== undefined) this.#deathEffect.setScale(v);
+        if (this.#deathEffect !== undefined) this.#deathEffect.setScale(scale);
         this.#walls.forEach(wall => wall.setScale(scale));
     }
     clearWalls() {

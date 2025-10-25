@@ -20,33 +20,24 @@ import Level from './gameContent/level';
 
     // GAME
 
-    const level = Level.createTimeLevel(app);
+    const level = new Level(app);
+    const game = level.game;
 
     level.onInit = game => {
         game.setSwapEnabled(true);
         game.setRotationSpeed(.05);
         game.setWallSpeedMult(3);
-        game.setWallSpawnDistance(1000);
-        game.setSides(7);
+        game.setWallSpawnDistance(1500);
+        game.setSides(4);
         game.set3dDepth(5);
         game.set3dDistance(5);
-        game.setSkew(1);
         // game.set3dColor(new Color(255, 255, 255));
-        game.set3dFalloffColor(new Color(0, 0, 0));
+        // game.set3dFalloffColor(new Color(0, 0, 0));
+        game.setRadius(100);
     }
-
     level.start()
 
-
-    // game.onDeath = () => {
-    //     game.setBackgroundTileColors([
-    //         Color.hsvToRgb(time * 0.0002, 1, .25),
-    //         Color.hsvToRgb(time * 0.0002, 1, .2),
-    //     ])
-    // }
-
     let time = 0;
-    
     level.onUpdate = (game, ft) => {
         time += ft;
         game.setBackgroundTileColors([
@@ -54,10 +45,10 @@ import Level from './gameContent/level';
             Color.hsvToRgb(time * 0.0002, 1, .25),
             Color.hsvToRgb(time * 0.0002, 1, .2),
         ])
-        // game.setRotation(game.getRotation() - ((time / 960 - Math.ceil(time / 960)) * 5 + 2))
+        game.setRotation(game.getRotation() - ((time / 960 - Math.ceil(time / 960)) * 5 + 2))
         game.setMainColor(Color.hsvToRgb(time * 0.0002, 1, 1))
-        // game.set3dFalloffColor(Color.hsvToRgb(time * 0.0002 + .5, 1, 1));
         game.setRadius(Math.sin(time / 100)* 5 + 60);
+        game.setSkew(Math.sin(time/100) * .1 + .1)
     }
 
     // game.onRenderStage = ft => {

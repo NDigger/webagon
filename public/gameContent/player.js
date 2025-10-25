@@ -27,7 +27,7 @@ export default class Player extends CustomWall {
         this.#updateId = requestAnimationFrame(time => this.#update(time));
     }
 
-    getPointPosition() { return this.getVertexPos4()[0]} 
+    getPointPosition() { return new Vector2(this.#distance + 10, 0).rotate(this.getRotation() * Math.PI/180)} 
 
     #onKeyDown = e => {
         if (e.keyCode === 37) this.#leftKeyPressed = true;
