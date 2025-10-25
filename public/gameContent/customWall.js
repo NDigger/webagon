@@ -20,6 +20,7 @@ export default class CustomWall extends Mesh {
     #layers3d = new Layers3d(this.appContext);
     #skew = 0;
     #rotation = 0;
+    #scale = new Vector2(1, 1);
     
     #color3d = new Color(0, 0, 0);
     #depth3d = 0;
@@ -31,6 +32,7 @@ export default class CustomWall extends Mesh {
         const screenCenter = getScreenCenter();
         return this.getVertexPos4().map(vec2 => {
             let newPos = rotatePoint(vec2, new Vector2(0, 0), this.#rotation)
+            newPos = newPos.mul(this.#scale);
             newPos.x += screenCenter.x + this.#centerOffset.x
             newPos.y /= this.#skew + 1;
             newPos.y +=  screenCenter.y + this.#centerOffset.y;
@@ -66,6 +68,10 @@ export default class CustomWall extends Mesh {
         this.scheduleDraw();
     }
     getSkew() { return this.#skew; }
+    setScale({x, y}) {
+        this.#scale = new Vector2(x, y); 
+    }
+    getScale() { return this.#scale }
 
     set3dDepth(v) {
         if (typeof(v) !== 'number') return 

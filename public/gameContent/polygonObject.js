@@ -11,6 +11,7 @@ export default class PolygonObject extends GameObject {
     #thickness = 0;
     #distance = 0;
     #color = new Color(0, 0, 0);
+    #scale = new Vector2(1, 1);
 
     #centerOffset = new Vector2(0, 0);
     #offset = new Vector2(0, 0);
@@ -57,6 +58,10 @@ export default class PolygonObject extends GameObject {
         this.scheduleDraw();
     }
     getDistance() { return this.#distance; }
+    setScale({x, y}) {
+        this.#scale = new Vector2(x, y);
+        this.scheduleDraw();
+    }
     setColor({r, g, b, a}) {
         this.#color = new Color(r, g, b, a);
         this.scheduleDraw();
@@ -106,6 +111,7 @@ export default class PolygonObject extends GameObject {
             wall.setLayer(this.#layer);
             wall.setCenterOffset(this.#centerOffset);
             wall.setOffset(this.#offset);
+            wall.setScale(this.#scale);
 
             wall.set3dDistance(this.#distance3d);
             wall.set3dDepth(this.#depth3d);

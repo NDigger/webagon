@@ -11,6 +11,7 @@ export default class Layers3d extends GameObject {
     #distance = 10;
     #skew = 0;
     #color = new Color(0, 0, 0);
+    #falloffColor = null;
 
     constructor(appContext) {
         super(appContext)

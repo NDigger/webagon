@@ -56,6 +56,13 @@ export default class Polygon extends PolygonObject {
         this.#border.setRotation(v);
     }
 
+    setScale({x, y}) {
+        const scale = new Vector2(x, y);
+        super.setScale(scale)
+        this.#player.setScale(scale)
+        this.#border.setScale(scale);
+    }
+
     setBorderColor({r, g, b, a}) {
         this.#border.setColor(new Color(r, g, b, a))
     }

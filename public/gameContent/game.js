@@ -44,6 +44,8 @@ export default class Game extends GameObject {
     #rotationSpeed = 0;
     #rotation = 0;
     #sides = 6;
+    #skew = 0;
+    #scale = new Vector2(1, 1);
 
     #depth3d = 0;
     #distance3d = 0;
@@ -52,8 +54,6 @@ export default class Game extends GameObject {
     #mainColor = new Color(0, 0, 0);
     #wallSpawnDistance = 1000;
     #wallSpeedMult = 2;
-
-    #skew = 0;
 
     #handleVisibilityChange;
 
@@ -64,6 +64,7 @@ export default class Game extends GameObject {
 
     onUpdate = () => {}
     onRenderStage = () => {}
+    onDeath = () => {}
 
     constructor(appContext) {
         super(appContext)
@@ -115,6 +116,7 @@ export default class Game extends GameObject {
         d.setOffset(this.#polygon.getPlayerPosition())
         d.setRotation(this.#polygon.getPlayerRotation());
         d.set3dLayer(this.#get3dLayer());
+        d.setScale(this.#scale);
 
         d.set3dColor(this.#get3dColor());
         d.set3dDepth(this.#depth3d);
@@ -123,6 +125,7 @@ export default class Game extends GameObject {
         this.#deathEffect = d;
         this.#died = true;
         
+        this.onDeath()
     }
 
     #updateBackgroundRotation() {
@@ -205,6 +208,7 @@ export default class Game extends GameObject {
         wall.setDistance(this.#wallSpawnDistance);
         wall.setLayer(this.#getWallsLayer());
         wall.setSkew(this.#skew);
+        wall.setScale(this.#scale)
 
         wall.set3dDepth(this.#depth3d);
         wall.set3dDistance(this.#distance3d);
@@ -295,12 +299,19 @@ export default class Game extends GameObject {
     }
     setShakePower(v) {
         if (typeof(v) !== 'number') return
-        console.log(v);
         globalThis.shakePower = v;
     }
     setSwapEnabled(v) {
         if (typeof(v) !== 'boolean') return
         this.#polygon.setPlayerSwapEnabled(v)
+    }
+    setScale({x, y}) {
+        const scale = new Vector2(x, y);
+        this.#scale = scale;
+        this.#polygon.setScale(scale)
+        this.#background.setScale(scale)
+        if (this.#deathEffect !== undefined) this.#deathEffect.setScale(v);
+        this.#walls.forEach(wall => wall.setScale(scale));
     }
     clearWalls() {
         this.#walls.forEach(wall => wall.destroy());
