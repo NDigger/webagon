@@ -245,13 +245,15 @@ export default class Game extends GameObject {
         this.#polygon.setColor(new Color(r, g, b, a))
     }
     setWallSpawnDistance(v) {
-        if (typeof(v) === 'number') this.#wallSpawnDistance = v;
+        if (typeof(v) !== 'number') return;
+        this.#wallSpawnDistance = v;
     }
     setWallSpeedMult(v) {
-        if (typeof(v) === 'number') this.#wallSpeedMult = v;
+        if (typeof(v) !== 'number') return;
+        this.#wallSpeedMult = v;
     }
     set3dDepth(v) {
-        if (typeof(v) !== 'number') return
+        if (typeof(v) !== 'number') return;
         const depth = Math.floor(v);
         this.#depth3d = depth;
         this.#walls.forEach(wall => wall.set3dDepth(depth));

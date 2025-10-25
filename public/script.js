@@ -29,18 +29,18 @@ import DrawHandler from './gameContent/drawHandler';
     game.setRotationSpeed(0.05);
     game.setWallSpeedMult(2);
     game.setWallSpawnDistance(1000);
-    game.setSides(3);
+    game.setSides(6);
     game.set3dDepth(5);
     game.set3dDistance(10);
-    
+
     let time = 0;
     game.onUpdate = ft => {
         time += ft;
         game.setBackgroundTileColors([
-            Color.hsvToRgb(time * 0.0002, 1, .2),
+            Lerp.interpolate(Color.hsvToRgb(time * 0.0002, 1, .25), Color.hsvToRgb(time * 0.0002, 0, .95), time/960-Math.floor(time/960)),
             Color.hsvToRgb(time * 0.0002, 1, .25),
         ])
-        // game.setRotation(game.getRotation() - ((time / 960 - Math.ceil(time / 970)) * 5 + 2))
+        game.setRotation(game.getRotation() - ((time / 960 - Math.ceil(time / 960)) * 5 + 2))
         game.setMainColor(Color.hsvToRgb(time * 0.0002, 1., 1.))
         game.setSkew(Math.sin(time / 120)*.1+.1);
         game.setRadius(Math.sin(time / 100)* 5 + 60);
@@ -49,7 +49,7 @@ import DrawHandler from './gameContent/drawHandler';
     setInterval(() => {
         const rnd = Math.random() * game.getSides()
         for (let i = 1; i < game.getSides(); i++) {
-            game.createWall(i + rnd, 40)
+            game.createWall(i + rnd, 20)
         }
     }, 600)
 

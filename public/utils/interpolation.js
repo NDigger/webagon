@@ -57,6 +57,10 @@ export const Easing = Object.freeze({
     SINE_OUT: sine_out
 })
 
+const isFromToInstanceOf = (from, to, variant) => 
+    (variant === Number ? typeof from === 'number' && typeof to === 'number' 
+    : from instanceof variant && to instanceof variant);
+
 /* Supports Number and Color */
 export default class Lerp {
     #runId = 0;
@@ -88,7 +92,7 @@ export default class Lerp {
                 }
             }
 
-            this.value = this.#lerp(this.#from, to, t);
+            this.value = Lerp.interpolate(this.#from, to, t);
         
             if (this.setter) this.setter(this.value);
 
@@ -107,7 +111,19 @@ export default class Lerp {
         return this;
     }
 
-    #lerp(a, b, t) {
-        return a + (b - a) * t;
+    static interpolate(a, b, t) {
+        const clamped = Math.min(Math.max(t, 0), 1) 
+        if (isFromToInstanceOf(a, b, Color)) {
+            return new Color(
+                a.r + (b.r - a.r) * clamped,
+                a.g + (b.g - a.g) * clamped,
+                a.b + (b.b - a.b) * clamped,
+                a.a + (b.a - a.a) * clamped
+            )
+        } else if (isFromToInstanceOf(a, b, Number)) {
+            return a + (b - a) * clamped;
+        } else {
+            throw new Error('Invalid type.')
+        }
     }
 }
