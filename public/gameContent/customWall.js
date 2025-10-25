@@ -107,6 +107,7 @@ export default class CustomWall extends Mesh {
     get3dFalloffColor() { return this.#falloffColor3d}
     clear3dFalloffColor() {
         this.#falloffColor3d = null;
+        this.#layers3d.clearFalloffColor();
     }
     // setLayer(v) {
     //     super.setLayer(v)

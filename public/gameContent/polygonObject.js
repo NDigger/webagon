@@ -128,6 +128,7 @@ export default class PolygonObject extends GameObject {
             wall.set3dLayer(this.#layer3d);
             wall.set3dColor(this.#color3d);
             if (this.#falloffColor3d != null) wall.set3dFalloffColor(this.#falloffColor3d);
+            else wall.clear3dFalloffColor();
             
             wall.draw();
         })

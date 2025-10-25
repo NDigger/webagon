@@ -30,6 +30,9 @@ import Level from './gameContent/level';
     game.set3dDepth(5);
     game.set3dDistance(200);
     // game.set3dColor(new Color(255, 255, 255));
+    game.set3dFalloffColor(new Color(0, 0, 0));
+
+    setTimeout(() => game.clear3dFalloffColor(), 3000)
 
     game.onDeath = () => {
         game.setBackgroundTileColors([
@@ -48,9 +51,9 @@ import Level from './gameContent/level';
         ])
         // game.setRotation(game.getRotation() - ((time / 960 - Math.ceil(time / 960)) * 5 + 2))
         game.setMainColor(Color.hsvToRgb(time * 0.0002, 1, 1))
-        game.set3dFalloffColor(Color.hsvToRgb(time * 0.0002 + .5, 1, 1));
+        // game.set3dFalloffColor(Color.hsvToRgb(time * 0.0002 + .5, 1, 1));
         game.setRadius(Math.sin(time / 100)* 5 + 60);
-        const s = 1.+(time/460 - Math.floor(time / 460)) * .1
+        const s = .5+(time/460 - Math.floor(time / 460)) * .1
         game.setScale(new Vector2(s, s));
     }
 

@@ -309,6 +309,11 @@ export default class Game extends GameObject {
         if (this.#deathEffect !== undefined) this.#deathEffect.set3dFalloffColor(color);
         this.#walls.forEach(wall => wall.set3dFalloffColor(color));
     }
+    clear3dFalloffColor() {
+        this.#falloffColor3d = null
+        this.#polygon.clear3dFalloffColor();
+        this.#walls.forEach(w => w.clear3dFalloffColor());
+    }
     setShakePower(v) {
         if (typeof(v) !== 'number') return
         globalThis.shakePower = v;

@@ -71,6 +71,11 @@ export default class Layers3d extends GameObject {
         this.scheduleDraw();
     }
 
+    clearFalloffColor() {
+        this.#falloffColor = null;
+        this.scheduleDraw();
+    }
+
     destroy() {
         this.#meshes.forEach(mesh => mesh.destroy());
         this.#meshes = [];
