@@ -69,7 +69,8 @@ export default class CustomWall extends Mesh {
     }
     getSkew() { return this.#skew; }
     setScale({x, y}) {
-        this.#scale = new Vector2(x, y); 
+        this.#scale = new Vector2(x, y);
+        this.#layers3d.setDistance(this.#distance3d * this.#scale.y);
     }
     getScale() { return this.#scale }
 
@@ -82,7 +83,7 @@ export default class CustomWall extends Mesh {
     set3dDistance(v) {
         if (typeof(v) !== 'number') return
         this.#distance3d = v;
-        this.#layers3d.setDistance(v);
+        this.#layers3d.setDistance(v * this.#scale.y);
     }
     get3dDistance() { return this.#distance3d; }
     set3dLayer(v) {
