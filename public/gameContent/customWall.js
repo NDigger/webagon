@@ -21,12 +21,13 @@ export default class CustomWall extends Mesh {
     #skew = 0;
     #rotation = 0;
     #scale = new Vector2(1, 1);
+    #centerOffset = new Vector2(0, 0);
     
     #color3d = new Color(0, 0, 0);
+    #falloffColor3d = null;
     #depth3d = 0;
     #distance3d = 0;
     #layersCount3d = 0;
-    #centerOffset = new Vector2(0, 0);
 
     getAbsoluteVertex4() {
         const screenCenter = getScreenCenter();
@@ -97,7 +98,16 @@ export default class CustomWall extends Mesh {
         this.#color3d = color;
         this.#layers3d.setColor(color);
     }
-    get3DColor() { return this.#color3d }
+    get3dColor() { return this.#color3d }
+    set3dFalloffColor({r, g, b, a}) {
+        const color = new Color(r, g, b, a);
+        this.#falloffColor3d = color;
+        this.#layers3d.setFalloffColor(color);
+    }
+    get3dFalloffColor() { return this.#falloffColor3d}
+    clear3dFalloffColor() {
+        this.#falloffColor3d = null;
+    }
     // setLayer(v) {
     //     super.setLayer(v)
     //     this.#layers3d.setLayer(v - 0.001);

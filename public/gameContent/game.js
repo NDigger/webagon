@@ -50,6 +50,7 @@ export default class Game extends GameObject {
     #depth3d = 0;
     #distance3d = 0;
     #color3d = null;
+    #falloffColor3d = null;
 
     #mainColor = new Color(0, 0, 0);
     #wallSpawnDistance = 1000;
@@ -122,6 +123,8 @@ export default class Game extends GameObject {
         d.set3dDepth(this.#depth3d);
         d.set3dDistance(this.#distance3d);
         d.setSides(this.#sides)
+        if (this.#falloffColor3d != null) d.set3dFalloffColor(this.#falloffColor3d)
+
         this.#deathEffect = d;
         this.#died = true;
         
@@ -210,6 +213,7 @@ export default class Game extends GameObject {
         wall.setSkew(this.#skew);
         wall.setScale(this.#scale)
 
+        if (this.#falloffColor3d) wall.set3dFalloffColor(this.#falloffColor3d);
         wall.set3dDepth(this.#depth3d);
         wall.set3dDistance(this.#distance3d);
         wall.set3dLayer(this.#get3dLayer());
@@ -287,15 +291,23 @@ export default class Game extends GameObject {
         if (this.#deathEffect !== undefined) this.#deathEffect.set3dDistance(v);
     }
     set3dColor({r, g, b, a}) {
-        if (r && g && b) {
+        if (r != null && g != null && b != null) {
             const color = new Color(r, g, b, a);
             this.#color3d = color;
+            this.#polygon.set3dColor(color)
             if (this.#deathEffect !== undefined) this.#deathEffect.set3dColor(color);
             this.#walls.forEach(wall => wall.set3dColor(color));
         } else {
             if (this.#deathEffect !== undefined) this.#deathEffect.set3dColor(this.#getDefault3dColor);
             this.#walls.forEach(wall => wall.set3dColor(this.#getDefault3dColor()));
         }
+    }
+    set3dFalloffColor({r, g, b, a}) {
+        const color = new Color(r, g, b, a);
+        this.#falloffColor3d = color;
+        this.#polygon.set3dFalloffColor(color);
+        if (this.#deathEffect !== undefined) this.#deathEffect.set3dFalloffColor(color);
+        this.#walls.forEach(wall => wall.set3dFalloffColor(color));
     }
     setShakePower(v) {
         if (typeof(v) !== 'number') return

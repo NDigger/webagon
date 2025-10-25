@@ -20,6 +20,7 @@ export default class PolygonObject extends GameObject {
     #distance3d = 0;
     #layer3d = 0;
     #color3d = new Color(0, 0, 0);
+    #falloffColor3d = null;
 
     draw() {
         const sidesChanged = (this._walls[0]?.getSides() ?? -1) !== this.#sides;
@@ -100,6 +101,15 @@ export default class PolygonObject extends GameObject {
         this.scheduleDraw();
     }
     get3dColor() { return this.#color3d; }
+    set3dFalloffColor({r, g, b, a}) {
+        this.#falloffColor3d = new Color(r, g, b, a);
+        this.scheduleDraw();
+    }
+    get3dFalloffColor() { return this.#falloffColor3d; }
+    clear3dFalloffColor() {
+        this.#falloffColor3d = null;
+        this.scheduleDraw();
+    }
 
     updateWallsProps() {
         this._walls.forEach(wall => {
@@ -117,6 +127,7 @@ export default class PolygonObject extends GameObject {
             wall.set3dDepth(this.#depth3d);
             wall.set3dLayer(this.#layer3d);
             wall.set3dColor(this.#color3d);
+            if (this.#falloffColor3d != null) wall.set3dFalloffColor(this.#falloffColor3d);
             
             wall.draw();
         })

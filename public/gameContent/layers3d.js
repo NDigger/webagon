@@ -1,5 +1,6 @@
 import GameObject from "./gameObject";
 import Mesh from "./mesh";
+import Lerp from "../utils/interpolation";
 import { Vector2, Color } from "./structures";
 
 export default class Layers3d extends GameObject {
@@ -20,10 +21,15 @@ export default class Layers3d extends GameObject {
     draw() {
         this.#meshes.forEach(mesh => mesh.destroy())
         this.#meshes = [];
+        console.log(this.#falloffColor)
         for (let i = 1; i <= this.#depth; i++) {
             const mesh = new Mesh(this.appContext)
-            mesh.setColor(this.#color);
-            mesh.setLayer(this.#layer)
+            if (this.#falloffColor == null) {
+                mesh.setColor(this.#color);
+            } else {
+                mesh.setColor(Lerp.interpolate(this.#color, this.#falloffColor, i/this.#depth))
+            }
+            mesh.setLayer(this.#layer - i*0.0001)
             this.#meshes.push(mesh);
         }
         if (this.#vertexPos4) {
@@ -45,19 +51,24 @@ export default class Layers3d extends GameObject {
     }
 
     setSkew(v) {
-        if (typeof(v) !== 'number') return
+        if (typeof(v) !== 'number') return;
         this.#skew = v;
         this.scheduleDraw();
     }
 
     setLayer(v) {
         this.#layer = v;
-        this.#meshes.forEach(mesh => mesh.setLayer(v))
+        this.#meshes.forEach(mesh => mesh.setLayer(v));
     }
 
     setColor({r, g, b, a}) {
         this.#color = new Color(r, g, b, a);
-        this.scheduleDraw()
+        this.scheduleDraw();
+    }
+
+    setFalloffColor({r, g, b, a}) {
+        this.#falloffColor = new Color(r, g, b, a);
+        this.scheduleDraw();
     }
 
     destroy() {
