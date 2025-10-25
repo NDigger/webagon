@@ -77,6 +77,7 @@ export default class PolygonObject extends GameObject {
         this.#offset = new Vector2(x, y);
         this.scheduleDraw();
     }
+    getOffset() { return this.#offset }
 
     set3dDepth(v) {
         if (typeof(v) !== 'number') return 

@@ -106,18 +106,22 @@ export default class Game extends GameObject {
     kill() {
         document.removeEventListener('visibilitychange', this.#handleVisibilityChange);
 
-        const lerp = new Lerp(v => {
+        new Lerp(v => {
             this.setShakePower(v)
             this.#background.scheduleDraw()
             this.#polygon.scheduleDraw()
         }).apply(50).run(0, 0.7);
+
         this.setShakePower(10);
         const d = new Death(this.appContext);
         d.setSkew(this.#skew);
-        d.setOffset(this.#polygon.getPlayerPosition())
-        d.setRotation(this.#polygon.getPlayerRotation());
+        console.log(this.#polygon.getPlayerPosition());
+        d.setOffset(this.#polygon.getPlayerPosition().mul(new Vector2(.1, .1)))
+        console.log(d.getOffset())
+        // d.setRotation(this.#polygon.getPlayerRotation());
         d.set3dLayer(this.#get3dLayer());
         d.setScale(this.#scale);
+
 
         d.set3dColor(this.#get3dColor());
         d.set3dDepth(this.#depth3d);

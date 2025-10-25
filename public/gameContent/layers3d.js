@@ -21,7 +21,6 @@ export default class Layers3d extends GameObject {
     draw() {
         this.#meshes.forEach(mesh => mesh.destroy())
         this.#meshes = [];
-        console.log(this.#falloffColor)
         for (let i = 1; i <= this.#depth; i++) {
             const mesh = new Mesh(this.appContext)
             if (this.#falloffColor == null) {

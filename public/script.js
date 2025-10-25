@@ -20,30 +20,35 @@ import Level from './gameContent/level';
 
     // GAME
 
-    const { game } = Level.createTimeLevel(app);
+    const level = Level.createTimeLevel(app);
 
-    game.setSwapEnabled(true);
-    game.setRotationSpeed(.05);
-    game.setWallSpeedMult(3);
-    game.setWallSpawnDistance(1000);
-    game.setSides(4);
-    game.set3dDepth(5);
-    game.set3dDistance(200);
-    // game.set3dColor(new Color(255, 255, 255));
-    game.set3dFalloffColor(new Color(0, 0, 0));
-
-    setTimeout(() => game.clear3dFalloffColor(), 3000)
-
-    game.onDeath = () => {
-        game.setBackgroundTileColors([
-            // Lerp.interpolate(Color.hsvToRgb(time * 0.0002, 1, .25), Color.hsvToRgb(time * 0.0002, 0, .95), time/960-Math.floor(time/960)),
-            Color.hsvToRgb(time * 0.0002, 1, .25),
-            Color.hsvToRgb(time * 0.0002, 1, .2),
-        ])
+    level.onInit = game => {
+        game.setSwapEnabled(true);
+        game.setRotationSpeed(.05);
+        game.setWallSpeedMult(3);
+        game.setWallSpawnDistance(1000);
+        game.setSides(7);
+        game.set3dDepth(5);
+        game.set3dDistance(5);
+        game.setSkew(1);
+        // game.set3dColor(new Color(255, 255, 255));
+        game.set3dFalloffColor(new Color(0, 0, 0));
     }
 
+    level.start()
+
+
+    // game.onDeath = () => {
+    //     game.setBackgroundTileColors([
+    //         Color.hsvToRgb(time * 0.0002, 1, .25),
+    //         Color.hsvToRgb(time * 0.0002, 1, .2),
+    //     ])
+    // }
+
     let time = 0;
-    game.onUpdate = ft => {
+    
+    level.onUpdate = (game, ft) => {
+        time += ft;
         game.setBackgroundTileColors([
             // Lerp.interpolate(Color.hsvToRgb(time * 0.0002, 1, .25), Color.hsvToRgb(time * 0.0002, 0, .95), time/960-Math.floor(time/960)),
             Color.hsvToRgb(time * 0.0002, 1, .25),
@@ -53,19 +58,16 @@ import Level from './gameContent/level';
         game.setMainColor(Color.hsvToRgb(time * 0.0002, 1, 1))
         // game.set3dFalloffColor(Color.hsvToRgb(time * 0.0002 + .5, 1, 1));
         game.setRadius(Math.sin(time / 100)* 5 + 60);
-        const s = .5+(time/460 - Math.floor(time / 460)) * .1
-        game.setScale(new Vector2(s, s));
     }
 
-    game.onRenderStage = ft => {
-        time += ft;
-        game.setSkew(Math.sin(time / 120)*.1+.1);
-    }
+    // game.onRenderStage = ft => {
+    //     time += ft;
+    // }
 
     setInterval(() => {
-        const rnd = Math.random() * game.getSides()
-        for (let i = 1; i < game.getSides(); i++) {
-            game.createWall(i + rnd, 40)
+        const rnd = Math.random() * level.game.getSides()
+        for (let i = 1; i < level.game.getSides(); i++) {
+            level.game.createWall(i + rnd, 40)
         }
     }, 600)
 
