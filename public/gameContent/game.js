@@ -37,6 +37,7 @@ export default class Game extends GameObject {
     #layer = 0;
 
     #polygon;
+    #deathEffect;
 
     #walls = [];
 
@@ -96,7 +97,7 @@ export default class Game extends GameObject {
 
     #getDefault3dColor() { 
         const brightness = .5
-        return new Color(this.#mainColor.r * brightness, this.#mainColor.g * brightness, this.#mainColor.b * brightness) 
+        return new Color(this.#mainColor.r * brightness, this.#mainColor.g * brightness, this.#mainColor.b * brightness, this.#mainColor.a) 
     }
     #get3dColor() { return this.#color3d ?? this.#getDefault3dColor() }
 
@@ -119,6 +120,7 @@ export default class Game extends GameObject {
         d.set3dDepth(this.#depth3d);
         d.set3dDistance(this.#distance3d);
         d.setSides(this.#sides)
+        this.#deathEffect = d;
         this.#died = true;
         
     }
@@ -221,12 +223,14 @@ export default class Game extends GameObject {
         this.#skew = v
         this.#background.setSkew(v);
         this.#polygon.setSkew(v);
+        if (this.#deathEffect !== undefined) this.#deathEffect.setSkew(v);
         this.#walls.forEach(wall => wall.setSkew(v));        
     }
     setSides(v) {
         if (typeof(v) !== 'number') return
         this.#background.setSides(v);
         this.#polygon.setSides(v);
+        if (this.#deathEffect !== undefined) this.#deathEffect.setSides(v);
         this.#sides = v;
     }
     getSides() {
@@ -269,19 +273,23 @@ export default class Game extends GameObject {
         this.#depth3d = depth;
         this.#walls.forEach(wall => wall.set3dDepth(depth));
         this.#polygon.set3dDepth(depth)
+        if (this.#deathEffect !== undefined) this.#deathEffect.set3dDepth(v);
     }
     set3dDistance(v) {
         if (typeof(v) !== 'number') return
         this.#distance3d = v;
         this.#walls.forEach(wall => wall.set3dDistance(v));
         this.#polygon.set3dDistance(v)
+        if (this.#deathEffect !== undefined) this.#deathEffect.set3dDistance(v);
     }
     set3dColor({r, g, b, a}) {
         if (r && g && b) {
             const color = new Color(r, g, b, a);
             this.#color3d = color;
+            if (this.#deathEffect !== undefined) this.#deathEffect.set3dColor(color);
             this.#walls.forEach(wall => wall.set3dColor(color));
         } else {
+            if (this.#deathEffect !== undefined) this.#deathEffect.set3dColor(this.#getDefault3dColor);
             this.#walls.forEach(wall => wall.set3dColor(this.#getDefault3dColor()));
         }
     }

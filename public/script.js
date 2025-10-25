@@ -23,7 +23,7 @@ import Level from './gameContent/level';
     const { game } = Level.createTimeLevel(app);
 
     game.setSwapEnabled(true);
-    game.setRotationSpeed(0.3);
+    game.setRotationSpeed(1);
     game.setWallSpeedMult(5);
     game.setWallSpawnDistance(1000);
     game.setSides(4);
@@ -34,17 +34,17 @@ import Level from './gameContent/level';
     game.onUpdate = ft => {
         game.setBackgroundTileColors([
             // Lerp.interpolate(Color.hsvToRgb(time * 0.0002, 1, .25), Color.hsvToRgb(time * 0.0002, 0, .95), time/960-Math.floor(time/960)),
-            Color.hsvaToRgba(time * 0.0002, 1, .25, 125),
-            Color.hsvaToRgba(time * 0.0002, 1, .2, 125),
+            Color.hsvToRgb(time * 0.0002, 1, .25),
+            Color.hsvToRgb(time * 0.0002, 1, .2),
         ])
         // game.setRotation(game.getRotation() - ((time / 960 - Math.ceil(time / 960)) * 5 + 2))
-        game.setMainColor(Color.hsvaToRgba(time * 0.0002, 1., 1., 125))
+        game.setMainColor(Color.hsvaToRgba(time * 0.0002, 1., 1., 25))
         game.setRadius(Math.sin(time / 100)* 5 + 60);
-        game.setSkew(Math.sin(time / 120)*.1+.1);
     }
 
     game.onRenderStage = ft => {
         time += ft;
+        game.setSkew(Math.sin(time / 120)*.1+.1);
     }
 
     setInterval(() => {
