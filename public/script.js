@@ -26,24 +26,27 @@ import DrawHandler from './gameContent/drawHandler';
     });
 
     game.setSwapEnabled(true);
-    game.setRotationSpeed(0.05);
+    game.setRotationSpeed(0.5);
     game.setWallSpeedMult(2);
     game.setWallSpawnDistance(1000);
     game.setSides(6);
     game.set3dDepth(5);
-    game.set3dDistance(10);
+    game.set3dDistance(100);
 
     let time = 0;
     game.onUpdate = ft => {
-        time += ft;
         game.setBackgroundTileColors([
             Lerp.interpolate(Color.hsvToRgb(time * 0.0002, 1, .25), Color.hsvToRgb(time * 0.0002, 0, .95), time/960-Math.floor(time/960)),
             Color.hsvToRgb(time * 0.0002, 1, .25),
         ])
         game.setRotation(game.getRotation() - ((time / 960 - Math.ceil(time / 960)) * 5 + 2))
         game.setMainColor(Color.hsvToRgb(time * 0.0002, 1., 1.))
-        game.setSkew(Math.sin(time / 120)*.1+.1);
         game.setRadius(Math.sin(time / 100)* 5 + 60);
+        game.setSkew(Math.sin(time / 120)*.1+.1);
+    }
+
+    game.onRenderStage = ft => {
+        time += ft;
     }
 
     setInterval(() => {

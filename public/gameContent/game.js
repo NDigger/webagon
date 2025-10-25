@@ -40,8 +40,6 @@ export default class Game extends GameObject {
 
     #walls = [];
 
-    #lasttime = performance.now();
-
     #rotationSpeed = 0;
     #rotation = 0;
     #sides = 6;
@@ -58,7 +56,13 @@ export default class Game extends GameObject {
 
     #handleVisibilityChange;
 
+    #updateId;
+    #renderStageId;
+    #lastUpdateTime = performance.now();
+    #lastRenderStageTime = performance.now();
+
     onUpdate = () => {}
+    onRenderStage = () => {}
 
     constructor(appContext) {
         super(appContext)
@@ -81,7 +85,8 @@ export default class Game extends GameObject {
         document.addEventListener('visibilitychange', this.#handleVisibilityChange);
 
 
-        requestAnimationFrame(time => this.#update(time));
+        this.#updateId = requestAnimationFrame(time => this.#update(time));
+        this.#renderStageId = requestAnimationFrame(time => this.#renderStage(time));
     }
 
     #getPolygonLayer() { return this.#layer + 0.004}
@@ -129,9 +134,17 @@ export default class Game extends GameObject {
         this.#updateBackgroundRotation()
     }
 
+    #renderStage(time) {
+        const frameTime = time - this.#lastRenderStageTime;
+        this.#lastRenderStageTime = time;
+        this.onRenderStage(frameTime);
+
+        this.#renderStageId = requestAnimationFrame(time => this.#renderStage(time));
+    }
+
     #update(time) {
-        const frameTime = time - this.#lasttime;
-        this.#lasttime = time;
+        const frameTime = time - this.#lastUpdateTime;
+        this.#lastUpdateTime = time;
 
         if (!this.#died) {
             this.#rotation += this.#rotationSpeed * frameTime;
@@ -169,6 +182,7 @@ export default class Game extends GameObject {
                 wall.destroy()
                 return false;
             }
+            wall.scheduleDraw();
             return true
         })
 
@@ -178,7 +192,7 @@ export default class Game extends GameObject {
             this.#swapBackground();
         }
 
-        requestAnimationFrame(time => this.#update(time));
+        this.#updateId = requestAnimationFrame(time => this.#update(time));
     }
 
     createWall(side, thickness) {
