@@ -27,7 +27,7 @@ import Level from './gameContent/level';
         game.setRotationSpeed(.05);
         game.setWallSpeedMult(3);
         game.setWallSpawnDistance(1500);
-        game.setSides(7);
+        game.setSides(3);
         game.set3dDepth(5);
         game.set3dDistance(5);
         // game.set3dColor(new Color(255, 255, 255));

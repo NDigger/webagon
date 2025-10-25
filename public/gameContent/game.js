@@ -56,8 +56,6 @@ export default class Game extends GameObject {
     #wallSpawnDistance = 1000;
     #wallSpeedMult = 2;
 
-    #handleVisibilityChange;
-
     #updateId;
     #renderStageId;
     #lastUpdateTime = performance.now();
@@ -81,13 +79,6 @@ export default class Game extends GameObject {
             new Color(235, 235, 235),
         ])
 
-        this.#handleVisibilityChange = () => {
-            if (document.hidden) this.kill();
-        };
-
-        document.addEventListener('visibilitychange', this.#handleVisibilityChange);
-
-
         this.#updateId = requestAnimationFrame(time => this.#update(time));
         this.#renderStageId = requestAnimationFrame(time => this.#renderStage(time));
     }
@@ -104,8 +95,6 @@ export default class Game extends GameObject {
     #get3dColor() { return this.#color3d ?? this.#getDefault3dColor() }
 
     kill() {
-        document.removeEventListener('visibilitychange', this.#handleVisibilityChange);
-
         new Lerp(v => {
             this.setShakePower(v)
             this.#background.scheduleDraw()
@@ -166,7 +155,6 @@ export default class Game extends GameObject {
             const pos = wall.getVertexAbsolutePos4();
             if (pointInQuad(this.#polygon.getPlayerAbsolutePosition(), pos[0], pos[1], pos[2], pos[3])
             && !this.#died) {
-                document.removeEventListener('visibilitychange', this.#handleVisibilityChange)
                 this.kill();
                 this.#polygon.draw();
             }

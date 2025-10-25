@@ -6,32 +6,49 @@ export default class Level {
     game;
     #gameOver = false;
 
+    #renderId = null;
     #updateId = null;
     #lastUpdateTime = performance.now();
     #lastRestartTime = 0;
 
     onInit = () => {};
     onUpdate = () => {};
+    onRender = () => {};
 
     constructor(pixiApp) {
         this.#pixiApp = pixiApp
 
-        window.addEventListener('keydown', e => {
-            if (e.keyCode === 82) this.restart()
-        })
+        window.addEventListener('keydown', this.#handleKeydown)
+
+        this.#renderId = requestAnimationFrame(t => this.#render)
+    }
+
+    #handleVisibilityChange = () => {
+        if (document.hidden) this.kill();
+    };
+
+    #handleKeydown = e => {
+        if (e.keyCode === 82) this.restart();
+        if (e.keyCode === 27) this.leave();
+    }
+
+    leave() {
+        document.removeEventListener('visibilitychange', this.#handleVisibilityChange);
+        this.game.destroy()
+        cancelAnimationFrame(this.#updateId)
+        cancelAnimationFrame(this.#renderId)
     }
 
     restart() {
         this.#lastUpdateTime = performance.now();
         this.#lastRestartTime = performance.now();
-        this.#gameOver = false;
-        this.game.destroy()
         cancelAnimationFrame(this.#updateId);
         this.start();
     }
 
     start() {
-        this.#updateId = requestAnimationFrame(t => this.#update(t))
+        if (this.game != null) this.game.destroy();
+        this.#gameOver = false;
         const game = new Game({
             pixiApp: this.#pixiApp,
             drawHandler: new DrawHandler(),
@@ -41,8 +58,18 @@ export default class Level {
         this.onInit(game)
         this.game.onDeath = () => {
             cancelAnimationFrame(this.#updateId);
+            window.removeEventListener('keydown', this.#handleVisibilityChange);
             this.#gameOver = true
         }
+
+        document.addEventListener('visibilitychange', this.#handleVisibilityChange);
+        this.#updateId = requestAnimationFrame(t => this.#update(t))
+    }
+
+    kill() {
+        document.removeEventListener('visibilitychange', this.#handleVisibilityChange);
+        this.game.kill()
+        cancelAnimationFrame(this.#updateId);
     }
 
     #update(time) {
@@ -56,5 +83,12 @@ export default class Level {
         if (this.game) timer.style.color = this.game.getMainColor().getRGBStyle();
         
         this.#updateId = requestAnimationFrame(t => this.#update(t));
+    }
+
+    #render(time) {
+        const frameTime = time - this.#lastUpdateTime;
+
+        this.onRender(this.game, frameTime)
+        this.#renderId = requestAnimationFrame(t => this.#render(t))
     }
 }
