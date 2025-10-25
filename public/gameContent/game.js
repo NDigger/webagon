@@ -281,4 +281,8 @@ export default class Game extends GameObject {
         if (typeof(v) !== 'boolean') return
         this.#polygon.setPlayerSwapEnabled(v)
     }
+    clearWalls() {
+        this.#walls.forEach(wall => wall.destroy());
+        this.#walls = [];
+    }
 }

@@ -32,7 +32,7 @@ import DrawHandler from './gameContent/drawHandler';
     game.setSides(3);
     game.set3dDepth(5);
     game.set3dDistance(10);
-
+    
     let time = 0;
     game.onUpdate = ft => {
         time += ft;
