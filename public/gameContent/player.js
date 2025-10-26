@@ -62,11 +62,13 @@ export default class Player extends CustomWall {
         if (typeof(v) !== 'boolean') return
         this.#movementEnabled = v;
     }
+    getMovementEnabled() { return this.#movementEnabled; }
 
     setSwapEnabled(v) {
         if (typeof(v) !== 'boolean') return
         this.#swapEnabled = v;
     }
+    getSwapEnabled() { return this.#swapEnabled; }
     
     setDistance(v) {
         if (typeof(v) !== 'number') return

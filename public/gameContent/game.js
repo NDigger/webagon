@@ -227,7 +227,9 @@ export default class Game extends GameObject {
     setRotation(v) { if (typeof(v) === 'number') this.#rotation = v; }
     getRotation() { return this.#rotation }
     setRotationSpeed(v) { if (typeof(v) === 'number') this.#rotationSpeed = v; }
+    getRotationSpeed() { return this.#rotationSpeed }
     setRadius(v) { if (typeof(v) === 'number') this.#polygon.setThickness(v); }
+    getRadius() { return this.#polygon.getThickness() }
     setSkew(v) {
         if (typeof(v) !== 'number') return
         this.#skew = v
@@ -236,6 +238,7 @@ export default class Game extends GameObject {
         if (this.#deathEffect !== undefined) this.#deathEffect.setSkew(v);
         this.#walls.forEach(wall => wall.setSkew(v));        
     }
+    getSkew() { return this.#skew; }
     setSides(v) {
         if (typeof(v) !== 'number') return
         this.#background.setSides(v);
@@ -243,16 +246,16 @@ export default class Game extends GameObject {
         if (this.#deathEffect !== undefined) this.#deathEffect.setSides(v);
         this.#sides = v;
     }
-    getSides() {
-        return this.#sides;
-    }
+    getSides() { return this.#sides; }
     setBackgroundTileColors(arr) {
         this.#backgroundTileColors = arr;
         this.#updateBackground();
     }
+    getBackgroundTileColors() { return this.#backgroundTileColors; }
     setBackgroundRotationOffset(v) {
-        if (typeof(v) === 'number') this.#backgroundRotationOffset = v
+        if (typeof(v) === 'number') this.#backgroundRotationOffset = v;
     }
+    getBackgroundRotationOffset() { return this.#backgroundRotationOffset; }
     setMainColor({r, g, b, a}) {
         const color = new Color(r, g, b, a)
         this.#mainColor = color;
@@ -269,10 +272,12 @@ export default class Game extends GameObject {
     setPolygonColor({r, g, b, a}) {
         this.#polygon.setColor(new Color(r, g, b, a))
     }
+    getPolygonColor() { return this.#polygon.getColor() }
     setWallSpawnDistance(v) {
         if (typeof(v) !== 'number') return;
         this.#wallSpawnDistance = v;
     }
+    getWallSpawnDistance() { return this.#wallSpawnDistance }
     setWallSpeedMult(v) {
         if (typeof(v) !== 'number') return;
         this.#wallSpeedMult = v;
@@ -286,6 +291,7 @@ export default class Game extends GameObject {
         this.#polygon.set3dDepth(depth)
         if (this.#deathEffect !== undefined) this.#deathEffect.set3dDepth(v);
     }
+    get3dDepth() { return this.#depth3d }
     set3dDistance(v) {
         if (typeof(v) !== 'number') return
         this.#distance3d = v;
@@ -293,6 +299,7 @@ export default class Game extends GameObject {
         this.#polygon.set3dDistance(v)
         if (this.#deathEffect !== undefined) this.#deathEffect.set3dDistance(v);
     }
+    get3dDistance() { return this.#distance3d }
     set3dColor({r, g, b, a}) {
         if (r != null && g != null && b != null) {
             const color = new Color(r, g, b, a);
@@ -305,6 +312,7 @@ export default class Game extends GameObject {
             this.#walls.forEach(wall => wall.set3dColor(this.#getDefault3dColor()));
         }
     }
+    get3dColor() { return this.#color3d; }
     set3dFalloffColor({r, g, b, a}) {
         const color = new Color(r, g, b, a);
         this.#falloffColor3d = color;
@@ -312,8 +320,9 @@ export default class Game extends GameObject {
         if (this.#deathEffect !== undefined) this.#deathEffect.set3dFalloffColor(color);
         this.#walls.forEach(wall => wall.set3dFalloffColor(color));
     }
+    get3dFalloffColor() { return this.#falloffColor3d; }
     clear3dFalloffColor() {
-        this.#falloffColor3d = null
+        this.#falloffColor3d = null;
         this.#polygon.clear3dFalloffColor();
         this.#walls.forEach(w => w.clear3dFalloffColor());
     }
@@ -321,41 +330,43 @@ export default class Game extends GameObject {
         if (typeof(v) !== 'number') return
         globalThis.shakePower = v;
     }
+    getShakePower() { return globalThis.shakePower }
     setSwapEnabled(v) {
         if (typeof(v) !== 'boolean') return
         this.#polygon.player.setSwapEnabled(v)
     }
+    getSwapEnabled() { return this.#polygon.player.getSwapEnabled(); }
     setScale({x, y}) {
         const scale = new Vector2(x, y);
         this.#scale = scale;
-        this.#polygon.setScale(scale)
-        this.#background.setScale(scale)
+        this.#polygon.setScale(scale);
+        this.#background.setScale(scale);
         if (this.#deathEffect !== undefined) this.#deathEffect.setScale(scale);
         this.#walls.forEach(wall => wall.setScale(scale));
     }
+    getScale() { return this.#scale; }
     setOffset({x, y}) {
         const offset = new Vector2(x, y);
         this.#offset = offset;
         this.#polygon.setOffset(offset);
         this.#background.setOffset(offset);
-        this.#walls.forEach(wall => {
-            wall.setOffset(offset)
-        })
+        this.#walls.forEach(wall => wall.setOffset(offset));
     }
+    getOffset() { return this.#offset; }
     setCenterOffset({x, y}) {
-        const offset = new Vector2(x, y)
-        this.#centerOffset = offset
-        this.#polygon.setCenterOffset(offset)
+        const offset = new Vector2(x, y);
+        this.#centerOffset = offset;
+        this.#polygon.setCenterOffset(offset);
         this.#background.setCenterOffset(offset);
-        this.#walls.forEach(wall => {
-            wall.setCenterOffset(offset)
-        })
+        this.#walls.forEach(wall => wall.setCenterOffset(offset));
     }
+    getCenterOffset() { return this.#centerOffset; }
     setBackgroundSwapTime(v) {
         if (typeof(v) !== 'number') return
         this.#backgroundSwapTime = v*1000;
         this.#backgroundSwapTimer = v*1000;
     }
+    getBackgroundSwapTime() { return this.#backgroundSwapTime }
     clearWalls() {
         this.#walls.forEach(wall => wall.destroy());
         this.#walls = [];
