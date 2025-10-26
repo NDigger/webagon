@@ -54,7 +54,7 @@ export default class Polygon extends PolygonObject {
 
     setLayer(v) {
         super.setLayer(v)
-        this.player.setLayer(v);
+        this.player.setLayer(v - 0.0001);
         this.#border.setLayer(v);
     }
 

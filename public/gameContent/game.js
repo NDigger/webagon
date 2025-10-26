@@ -224,6 +224,17 @@ export default class Game extends GameObject {
         this.#walls.push(wall);
     }
     
+    setLayer(v) {
+        this.#layer = v;
+        this.#background.setLayer(this.#getBackgroundLayer());
+        this.#background.set3dLayer(this.#get3dLayer());
+        this.#polygon.setLayer(this.#getPolygonLayer());
+        this.#polygon.set3dLayer(this.#get3dLayer());
+        this.#walls.forEach(wall => {
+            wall.setLayer(this.#getWallsLayer());
+            wall.set3dLayer(this.#get3dLayer());
+        })
+    }
     setRotation(v) { if (typeof(v) === 'number') this.#rotation = v; }
     getRotation() { return this.#rotation }
     setRotationSpeed(v) { if (typeof(v) === 'number') this.#rotationSpeed = v; }
