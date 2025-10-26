@@ -21,7 +21,6 @@ let time = 0;
 // onUpdate is called every frame.
 level.onUpdate = ft => {
     const g = level.game;
-    time += ft;
     g.setBackgroundTileColors([
         // Lerp.interpolate(Color.hsvToRgb(time * 0.2, 1, 0.5), Color.hsvToRgb(time * 0.2, 1, 0.1), (time/940-Math.floor(time/940))),
         // Lerp.interpolate(Color.hsvToRgb(time * 0.2, 1, 0.4), Color.hsvToRgb(time * 0.2, 1, 0.2), (time/940-Math.floor(time/940))),
@@ -34,6 +33,11 @@ level.onUpdate = ft => {
     g.setWallSpeedMult(g.getWallSpeedMult() + ft)
     g.setRadius(80 - (time * 2 - Math.floor(time * 2)) * 10)
     g.setRadius(Math.sin(time*10)* 5 + 60);
+}
+
+level.onRender = ft => {
+    time += ft;
+    const g = level.game;
     g.setSkew(Math.sin(time*10) * .1 + .1)
 }
 

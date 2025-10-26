@@ -351,7 +351,6 @@ export default class Game extends GameObject {
         const time = timeSeconds*1000;
         const interval = setInterval(() => event(), time);
         this.#intervals.push(interval);
-        console.log(1)
         return interval;
     }
     clearIntervals() {

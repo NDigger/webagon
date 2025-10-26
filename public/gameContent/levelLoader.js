@@ -24,6 +24,7 @@ export default class LevelLoader {
     #renderId = null;
     #updateId = null;
     #lastUpdateTime = performance.now();
+    #lastRenderTime = performance.now();
     #lastRestartTime = 0;
 
     async init() {
@@ -60,11 +61,7 @@ export default class LevelLoader {
         this.#lastUpdateTime = performance.now();
         this.#lastRestartTime = performance.now();
         cancelAnimationFrame(this.#updateId);
-        
-        // TODO //
         this.load()
-        //////////
-
         // this.start();
     }
 
@@ -96,10 +93,11 @@ export default class LevelLoader {
         window.addEventListener('keydown', this.#handleKeydown)
         document.addEventListener('visibilitychange', this.#handleVisibilityChange);
         this.#updateId = requestAnimationFrame(t => this.#update(t))
+        cancelAnimationFrame(this.#renderId);
+        this.#renderId = requestAnimationFrame(t => this.#render(t))
     }
 
     kill() {
-        this.#onDeath()
         this.game.kill()
     }
 
@@ -123,8 +121,8 @@ export default class LevelLoader {
     }
 
     #render(time) {
-        const frameTime = time - this.#lastUpdateTime;
-
+        const frameTime = time - this.#lastRenderTime;
+        this.#lastRenderTime = time;
         this.onRender(frameTime/1000)
         this.#renderId = requestAnimationFrame(t => this.#render(t))
     }
