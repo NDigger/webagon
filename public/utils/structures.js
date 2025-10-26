@@ -22,6 +22,16 @@ export class Vector2 {
     }
 }
 
+export class Size {
+    width = 0;
+    height = 0;
+
+    constructor(width, height) {
+        this.width = width
+        this.height = height
+    }
+}
+
 export class Color {
     r = 0;
     g = 0;

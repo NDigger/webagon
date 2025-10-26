@@ -1,5 +1,5 @@
 
-import { Vector2, Color } from '../utils/structures';
+import { Vector2, Color, Size } from '../utils/structures';
 import Lerp from '../utils/interpolation';
 import level from '../script';
 
@@ -10,12 +10,14 @@ level.onInit = () => {
     g.setWallSpeedMult(1);
     g.setWallSpawnDistance(1500);
     g.setSides(6);
-    g.set3dDepth(5);
-    g.set3dDistance(50);
+    g.set3dDepth(20);
+    g.set3dDistance(10);
     // g.set3dColor(new Color(255, 255, 255));
     g.set3dFalloffColor(new Color(0, 0, 0));
     g.setSkew(.05);
     g.setBackgroundSwapTime(.2);
+    g.setPlayerSize(new Size(50, 100))
+    g.setPlayerDistanceMult(.1);
 }
 
 let time = 0;

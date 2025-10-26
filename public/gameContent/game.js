@@ -1,6 +1,6 @@
 import Wall from "./wall";
 import Polygon from "./polygon";
-import { Vector2, Color } from "../utils/structures";
+import { Vector2, Color, Size } from "../utils/structures";
 import Background from "./background";
 import GameObject from "./gameObject";
 import Death from "./death";
@@ -371,6 +371,14 @@ export default class Game extends GameObject {
         this.#polygon.player.setRotationOffset(v);
     }
     getPlayerRotationOffset() { return this.#polygon.player.getRotationOffset() }
+    setPlayerSize({width, height}) {
+        this.#polygon.player.setSize(new Size(width, height))
+    }
+    getPlayerSize() { return this.#polygon.player.getPlayerSize() }
+    setPlayerDistanceMult(v) {
+        this.#polygon.setPlayerDistanceMult(v)
+    }
+    getPlayerDistanceMult() { return this.#polygon.getPlayerDistanceMult() }
 
     clearWalls() {
         this.#walls.forEach(wall => wall.destroy());

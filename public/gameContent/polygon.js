@@ -13,6 +13,7 @@ class PolygonBorder extends PolygonObject {
 export default class Polygon extends PolygonObject {
     player = new Player(this.appContext);
     #border = new PolygonBorder(this.appContext);
+    #playerDistanceMult = 1.25;
 
     constructor(appContext) {
         super(appContext);
@@ -37,10 +38,17 @@ export default class Polygon extends PolygonObject {
         this.#border.setSkew(v);
     }
 
+    setPlayerDistanceMult(v) {
+        if (typeof(v) !== 'number') return
+        this.#playerDistanceMult = v;
+        this.scheduleDraw();
+    }
+    getPlayerDistanceMult() { return this.#playerDistanceMult }
+
     setThickness(v) {
         const borderThickness = this.#border.getThickness();
         super.setThickness(v - borderThickness)
-        this.player.setDistance(v * 1.25)
+        this.player.setDistance(v * this.#playerDistanceMult)
         this.#border.setDistance(v - borderThickness);
     }
 
