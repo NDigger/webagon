@@ -1,6 +1,6 @@
 import GameObject from "./gameObject";
 import Wall from "./wall";
-import { Color, Vector2 } from './structures';
+import { Color, Vector2 } from '../utils/structures';
 
 export default class PolygonObject extends GameObject {
     _walls = [];

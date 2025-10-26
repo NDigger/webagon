@@ -1,4 +1,4 @@
-import { Color } from '../gameContent/structures';
+import { Color } from './structures';
 
 const linear = (t) => t;
 const ease_in = (t, _pow = 3) => Math.pow(t, _pow);

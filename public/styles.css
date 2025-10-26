@@ -31,6 +31,7 @@ canvas {
     top: -15px; 
     color: white;
     text-shadow: 2px 0 black, -2px 0 black, 0 2px black, 0 2px black,
-               2px 2px black, -2px -2px black, 2px -2px black, -2px 2px black;
-  /* -webkit-text-stroke: 1px black; */
+               2px 2px black, -2px -2px black, 2px -2px black, -2px 2px black
+               , 0px 5px 10px black;
+    /* display: none; */
 }

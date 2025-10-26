@@ -1,5 +1,5 @@
 import PolygonObject from "./polygonObject";
-import { Color, Vector2 } from "./structures";
+import { Color, Vector2 } from "../utils/structures";
 import Player from "./player";
 
 class PolygonBorder extends PolygonObject {

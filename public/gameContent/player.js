@@ -1,6 +1,6 @@
 import CustomWall from "./customWall";
-import { Vector2 } from "./structures";
-import { Color } from "./structures";
+import { Vector2 } from "../utils/structures";
+import { Color } from "../utils/structures";
 
 const degToRad = deg => deg * Math.PI / 180;
 

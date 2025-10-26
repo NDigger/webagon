@@ -1,6 +1,6 @@
 import Wall from "./wall";
 import Polygon from "./polygon";
-import { Vector2, Color } from "./structures";
+import { Vector2, Color } from "../utils/structures";
 import Background from "./background";
 import GameObject from "./gameObject";
 import Death from "./death";
@@ -55,6 +55,9 @@ export default class Game extends GameObject {
     #mainColor = new Color(0, 0, 0);
     #wallSpawnDistance = 1000;
     #wallSpeedMult = 2;
+
+    #timeouts = [];
+    #intervals = [];
 
     #updateId;
     #renderStageId;
@@ -156,6 +159,7 @@ export default class Game extends GameObject {
             if (pointInQuad(this.#polygon.getPlayerAbsolutePosition(), pos[0], pos[1], pos[2], pos[3])
             && !this.#died) {
                 this.kill();
+                this.#polygon.setPlayerSwapEnabled(false)
                 this.#polygon.draw();
             }
             wall.setRotation(this.#rotation)
@@ -264,6 +268,7 @@ export default class Game extends GameObject {
         if (typeof(v) !== 'number') return;
         this.#wallSpeedMult = v;
     }
+    getWallSpeedMult() { return this.#wallSpeedMult }
     set3dDepth(v) {
         if (typeof(v) !== 'number') return;
         const depth = Math.floor(v);
@@ -324,11 +329,33 @@ export default class Game extends GameObject {
         this.#walls = [];
     }
     destroy() {
+        this.#died = true;
         requestAnimationFrame(() => {
             this.clearWalls()
             this.#polygon.destroy()
             this.#background.destroy();
             if (this.#deathEffect != undefined) this.#deathEffect.destroy();
         })
+    }
+    createEvent(event, timeSeconds) {
+        const time = timeSeconds*1000;
+        const timeout = setTimeout(() => event(), time);
+        this.#timeouts.push(timeout);
+        return timeout;
+    }
+    clearEvents() {
+        this.#timeouts.forEach(timeout => clearTimeout(timeout));
+        this.#timeouts = []
+    }
+    createInterval(event, timeSeconds) {
+        const time = timeSeconds*1000;
+        const interval = setInterval(() => event(), time);
+        this.#intervals.push(interval);
+        console.log(1)
+        return interval;
+    }
+    clearIntervals() {
+        this.#intervals.forEach(interval => clearInterval(interval));
+        this.#intervals = []
     }
 }

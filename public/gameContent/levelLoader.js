@@ -1,7 +1,22 @@
+import * as PIXI from 'pixi.js'
 import Game from "./game";
 import DrawHandler from './drawHandler';
 
-export default class Level {
+const createApp = async () => {
+    const app = new PIXI.Application();
+    await app.init({
+        resizeTo: window,
+        resolution: devicePixelRatio,
+        antialias: true
+    });
+
+    app.stage.sortableChildren = true;
+    app.stage.sortChildren();
+    document.querySelector('body').appendChild(app.canvas);
+    return app;
+}
+
+export default class LevelLoader {
     #pixiApp;
     game;
     #gameOver = false;
@@ -11,17 +26,15 @@ export default class Level {
     #lastUpdateTime = performance.now();
     #lastRestartTime = 0;
 
+    async init() {
+        this.#pixiApp = await createApp();
+        this.#renderId = requestAnimationFrame(t => this.#render)
+    }
+
     onInit = () => {};
     onUpdate = () => {};
     onRender = () => {};
-
-    constructor(pixiApp) {
-        this.#pixiApp = pixiApp
-
-        window.addEventListener('keydown', this.#handleKeydown)
-
-        this.#renderId = requestAnimationFrame(t => this.#render)
-    }
+    onLoad = () => {};
 
     #handleVisibilityChange = () => {
         if (document.hidden) this.kill();
@@ -33,17 +46,37 @@ export default class Level {
     }
 
     leave() {
+        window.removeEventListener('keydown', this.#handleKeydown)
         document.removeEventListener('visibilitychange', this.#handleVisibilityChange);
         this.game.destroy()
+        
         cancelAnimationFrame(this.#updateId)
         cancelAnimationFrame(this.#renderId)
+
+        document.getElementById('timer').textContent = 'MENU';
     }
 
     restart() {
         this.#lastUpdateTime = performance.now();
         this.#lastRestartTime = performance.now();
         cancelAnimationFrame(this.#updateId);
-        this.start();
+        
+        // TODO //
+        this.load()
+        //////////
+
+        // this.start();
+    }
+
+    load() {
+        const script = document.createElement('script');
+        script.type = 'module';
+        script.src = './levels/level1.js?' + new Date().getTime();
+        document.querySelector('body').appendChild(script);
+        script.onload = () => {
+            this.start();
+            this.onLoad();
+        }
     }
 
     start() {
@@ -55,20 +88,24 @@ export default class Level {
         })
         this.game = game;
 
-        this.onInit(game)
+        this.onInit()
         this.game.onDeath = () => {
-            cancelAnimationFrame(this.#updateId);
-            window.removeEventListener('keydown', this.#handleVisibilityChange);
-            this.#gameOver = true
+            this.#onDeath()
         }
 
+        window.addEventListener('keydown', this.#handleKeydown)
         document.addEventListener('visibilitychange', this.#handleVisibilityChange);
         this.#updateId = requestAnimationFrame(t => this.#update(t))
     }
 
     kill() {
-        document.removeEventListener('visibilitychange', this.#handleVisibilityChange);
+        this.#onDeath()
         this.game.kill()
+    }
+
+    #onDeath() {
+        document.removeEventListener('visibilitychange', this.#handleVisibilityChange);
+        this.#gameOver = true
         cancelAnimationFrame(this.#updateId);
     }
 
@@ -76,7 +113,7 @@ export default class Level {
         if (this.#gameOver) return
         const frameTime = time - this.#lastUpdateTime;
         this.#lastUpdateTime = time;
-        this.onUpdate(this.game, frameTime);
+        this.onUpdate(frameTime/1000);
 
         const timer = document.getElementById('timer');
         timer.textContent = Math.floor(time - this.#lastRestartTime)/1000;
@@ -88,7 +125,7 @@ export default class Level {
     #render(time) {
         const frameTime = time - this.#lastUpdateTime;
 
-        this.onRender(this.game, frameTime)
+        this.onRender(frameTime/1000)
         this.#renderId = requestAnimationFrame(t => this.#render(t))
     }
 }

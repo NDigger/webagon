@@ -1,5 +1,5 @@
 import Mesh from "./mesh";
-import { Vector2, Color } from "./structures";
+import { Vector2, Color } from "../utils/structures";
 import Layers3d from "./layers3d";
 
 const getScreenCenter = () => new Vector2(window.innerWidth/2, window.innerHeight/2)

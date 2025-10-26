@@ -1,7 +1,7 @@
 import GameObject from "./gameObject";
 import Mesh from "./mesh";
 import Lerp from "../utils/interpolation";
-import { Vector2, Color } from "./structures";
+import { Vector2, Color } from "../utils/structures";
 
 export default class Layers3d extends GameObject {
     #meshes = [];
@@ -23,12 +23,9 @@ export default class Layers3d extends GameObject {
         this.#meshes = [];
         for (let i = 1; i <= this.#depth; i++) {
             const mesh = new Mesh(this.appContext)
-            if (this.#falloffColor == null) {
-                mesh.setColor(this.#color);
-            } else {
-                mesh.setColor(Lerp.interpolate(this.#color, this.#falloffColor, i/this.#depth))
-            }
-            mesh.setLayer(this.#layer - i*0.0001)
+            if (this.#falloffColor == null) mesh.setColor(this.#color);
+            else mesh.setColor(Lerp.interpolate(this.#color, this.#falloffColor, i/this.#depth))
+            mesh.setLayer(this.#layer - i*0.00001)
             this.#meshes.push(mesh);
         }
         if (this.#vertexPos4) {

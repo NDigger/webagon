@@ -1,6 +1,6 @@
 import GameObject from "./gameObject";
 import * as PIXI from "pixi.js";
-import { Vector2, Color } from "./structures";
+import { Vector2, Color } from "../utils/structures";
 
 const componentToHex = c => {
   var hex = c.toString(16);
