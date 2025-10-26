@@ -112,7 +112,7 @@ export default class Game extends GameObject {
         d.setSkew(this.#skew);
         d.setOffset(this.#polygon.player.getPointPosition());
         d.setRotation(this.#rotation)
-        // d.setCenterOffset(this.#centerOffset);
+        d.setCenterOffset(this.#centerOffset);
         d.set3dLayer(this.#get3dLayer());
         d.setScale(this.#scale);
 
@@ -346,7 +346,7 @@ export default class Game extends GameObject {
         const offset = new Vector2(x, y)
         this.#centerOffset = offset
         this.#polygon.setCenterOffset(offset)
-        // this.#background.setCenterOffset(offset.sub(this.#offset));
+        this.#background.setCenterOffset(offset);
         this.#walls.forEach(wall => {
             wall.setCenterOffset(offset)
         })

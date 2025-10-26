@@ -6,7 +6,7 @@ import level from '../script';
 level.onInit = () => {
     const g = level.game;
     g.setSwapEnabled(true);
-    g.setRotationSpeed(0);
+    g.setRotationSpeed(0.5);
     g.setWallSpeedMult(1);
     g.setWallSpawnDistance(1500);
     g.setSides(6);
@@ -15,8 +15,8 @@ level.onInit = () => {
     // g.set3dColor(new Color(255, 255, 255));
     g.set3dFalloffColor(new Color(0, 0, 0));
     g.setSkew(.05);
-    g.setOffset(new Vector2(150, 0));
-    g.setCenterOffset(new Vector2(0, 0));
+    g.setOffset(new Vector2(-100, 0));
+    g.setCenterOffset(new Vector2(200, 0));
     g.setBackgroundSwapTime(.2);
 }
 
@@ -33,7 +33,7 @@ level.onUpdate = ft => {
         Color.BLACK(255),
         Color.WHITE(),
     ])
-    g.setRotation(g.getRotation() - ((time / .940 - Math.ceil(time / .940)) * 5 + 2))
+    // g.setRotation(g.getRotation() - ((time / .940 - Math.ceil(time / .940)) * 5 + 2))
     g.setMainColor(Color.hsvToRgb(time * 0.2, 1, 1))
     g.setWallSpeedMult(g.getWallSpeedMult() + ft)
     // g.setRadius(80 - (time * 2 - Math.floor(time * 2)) * 10)
