@@ -12,6 +12,7 @@ const createApp = async () => {
 
     app.stage.sortableChildren = true;
     app.stage.sortChildren();
+    app.canvas.id = 'game'
     document.querySelector('body').appendChild(app.canvas);
     return app;
 }
@@ -20,6 +21,7 @@ export default class LevelLoader {
     #pixiApp;
     game;
     #gameOver = false;
+    #gameDestroyed = false;
     
     #currentLevelPath
 
@@ -27,7 +29,8 @@ export default class LevelLoader {
     #updateId = null;
     #lastUpdateTime = performance.now();
     #lastRenderTime = performance.now();
-    #lastRestartTime = 0;
+
+    #loadTime = 0;
 
     async init() {
         this.#pixiApp = await createApp();
@@ -52,16 +55,18 @@ export default class LevelLoader {
         window.removeEventListener('keydown', this.#handleKeydown)
         document.removeEventListener('visibilitychange', this.#handleVisibilityChange);
         this.game.destroy()
+        this.#gameDestroyed = true;
         
         cancelAnimationFrame(this.#updateId)
         cancelAnimationFrame(this.#renderId)
 
-        document.getElementById('timer').textContent = 'MENU';
+        document.getElementById('timer').style.display = 'none';
+        
+        document.getElementById('level-select').style.display = 'flex';
     }
 
     reload() {
         this.#lastUpdateTime = performance.now();
-        this.#lastRestartTime = performance.now();
         cancelAnimationFrame(this.#updateId);
         this.load(this.#currentLevelPath);
         // this.start();
@@ -80,20 +85,23 @@ export default class LevelLoader {
     }
 
     start() {
-        if (this.game != null) this.game.destroy();
+        if (!this.#gameDestroyed && this.game) this.game.destroy();
         this.#gameOver = false;
+        this.#gameDestroyed = false;
         const game = new Game({
             pixiApp: this.#pixiApp,
             drawHandler: new DrawHandler(),
         })
         this.game = game;
+        this.#loadTime = performance.now()
 
         this.onInit()
         this.game.onDeath = () => {
             this.#onDeath()
         }
 
-        window.addEventListener('keydown', this.#handleKeydown)
+        document.getElementById('timer').style.display = 'block';
+        window.addEventListener('keydown', this.#handleKeydown);
         document.addEventListener('visibilitychange', this.#handleVisibilityChange);
         this.#updateId = requestAnimationFrame(t => this.#update(t))
         cancelAnimationFrame(this.#renderId);
@@ -117,7 +125,7 @@ export default class LevelLoader {
         this.onUpdate(frameTime/1000);
 
         const timer = document.getElementById('timer');
-        timer.textContent = Math.floor(time - this.#lastRestartTime)/1000;
+        timer.textContent = Math.floor(time - this.#loadTime)/1000;
         if (this.game) timer.style.color = this.game.getMainColor().getRGBStyle();
         
         this.#updateId = requestAnimationFrame(t => this.#update(t));

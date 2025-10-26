@@ -15,9 +15,8 @@ level.onInit = () => {
     // g.set3dColor(new Color(255, 255, 255));
     g.set3dFalloffColor(new Color(0, 0, 0));
     g.setSkew(.05);
-    g.setBackgroundSwapTime(.2);
-    g.setPlayerSize(new Size(97, 100))
-    g.setPlayerDistanceMult(.1);
+    // g.setPlayerSize(new Size(97, 100))
+    // g.setPlayerDistanceMult(.1);
 }
 
 let time = 0;

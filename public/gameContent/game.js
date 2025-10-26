@@ -324,6 +324,9 @@ export default class Game extends GameObject {
         }
     }
     get3dColor() { return this.#color3d; }
+    clear3dColor() {
+        this.#color3d = null;
+    }
     set3dFalloffColor({r, g, b, a}) {
         const color = new Color(r, g, b, a);
         this.#falloffColor3d = color;

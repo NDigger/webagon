@@ -30,6 +30,11 @@ export class Size {
         this.width = width
         this.height = height
     }
+
+    add(size) { return new Size(this.width + size.width, this.height + size.height) }
+    sub(size) { return new Size(this.width - size.width, this.height - size.height) }
+    mul(size) { return new Size(this.width * size.width, this.height * size.height) }
+    div(size) { return new Size(this.width / size.width, this.height / size.height) }
 }
 
 export class Color {

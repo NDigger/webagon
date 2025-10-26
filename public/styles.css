@@ -8,16 +8,11 @@
     box-sizing: border-box;
 }
 
-canvas {
-    max-width: 100vw;
-    max-height: 100vh;
-    position: absolute;
-}
-
 * {
-  font-family: "Stalinist One", sans-serif;
-  font-weight: 400;
-  font-style: normal;
+    user-select: none;
+    font-family: "Stalinist One", sans-serif;
+    font-weight: 400;
+    font-style: normal;
 }
 
 #timer {
@@ -34,4 +29,62 @@ canvas {
                2px 2px black, -2px -2px black, 2px -2px black, -2px 2px black
                , 0px 5px 10px black;
     /* display: none; */
+}
+
+html {
+    overflow: hidden;
+}
+
+body {
+    max-width: 100vw;
+    max-height: 100vh;
+    min-width: 100vw;
+    min-height: 100vh;
+    width: 100vw;
+    height: 100vh;
+}
+
+canvas {
+    max-width: 100vw;
+    max-height: 100vh;
+    min-width: 100vw;
+    min-height: 100vh;
+    width: 100vw;
+    height: 100vh;
+    position: absolute;
+    inset: 0;
+}
+
+#level-select {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+}
+
+#level-select * {
+    position: relative;
+    z-index: 2;
+}
+
+#level-select-background {
+    width: 1600px;
+    height: 1080px;
+    position: absolute;
+    z-index: 1;
+}
+
+#title {
+    position: absolute;
+    top: -100px;
+    left: calc(-100vw + 250px);
+    color: red;
+    text-align: center;
+    font-size: 4.5rem;
+    background-color: black;
+    padding: 20px;
+    padding-top: 130px;
+    width: 210vw;
+    rotate: -8deg;
 }
