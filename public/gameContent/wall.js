@@ -19,6 +19,7 @@ export default class Wall extends CustomWall {
         const y3 = ((this.#thickness + this.#distance) * Math.sin(secondAngle));
         const x4 = (this.#distance * Math.cos(secondAngle));
         const y4 = (this.#distance * Math.sin(secondAngle));
+
         return [
             new Vector2(x1, y1),
             new Vector2(x2, y2),

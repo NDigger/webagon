@@ -15,8 +15,6 @@ level.onInit = () => {
     // g.set3dColor(new Color(255, 255, 255));
     g.set3dFalloffColor(new Color(0, 0, 0));
     g.setSkew(.05);
-    g.setOffset(new Vector2(-500, 0));
-    g.setCenterOffset(new Vector2(0, 0));
     g.setBackgroundSwapTime(.2);
 }
 
@@ -33,8 +31,8 @@ level.onUpdate = ft => {
         // Color.BLACK(255),
         // Color.WHITE(),
     ])
-    g.setOffset(new Vector2(Math.sin(time * 10) * 50, Math.cos(time) * 80));
-    g.setScale(g.getScale().sub(new Vector2(ft*.001, ft*.01)))
+    // g.setOffset(new Vector2(Math.sin(time * 10) * 50, Math.cos(time) * 80));
+    // g.setScale(g.getScale().sub(new Vector2(ft*.1, ft*.3)))
     // g.setRotation(g.getRotation() - ((time / .940 - Math.ceil(time / .940)) * 5 + 2))
     g.setMainColor(Color.hsvToRgb(time * 0.2, 1, 1))
     g.setWallSpeedMult(g.getWallSpeedMult() + ft)

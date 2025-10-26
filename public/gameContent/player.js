@@ -58,12 +58,16 @@ export default class Player extends CustomWall {
         this.#updateId = requestAnimationFrame(time => this.#update(time));
     }
 
+    setRotationOffset(v) {
+        if (typeof(v) !== 'number') return
+        this.#rotationOffset = v;
+    }
+    getRotationOffset() { return this.#rotationOffset }
     setMovementEnabled(v) {
         if (typeof(v) !== 'boolean') return
         this.#movementEnabled = v;
     }
     getMovementEnabled() { return this.#movementEnabled; }
-
     setSwapEnabled(v) {
         if (typeof(v) !== 'boolean') return
         this.#swapEnabled = v;

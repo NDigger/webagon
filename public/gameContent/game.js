@@ -367,6 +367,11 @@ export default class Game extends GameObject {
         this.#backgroundSwapTimer = v*1000;
     }
     getBackgroundSwapTime() { return this.#backgroundSwapTime }
+    setPlayerRotationOffset(v) {
+        this.#polygon.player.setRotationOffset(v);
+    }
+    getPlayerRotationOffset() { return this.#polygon.player.getRotationOffset() }
+
     clearWalls() {
         this.#walls.forEach(wall => wall.destroy());
         this.#walls = [];
