@@ -13,13 +13,13 @@ export class Vector2 {
     div(vec2) { return new Vector2(this.x / vec2.x, this.y / vec2.y) }
 
     rotate(angle) {
-    const cos = Math.cos(angle);
-    const sin = Math.sin(angle);
-    return new Vector2(
-        this.x * cos - this.y * sin,
-        this.x * sin + this.y * cos
-    )
-}
+        const cos = Math.cos(angle);
+        const sin = Math.sin(angle);
+        return new Vector2(
+            this.x * cos - this.y * sin,
+            this.x * sin + this.y * cos
+        )
+    }
 }
 
 export class Color {
@@ -71,4 +71,15 @@ export class Color {
         const c = Color.hsvToRgb(h, s, v);
         return new Color(c.r, c.g, c.b, a);
     }
+
+    static RED(a = 255)    { return new Color(255, 0, 0, a); }
+    static GREEN(a = 255)  { return new Color(0, 255, 0, a); }
+    static BLUE(a = 255)   { return new Color(0, 0, 255, a); }
+    static BLACK(a = 255)  { return new Color(0, 0, 0, a); }
+    static WHITE(a = 255)  { return new Color(255, 255, 255, a); }
+    static GRAY(a = 255)   { return new Color(128, 128, 128, a); }
+    static YELLOW(a = 255) { return new Color(255, 255, 0, a); }
+    static CYAN(a = 255)   { return new Color(0, 255, 255, a); }
+    static MAGENTA(a = 255){ return new Color(255, 0, 255, a); }
+    static ORANGE(a = 255) { return new Color(255, 165, 0, a); }
 }

@@ -46,6 +46,9 @@ export default class Game extends GameObject {
     #sides = 6;
     #skew = 0;
     #scale = new Vector2(1, 1);
+    #offset = new Vector2(0, 0);
+    #centerOffset = new Vector2(0, 0);
+    #backgroundTileColors = [];
 
     #depth3d = 0;
     #distance3d = 0;
@@ -107,7 +110,9 @@ export default class Game extends GameObject {
         this.setShakePower(10);
         const d = new Death(this.appContext);
         d.setSkew(this.#skew);
-        d.setOffset(this.#polygon.getPlayerPosition())
+        d.setOffset(this.#polygon.player.getPointPosition());
+        d.setRotation(this.#rotation)
+        // d.setCenterOffset(this.#centerOffset);
         d.set3dLayer(this.#get3dLayer());
         d.setScale(this.#scale);
 
@@ -117,21 +122,28 @@ export default class Game extends GameObject {
         d.setSides(this.#sides)
         if (this.#falloffColor3d != null) d.set3dFalloffColor(this.#falloffColor3d)
 
+        this.#polygon.player.setSwapEnabled(false);
+        this.#polygon.player.setMovementEnabled(false);
+
         this.#deathEffect = d;
         this.#died = true;
         
         this.onDeath()
     }
 
-    #updateBackgroundRotation() {
-        this.#background.setRotation(this.#rotation + this.#backgroundRotationOffset + this.#backgroundSwapped * (360 / this.#sides));
-        const bgTileColors = this.#background.getTileColors();
+    #updateBackground() {
+        this.#background.setRotation(this.#rotation + this.#backgroundRotationOffset);
+        const bgTileColors = this.#backgroundTileColors;
+        const newArr = this.#backgroundSwapped
+                        ? bgTileColors
+                        : [bgTileColors[bgTileColors.length - 1], ...bgTileColors.slice(0, bgTileColors.length - 1)];
+        this.#background.setTileColors(newArr);
         this.#polygon.setColor(bgTileColors[this.#backgroundSwapped || bgTileColors.length === 1 ? 0 : 1]);
     }
 
     #swapBackground() {
         this.#backgroundSwapped = !this.#backgroundSwapped;
-        this.#updateBackgroundRotation()
+        this.#updateBackground()
     }
 
     #renderStage(time) {
@@ -149,19 +161,15 @@ export default class Game extends GameObject {
         if (!this.#died) {
             this.#rotation += this.#rotationSpeed * frameTime;
             this.#polygon.setRotation(this.#rotation)
-            this.#updateBackgroundRotation()
+            this.#updateBackground()
             this.onUpdate(frameTime);
         }
 
         this.#walls.forEach(wall => {
             // Wall absolute position
             const pos = wall.getVertexAbsolutePos4();
-            if (pointInQuad(this.#polygon.getPlayerAbsolutePosition(), pos[0], pos[1], pos[2], pos[3])
-            && !this.#died) {
-                this.kill();
-                this.#polygon.setPlayerSwapEnabled(false)
-                this.#polygon.draw();
-            }
+            if (pointInQuad(this.#polygon.player.getPointAbsolutePosition(), pos[0], pos[1], pos[2], pos[3])
+            && !this.#died) this.kill();
             wall.setRotation(this.#rotation)
         })
 
@@ -204,6 +212,8 @@ export default class Game extends GameObject {
         wall.setLayer(this.#getWallsLayer());
         wall.setSkew(this.#skew);
         wall.setScale(this.#scale)
+        wall.setCenterOffset(this.#centerOffset);
+        wall.setOffset(this.#offset)
 
         if (this.#falloffColor3d) wall.set3dFalloffColor(this.#falloffColor3d);
         wall.set3dDepth(this.#depth3d);
@@ -237,9 +247,8 @@ export default class Game extends GameObject {
         return this.#sides;
     }
     setBackgroundTileColors(arr) {
-        this.#background.setTileColors(arr);
-        const bgTileColors = this.#background.getTileColors();
-        this.#polygon.setColor(arr[this.#backgroundSwapped || bgTileColors.length === 1 ? 0 : 1]);
+        this.#backgroundTileColors = arr;
+        this.#updateBackground();
     }
     setBackgroundRotationOffset(v) {
         if (typeof(v) === 'number') this.#backgroundRotationOffset = v
@@ -314,7 +323,7 @@ export default class Game extends GameObject {
     }
     setSwapEnabled(v) {
         if (typeof(v) !== 'boolean') return
-        this.#polygon.setPlayerSwapEnabled(v)
+        this.#polygon.player.setSwapEnabled(v)
     }
     setScale({x, y}) {
         const scale = new Vector2(x, y);
@@ -323,6 +332,29 @@ export default class Game extends GameObject {
         this.#background.setScale(scale)
         if (this.#deathEffect !== undefined) this.#deathEffect.setScale(scale);
         this.#walls.forEach(wall => wall.setScale(scale));
+    }
+    setOffset({x, y}) {
+        const offset = new Vector2(x, y);
+        this.#offset = offset;
+        this.#polygon.setOffset(offset);
+        this.#background.setOffset(offset);
+        this.#walls.forEach(wall => {
+            wall.setOffset(offset)
+        })
+    }
+    setCenterOffset({x, y}) {
+        const offset = new Vector2(x, y)
+        this.#centerOffset = offset
+        this.#polygon.setCenterOffset(offset)
+        // this.#background.setCenterOffset(offset.sub(this.#offset));
+        this.#walls.forEach(wall => {
+            wall.setCenterOffset(offset)
+        })
+    }
+    setBackgroundSwapTime(v) {
+        if (typeof(v) !== 'number') return
+        this.#backgroundSwapTime = v*1000;
+        this.#backgroundSwapTimer = v*1000;
     }
     clearWalls() {
         this.#walls.forEach(wall => wall.destroy());

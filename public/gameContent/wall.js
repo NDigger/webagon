@@ -6,7 +6,6 @@ export default class Wall extends CustomWall {
     #sides = 0;
     #thickness = 40;
     #distance = 0;
-    #offset = new Vector2(0, 0);
 
     #getWallVertexPos4() {
         const halfSides = this.#sides / 2;
@@ -30,7 +29,7 @@ export default class Wall extends CustomWall {
 
     draw() {
         const [pos1, pos2, pos3, pos4] = this.#getWallVertexPos4();
-        this.setVertexPos4(pos1.add(this.#offset), pos2.add(this.#offset), pos3.add(this.#offset), pos4.add(this.#offset));
+        this.setVertexPos4(pos1, pos2, pos3, pos4);
         super.draw();
     }
 
@@ -61,12 +60,6 @@ export default class Wall extends CustomWall {
         this.scheduleDraw();
     }
     getDistance() { return this.#distance; }
-    
-    setOffset({x, y}) {
-        this.#offset = new Vector2(x, y);
-        this.scheduleDraw();
-    }
-    getOffset() { return this.#offset }
 }
 
 const getWallVertex4 = ({sides, side, thickness, distance}) => {

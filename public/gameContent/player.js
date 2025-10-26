@@ -10,6 +10,7 @@ export default class Player extends CustomWall {
     #rightKeyPressed = false;
 
     #swapEnabled = false;
+    #movementEnabled = true;
 
     #updateId;
     
@@ -27,7 +28,13 @@ export default class Player extends CustomWall {
         this.#updateId = requestAnimationFrame(time => this.#update(time));
     }
 
-    getPointPosition() { return new Vector2(this.#distance + 10, 0).rotate(this.getRotation() * Math.PI/180)} 
+    getPointPosition() { 
+        return new Vector2(this.#distance + 10, 0).rotate(degToRad(this.#rotationOffset)).add(this.getOffset())
+    } 
+
+    getPointAbsolutePosition() { // Used for collisions
+        return this.getVertexAbsolutePos(0)
+    }
 
     #onKeyDown = e => {
         if (e.keyCode === 37) this.#leftKeyPressed = true;
@@ -43,38 +50,41 @@ export default class Player extends CustomWall {
     #update(time) {
         const frameTime = time - this.#lasttime;
         this.#lasttime = time;
-        if (this.#leftKeyPressed) this.#rotationOffset -= frameTime * this.#speedMult;
-        if (this.#rightKeyPressed) this.#rotationOffset += frameTime * this.#speedMult;
+        if (this.#movementEnabled) {
+            if (this.#leftKeyPressed) this.#rotationOffset -= frameTime * this.#speedMult;
+            if (this.#rightKeyPressed) this.#rotationOffset += frameTime * this.#speedMult;
+        }
 
         this.#updateId = requestAnimationFrame(time => this.#update(time));
+    }
+
+    setMovementEnabled(v) {
+        if (typeof(v) !== 'boolean') return
+        this.#movementEnabled = v;
     }
 
     setSwapEnabled(v) {
         if (typeof(v) !== 'boolean') return
         this.#swapEnabled = v;
     }
-
-    setRotation(v) {
-        super.setRotation(v + this.#rotationOffset);
-    }
     
     setDistance(v) {
         if (typeof(v) !== 'number') return
         this.#distance = v;
         this.setVertexPos4(
-            new Vector2(v + 10, 0),
-            new Vector2(v, -12),
-            new Vector2(v, 0),
-            new Vector2(v, 12),
+            new Vector2(v + 10, 0).rotate(degToRad(this.#rotationOffset)),
+            new Vector2(v, -12).rotate(degToRad(this.#rotationOffset)),
+            new Vector2(v, 0).rotate(degToRad(this.#rotationOffset)),
+            new Vector2(v, 12).rotate(degToRad(this.#rotationOffset)),
         )
     }
 
     draw() {
         this.setVertexPos4(
-            new Vector2(this.#distance + 10, 0),
-            new Vector2(this.#distance , -12),
-            new Vector2(this.#distance , 0),
-            new Vector2(this.#distance , 12),
+            new Vector2(this.#distance + 10, 0).rotate(degToRad(this.#rotationOffset)),
+            new Vector2(this.#distance , -12).rotate(degToRad(this.#rotationOffset)),
+            new Vector2(this.#distance , 0).rotate(degToRad(this.#rotationOffset)),
+            new Vector2(this.#distance , 12).rotate(degToRad(this.#rotationOffset)),
         )
         super.draw();
     }

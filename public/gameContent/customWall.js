@@ -21,6 +21,7 @@ export default class CustomWall extends Mesh {
     #skew = 0;
     #rotation = 0;
     #scale = new Vector2(1, 1);
+    #offset = new Vector2(0, 0);
     #centerOffset = new Vector2(0, 0);
     
     #color3d = new Color(0, 0, 0);
@@ -32,7 +33,9 @@ export default class CustomWall extends Mesh {
     getAbsoluteVertex4() {
         const screenCenter = getScreenCenter();
         return this.getVertexPos4().map(vec2 => {
-            let newPos = rotatePoint(vec2, new Vector2(0, 0), this.#rotation)
+            let newPos = vec2; 
+            newPos = newPos.add(this.#offset)
+            newPos = rotatePoint(newPos, new Vector2(0, 0), this.#rotation)
             newPos = newPos.mul(this.#scale);
             newPos.x += screenCenter.x + this.#centerOffset.x
             newPos.y /= this.#skew + 1;
@@ -56,6 +59,11 @@ export default class CustomWall extends Mesh {
         this.scheduleDraw();
     }
     getRotation() { return this.#rotation; }
+    setOffset({x, y}) {
+        this.#offset = new Vector2(x, y);
+        this.scheduleDraw();
+    }
+    getOffset() { return this.#offset }
     setCenterOffset({x, y}) {
         this.#centerOffset = new Vector2(x, y);
         this.scheduleDraw();
