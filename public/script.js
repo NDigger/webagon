@@ -6,7 +6,7 @@ var level
     level = new LevelLoader();
     await level.init();
 
-    level.load();
+    level.load('./levels/level1.js');
 })()
 
 export default level;

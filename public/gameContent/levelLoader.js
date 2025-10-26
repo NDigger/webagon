@@ -20,6 +20,8 @@ export default class LevelLoader {
     #pixiApp;
     game;
     #gameOver = false;
+    
+    #currentLevelPath
 
     #renderId = null;
     #updateId = null;
@@ -42,7 +44,7 @@ export default class LevelLoader {
     };
 
     #handleKeydown = e => {
-        if (e.keyCode === 82) this.restart();
+        if (e.keyCode === 82) this.reload();
         if (e.keyCode === 27) this.leave();
     }
 
@@ -57,18 +59,19 @@ export default class LevelLoader {
         document.getElementById('timer').textContent = 'MENU';
     }
 
-    restart() {
+    reload() {
         this.#lastUpdateTime = performance.now();
         this.#lastRestartTime = performance.now();
         cancelAnimationFrame(this.#updateId);
-        this.load()
+        this.load(this.#currentLevelPath);
         // this.start();
     }
 
-    load() {
+    load(path) {
+        this.#currentLevelPath = path;
         const script = document.createElement('script');
         script.type = 'module';
-        script.src = './levels/level1.js?' + new Date().getTime();
+        script.src = `${path}?${new Date().getTime()}`
         document.querySelector('body').appendChild(script);
         script.onload = () => {
             this.start();
