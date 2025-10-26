@@ -55,8 +55,12 @@ canvas {
     inset: 0;
 }
 
-#level-select {
+#game {
     display: none;
+}
+
+#level-select {
+    /* display: none; */
     justify-content: center;
     align-items: center;
     width: 100vw;
@@ -65,26 +69,69 @@ canvas {
 
 #level-select * {
     position: relative;
-    z-index: 2;
 }
 
 #level-select-background {
     width: 1600px;
     height: 1080px;
     position: absolute;
-    z-index: 1;
+    z-index: -1;
+}
+
+#level-list {
+    position: absolute;
+    left: 0vw;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+}
+
+#level-list > .level-wrap {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;    
+} 
+
+#level-list::before {
+    content: '';
+    height: 100vh;
+    width: 100px;
+    background: black;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+}
+
+#level-list::after {
+    content: '';
+    height: 100vh;
+    width: 100px;
+    background:  black;
+    position: absolute;
+    right: 0px;
+    top: 0px;
+}
+
+.level {
+    width: 1000px;
+    height: 500px;
+    background-color: rgba(0, 0, 0, .2);
 }
 
 #title {
     position: absolute;
     top: -100px;
-    left: calc(-100vw + 250px);
+    left: 0;
+    /* left: calc(-100vw + 250px); */
     color: red;
     text-align: center;
     font-size: 4.5rem;
     background-color: black;
-    padding: 20px;
+    /* padding: 20px; */
     padding-top: 130px;
-    width: 210vw;
-    rotate: -8deg;
+    width: 100vw;
+    /* rotate: -8deg; */
 }

@@ -61,6 +61,7 @@ export default class LevelLoader {
         cancelAnimationFrame(this.#renderId)
 
         document.getElementById('timer').style.display = 'none';
+        document.getElementById('game').style.display = 'none';
         
         document.getElementById('level-select').style.display = 'flex';
     }
@@ -100,6 +101,7 @@ export default class LevelLoader {
             this.#onDeath()
         }
 
+        document.getElementById('game').style.display = 'block'
         document.getElementById('timer').style.display = 'block';
         window.addEventListener('keydown', this.#handleKeydown);
         document.addEventListener('visibilitychange', this.#handleVisibilityChange);

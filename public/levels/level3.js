@@ -6,15 +6,14 @@ import level from '../script';
 level.onInit = () => {
     const g = level.game;
     g.setSwapEnabled(true);
-    g.setRotationSpeed(0.5);
+    g.setRotationSpeed(1);
     g.setWallSpeedMult(6);
     g.setWallSpawnDistance(1500);
-    g.setSides(3);
+    g.setSides(4);
     g.set3dDepth(4);
     g.set3dDistance(50);
     g.set3dColor(new Color(255, 255, 255));
-    g.setSkew(.5);
-    g.setOffset(new Vector2(150, 0));
+    g.setSkew(0);
     // g.setPlayerSize(new Size(97, 100))
     // g.setPlayerDistanceMult(.1);
 }
@@ -24,13 +23,13 @@ let time = 0;
 level.onUpdate = ft => {
     const g = level.game;
     g.setBackgroundTileColors([
-        Lerp.interpolate(Color.hsvToRgb(time * 0.2, 1, 0.5), Color.hsvToRgb(time * 0.2, 1, 0.1), (time/940-Math.floor(time/940))),
-        Lerp.interpolate(Color.hsvToRgb(time * 0.2, 1, 0.4), Color.hsvToRgb(time * 0.2, 1, 0.2), (time/940-Math.floor(time/940))),
+        // Lerp.interpolate(Color.hsvToRgb(time * 0.2, 1, 0.5), Color.hsvToRgb(time * 0.2, 1, 0.1), (time/940-Math.floor(time/940))),
+        // Lerp.interpolate(Color.hsvToRgb(time * 0.2, 1, 0.4), Color.hsvToRgb(time * 0.2, 1, 0.2), (time/940-Math.floor(time/940))),
 
         // Color.hsvToRgb(time * 0.2, 1, .25),
         // Color.hsvToRgb(time * 0.2, 1, .2),
-        // Color.BLACK(255),
-        // Color.WHITE(),
+        Color.BLACK(255),
+        Color.WHITE(),
     ])
     g.setMainColor(Color.hsvToRgb(time * 0.5, 1, 1))
     // g.setRadius(80 - (time * 2 - Math.floor(time * 2)) * 10)

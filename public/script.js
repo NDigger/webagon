@@ -1,13 +1,14 @@
 
 import LevelLoader from './gameContent/levelLoader';
 import FragmentShader from './fragmentShader';
+import Lerp from './utils/interpolation';
 
 let level
 (async () => {
     level = new LevelLoader();
     await level.init();
 
-    level.load(levelPaths[0])
+    // level.load(levelPaths[0])
 })()
 export default level
 
@@ -30,15 +31,39 @@ fetch('./shader.frag')
 const levelPaths = [
     './levels/level1.js',
     './levels/level2.js',
+    './levels/level3.js',
 ]
 
-const levelsListDiv = document.getElementById('levels-list');
+const levelList = document.getElementById('level-list');
 levelPaths.forEach(levelPath => {
-    levelsListDiv.insertAdjacentHTML('beforeend', `
-        <button>${levelPath}</button>
+    levelList.insertAdjacentHTML('beforeend', `
+        <div class="level-wrap">
+            <div class="level">
+                <p>Level Name</p>
+                <button>${levelPath}</button>
+            </div>
+        </div>
     `)
-    levelsListDiv.lastElementChild.addEventListener('click', () => {
+    levelList.lastElementChild.addEventListener('click', () => {
         loadLevel(levelPath)
         document.getElementById('level-select').style.display = 'none'
     })
 })
+
+document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft' || e.key === 'a') shiftLevelListPosition(-1)
+    else if (e.key === 'ArrowRight' || e.key === 'd') shiftLevelListPosition(1)
+    else if (e.key === 'Enter') loadLevel(levelPaths[levelListSelectedLevel])
+})
+let levelListSelectedLevel = 0
+const levelListPositionXLerp = new Lerp(v => levelList.style.left = `${-v*100}vw`);
+
+const shiftLevelListPosition = shift => {
+    console.log(levelListSelectedLevel, shift)
+    if ((levelListSelectedLevel === 0 && shift === -1)
+    || (levelListSelectedLevel === levelPaths.length - 1 && shift === 1)) return
+    levelListSelectedLevel += shift;  
+    console.log(levelListSelectedLevel)
+    levelListPositionXLerp.run(levelListSelectedLevel, 0.3, Lerp.Easing.EASE_OUT)
+}
+
