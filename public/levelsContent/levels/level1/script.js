@@ -18,7 +18,7 @@ level.onInit = () => {
     g.set3dDepth(5);
     g.set3dDistance(20);
     // g.set3dColor(new Color(255, 255, 255));
-    g.set3dFalloffColor(new Color(0, 0, 0));
+    // g.set3dFalloffColor(new Color(0, 0, 0));
     g.setSkew(.05);
     // g.setPlayerSize(new Size(97, 100))
     // g.setPlayerDistanceMult(.1);
@@ -39,7 +39,7 @@ level.onUpdate = ft => {
     ])
     // g.setOffset(new Vector2(Math.sin(time * 10) * 50, Math.cos(time) * 80));
     // g.setScale(g.getScale().sub(new Vector2(ft*.1, ft*.3)))
-    // g.setRotation(g.getRotation() - ((time / .940 - Math.ceil(time / .940)) * 5 + 2))
+    g.setRotation(g.getRotation() - ((time / .930 - Math.ceil(time / .930)) * 5 + 2))
     g.setMainColor(Color.hsvToRgb(time * 0.2, 1, 1))
     g.setWallSpeedMult(g.getWallSpeedMult() + ft/10)
     // g.setRadius(80 - (time * 2 - Math.floor(time * 2)) * 10)
@@ -57,7 +57,7 @@ level.onLoad = () => {
     g.createInterval(() => {
         const rnd = Math.random() * g.getSides()
         for (let i = 1; i < g.getSides(); i++) {
-            g.createWall(i + rnd, 50)
+            g.createWall(i + rnd, 40)
         }
     }, .8)
 }

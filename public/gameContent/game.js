@@ -350,6 +350,7 @@ export default class Game extends GameObject {
     setSwapEnabled(v) {
         if (typeof(v) !== 'boolean') return
         this.#polygon.player.setSwapEnabled(v)
+        document.getElementById('swap-enabled-msg').style.display = v ? 'block' : 'none'
     }
     getSwapEnabled() { return this.#polygon.player.getSwapEnabled(); }
     setScale({x, y}) {

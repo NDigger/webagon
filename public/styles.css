@@ -19,26 +19,45 @@
         "wdth" 100;
 }
 
-#timer {
+#game-content {
+    display: none;
+}
+
+#game-content * {
     font-family: "Stalinist One", sans-serif;
     font-weight: 400;
     font-style: normal;
 }
 
 #timer {
+    font-family: "Stalinist One", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}
+
+#game-ui {
     transform: scaleX(.6);
     transform-origin: left;
     text-align: left;
     position: absolute; 
     z-index: 9999; 
-    font-size: 5rem; 
     left: 10px; 
-    top: -15px; 
+    font-size: 1.5rem;
+    top: -10px;
     color: white;
     text-shadow: 2px 0 black, -2px 0 black, 0 2px black, 0 2px black,
                2px 2px black, -2px -2px black, 2px -2px black, -2px 2px black
                , 0px 5px 10px black;
     /* display: none; */
+}
+
+#game-ui .top-left * {
+    flex-direction: column;
+    margin-bottom: -10px;
+}
+
+#timer {
+    font-size: 5rem; 
 }
 
 html {
@@ -65,12 +84,7 @@ canvas {
     inset: 0;
 }
 
-#game {
-    display: none;
-}
-
 #level-select {
-    /* display: none; */
     justify-content: center;
     align-items: center;
     width: 100vw;

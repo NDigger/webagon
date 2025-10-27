@@ -63,7 +63,8 @@ export default class Level {
 
         const timer = document.getElementById('timer');
         timer.textContent = Math.floor(levelTime)/1000;
-        if (this.game) timer.style.color = this.game.getMainColor().getRGBStyle();
+        const gameUi = document.getElementById('game-ui')
+        if (this.game) gameUi.style.color = this.game.getMainColor().getRGBStyle();
         
         this.#updateId = requestAnimationFrame(t => this.#update(t));
     }
@@ -84,6 +85,7 @@ export default class Level {
     }
 
     #onDeath() {
+        document.getElementById('restart-help-msg').style.display = 'block'
         if (this.#audio) this.#audio.pause()
         document.removeEventListener('visibilitychange', this.#handleVisibilityChange);
         this.#gameOver = true

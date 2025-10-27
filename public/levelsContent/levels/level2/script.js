@@ -5,7 +5,7 @@ import { level } from '../../../script';
 
 level.onInit = () => {
     const g = level.game;
-    g.setSwapEnabled(true);
+    // g.setSwapEnabled(true);
     g.setRotationSpeed(0.5);
     g.setWallSpeedMult(6);
     g.setWallSpawnDistance(1500);

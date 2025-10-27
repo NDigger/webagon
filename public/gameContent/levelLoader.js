@@ -17,7 +17,8 @@ const createApp = async () => {
     app.stage.sortableChildren = true;
     app.stage.sortChildren();
     app.canvas.id = 'game'
-    document.querySelector('body').appendChild(app.canvas);
+    console.log(document.getElementById('game-content'))
+    document.getElementById('game-content').appendChild(app.canvas);
     return app;
 }
 
@@ -48,9 +49,7 @@ export default class LevelLoader {
         this.level.destroy()
         this.#levelDestroyed = true;
 
-        document.getElementById('timer').style.display = 'none';
-        document.getElementById('game').style.display = 'none';
-        
+        document.getElementById('game-content').style.display = 'none';
         document.getElementById('level-select').style.display = 'flex';
     }
 
@@ -74,9 +73,11 @@ export default class LevelLoader {
         this.level = level;
 
         script.onload = () => {
+            document.getElementById('restart-help-msg').style.display = 'none'
+            document.getElementById('swap-enabled-msg').style.display = 'none'
             this.level.init()
-            document.getElementById('game').style.display = 'block'
-            document.getElementById('timer').style.display = 'block';
+            document.getElementById('game-content').style.display = 'block'
+            document.getElementById('level-select').style.display = 'none'
             window.addEventListener('keydown', this.#handleKeydown);
             window.addEventListener('keyup', this.#handleKeyup)
             this.level.onLoad();
