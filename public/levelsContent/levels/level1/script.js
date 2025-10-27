@@ -22,17 +22,11 @@ const addPattern = async pKey => {
     else if (pKey === 10) await patterns.pWallExSpam(3, 80, 120);
     else if (pKey === 11) await patterns.pWallExTunnel(3, 200, 200)
     else if (pKey === 12) await patterns.pRandomLRBarrage(10, 200, 0);
-    step()
+    else if (pKey === 13) await patterns.pBarrageSpam(3, 60, 300);
 }
 
-const pKeys = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+const pKeys = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13];
 let activeKeys = [];
-
-const step = () => {
-    if (activeKeys.length === 0) activeKeys = pKeys.slice();
-    const rndIndex = Math.floor(Math.random() * activeKeys.length)
-    addPattern(activeKeys.splice(rndIndex, 1)[0])
-}
 
 level.onInit = () => {
     g = level.game;
@@ -45,9 +39,10 @@ level.onInit = () => {
     ])
     g.setRotationSpeed(0.1);
     g.setWallSpeedMult(3);
-    g.setSides(6);
-    g.set3dDepth(5);
-    g.set3dDistance(20);
+    g.setSides(5);
+    g.set3dDepth(4);
+    g.set3dDistance(50);
+    g.setIncrementTime(1);
     // g.set3dCoor(new Color(255, 255, 255));
     // g.set3dFalloffColor(new Color(0, 0, 0));
     g.setSkew(.05);
@@ -55,7 +50,12 @@ level.onInit = () => {
     // g.setPlayerDistanceMult(.1);
 
     patterns = initPatterns(g);
-    step();
+
+    g.onStep = async () => {
+        if (activeKeys.length === 0) activeKeys = pKeys.slice();
+        const rndIndex = Math.floor(Math.random() * activeKeys.length)
+        await addPattern(activeKeys.splice(rndIndex, 1)[0])
+    }
 }
 
 let time = 0;

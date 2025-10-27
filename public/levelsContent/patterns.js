@@ -185,6 +185,27 @@ export default function initPatterns(g) {
         await g.distanceDelay(delayEnd)
     }
 
+    const pRandomBarrage = async (times, delay, delayEnd) => {
+        let side = getRandomSide();
+        for (let i = 0; i < times; i++) {
+            barrage(side);
+            const inc = Math.floor(Math.random() * (g.getSides()/2))*getRandomDir();
+            side += inc;
+            console.log(inc);
+            if (i !== times - 1) await g.distanceDelay(Math.abs(inc) * delay + 60)
+        }
+        await g.distanceDelay(delayEnd);
+    }
+
+    const pBarrageSpam = async (times, delay, delayEnd) => {
+        const side = getRandomSide();
+        for (let i = 0; i < times; i++) {
+            barrage(side)
+            await g.distanceDelay(delay);
+        }
+        await g.distanceDelay(delayEnd);
+    }
+
     return {
         pInverseBarrage,
         pSpiral,
@@ -200,5 +221,7 @@ export default function initPatterns(g) {
         pWallExVortex,
         pWallExTunnel,
         pRandomLRBarrage,
+        pRandomBarrage,
+        pBarrageSpam,
     }
 }
