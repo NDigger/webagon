@@ -5,6 +5,7 @@ import { level } from '../../../script';
 
 level.onInit = () => {
     const g = level.game;
+    g.setBackgroundRadius(100);
     g.setSwapEnabled(true);
     g.setMainColor(new Color(255, 0, 0));
     g.setBackgroundTileColors([

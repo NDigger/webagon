@@ -269,6 +269,11 @@ export default class Game extends GameObject {
         if (typeof(v) === 'number') this.#backgroundRotationOffset = v;
     }
     getBackgroundRotationOffset() { return this.#backgroundRotationOffset; }
+    setBackgroundRadius(v) {
+        if (typeof(v) !== 'number') return
+        this.#background.setThickness(v);
+    }
+    getBackgroundRadius() { return this.#background.getThickness() }
     setMainColor({r, g, b, a}) {
         const color = new Color(r, g, b, a)
         this.#mainColor = color;
