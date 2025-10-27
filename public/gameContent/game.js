@@ -77,6 +77,7 @@ export default class Game extends GameObject {
     onDeath = () => {}
     onStep = async () => {}
     onIncrement = () => {}
+    onPreIncrement = () => {}
 
     constructor(appContext) {
         super(appContext)
@@ -92,7 +93,7 @@ export default class Game extends GameObject {
             new Color(235, 235, 235),
         ])
 
-        this.#step();
+        this.step();
 
         this.#updateId = requestAnimationFrame(time => this.#update(time));
     }
@@ -108,7 +109,9 @@ export default class Game extends GameObject {
     }
     #get3dColor() { return this.#color3d ?? this.#getDefault3dColor() }
 
-    async #step() {
+    async step() {
+        if (typeof this.onStep !== 'function' || this.onStep.toString() === 'async () => {}') return;
+
         while (true && !this.died && !this.#isIncrementing) {
             await this.onStep();
         }
@@ -162,14 +165,20 @@ export default class Game extends GameObject {
         this.#updateBackground()
     }
 
+    #preIncrement() {
+        this.#rotationDir = this.#rotationDir * -1;
+        this.#incrementTimer = 0;
+        this.onPreIncrement();
+        this.#isIncrementing = true;
+        this.#rotationSpeed += this.#rotationSpeedIncrement;
+    }
+
     #increment() {
         this.#isIncrementing = false;
         this.#wallSpeedMult += this.#wallSpeedIncrement;
-        this.#rotationSpeed += this.#rotationSpeedIncrement;
-        this.#rotationDir = this.#rotationDir * -1;
-        this.#step();
+        console.log(this.#wallSpeedMult)
+        this.step();
         this.onIncrement();
-
     }
 
     #update(time) {
@@ -199,7 +208,7 @@ export default class Game extends GameObject {
                 wall.setThickness(wall.getThickness() - frameTime * this.#wallSpeedMult / 5)
             }
 
-            if (wall.getThickness() < 0 || wall.getDistance() < 0) {
+            if (wall.getThickness() <= 0 || wall.getDistance() <= 0) {
                 wall.destroy()
                 return false;
             }
@@ -208,6 +217,10 @@ export default class Game extends GameObject {
 
         if (!this.#died) {
             this.#incrementTimer += frameTime/1000;
+
+            if (this.#incrementTimer > this.#incrementTime) {
+                this.#preIncrement();
+            }
             
             this.#rotation += this.#rotationSpeed * this.#rotationDir * frameTime;
             this.#polygon.setRotation(this.#rotation)
@@ -220,12 +233,6 @@ export default class Game extends GameObject {
             }
 
             if (this.#isIncrementing && this.#walls.length === 0) this.#increment();
-        }
-
-        if (this.#incrementTimer > this.#incrementTime) {
-            this.#incrementTimer = 0;
-            this.#rotation += 180;
-            this.#isIncrementing = true;
         }
 
         this.#updateId = requestAnimationFrame(time => this.#update(time));
