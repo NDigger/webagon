@@ -7,8 +7,6 @@ let level
 (async () => {
     level = new LevelLoader();
     await level.init();
-
-    // level.load(levelPaths[0])
 })()
 export default level
 
@@ -28,42 +26,50 @@ fetch('./shader.frag')
     requestAnimationFrame(render);
 })
 
+const levelsFolderPath = './levelsContent/levels';
 const levelPaths = [
-    './levels/level1.js',
-    './levels/level2.js',
-    './levels/level3.js',
+    `${levelsFolderPath}/level1`,
+    `${levelsFolderPath}/level2`,
+    `${levelsFolderPath}/level3`,
 ]
+const levelJsons = []
 
 const levelList = document.getElementById('level-list');
 levelPaths.forEach(levelPath => {
-    levelList.insertAdjacentHTML('beforeend', `
-        <div class="level-wrap">
-            <div class="level">
-                <p>Level Name</p>
-                <button>${levelPath}</button>
+    fetch(`${levelPath}/data.json`)
+    .then(res => res.json())
+    .then(d => {
+        levelJsons.push(d);
+        levelList.insertAdjacentHTML('beforeend', `
+            <div class="level-wrap">
+                <div class="level">
+                    <p class="name">${d.name}</p>
+                    <p class="description">${d.description}</p>
+                    <p class="author">${d.author}</p>
+                    <p class="best">31.145</p>
+                </div>
             </div>
-        </div>
-    `)
-    levelList.lastElementChild.addEventListener('click', () => {
-        loadLevel(levelPath)
-        document.getElementById('level-select').style.display = 'none'
+        `)
+        levelList.lastElementChild.querySelector('.level').addEventListener('click', () => {
+            loadLevel(`${levelPath}/${d.scriptPath}`)
+            document.getElementById('level-select').style.display = 'none'
+        })
     })
 })
 
 document.addEventListener('keydown', e => {
     if (e.key === 'ArrowLeft' || e.key === 'a') shiftLevelListPosition(-1)
     else if (e.key === 'ArrowRight' || e.key === 'd') shiftLevelListPosition(1)
-    else if (e.key === 'Enter') loadLevel(levelPaths[levelListSelectedLevel])
+    else if (e.key === 'Enter') 
+        loadLevel(`${levelPaths[levelListSelectedLevel]}/${levelJsons[levelListSelectedLevel].scriptPath}`)
 })
 let levelListSelectedLevel = 0
-const levelListPositionXLerp = new Lerp(v => levelList.style.left = `${-v*100}vw`);
+const levelListPositionXLerp = new Lerp(v => levelList.style.transform = `translateX(${-v*100}vw)`);
 
 const shiftLevelListPosition = shift => {
-    console.log(levelListSelectedLevel, shift)
     if ((levelListSelectedLevel === 0 && shift === -1)
     || (levelListSelectedLevel === levelPaths.length - 1 && shift === 1)) return
     levelListSelectedLevel += shift;  
-    console.log(levelListSelectedLevel)
     levelListPositionXLerp.run(levelListSelectedLevel, 0.3, Lerp.Easing.EASE_OUT)
 }
 

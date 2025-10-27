@@ -1,7 +1,7 @@
 
-import { Vector2, Color, Size } from '../utils/structures';
-import Lerp from '../utils/interpolation';
-import level from '../script';
+import { Vector2, Color, Size } from '../../../utils/structures';
+import Lerp from '../../../utils/interpolation';
+import level from '../../../script';
 
 level.onInit = () => {
     const g = level.game;

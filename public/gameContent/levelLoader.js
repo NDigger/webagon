@@ -10,6 +10,11 @@ const createApp = async () => {
         antialias: true
     });
 
+    window.addEventListener('resize', () => {
+        app.resolution = devicePixelRatio,
+        app.resizeTo = window
+    })
+
     app.stage.sortableChildren = true;
     app.stage.sortChildren();
     app.canvas.id = 'game'
@@ -94,6 +99,8 @@ export default class LevelLoader {
             drawHandler: new DrawHandler(),
         })
         this.game = game;
+        this.#lastUpdateTime = performance.now();
+        this.#lastRenderTime = performance.now();
         this.#loadTime = performance.now()
 
         this.onInit()

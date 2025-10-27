@@ -1,0 +1,14 @@
+{
+    "key": "level2", 
+
+    "name": "Level2 Niche",
+    "description": "Actually this is just copypaasted first level",
+    "author": "NDagger",
+
+    "musicName": "Hexagon and On",
+    "musicAuthor": "Zanzlanz",
+    "musicAlbum": "",
+    "musicPath": "hexagonAndOn.ogg",
+
+    "scriptPath": "script.js"
+}

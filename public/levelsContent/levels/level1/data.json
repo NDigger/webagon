@@ -1,0 +1,14 @@
+{
+    "key": "level1", 
+
+    "name": "Cool level name",
+    "description": "This is level description",
+    "author": "NDagger",
+
+    "musicName": "Hexagon and On",
+    "musicAuthor": "Zanzlanz",
+    "musicAlbum": "",
+    "musicPath": "hexagonAndOn.ogg",
+
+    "scriptPath": "script.js"
+}

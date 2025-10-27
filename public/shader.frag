@@ -25,7 +25,7 @@ mat2 rotate2d(in float a) {
 
 void main() {
     vec2 st = getCenterSquareResolution(v_uv * u_resolution);
-    st -= vec2(0., .0);
+    st -= vec2(0.5, .0);
     st = rotate2d(u_time) * st;
     vec3 color = vec3(0);
 

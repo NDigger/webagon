@@ -1,4 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Stalinist+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Tektur:wght@400..900&display=swap');
 
 *,
 *::before,
@@ -10,6 +11,15 @@
 
 * {
     user-select: none;
+    font-family: "Tektur", sans-serif;
+    font-optical-sizing: auto;
+    font-weight: 800;
+    font-style: normal;
+    font-variation-settings:
+        "wdth" 100;
+}
+
+#timer {
     font-family: "Stalinist One", sans-serif;
     font-weight: 400;
     font-style: normal;
@@ -67,7 +77,7 @@ canvas {
     height: 100vh;
 }
 
-#level-select * {
+#level-select > * {
     position: relative;
 }
 
@@ -92,14 +102,14 @@ canvas {
     justify-content: center;
     align-items: center;
     width: 100vw;
-    height: 100vh;    
+    height: 100vh;
 } 
 
 #level-list::before {
     content: '';
     height: 100vh;
-    width: 100px;
-    background: black;
+    width: 40px;
+    background: linear-gradient(to right, black, transparent);
     position: absolute;
     left: 0px;
     top: 0px;
@@ -108,30 +118,50 @@ canvas {
 #level-list::after {
     content: '';
     height: 100vh;
-    width: 100px;
-    background:  black;
+    width: 40px;
+    background: linear-gradient(to left, black, transparent);
     position: absolute;
     right: 0px;
     top: 0px;
 }
 
 .level {
+    position: relative;
     width: 1000px;
     height: 500px;
-    background-color: rgba(0, 0, 0, .2);
+    box-shadow: 0px 10px 25px rgba(0, 0, 0, .5);
+    backdrop-filter: blur(50px);
+    /* background-color: rgba(0, 0, 0, .2); */
+    padding: 20px;
+}
+
+.level * {
+    color: red;
+}
+
+.level .name {
+    text-align: center;
+    font-size: 4rem;
+}
+
+.level .best {
+    position: absolute;
+    bottom: -20px;
+    right: 20px;
+    font-size: 8rem;
 }
 
 #title {
+    display: none;
     position: absolute;
-    top: -100px;
-    left: 0;
-    /* left: calc(-100vw + 250px); */
+    top: -80px;
+    left: calc(-100vw + 120px);
     color: red;
     text-align: center;
     font-size: 4.5rem;
     background-color: black;
-    /* padding: 20px; */
-    padding-top: 130px;
-    width: 100vw;
-    /* rotate: -8deg; */
+    padding: 20px;
+    padding-top: 110px;
+    width: 210vw;
+    rotate: -8deg;
 }
