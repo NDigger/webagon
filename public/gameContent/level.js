@@ -1,18 +1,15 @@
 import DrawHandler from "./drawHandler";
 import Game from "./game";
+import { Color } from "../utils/structures";
 
-export default class Level { 
+export default class Level extends Game { 
     onInit = () => {};
     onUpdate = () => {};
     onRender = () => {};
     // onLoad = () => {};
     onStep = async () => {};
 
-    #pixiApp;
-
     #levelInitTime = performance.now();
-
-    game;
 
     #timeouts = [];
     #intervals = [];
@@ -27,17 +24,15 @@ export default class Level {
     #currentLevelData;
 
     constructor(pixiApp, currentLevelData) {
+        super({
+            pixiApp: pixiApp,
+            drawHandler: new DrawHandler(),
+        })
+        this.setBackgroundTileColors([Color.BLACK()]);
         this.#currentLevelData = currentLevelData
-        this.#pixiApp = pixiApp
     }
     
     init() {
-        const game = new Game({
-            pixiApp: this.#pixiApp,
-            drawHandler: new DrawHandler(),
-        })
-        this.game = game;
-
         const audio = new Audio(this.#currentLevelData.musicPath);
         audio.oncanplay = () => {
             this.#audio = audio;
@@ -53,7 +48,7 @@ export default class Level {
         this.#renderId = requestAnimationFrame(t => this.#render(t));
         document.addEventListener('visibilitychange', this.#handleVisibilityChange);
 
-        this.game.onDeath = () => this.#onDeath()
+        this.onDeath = () => this.#onDeath()
     }
     
     async #step() {
@@ -64,7 +59,7 @@ export default class Level {
         }
     }
 
-    #handleVisibilityChange = () => document.hidden && this.game.kill()
+    #handleVisibilityChange = () => document.hidden && this.kill()
 
     #update(time) {
         if (this.#gameOver) return
@@ -76,7 +71,7 @@ export default class Level {
         const timer = document.getElementById('timer');
         timer.textContent = Math.floor(levelTime)/1000;
         const gameUi = document.getElementById('game-ui')
-        if (this.game) gameUi.style.color = this.game.getMainColor().getRGBStyle();
+        gameUi.style.color = this.getMainColor().getRGBStyle();
         
         this.#updateId = requestAnimationFrame(t => this.#update(t));
     }
@@ -89,11 +84,11 @@ export default class Level {
     }
 
     destroy() {
+        super.destroy();
         cancelAnimationFrame(this.#updateId)
         cancelAnimationFrame(this.#renderId)
         document.removeEventListener('visibilitychange', this.#handleVisibilityChange);
         if (this.#audio) this.#audio.pause()
-        this.game.destroy()
     }
 
     #onDeath() {

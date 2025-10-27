@@ -4,24 +4,23 @@ import Lerp from '../../../utils/interpolation';
 import { level } from '../../../script';
 
 level.onInit = () => {
-    const g = level.game;
-    // g.setSwapEnabled(true);
-    g.setRotationSpeed(0.5);
-    g.setWallSpeedMult(6);
-    g.setWallSpawnDistance(1500);
-    g.setSides(3);
-    g.set3dDepth(5);
-    g.set3dDistance(200);
-    // g.set3dColor(new Color(255, 255, 255));
-    g.setSkew(.5);
-    g.setOffset(new Vector2(50, 0));
-    // g.setPlayerSize(new Size(97, 100))
-    // g.setPlayerDistanceMult(.1);
+    // level.setSwapEnabled(true);
+    level.setRotationSpeed(0.5);
+    level.setWallSpeedMult(6);
+    level.setWallSpawnDistance(1500);
+    level.setSides(3);
+    level.set3dDepth(5);
+    level.set3dDistance(200);
+    // level.set3dColor(new Color(255, 255, 255));
+    level.setSkew(.5);
+    level.setOffset(new Vector2(50, 0));
+    // level.setPlayerSize(new Size(97, 100))
+    // level.setPlayerDistanceMult(.1);
 
     level.createInterval(() => {
-        const rnd = Math.random() * g.getSides()
-        for (let i = 1; i < g.getSides(); i++) {
-            g.createWall(i + rnd, 50)
+        const rnd = Math.random() * level.getSides()
+        for (let i = 1; i < level.getSides(); i++) {
+            level.createWall(i + rnd, 50)
         }
     }, .4)
 }
@@ -29,8 +28,7 @@ level.onInit = () => {
 let time = 0;
 // onUpdate is called every frame.
 level.onUpdate = ft => {
-    const g = level.game;
-    g.setBackgroundTileColors([
+    level.setBackgroundTileColors([
         Lerp.interpolate(Color.hsvToRgb(time * 0.2, 1, 0.5), Color.hsvToRgb(time * 0.2, 1, 0.1), (time/940-Math.floor(time/940))),
         Lerp.interpolate(Color.hsvToRgb(time * 0.2, 1, 0.4), Color.hsvToRgb(time * 0.2, 1, 0.2), (time/940-Math.floor(time/940))),
 
@@ -39,14 +37,13 @@ level.onUpdate = ft => {
         // Color.BLACK(255),
         // Color.WHITE(),
     ])
-    g.setMainColor(Color.hsvToRgb(time * 0.5, 1, 1))
-    g.set3dColor(Color.hsvToRgb(time * 0.5 + .5, 1, .2))
-    // g.setRadius(80 - (time * 2 - Math.floor(time * 2)) * 10)
-    g.setRadius(Math.sin(time*10)* 5 + 60);
+    level.setMainColor(Color.hsvToRgb(time * 0.5, 1, 1))
+    level.set3dColor(Color.hsvToRgb(time * 0.5 + .5, 1, .2))
+    // level.setRadius(80 - (time * 2 - Math.floor(time * 2)) * 10)
+    level.setRadius(Math.sin(time*10)* 5 + 60);
 }
 
 level.onRender = ft => {
     time += ft;
-    const g = level.game;
-    // g.setSkew(Math.sin(time*10) * .1 + .1)
+    // level.setSkew(Math.sin(time*10) * .1 + .1)
 }
