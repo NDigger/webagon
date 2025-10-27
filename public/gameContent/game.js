@@ -67,15 +67,7 @@ export default class Game extends GameObject {
     #distanceSignal;
     #distanceDelay = -1;
 
-    #incrementTime = 15;
-    #incrementTimer = 0;
-    #isIncrementing = false;
-
-    #rotationSpeedIncrement = 0;
-    #wallSpeedIncrement = 0;
-
     onDeath = () => {}
-    onStep = async () => {}
     onIncrement = () => {}
     onPreIncrement = () => {}
 
@@ -93,8 +85,6 @@ export default class Game extends GameObject {
             new Color(235, 235, 235),
         ])
 
-        this.step();
-
         this.#updateId = requestAnimationFrame(time => this.#update(time));
     }
 
@@ -109,24 +99,9 @@ export default class Game extends GameObject {
     }
     #get3dColor() { return this.#color3d ?? this.#getDefault3dColor() }
 
-    async step() {
-        if (typeof this.onStep !== 'function' || this.onStep.toString() === 'async () => {}') return;
-
-        while (true && !this.died && !this.#isIncrementing) {
-            await this.onStep();
-        }
-    }
-
     kill() {
         this.#polygon.player.positionRedrawEnabled = false;
 
-        new Lerp(v => {
-            this.setShakePower(v)
-            this.#background.scheduleDraw()
-            this.#polygon.scheduleDraw()
-        }).apply(30).run(0, 0.35);
-
-        this.setShakePower(10);
         const d = new Death(this.appContext);
         d.setSkew(this.#skew);
         d.setOffset(this.#polygon.player.getPointPosition());
@@ -165,22 +140,6 @@ export default class Game extends GameObject {
         this.#updateBackground()
     }
 
-    #preIncrement() {
-        this.#rotationDir = this.#rotationDir * -1;
-        this.#incrementTimer = 0;
-        this.onPreIncrement();
-        this.#isIncrementing = true;
-        this.#rotationSpeed += this.#rotationSpeedIncrement;
-    }
-
-    #increment() {
-        this.#isIncrementing = false;
-        this.#wallSpeedMult += this.#wallSpeedIncrement;
-        console.log(this.#wallSpeedMult)
-        this.step();
-        this.onIncrement();
-    }
-
     #update(time) {
         const frameTime = time - this.#lastUpdateTime;
         this.#lastUpdateTime = time;
@@ -215,13 +174,7 @@ export default class Game extends GameObject {
             return true
         })
 
-        if (!this.#died) {
-            this.#incrementTimer += frameTime/1000;
-
-            if (this.#incrementTimer > this.#incrementTime) {
-                this.#preIncrement();
-            }
-            
+        if (!this.#died) {            
             this.#rotation += this.#rotationSpeed * this.#rotationDir * frameTime;
             this.#polygon.setRotation(this.#rotation)
             this.#updateBackground()
@@ -231,8 +184,6 @@ export default class Game extends GameObject {
                 this.#backgroundSwapTimer = this.#backgroundSwapTime;
                 this.#swapBackground();
             }
-
-            if (this.#isIncrementing && this.#walls.length === 0) this.#increment();
         }
 
         this.#updateId = requestAnimationFrame(time => this.#update(time));
@@ -278,20 +229,6 @@ export default class Game extends GameObject {
     getRotationSpeed() { return this.#rotationSpeed }
     setRadius(v) { if (typeof(v) === 'number') this.#polygon.setThickness(v); }
     getRadius() { return this.#polygon.getThickness() }
-    setIncrementTime(v) {
-        if (typeof(v) !== 'number') return
-        this.#incrementTime = v;
-    }
-    getIncrementTime() { return this.#incrementTime }
-    setWallSpeedIncrement(v) {
-        if (typeof(v) !== 'number') return
-        this.#wallSpeedIncrement = v;
-    } 
-    getWallSpeedIncrement() { return this.#wallSpeedIncrement }
-    setRotationSpeedIncrement(v) {
-        if (typeof(v) !== 'number') return
-        this.#rotationSpeedIncrement = v;
-    }
     setSkew(v) {
         if (typeof(v) !== 'number') return
         this.#skew = v
@@ -396,15 +333,9 @@ export default class Game extends GameObject {
         this.#polygon.clear3dFalloffColor();
         this.#walls.forEach(w => w.clear3dFalloffColor());
     }
-    setShakePower(v) {
-        if (typeof(v) !== 'number') return
-        globalThis.shakePower = v;
-    }
-    getShakePower() { return globalThis.shakePower }
     setSwapEnabled(v) {
         if (typeof(v) !== 'boolean') return
         this.#polygon.player.setSwapEnabled(v)
-        document.getElementById('swap-enabled-msg').style.display = v ? 'block' : 'none'
     }
     getSwapEnabled() { return this.#polygon.player.getSwapEnabled(); }
     setScale({x, y}) {
@@ -465,6 +396,7 @@ export default class Game extends GameObject {
             if (this.#deathEffect != undefined) this.#deathEffect.destroy();
         })
     }
+    getWallCount() { return this.#walls.length }
     async distanceDelay(distance) {
         this.#distanceDelay = Math.max(distance, 1)
         return new Promise(resolve => {

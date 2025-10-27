@@ -1,6 +1,7 @@
 import DrawHandler from "./drawHandler";
 import Game from "./game";
 import { Color } from "../utils/structures";
+import Lerp from "../utils/interpolation";
 
 export default class Level extends Game { 
     onInit = () => {};
@@ -22,6 +23,12 @@ export default class Level extends Game {
 
     #audio;
     #currentLevelData;
+
+    #incrementTime = 15;
+    #incrementTimer = 0;
+    #isIncrementing = false;
+    #rotationSpeedIncrement = 0;
+    #wallSpeedIncrement = 0;
 
     constructor(pixiApp, currentLevelData) {
         super({
@@ -52,9 +59,23 @@ export default class Level extends Game {
     async #step() {
         if (typeof this.onStep !== 'function' || this.onStep.toString() === 'async () => {}') return;
 
-        while (true && !this.died) { // && !this.#isIncrementing
+        while (true && !this.died && !this.#isIncrementing) { // && !this.#isIncrementing
             await this.onStep();
         }
+    }
+
+    #preIncrement() {
+        this.#incrementTimer = 0;
+        this.onPreIncrement();
+        this.#isIncrementing = true;
+        const inc = this.getRotationSpeed() >= 0 ? this.#rotationSpeedIncrement : -this.#rotationSpeedIncrement
+        this.setRotationSpeed((this.getRotationSpeed() + inc)*-1);
+    }
+    #increment() {
+        this.#isIncrementing = false;
+        this.setWallSpeedMult(this.getWallSpeedMult() + this.#wallSpeedIncrement);
+        this.#step();
+        this.onIncrement();
     }
 
     #handleVisibilityChange = () => document.hidden && this.kill()
@@ -65,6 +86,12 @@ export default class Level extends Game {
         const levelTime = time - this.#levelInitTime;
         this.#lastUpdateTime = time;
         this.onUpdate(frameTime/1000);
+        
+        this.#incrementTimer += frameTime/1000;
+        if (this.#incrementTimer > this.#incrementTime) {
+            this.#preIncrement();
+        }
+        if (this.#isIncrementing && this.getWallCount() === 0) this.#increment();
 
         const timer = document.getElementById('timer');
         timer.textContent = Math.floor(levelTime)/1000;
@@ -94,8 +121,33 @@ export default class Level extends Game {
         cancelAnimationFrame(this.#updateId);
     }
 
+    setShakePower(v) {
+        if (typeof(v) !== 'number') return
+        globalThis.shakePower = v;
+    }
+    getShakePower() { return globalThis.shakePower }
+    setIncrementTime(v) {
+        if (typeof(v) !== 'number') return
+        this.#incrementTime = v;
+    }
+    getIncrementTime() { return this.#incrementTime }
+    setWallSpeedIncrement(v) {
+        if (typeof(v) !== 'number') return
+        this.#wallSpeedIncrement = v;
+    } 
+    getWallSpeedIncrement() { return this.#wallSpeedIncrement }
+    setRotationSpeedIncrement(v) {
+        if (typeof(v) !== 'number') return
+        this.#rotationSpeedIncrement = v;
+    }
+    getRotationSpeedIncrement() { return this.#rotationSpeedIncrement }
+
     kill() {
         super.kill()
+        this.setShakePower(10);
+        new Lerp(v => {
+            this.setShakePower(v);
+        }).apply(30).run(0, 0.35);
         this.#onDeath()
     }
     setMainColor({r, g, b, a}) {
