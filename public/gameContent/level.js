@@ -19,7 +19,11 @@ export default class Level {
     #lastUpdateTime = performance.now();
     #lastRenderTime = performance.now();
 
-    constructor(pixiApp) {
+    #audio;
+    #currentLevelData;
+
+    constructor(pixiApp, currentLevelData) {
+        this.#currentLevelData = currentLevelData
         this.#pixiApp = pixiApp
     }
     
@@ -29,6 +33,16 @@ export default class Level {
             drawHandler: new DrawHandler(),
         })
         this.game = game;
+
+        const audio = new Audio(this.#currentLevelData.musicPath);
+        audio.oncanplay = () => {
+            this.#audio = audio;
+        }
+        const musicTimestamps = this.#currentLevelData.musicTimestamps
+        audio.currentTime = musicTimestamps[Math.floor(Math.random() * musicTimestamps.length)] ?? 0
+        audio.play();
+
+
         this.onInit();
 
         this.#updateId = requestAnimationFrame(t => this.#update(t));
@@ -43,7 +57,7 @@ export default class Level {
     #update(time) {
         if (this.#gameOver) return
         const frameTime = time - this.#lastUpdateTime;
-        this.#lastUpdateTime = time ;
+        this.#lastUpdateTime = time - this.#levelInitTime;
         this.onUpdate(frameTime/1000);
 
         const timer = document.getElementById('timer');
@@ -55,7 +69,7 @@ export default class Level {
 
     #render(time) {
         const frameTime = time - this.#lastRenderTime;
-        this.#lastRenderTime = time;
+        this.#lastRenderTime = time - this.#levelInitTime;
         this.onRender(frameTime/1000)
         this.#renderId = requestAnimationFrame(t => this.#render(t))
     }
@@ -64,10 +78,12 @@ export default class Level {
         cancelAnimationFrame(this.#updateId)
         cancelAnimationFrame(this.#renderId)
         document.removeEventListener('visibilitychange', this.#handleVisibilityChange);
+        if (this.#audio) this.#audio.pause()
         this.game.destroy()
     }
 
     #onDeath() {
+        if (this.#audio) this.#audio.pause()
         document.removeEventListener('visibilitychange', this.#handleVisibilityChange);
         this.#gameOver = true
         cancelAnimationFrame(this.#updateId);

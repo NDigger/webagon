@@ -25,8 +25,7 @@ export default class LevelLoader {
     #pixiApp;
     level;
     #levelDestroyed = false;
-    
-    #currentLevelPath
+    #currentLevelData
 
     async init() {
         this.#pixiApp = await createApp();
@@ -49,20 +48,20 @@ export default class LevelLoader {
     }
 
     reload() {
-        this.load(this.#currentLevelPath);
+        this.load(this.#currentLevelData);
     }
 
-    load(path) {
-        this.#currentLevelPath = path;
+    load(data) {
+        this.#currentLevelData = data;
         const script = document.createElement('script');
         script.type = 'module';
-        script.src = `${path}?${new Date().getTime()}`
+        script.src = `${data.scriptPath}?${new Date().getTime()}`
         document.querySelector('body').appendChild(script);
 
         if (!this.#levelDestroyed && this.level) this.level.destroy();
         this.#levelDestroyed = false;
 
-        const level = new Level(this.#pixiApp);
+        const level = new Level(this.#pixiApp, this.#currentLevelData);
         setLevel(level);
         this.level = level;
 

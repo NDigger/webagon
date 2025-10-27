@@ -2,19 +2,25 @@
 import LevelLoader from './gameContent/levelLoader';
 import FragmentShader from './fragmentShader';
 import Lerp from './utils/interpolation';
+import AudioManager from './utils/audioManager';
 
 let level
 let levelLoader
+const audioManager = new AudioManager();
 (async () => {
     levelLoader = new LevelLoader();
     await levelLoader.init();
+    levelLoader.audioManager = audioManager;
 })()
 export { level }
 export function setLevel(v) {
     level = v
 }
 
-const loadLevel = path => levelLoader.load(path);
+const loadLevel = levelData => {
+    levelLoader.load(levelData);
+}
+
 
 fetch('./shader.frag')
 .then(res => res.text())
@@ -38,6 +44,12 @@ const levelPaths = [
 ]
 const levelJsons = []
 
+const updateJsonPaths = jsonLevelObject => {
+    const levelJson = structuredClone(jsonLevelObject);
+    levelJson.scriptPath = `${levelPaths[levelListSelectedLevel]}/${levelJson.scriptPath}`
+    levelJson.musicPath = `${levelPaths[levelListSelectedLevel]}/${levelJson.musicPath}`
+    return levelJson
+}
 const levelList = document.getElementById('level-list');
 levelPaths.forEach(levelPath => {
     fetch(`${levelPath}/data.json`)
@@ -54,21 +66,14 @@ levelPaths.forEach(levelPath => {
                 </div>
             </div>
         `)
+
         levelList.lastElementChild.querySelector('.level').addEventListener('click', () => {
-            loadLevel(`${levelPath}/${d.scriptPath}`)
+            loadLevel(updateJsonPaths(d))
             document.getElementById('level-select').style.display = 'none'
         })
     })
 })
 
-document.addEventListener('keydown', e => {
-    if (e.key === 'ArrowLeft' || e.key === 'a') shiftLevelListPosition(-1)
-    else if (e.key === 'ArrowRight' || e.key === 'd') shiftLevelListPosition(1)
-    else if (e.key === 'Enter') 
-        loadLevel(`${levelPaths[levelListSelectedLevel]}/${levelJsons[levelListSelectedLevel].scriptPath}`)
-})
-let levelListSelectedLevel = 0
-const levelListPositionXLerp = new Lerp(v => levelList.style.transform = `translateX(${-v*100}vw)`);
 
 const shiftLevelListPosition = shift => {
     if ((levelListSelectedLevel === 0 && shift === -1)
@@ -76,4 +81,15 @@ const shiftLevelListPosition = shift => {
     levelListSelectedLevel += shift;  
     levelListPositionXLerp.run(levelListSelectedLevel, 0.3, Lerp.Easing.EASE_OUT)
 }
+
+document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft' || e.key === 'a') shiftLevelListPosition(-1)
+    else if (e.key === 'ArrowRight' || e.key === 'd') shiftLevelListPosition(1)
+    else if (e.key === 'Enter') {
+        loadLevel(updateJsonPaths(levelJsons[levelListSelectedLevel]))
+    }
+})
+let levelListSelectedLevel = 0
+const levelListPositionXLerp = new Lerp(v => levelList.style.transform = `translateX(${-v*100}vw)`);
+
 
