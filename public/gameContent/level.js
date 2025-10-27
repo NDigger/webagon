@@ -47,8 +47,6 @@ export default class Level extends Game {
         this.#updateId = requestAnimationFrame(t => this.#update(t));
         this.#renderId = requestAnimationFrame(t => this.#render(t));
         document.addEventListener('visibilitychange', this.#handleVisibilityChange);
-
-        this.onDeath = () => this.#onDeath()
     }
     
     async #step() {
@@ -96,6 +94,10 @@ export default class Level extends Game {
         cancelAnimationFrame(this.#updateId);
     }
 
+    kill() {
+        super.kill()
+        this.#onDeath()
+    }
     setMainColor({r, g, b, a}) {
         super.setMainColor({r: r, g: g, b: b, a: a})
         const gameUi = document.getElementById('game-ui')
