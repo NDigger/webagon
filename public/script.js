@@ -4,13 +4,17 @@ import FragmentShader from './fragmentShader';
 import Lerp from './utils/interpolation';
 
 let level
+let levelLoader
 (async () => {
-    level = new LevelLoader();
-    await level.init();
+    levelLoader = new LevelLoader();
+    await levelLoader.init();
 })()
-export default level
+export { level }
+export function setLevel(v) {
+    level = v
+}
 
-const loadLevel = path => level.load(path);
+const loadLevel = path => levelLoader.load(path);
 
 fetch('./shader.frag')
 .then(res => res.text())
