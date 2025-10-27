@@ -17,7 +17,6 @@ const createApp = async () => {
     app.stage.sortableChildren = true;
     app.stage.sortChildren();
     app.canvas.id = 'game'
-    console.log(document.getElementById('game-content'))
     document.getElementById('game-content').appendChild(app.canvas);
     return app;
 }

@@ -7,7 +7,7 @@ export default class Background extends PolygonObject {
 
     constructor(appContext) {
         super(appContext)
-        this.setThickness(1800);
+        this.setThickness(2500);
         this.draw()
     }
 

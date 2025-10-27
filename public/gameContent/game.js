@@ -67,6 +67,9 @@ export default class Game extends GameObject {
     #lastUpdateTime = performance.now();
     #lastRenderStageTime = performance.now();
 
+    #distanceSignal;
+    #distanceDelay = -1;
+
     onUpdate = () => {}
     onRenderStage = () => {}
     onDeath = () => {}
@@ -175,6 +178,10 @@ export default class Game extends GameObject {
             wall.setRotation(this.#rotation)
         })
 
+        if (!this.#died && this.#distanceDelay > 0) {
+            this.#distanceDelay -= frameTime * this.#wallSpeedMult / 5;
+            if (this.#distanceDelay <= 0 && typeof(this.#distanceSignal) === 'function') this.#distanceSignal()
+        }
         this.#walls = this.#walls.filter(wall => {
             if (this.#died) {
                 return true
@@ -206,7 +213,7 @@ export default class Game extends GameObject {
         if (this.#died) return; 
         const wall = new Wall(this.appContext);
         wall.setSides(this.#sides)
-        wall.setSide(side)
+        wall.setSide(Math.floor(side))
         wall.setThickness(thickness);
         wall.setRotation(this.#rotation)
         wall.setColor(this.#mainColor);
@@ -434,5 +441,11 @@ export default class Game extends GameObject {
     clearIntervals() {
         this.#intervals.forEach(interval => clearInterval(interval));
         this.#intervals = []
+    }
+    async distanceDelay(distance) {
+        this.#distanceDelay = distance
+        return new Promise(resolve => {
+            this.#distanceSignal = resolve;
+        });
     }
 }

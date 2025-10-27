@@ -76,9 +76,9 @@ levelPaths.forEach(levelPath => {
 
 
 const shiftLevelListPosition = shift => {
-    if ((levelListSelectedLevel === 0 && shift === -1)
-    || (levelListSelectedLevel === levelPaths.length - 1 && shift === 1)) return
-    levelListSelectedLevel += shift;  
+    if (levelListSelectedLevel === 0 && shift === -1) levelListSelectedLevel = levelPaths.length - 1;
+    else if (levelListSelectedLevel === levelPaths.length - 1 && shift === 1) levelListSelectedLevel = 0;
+    else levelListSelectedLevel += shift;  
     levelListPositionXLerp.run(levelListSelectedLevel, .3, Lerp.Easing.EASE_OUT)
 }
 
