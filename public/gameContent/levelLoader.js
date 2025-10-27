@@ -26,18 +26,25 @@ export default class LevelLoader {
     level;
     #levelDestroyed = false;
     #currentLevelData
+    #attempt = 0;
+
+    #keyPressed = false;
 
     async init() {
         this.#pixiApp = await createApp();
     }
 
+    #handleKeyup = () => this.#keyPressed = false
     #handleKeydown = e => {
-        if (e.keyCode === 82) this.reload();
-        if (e.keyCode === 27) this.leave();
+        if (this.#keyPressed) return
+        if (e.key === 'r' || e.key === 'ArrowUp') this.reload();
+        if (e.key === 'Escape') this.leave();
+        this.#keyPressed = true;
     }
 
     leave() {
-        window.removeEventListener('keydown', this.#handleKeydown)
+        window.removeEventListener('keyup', this.#handleKeyup);
+        window.removeEventListener('keydown', this.#handleKeydown);
         this.level.destroy()
         this.#levelDestroyed = true;
 
@@ -52,6 +59,7 @@ export default class LevelLoader {
     }
 
     load(data) {
+        this.#attempt = 0;
         this.#currentLevelData = data;
         const script = document.createElement('script');
         script.type = 'module';
@@ -66,15 +74,12 @@ export default class LevelLoader {
         this.level = level;
 
         script.onload = () => {
-            this.start();
+            this.level.init()
+            document.getElementById('game').style.display = 'block'
+            document.getElementById('timer').style.display = 'block';
+            window.addEventListener('keydown', this.#handleKeydown);
+            window.addEventListener('keyup', this.#handleKeyup)
             this.level.onLoad();
         }
-    }
-
-    start() {
-        this.level.init()
-        document.getElementById('game').style.display = 'block'
-        document.getElementById('timer').style.display = 'block';
-        window.addEventListener('keydown', this.#handleKeydown);
     }
 }

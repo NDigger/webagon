@@ -9,7 +9,7 @@
     "musicAuthor": "Zanzlanz",
     "musicAlbum": "",
     "musicPath": "hexagonAndOn.ogg",
-    "musicTimestamps": [2, 10, 100],
+    "musicTimestamps": [1],
 
     "scriptPath": "script.js"
 }

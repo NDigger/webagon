@@ -101,6 +101,8 @@ export default class Game extends GameObject {
     #get3dColor() { return this.#color3d ?? this.#getDefault3dColor() }
 
     kill() {
+        this.#polygon.player.positionRedrawEnabled = false;
+
         new Lerp(v => {
             this.setShakePower(v)
             this.#background.scheduleDraw()

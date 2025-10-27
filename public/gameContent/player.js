@@ -8,7 +8,11 @@ export default class Player extends CustomWall {
     #leftKeyPressed = false;
     #rightKeyPressed = false;
 
+    positionRedrawEnabled = true;
+
     #size = new Size(24, 10);
+
+    #swapKeyPressed = false;
 
     #swapEnabled = false;
     #movementEnabled = true;
@@ -39,12 +43,18 @@ export default class Player extends CustomWall {
     #onKeyDown = e => {
         if (e.keyCode === 37) this.#leftKeyPressed = true;
         if (e.keyCode === 39) this.#rightKeyPressed = true;
-        if (e.keyCode === 32 && this.#swapEnabled) this.#rotationOffset += 180;
+
+        if (e.keyCode === 32 && this.#swapEnabled && !this.#swapKeyPressed) {
+            this.#rotationOffset += 180;
+            this.#swapKeyPressed = true;
+        }
     }
 
     #onKeyUp = e => {
         if (e.keyCode === 37) this.#leftKeyPressed = false;
         if (e.keyCode === 39) this.#rightKeyPressed = false;
+
+        if (e.keyCode === 32) this.#swapKeyPressed = false;
     }
 
     #update(time) {
@@ -85,12 +95,14 @@ export default class Player extends CustomWall {
     }
 
     draw() {
-        this.setVertexPos4(
-            new Vector2(this.#distance + this.#size.height, 0).rotate(degToRad(this.#rotationOffset)),
-            new Vector2(this.#distance, -this.#size.width/2).rotate(degToRad(this.#rotationOffset)),
-            new Vector2(this.#distance, 0).rotate(degToRad(this.#rotationOffset)),
-            new Vector2(this.#distance, this.#size.width/2).rotate(degToRad(this.#rotationOffset)),
-        )
+        if (this.positionRedrawEnabled) {
+            this.setVertexPos4(
+                new Vector2(this.#distance + this.#size.height, 0).rotate(degToRad(this.#rotationOffset)),
+                new Vector2(this.#distance, -this.#size.width/2).rotate(degToRad(this.#rotationOffset)),
+                new Vector2(this.#distance, 0).rotate(degToRad(this.#rotationOffset)),
+                new Vector2(this.#distance, this.#size.width/2).rotate(degToRad(this.#rotationOffset)),
+            )
+        }
         super.draw();
     }
 

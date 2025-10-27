@@ -79,7 +79,7 @@ const shiftLevelListPosition = shift => {
     if ((levelListSelectedLevel === 0 && shift === -1)
     || (levelListSelectedLevel === levelPaths.length - 1 && shift === 1)) return
     levelListSelectedLevel += shift;  
-    levelListPositionXLerp.run(levelListSelectedLevel, 0.3, Lerp.Easing.EASE_OUT)
+    levelListPositionXLerp.run(levelListSelectedLevel, .3, Lerp.Easing.EASE_OUT)
 }
 
 document.addEventListener('keydown', e => {

@@ -57,11 +57,12 @@ export default class Level {
     #update(time) {
         if (this.#gameOver) return
         const frameTime = time - this.#lastUpdateTime;
-        this.#lastUpdateTime = time - this.#levelInitTime;
+        const levelTime = time - this.#levelInitTime;
+        this.#lastUpdateTime = time;
         this.onUpdate(frameTime/1000);
 
         const timer = document.getElementById('timer');
-        timer.textContent = Math.floor(time)/1000;
+        timer.textContent = Math.floor(levelTime)/1000;
         if (this.game) timer.style.color = this.game.getMainColor().getRGBStyle();
         
         this.#updateId = requestAnimationFrame(t => this.#update(t));
@@ -69,7 +70,7 @@ export default class Level {
 
     #render(time) {
         const frameTime = time - this.#lastRenderTime;
-        this.#lastRenderTime = time - this.#levelInitTime;
+        this.#lastRenderTime = time;
         this.onRender(frameTime/1000)
         this.#renderId = requestAnimationFrame(t => this.#render(t))
     }
