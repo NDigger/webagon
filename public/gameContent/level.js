@@ -5,13 +5,16 @@ export default class Level {
     onInit = () => {};
     onUpdate = () => {};
     onRender = () => {};
-    onLoad = () => {};
+    // onLoad = () => {};
 
     #pixiApp;
 
     #levelInitTime = performance.now();
 
     game;
+
+    #timeouts = [];
+    #intervals = [];
 
     #gameOver = false;
     #renderId = null;
@@ -90,5 +93,26 @@ export default class Level {
         document.removeEventListener('visibilitychange', this.#handleVisibilityChange);
         this.#gameOver = true
         cancelAnimationFrame(this.#updateId);
+    }
+
+    createEvent(event, timeSeconds) {
+        const time = timeSeconds*1000;
+        const timeout = setTimeout(() => event(), time);
+        this.#timeouts.push(timeout);
+        return timeout;
+    }
+    clearEvents() {
+        this.#timeouts.forEach(timeout => clearTimeout(timeout));
+        this.#timeouts = []
+    }
+    createInterval(event, timeSeconds) {
+        const time = timeSeconds*1000;
+        const interval = setInterval(() => event(), time);
+        this.#intervals.push(interval);
+        return interval;
+    }
+    clearIntervals() {
+        this.#intervals.forEach(interval => clearInterval(interval));
+        this.#intervals = []
     }
 }

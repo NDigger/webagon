@@ -79,7 +79,7 @@ export default class LevelLoader {
             document.getElementById('level-select').style.display = 'none'
             window.addEventListener('keydown', this.#handleKeydown);
             window.addEventListener('keyup', this.#handleKeyup)
-            this.level.onLoad();
+            // this.level.onLoad();
         }
     }
 }

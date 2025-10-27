@@ -2,111 +2,41 @@
 import { Vector2, Color, Size } from '../../../utils/structures';
 import Lerp from '../../../utils/interpolation';
 import { level } from '../../../script';
+import initPatterns from '../../patterns';
 let g;
+let patterns
 
 const delay = s => new Promise(resolve => setTimeout(resolve, s*1000));
 
-const getRandomSide = () => Math.floor(Math.random() * g.getSides());
-const getRandomDir = () => Math.random() < .5 ? -1 : 1;
-
-const barrage = side => {
-    for(let i = 0; i < g.getSides() - 1; i++) {
-        g.createWall(i + side, 40)
-    }
-}
-
-const alt = side => {
-    for(let i = 0; i < g.getSides(); i+=2) {
-        g.createWall(i + side, 40);
-    }
-}
-
-const wallEx = side => {
-    for(let i = 0; i < g.getSides(); i+=2) {
-        g.createWall(i + side, 40);
-    }
-}
-
-const pInverseBarrage = async (times, delay, delayEnd) => {
-    const side = getRandomSide();
-    for(let i = 0; i < times; i++) {
-        barrage((i%2)*g.getSides()/2+side);
-        await g.distanceDelay(delay);
-    }
-    await g.distanceDelay(delayEnd);
-}
-
-const pSpiral = async (times, delay, delayEnd, extra = 1) => {
-    const side = getRandomSide();
-    const dir = getRandomDir();
-    for(let i = 0; i < times; i++) {
-        for(let k = 0; k < extra; k++) g.createWall((i+k) * dir + side, delay)
-        await g.distanceDelay(delay);
-    }
-    await g.distanceDelay(delayEnd);
-}
-
-const pDoubleSpiral = async (times, delay, delayEnd, extra = 1) => {
-    const side = getRandomSide();
-    const dir = getRandomDir();
-    for(let i = 0; i < times; i++) {
-        for(let k = 0; k < extra; k++) {
-            g.createWall((i+k) * dir + side, delay);
-            g.createWall((i+k+g.getSides()/2) * dir + side, delay);
-        }
-        await g.distanceDelay(delay);
-    }
-    await g.distanceDelay(delayEnd);
-}
-
-const pSpiralBarrage = async (times, delay, delayEnd) => {
-    const side = getRandomSide();
-    const dir = getRandomDir();
-    for(let i = 0; i < times; i++) {
-        barrage(i * dir + side);
-        await g.distanceDelay(delay);
-    }
-    await g.distanceDelay(delayEnd);
-}
-
-const pLeftRight = async (times, delay, delayEnd) => {
-    const side = getRandomSide();
-    for(let i = 0; i < times; i++) {
-        if (i % 2 === 0) {
-            barrage(side);
-        } else {
-            g.createWall(side - 1, 40)
-        }
-        await g.distanceDelay(delay);
-    }
-    await g.distanceDelay(delayEnd);
-}
-
 const addPattern = async pKey => {
-    // if (pKey === 0) await pInverseBarrage(2, 300, 100);
-    // else if (pKey === 1) await pSpiralBarrage(4, 250, 100);
-    // else if (pKey === 2) await pSpiral(5, 40, 220, 1);
-    // else if (pKey === 3) await pDoubleSpiral(5, 80, 220);
-    if (pKey === 4) await pLeftRight(5, 200, 100);
+    if (pKey === 0) await patterns.pInverseBarrage(2, 300, 0);
+    else if (pKey === 1) await patterns.pSpiralBarrage(4, 250, 0);
+    // else if (pKey === 2) await patterns.pSpiral(5, 40, 200, 1);
+    // else if (pKey === 3) await patterns.pDoubleSpiral(5, 80, 200);
+    else if (pKey === 4) await patterns.pLeftRight(5, 200, 0);
+    else if (pKey === 5) await patterns.pWallExVortex(3, 200, 0);
+    else if (pKey === 6) await patterns.pTunnel(3, 400, 250);
+    else if (pKey === 7) await patterns.pAltTunnel(3, 200, 250, 3);
+    else if (pKey === 8) await patterns.pLRBarrage(4, 200, 0); 
+    else if (pKey === 9) await patterns.pWallExSpiral(4, 200, 0);
+    else if (pKey === 10) await patterns.pWallExSpam(3, 80, 120);
+    else if (pKey === 11) await patterns.pWallExTunnel(3, 200, 200)
+    else if (pKey === 12) await patterns.pRandomLRBarrage(10, 200, 0);
     step()
 }
 
-const pKeys = [0, 1, 2, 3, 4];
+const pKeys = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 let activeKeys = [];
 
 const step = () => {
     if (activeKeys.length === 0) activeKeys = pKeys.slice();
     const rndIndex = Math.floor(Math.random() * activeKeys.length)
-    const deletedIndex = activeKeys.splice(rndIndex, 1)[0]
-    console.log(deletedIndex)
-    addPattern(deletedIndex)
+    addPattern(activeKeys.splice(rndIndex, 1)[0])
 }
-
-(async () => requestAnimationFrame(() => step()))()
 
 level.onInit = () => {
     g = level.game;
-    g.setBackgroundRadius(500);
+    // g.setBackgroundRadius(500);
     g.setSwapEnabled(true);
     g.setMainColor(new Color(255, 0, 0));
     g.setBackgroundTileColors([
@@ -118,11 +48,14 @@ level.onInit = () => {
     g.setSides(6);
     g.set3dDepth(5);
     g.set3dDistance(20);
-    // g.set3dColor(new Color(255, 255, 255));
+    // g.set3dCoor(new Color(255, 255, 255));
     // g.set3dFalloffColor(new Color(0, 0, 0));
     g.setSkew(.05);
     // g.setPlayerSize(new Size(97, 100))
     // g.setPlayerDistanceMult(.1);
+
+    patterns = initPatterns(g);
+    step();
 }
 
 let time = 0;
@@ -149,13 +82,4 @@ level.onUpdate = ft => {
 level.onRender = ft => {
     time += ft;
     g.setSkew(Math.sin(time*10) * .1 + .1)
-}
-
-level.onLoad = () => {
-    // g.createInterval(() => {
-    //     const rnd = Math.random() * g.getSides()
-    //     for (let i = 1; i < g.getSides(); i++) {
-    //         g.createWall(i + rnd, 40)
-    //     }
-    // }, .8)
 }

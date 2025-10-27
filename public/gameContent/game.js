@@ -59,11 +59,7 @@ export default class Game extends GameObject {
     #wallSpawnDistance = 1000;
     #wallSpeedMult = 2;
 
-    #timeouts = [];
-    #intervals = [];
-
     #updateId;
-    #renderStageId;
     #lastUpdateTime = performance.now();
     #lastRenderStageTime = performance.now();
 
@@ -71,7 +67,6 @@ export default class Game extends GameObject {
     #distanceDelay = -1;
 
     onUpdate = () => {}
-    onRenderStage = () => {}
     onDeath = () => {}
 
     constructor(appContext) {
@@ -89,7 +84,6 @@ export default class Game extends GameObject {
         ])
 
         this.#updateId = requestAnimationFrame(time => this.#update(time));
-        this.#renderStageId = requestAnimationFrame(time => this.#renderStage(time));
     }
 
     #getPolygonLayer() { return this.#layer + 0.004}
@@ -149,14 +143,6 @@ export default class Game extends GameObject {
     #swapBackground() {
         this.#backgroundSwapped = !this.#backgroundSwapped;
         this.#updateBackground()
-    }
-
-    #renderStage(time) {
-        const frameTime = time - this.#lastRenderStageTime;
-        this.#lastRenderStageTime = time;
-        this.onRenderStage(frameTime);
-
-        this.#renderStageId = requestAnimationFrame(time => this.#renderStage(time));
     }
 
     #update(time) {
@@ -232,7 +218,6 @@ export default class Game extends GameObject {
 
         this.#walls.push(wall);
     }
-    
     setLayer(v) {
         this.#layer = v;
         this.#background.setLayer(this.#getBackgroundLayer());
@@ -422,28 +407,8 @@ export default class Game extends GameObject {
             if (this.#deathEffect != undefined) this.#deathEffect.destroy();
         })
     }
-    createEvent(event, timeSeconds) {
-        const time = timeSeconds*1000;
-        const timeout = setTimeout(() => event(), time);
-        this.#timeouts.push(timeout);
-        return timeout;
-    }
-    clearEvents() {
-        this.#timeouts.forEach(timeout => clearTimeout(timeout));
-        this.#timeouts = []
-    }
-    createInterval(event, timeSeconds) {
-        const time = timeSeconds*1000;
-        const interval = setInterval(() => event(), time);
-        this.#intervals.push(interval);
-        return interval;
-    }
-    clearIntervals() {
-        this.#intervals.forEach(interval => clearInterval(interval));
-        this.#intervals = []
-    }
     async distanceDelay(distance) {
-        this.#distanceDelay = distance
+        this.#distanceDelay = Math.max(distance, 1)
         return new Promise(resolve => {
             this.#distanceSignal = resolve;
         });

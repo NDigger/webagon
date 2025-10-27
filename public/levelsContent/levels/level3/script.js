@@ -6,16 +6,24 @@ import { level } from '../../../script';
 level.onInit = () => {
     const g = level.game;
     g.setSwapEnabled(true);
-    g.setRotationSpeed(1);
+    g.setRotationSpeed(.5);
     g.setWallSpeedMult(6);
     g.setWallSpawnDistance(1500);
     g.setSides(4);
     g.set3dDepth(4);
     g.set3dDistance(50);
-    g.set3dColor(new Color(255, 255, 255));
-    g.setSkew(0);
+    // g.set3dColor(new Color(255, 255, 255));
+    g.setSkew(1);
+    g.setScale(new Vector2(.5, 1))
     // g.setPlayerSize(new Size(97, 100))
     // g.setPlayerDistanceMult(.1);
+
+    level.createInterval(() => {
+        const rnd = Math.random() * g.getSides()
+        for (let i = 1; i < g.getSides(); i++) {
+            g.createWall(i + rnd, 50)
+        }
+    }, .4)
 }
 
 let time = 0;
@@ -28,9 +36,10 @@ level.onUpdate = ft => {
 
         // Color.hsvToRgb(time * 0.2, 1, .25),
         // Color.hsvToRgb(time * 0.2, 1, .2),
-        Color.BLACK(255),
-        Color.WHITE(),
+        Color.BLACK(),
+        Color.hsvToRgb(time * .5, .5, .1)
     ])
+    g.setRotationSpeed(g.getRotationSpeed() + 0.1*ft)
     g.setMainColor(Color.hsvToRgb(time * 0.5, 1, 1))
     // g.setRadius(80 - (time * 2 - Math.floor(time * 2)) * 10)
     g.setRadius(Math.sin(time*10)* 5 + 60);
@@ -40,14 +49,4 @@ level.onRender = ft => {
     time += ft;
     const g = level.game;
     // g.setSkew(Math.sin(time*10) * .1 + .1)
-}
-
-level.onLoad = () => {
-    const g = level.game;
-    g.createInterval(() => {
-        const rnd = Math.random() * g.getSides()
-        for (let i = 1; i < g.getSides(); i++) {
-            g.createWall(i + rnd, 50)
-        }
-    }, .4)
 }
