@@ -73,8 +73,7 @@ export default class LevelLoader {
     }
 
     start() {
-        this.level.onInit()
-
+        this.level.init()
         document.getElementById('game').style.display = 'block'
         document.getElementById('timer').style.display = 'block';
         window.addEventListener('keydown', this.#handleKeydown);

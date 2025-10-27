@@ -7,6 +7,8 @@ export default class Level {
     onRender = () => {};
     onLoad = () => {};
 
+    #pixiApp;
+
     #levelInitTime = performance.now();
 
     game;
@@ -18,11 +20,16 @@ export default class Level {
     #lastRenderTime = performance.now();
 
     constructor(pixiApp) {
+        this.#pixiApp = pixiApp
+    }
+    
+    init() {
         const game = new Game({
-            pixiApp: pixiApp,
+            pixiApp: this.#pixiApp,
             drawHandler: new DrawHandler(),
         })
         this.game = game;
+        this.onInit();
 
         this.#updateId = requestAnimationFrame(t => this.#update(t));
         this.#renderId = requestAnimationFrame(t => this.#render(t));
