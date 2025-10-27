@@ -52,14 +52,13 @@ level.onInit = () => {
     // g.setPlayerDistanceMult(.1);
 
     patterns = initPatterns(g);
+}
 
-    // onStep must be async and use delays in order to work. No delays may cause crash.
-    g.onStep = async () => {
-        if (activeKeys.length === 0) activeKeys = pKeys.slice();
-        const rndIndex = Math.floor(Math.random() * activeKeys.length)
-        await addPattern(activeKeys.splice(rndIndex, 1)[0])
-    }
-    g.step();
+// onStep must be async and use delays in order to work. No delays may cause crash.
+level.onStep = async () => {
+    if (activeKeys.length === 0) activeKeys = pKeys.slice();
+    const rndIndex = Math.floor(Math.random() * activeKeys.length)
+    await addPattern(activeKeys.splice(rndIndex, 1)[0])
 }
 
 let time = 0;

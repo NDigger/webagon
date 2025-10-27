@@ -6,6 +6,7 @@ export default class Level {
     onUpdate = () => {};
     onRender = () => {};
     // onLoad = () => {};
+    onStep = async () => {};
 
     #pixiApp;
 
@@ -45,8 +46,8 @@ export default class Level {
         audio.currentTime = musicTimestamps[Math.floor(Math.random() * musicTimestamps.length)] ?? 0
         audio.play();
 
-
         this.onInit();
+        this.#step();
 
         this.#updateId = requestAnimationFrame(t => this.#update(t));
         this.#renderId = requestAnimationFrame(t => this.#render(t));
@@ -55,6 +56,14 @@ export default class Level {
         this.game.onDeath = () => this.#onDeath()
     }
     
+    async #step() {
+        if (typeof this.onStep !== 'function' || this.onStep.toString() === 'async () => {}') return;
+
+        while (true && !this.died) { // && !this.#isIncrementing
+            await this.onStep();
+        }
+    }
+
     #handleVisibilityChange = () => document.hidden && this.game.kill()
 
     #update(time) {
