@@ -70,33 +70,40 @@ export default class Level extends Game {
 
         const timer = document.getElementById('timer');
         timer.textContent = Math.floor(levelTime)/1000;
-        const gameUi = document.getElementById('game-ui')
-        gameUi.style.color = this.getMainColor().getRGBStyle();
         
         this.#updateId = requestAnimationFrame(t => this.#update(t));
     }
-
     #render(time) {
         const frameTime = time - this.#lastRenderTime;
         this.#lastRenderTime = time;
         this.onRender(frameTime/1000)
         this.#renderId = requestAnimationFrame(t => this.#render(t))
     }
-
     destroy() {
         super.destroy();
         cancelAnimationFrame(this.#updateId)
         cancelAnimationFrame(this.#renderId)
+        this.clearIntervals();
+        this.clearEvents();
         document.removeEventListener('visibilitychange', this.#handleVisibilityChange);
         if (this.#audio) this.#audio.pause()
     }
-
     #onDeath() {
         document.getElementById('restart-help-msg').style.display = 'block'
         if (this.#audio) this.#audio.pause()
         document.removeEventListener('visibilitychange', this.#handleVisibilityChange);
         this.#gameOver = true
         cancelAnimationFrame(this.#updateId);
+    }
+
+    setMainColor({r, g, b, a}) {
+        super.setMainColor({r: r, g: g, b: b, a: a})
+        const gameUi = document.getElementById('game-ui')
+        gameUi.style.color = this.getMainColor().getRGBStyle();
+    }
+    setSwapEnabled(v) {
+        super.setSwapEnabled(v);
+        document.getElementById('swap-enabled-msg').style.display = v ? 'block' : 'none';
     }
 
     createEvent(event, timeSeconds) {
