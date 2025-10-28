@@ -1,29 +1,13 @@
 import * as PIXI from 'pixi.js'
 import Level from './level';
 import { setLevel } from '../script';
-
-const createApp = async () => {
-    const app = new PIXI.Application();
-    await app.init({
-        resizeTo: window,
-        resolution: devicePixelRatio,
-        antialias: true
-    });
-
-    window.addEventListener('resize', () => {
-        app.renderer.resolution = devicePixelRatio;
-        app.renderer.resize(window.innerWidth, window.innerHeight);
-    });
-    app.stage.sortableChildren = true;
-    app.stage.sortChildren();
-    app.canvas.id = 'game'
-    document.getElementById('game-content').appendChild(app.canvas);
-    return app;
-}
+import LevelPreview from './levelPreview';
 
 export default class LevelLoader {
     #pixiApp;
-    level;
+    #level;
+    #levelPreview;
+    
     #levelDestroyed = false;
     #currentLevelData
     #attempt = 0;
@@ -32,8 +16,8 @@ export default class LevelLoader {
 
     onLeave = () => {}
 
-    async init() {
-        this.#pixiApp = await createApp();
+    constructor(pixiApp) {
+        this.#pixiApp = pixiApp
     }
 
     #handleKeyup = () => this.#keyPressed = false
@@ -47,7 +31,7 @@ export default class LevelLoader {
     leave() {
         window.removeEventListener('keyup', this.#handleKeyup);
         window.removeEventListener('keydown', this.#handleKeydown);
-        this.level.destroy()
+        this.#level.destroy()
         this.#levelDestroyed = true;
 
         this.onLeave();
@@ -68,22 +52,62 @@ export default class LevelLoader {
         script.src = `${data.scriptPath}?${new Date().getTime()}`
         document.querySelector('body').appendChild(script);
 
-        if (!this.#levelDestroyed && this.level) this.level.destroy();
+        if (!this.#levelDestroyed && this.#level) this.#level.destroy();
         this.#levelDestroyed = false;
 
         const level = new Level(this.#pixiApp, this.#currentLevelData);
         setLevel(level);
-        this.level = level;
+        this.#level = level;
 
         script.onload = () => {
             document.getElementById('restart-help-msg').style.display = 'none'
             document.getElementById('swap-enabled-msg').style.display = 'none'
-            this.level.init()
+            this.#level.init()
             document.getElementById('game-content').style.display = 'block'
             document.getElementById('level-select').style.display = 'none'
             window.addEventListener('keydown', this.#handleKeydown);
             window.addEventListener('keyup', this.#handleKeyup)
             // this.level.onLoad();
+        }
+    }
+
+    preview(path) {
+        const script = document.createElement('script');
+        script.type = 'module';
+        script.src = `${path}?${new Date().getTime()}`
+        document.querySelector('body').appendChild(script);
+
+        const levelPreview = new Proxy(new LevelPreview(), {
+            // get(target, prop) {
+            //     if (
+            //        prop === 'setMainColor' 
+            //     || prop === 'setSides'
+            //     || prop === 'init'
+            //     || prop === 'onInit'
+            //     || prop === 'update'
+            //     || prop === 'onUpdate'
+            //         ) {
+            //         return target[prop];
+            //     }
+            //     return () => {};
+            // }
+            get(target, prop) {
+                if (prop in target) {
+                    const value = target[prop];
+                    if (typeof value === "function") return (...args) => value.apply(target, args);
+                    return value;
+                }
+                return () => {};
+            },
+            set(target, prop, value) {
+                if (prop in target) target[prop] = value;
+                return true;
+            }
+        });
+        setLevel(levelPreview)
+
+        script.onload = () => {
+            levelPreview.init()
         }
     }
 }

@@ -1,15 +1,35 @@
 
+import * as PIXI from 'pixi.js'
 import LevelLoader from './game/levelLoader';
 import FragmentShader from './utils/fragmentShader';
 import Lerp from './utils/interpolation';
 import AudioManager from './utils/audioManager';
 
+const createApp = async () => {
+    const app = new PIXI.Application();
+    await app.init({
+        resizeTo: window,
+        resolution: devicePixelRatio,
+        antialias: true
+    });
+
+    window.addEventListener('resize', () => {
+        app.renderer.resolution = devicePixelRatio;
+        app.renderer.resize(window.innerWidth, window.innerHeight);
+    });
+    app.stage.sortableChildren = true;
+    app.stage.sortChildren();
+    app.canvas.id = 'game'
+    document.getElementById('game-content').appendChild(app.canvas);
+    return app;
+}
+
 let level
 let levelLoader
 const audioManager = new AudioManager();
 (async () => {
-    levelLoader = new LevelLoader();
-    await levelLoader.init();
+    const app = await createApp()
+    levelLoader = new LevelLoader(app);
     levelLoader.audioManager = audioManager;
     levelLoader.onLeave = () => loadMenu();
 })()
@@ -23,20 +43,19 @@ const loadLevel = levelData => {
     document.removeEventListener('keydown', keyDownMenuListener)
 }
 
-
-fetch('./shader.frag')
-.then(res => res.text())
-.then(frag => {
-    const backgroundShader = new FragmentShader('level-select-background', frag);
-    const render = time =>  {
-        backgroundShader.setUniform('u_time', [time/1000]);
-        requestAnimationFrame(render);
-    }
-    const setResolution = () => backgroundShader.setUniform('u_resolution', [window.innerWidth, window.innerHeight]);
-    setResolution()
-    window.addEventListener('resize', setResolution);
-    requestAnimationFrame(render);
-})
+// fetch('./shader.frag')
+// .then(res => res.text())
+// .then(frag => {
+//     const backgroundShader = new FragmentShader('level-select-background', frag);
+//     const render = time =>  {
+//         backgroundShader.setUniform('u_time', [time/1000]);
+//         requestAnimationFrame(render);
+//     }
+//     const setResolution = () => backgroundShader.setUniform('u_resolution', [window.innerWidth, window.innerHeight]);
+//     setResolution()
+//     window.addEventListener('resize', setResolution);
+//     requestAnimationFrame(render);
+// })
 
 const levelsFolderPath = './levelsContent/levels';
 const levelPaths = [
@@ -85,9 +104,14 @@ const shiftLevelListPosition = shift => {
 }
 
 const keyDownMenuListener = e => {
-    if (e.key === 'ArrowLeft' || e.key === 'a') shiftLevelListPosition(-1)
-    else if (e.key === 'ArrowRight' || e.key === 'd') shiftLevelListPosition(1)
-    else if (e.key === 'Enter') loadLevel(updateJsonPaths(levelJsons[levelListSelectedLevel]))
+    if (e.key === 'ArrowLeft' || e.key === 'a') {
+        shiftLevelListPosition(-1)
+    } else if (e.key === 'ArrowRight' || e.key === 'd') {
+        shiftLevelListPosition(1)
+    } else if (e.key === 'Enter') loadLevel(updateJsonPaths(levelJsons[levelListSelectedLevel]))
+
+    if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'ArrowRight' || e.key === 'd') 
+        levelLoader.preview(updateJsonPaths(levelJsons[levelListSelectedLevel]).scriptPath)
 }
 
 const loadMenu = () => document.addEventListener('keydown', keyDownMenuListener)
