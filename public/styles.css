@@ -19,9 +19,9 @@
         "wdth" 100;
 }
 
-#game-content {
+/* #game-content {
     display: none;
-}
+} */
 
 #game-content * {
     font-family: "Stalinist One", sans-serif;

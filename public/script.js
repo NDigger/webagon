@@ -4,6 +4,11 @@ import LevelLoader from './game/levelLoader';
 import FragmentShader from './utils/fragmentShader';
 import Lerp from './utils/interpolation';
 import AudioManager from './utils/audioManager';
+import LevelPreview from './game/levelPreview';
+
+import DrawHandler from './game/gameContent/drawHandler';
+import Background from './game/gameContent/background';
+import { Color } from './utils/structures';
 
 const createApp = async () => {
     const app = new PIXI.Application();
@@ -32,14 +37,23 @@ const audioManager = new AudioManager();
     levelLoader = new LevelLoader(app);
     levelLoader.audioManager = audioManager;
     levelLoader.onLeave = () => loadMenu();
+    const background = new Background({pixiApp: app, drawHandler: new DrawHandler()})
+    background.setTileColors([
+        new Color(55, 0, 0),
+        new Color(85, 0, 0)
+    ])
+    background.setLayer(-1);
 })()
 export { level }
 export function setLevel(v) {
     level = v
 }
 
+const levelPreview = new LevelPreview()
+
 const loadLevel = levelData => {
     levelLoader.load(levelData);
+    levelPreview.drop();
     document.removeEventListener('keydown', keyDownMenuListener)
 }
 
@@ -92,6 +106,8 @@ levelPaths.forEach(levelPath => {
             loadLevel(updateJsonPaths(d))
             document.getElementById('level-select').style.display = 'none'
         })
+
+        loadMenu();
     })
 })
 
@@ -111,13 +127,13 @@ const keyDownMenuListener = e => {
     } else if (e.key === 'Enter') loadLevel(updateJsonPaths(levelJsons[levelListSelectedLevel]))
 
     if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'ArrowRight' || e.key === 'd') 
-        levelLoader.preview(updateJsonPaths(levelJsons[levelListSelectedLevel]).scriptPath)
+        levelPreview.load(updateJsonPaths(levelJsons[levelListSelectedLevel]).scriptPath)
 }
-
-const loadMenu = () => document.addEventListener('keydown', keyDownMenuListener)
-loadMenu();
 
 let levelListSelectedLevel = 0
 const levelListPositionXLerp = new Lerp(v => levelList.style.transform = `translateX(${-v*100}vw)`);
 
-
+const loadMenu = () => {
+    document.addEventListener('keydown', keyDownMenuListener)
+    levelPreview.load(updateJsonPaths(levelJsons[levelListSelectedLevel]).scriptPath)
+}

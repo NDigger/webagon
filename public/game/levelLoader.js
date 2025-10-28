@@ -1,14 +1,12 @@
-import * as PIXI from 'pixi.js'
 import Level from './level';
 import { setLevel } from '../script';
 import LevelPreview from './levelPreview';
 
 export default class LevelLoader {
     #pixiApp;
-    #level;
-    #levelPreview;
+    #level = null;
+    #levelPreview = null;
     
-    #levelDestroyed = false;
     #currentLevelData
     #attempt = 0;
 
@@ -32,11 +30,11 @@ export default class LevelLoader {
         window.removeEventListener('keyup', this.#handleKeyup);
         window.removeEventListener('keydown', this.#handleKeydown);
         this.#level.destroy()
-        this.#levelDestroyed = true;
+        this.#level = null;
 
         this.onLeave();
 
-        document.getElementById('game-content').style.display = 'none';
+        // document.getElementById('game-content').style.display = 'none';
         document.getElementById('level-select').style.display = 'flex';
     }
 
@@ -52,8 +50,8 @@ export default class LevelLoader {
         script.src = `${data.scriptPath}?${new Date().getTime()}`
         document.querySelector('body').appendChild(script);
 
-        if (!this.#levelDestroyed && this.#level) this.#level.destroy();
-        this.#levelDestroyed = false;
+        if (this.#level != null) this.#level.destroy();
+        if (this.#levelPreview) this.#levelPreview.destroy();
 
         const level = new Level(this.#pixiApp, this.#currentLevelData);
         setLevel(level);
@@ -71,26 +69,14 @@ export default class LevelLoader {
         }
     }
 
-    preview(path) {
+    setPreview(path) {
+        if (this.#levelPreview != null) this.#levelPreview.destroy();
         const script = document.createElement('script');
         script.type = 'module';
         script.src = `${path}?${new Date().getTime()}`
         document.querySelector('body').appendChild(script);
 
         const levelPreview = new Proxy(new LevelPreview(), {
-            // get(target, prop) {
-            //     if (
-            //        prop === 'setMainColor' 
-            //     || prop === 'setSides'
-            //     || prop === 'init'
-            //     || prop === 'onInit'
-            //     || prop === 'update'
-            //     || prop === 'onUpdate'
-            //         ) {
-            //         return target[prop];
-            //     }
-            //     return () => {};
-            // }
             get(target, prop) {
                 if (prop in target) {
                     const value = target[prop];
@@ -105,6 +91,7 @@ export default class LevelLoader {
             }
         });
         setLevel(levelPreview)
+        this.#levelPreview = levelPreview
 
         script.onload = () => {
             levelPreview.init()
