@@ -198,7 +198,7 @@ export default class Game extends GameObject {
             }
 
             wall.setRotation(this.#rotation)
-            wall.draw();
+            wall.draw()
 
             const pos = wall.getVertexAbsolutePos4();
             if (pointInQuad(this.#polygon.player.getPointAbsolutePosition(), pos[0], pos[1], pos[2], pos[3])
@@ -206,6 +206,7 @@ export default class Game extends GameObject {
 
             return true
         })
+        if (this.#died) this.#walls.forEach(w => w.draw());
 
         this.#updateId = requestAnimationFrame(time => this.#update(time));
     }
