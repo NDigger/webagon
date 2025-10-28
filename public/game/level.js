@@ -10,6 +10,7 @@ export default class Level extends Game {
     // onLoad = () => {};
     onStep = async () => {};
 
+    #destroyed = false;
     #levelInitTime = performance.now();
 
     #timeouts = [];
@@ -105,6 +106,7 @@ export default class Level extends Game {
         this.#renderId = requestAnimationFrame(t => this.#render(t))
     }
     destroy() {
+        this.#destroyed = true;
         super.destroy();
         cancelAnimationFrame(this.#updateId)
         cancelAnimationFrame(this.#renderId)
@@ -147,7 +149,7 @@ export default class Level extends Game {
         this.setShakePower(10);
         new Lerp(v => {
             this.setShakePower(v);
-            super.scheduleDraw()
+            if (!this.#destroyed) super.draw()
         }).apply(30).run(0, 0.35);
         this.#onDeath()
     }

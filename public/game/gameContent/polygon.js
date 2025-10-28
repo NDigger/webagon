@@ -21,6 +21,12 @@ export default class Polygon extends PolygonObject {
         this.draw();
     }
 
+    draw() {
+        super.draw();
+        this.player.draw();
+        this.#border.draw();
+    }
+
     scheduleDraw() {
         super.scheduleDraw();
         this.player.scheduleDraw();

@@ -62,7 +62,6 @@ export default class Game extends GameObject {
 
     #updateId;
     #lastUpdateTime = performance.now();
-    #lastRenderStageTime = performance.now();
 
     #distanceSignal;
     #distanceDelay = -1;
@@ -78,6 +77,10 @@ export default class Game extends GameObject {
         this.#polygon = new Polygon(appContext);
         this.#polygon.setLayer(this.#getPolygonLayer());
         this.#polygon.set3dLayer(this.#get3dLayer());
+
+        // replacing schedule draw with normal draw
+        this.#polygon.redrawEnabled = false;
+        this.#background.redrawEnabled = false;
 
         this.setMainColor(new Color(40, 40, 0))
         this.setBackgroundTileColors([
@@ -100,7 +103,10 @@ export default class Game extends GameObject {
     #get3dColor() { return this.#color3d ?? this.#getDefault3dColor() }
 
     kill() {
-        this.#polygon.player.positionRedrawEnabled = false;
+        // this.#polygon.player.positionRedrawEnabled = false;
+        // this.#polygon.redrawEnabled = true;
+        // this.#background.redrawEnabled = true;
+        // this.#walls.forEach(w => w.redrawEnabled = true);
 
         const d = new Death(this.appContext);
         d.setSkew(this.#skew);
@@ -122,7 +128,15 @@ export default class Game extends GameObject {
         this.#deathEffect = d;
         this.#died = true;
         
+        this.draw();
         this.onDeath()
+    }
+
+    draw() {
+        this.#background.draw();
+        this.#polygon.draw();
+        if (this.#deathEffect) this.#deathEffect.draw();
+        this.#walls.forEach(w => w.draw());
     }
 
     scheduleDraw() {
@@ -149,22 +163,27 @@ export default class Game extends GameObject {
         const frameTime = time - this.#lastUpdateTime;
         this.#lastUpdateTime = time;
 
-        this.#walls.forEach(wall => {
-            // Wall absolute position
-            const pos = wall.getVertexAbsolutePos4();
-            if (pointInQuad(this.#polygon.player.getPointAbsolutePosition(), pos[0], pos[1], pos[2], pos[3])
-            && !this.#died) this.kill();
-            wall.setRotation(this.#rotation)
-        })
+        if (!this.#died) {            
+            this.#rotation += this.#rotationSpeed * this.#rotationDir * frameTime;
+            this.#polygon.setRotation(this.#rotation)
+
+            this.#backgroundSwapTimer -= frameTime;
+            if (this.#backgroundSwapTimer < 0) {
+                this.#backgroundSwapTimer = this.#backgroundSwapTime;
+                this.#swapBackground();
+            }
+        }
+        
+        this.#background.draw();
+        this.#polygon.draw();
 
         if (!this.#died && this.#distanceDelay > 0) {
             this.#distanceDelay -= frameTime * this.#wallSpeedMult / 5;
             if (this.#distanceDelay <= 0 && typeof(this.#distanceSignal) === 'function') this.#distanceSignal()
         }
+        let hasDiedNextFrame = this.#died;
         this.#walls = this.#walls.filter(wall => {
-            if (this.#died) {
-                return true
-            };
+            if (hasDiedNextFrame) return true
             
             if (wall.getDistance() > this.#polygon.getDistance() + this.#polygon.getThickness()) {
                 wall.setDistance(wall.getDistance() - frameTime * this.#wallSpeedMult / 5)
@@ -177,21 +196,15 @@ export default class Game extends GameObject {
                 return false;
             }
 
+            wall.setRotation(this.#rotation)
             wall.draw();
+
+            const pos = wall.getVertexAbsolutePos4();
+            if (pointInQuad(this.#polygon.player.getPointAbsolutePosition(), pos[0], pos[1], pos[2], pos[3])
+            && !this.#died) this.kill();
+
             return true
         })
-
-        if (!this.#died) {            
-            this.#rotation += this.#rotationSpeed * this.#rotationDir * frameTime;
-            this.#polygon.setRotation(this.#rotation)
-
-            this.#backgroundSwapTimer -= frameTime;
-            if (this.#backgroundSwapTimer < 0) {
-                this.#backgroundSwapTimer = this.#backgroundSwapTime;
-                this.#swapBackground();
-            }
-        }
-
 
         this.#updateId = requestAnimationFrame(time => this.#update(time));
     }
@@ -210,6 +223,7 @@ export default class Game extends GameObject {
         wall.setScale(this.#scale)
         wall.setCenterOffset(this.#centerOffset);
         wall.setOffset(this.#offset)
+        wall.redrawEnabled = false;
 
         if (this.#falloffColor3d) wall.set3dFalloffColor(this.#falloffColor3d);
         wall.set3dDepth(this.#depth3d);

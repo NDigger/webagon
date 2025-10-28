@@ -34,7 +34,7 @@ level.onInit = () => {
         Color.hsvToRgb(0, 1, .25),
         Color.RED(),
     ])
-    level.setRotationSpeed(0.1);
+    level.setRotationSpeed(10);
     level.setWallSpeedMult(3);
     level.setSides(5);
     level.set3dDepth(4);

@@ -2,8 +2,8 @@ import { Vector2, Color, Size, Lerp, level } from '../../common'
 
 level.onInit = () => {
     level.setSwapEnabled(true);
-    level.setRotationSpeed(.1);
-    level.setWallSpeedMult(2);
+    level.setRotationSpeed(0);
+    level.setWallSpeedMult(10);
     level.setWallSpawnDistance(1500);
     level.setSides(7);
     level.set3dDepth(4);

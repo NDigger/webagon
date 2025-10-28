@@ -27,6 +27,7 @@ export default class LevelLoader {
     leave() {
         window.removeEventListener('keyup', this.#handleKeyup);
         window.removeEventListener('keydown', this.#handleKeydown);
+
         this.#level.destroy()
         this.#level = null;
 
@@ -48,11 +49,14 @@ export default class LevelLoader {
         script.src = `${data.scriptPath}?${new Date().getTime()}`
         document.querySelector('body').appendChild(script);
 
-        if (this.#level != null) this.#level.destroy();
+        if (this.#level != null) {
+            this.#level.destroy();
+        }
 
         const level = new Level(this.#pixiApp, this.#currentLevelData);
         setLevel(level);
         this.#level = level;
+
 
         script.onload = () => {
             document.getElementById('restart-help-msg').style.display = 'none'

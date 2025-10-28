@@ -51,12 +51,14 @@ export function setLevel(v) {
 }
 
 const levelPreview = new LevelPreview()
+let backgroundTime;
 levelPreview.onUpdate = ft => {
+    backgroundTime += ft;
     if (background == null) return
     const style = levelPreview.getStyle()
     if (style == null) return
     background.setTileColors(style.backgroundTileColors)
-    background.setRotation(performance.now() * style.rotationSpeed)
+    background.setRotation(backgroundTime * style.rotationSpeed * 1000)
     document.documentElement.style.setProperty('--font-color', style.mainColor.getRGBAStyle());
     background.setSides(style.sides);
     console.log(style.rotationSpeed)
@@ -140,6 +142,7 @@ const keyDownMenuListener = e => {
 
     if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'ArrowRight' || e.key === 'd') 
         levelPreview.load(updateJsonPaths(levelJsons[levelListSelectedLevel]).scriptPath)
+        backgroundTime = 0;
 }
 
 let levelListSelectedLevel = 0
@@ -148,4 +151,5 @@ const levelListPositionXLerp = new Lerp(v => levelList.style.transform = `transl
 const loadMenu = () => {
     document.addEventListener('keydown', keyDownMenuListener)
     levelPreview.load(updateJsonPaths(levelJsons[levelListSelectedLevel]).scriptPath)
+    backgroundTime = 0;
 }
