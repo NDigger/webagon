@@ -1,5 +1,5 @@
 
-import LevelLoader from './gameContent/levelLoader';
+import LevelLoader from './game/levelLoader';
 import FragmentShader from './utils/fragmentShader';
 import Lerp from './utils/interpolation';
 import AudioManager from './utils/audioManager';

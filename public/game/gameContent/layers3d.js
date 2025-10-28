@@ -1,7 +1,7 @@
 import GameObject from "./gameObject";
 import Mesh from "./mesh";
-import Lerp from "../utils/interpolation";
-import { Vector2, Color } from "../utils/structures";
+import Lerp from "../../utils/interpolation";
+import { Vector2, Color } from "../../utils/structures";
 
 export default class Layers3d extends GameObject {
     #meshes = [];

@@ -1,4 +1,4 @@
-import DrawHandler from "./drawHandler";
+import DrawHandler from "./gameContent/drawHandler";
 import Game from "./game";
 import { Color } from "../utils/structures";
 import Lerp from "../utils/interpolation";

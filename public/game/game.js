@@ -1,9 +1,9 @@
-import Wall from "./wall";
-import Polygon from "./polygon";
+import Wall from "./gameContent/wall";
+import Polygon from "./gameContent/polygon";
 import { Vector2, Color, Size } from "../utils/structures";
-import Background from "./background";
-import GameObject from "./gameObject";
-import Death from "./death";
+import Background from "./gameContent/background";
+import GameObject from "./gameContent/gameObject";
+import Death from "./gameContent/death";
 import Lerp from "../utils/interpolation";
 
 const area = (a, b, c) => {

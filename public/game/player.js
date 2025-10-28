@@ -1,4 +1,4 @@
-import CustomWall from "./customWall";
+import CustomWall from "./gameContent/customWall";
 import { Vector2, Color, Size } from "../utils/structures";
 
 const degToRad = deg => deg * Math.PI / 180;

@@ -1,5 +1,5 @@
 import CustomWall from "./customWall";
-import { Vector2 } from "../utils/structures";
+import { Vector2 } from "../../utils/structures";
 
 export default class Wall extends CustomWall {
     #side = 0;

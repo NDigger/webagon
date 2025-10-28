@@ -1,4 +1,4 @@
-import { Color } from "../utils/structures";
+import { Color } from "../../utils/structures";
 import PolygonObject from "./polygonObject";
 
 export default class Death extends PolygonObject {
