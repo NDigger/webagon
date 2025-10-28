@@ -1,6 +1,6 @@
 
 import LevelLoader from './gameContent/levelLoader';
-import FragmentShader from './fragmentShader';
+import FragmentShader from './utils/fragmentShader';
 import Lerp from './utils/interpolation';
 import AudioManager from './utils/audioManager';
 
@@ -11,6 +11,7 @@ const audioManager = new AudioManager();
     levelLoader = new LevelLoader();
     await levelLoader.init();
     levelLoader.audioManager = audioManager;
+    levelLoader.onLeave = () => loadMenu();
 })()
 export { level }
 export function setLevel(v) {
@@ -19,6 +20,7 @@ export function setLevel(v) {
 
 const loadLevel = levelData => {
     levelLoader.load(levelData);
+    document.removeEventListener('keydown', keyDownMenuListener)
 }
 
 
@@ -82,13 +84,15 @@ const shiftLevelListPosition = shift => {
     levelListPositionXLerp.run(levelListSelectedLevel, .3, Lerp.Easing.EASE_OUT)
 }
 
-document.addEventListener('keydown', e => {
+const keyDownMenuListener = e => {
     if (e.key === 'ArrowLeft' || e.key === 'a') shiftLevelListPosition(-1)
     else if (e.key === 'ArrowRight' || e.key === 'd') shiftLevelListPosition(1)
-    else if (e.key === 'Enter') {
-        loadLevel(updateJsonPaths(levelJsons[levelListSelectedLevel]))
-    }
-})
+    else if (e.key === 'Enter') loadLevel(updateJsonPaths(levelJsons[levelListSelectedLevel]))
+}
+
+const loadMenu = () => document.addEventListener('keydown', keyDownMenuListener)
+loadMenu();
+
 let levelListSelectedLevel = 0
 const levelListPositionXLerp = new Lerp(v => levelList.style.transform = `translateX(${-v*100}vw)`);
 

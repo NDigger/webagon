@@ -30,6 +30,8 @@ export default class LevelLoader {
 
     #keyPressed = false;
 
+    onLeave = () => {}
+
     async init() {
         this.#pixiApp = await createApp();
     }
@@ -47,6 +49,8 @@ export default class LevelLoader {
         window.removeEventListener('keydown', this.#handleKeydown);
         this.level.destroy()
         this.#levelDestroyed = true;
+
+        this.onLeave();
 
         document.getElementById('game-content').style.display = 'none';
         document.getElementById('level-select').style.display = 'flex';
