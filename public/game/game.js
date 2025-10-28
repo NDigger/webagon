@@ -24,6 +24,36 @@ const pointInTriangle = (p, a, b, c) => {
 
 const pointInQuad = (p, a, b, c, d) => pointInTriangle(p, a, b, c) || pointInTriangle(p, a, c, d);
 
+
+function distPointToLine(px, py, x1, y1, x2, y2) {
+  const A = px - x1;
+  const B = py - y1;
+  const C = x2 - x1;
+  const D = y2 - y1;
+  const dot = A * C + B * D;
+  const len_sq = C * C + D * D;
+  let t = dot / len_sq;
+  t = Math.max(0, Math.min(1, t));
+  const x = x1 + t * C;
+  const y = y1 + t * D;
+  return Math.hypot(px - x, py - y);
+}
+
+function closestSide(pos, points) {
+  let minDist = Infinity;
+  let sideIndex = -1;
+  for (let i = 0; i < 4; i++) {
+    const p1 = points[i];
+    const p2 = points[(i + 1) % 4];
+    const d = distPointToLine(pos.x, pos.y, p1.x, p1.y, p2.x, p2.y);
+    if (d < minDist) {
+      minDist = d;
+      sideIndex = i;
+    }
+  }
+  return sideIndex;
+}
+
 const degToRad = deg => deg * Math.PI / 180;
 
 export default class Game extends GameObject {
@@ -202,7 +232,15 @@ export default class Game extends GameObject {
 
             const pos = wall.getVertexAbsolutePos4();
             if (pointInQuad(this.#polygon.player.getPointAbsolutePosition(), pos[0], pos[1], pos[2], pos[3])
-            && !this.#died) this.kill();
+            && !this.#died) {
+                const side = closestSide(this.#polygon.player.getPointAbsolutePosition(), pos)
+                console.log(side)
+                if (side === 3) this.kill()
+                else {
+                    this.#polygon.player.setRotationOffset(this.#polygon.player.previousFrameRotationOffset)
+                    this.#polygon.draw()
+                }
+            };
 
             return true
         })

@@ -29,6 +29,27 @@ const createApp = async () => {
     return app;
 }
 
+let lastTime = performance.now();
+let frameCount = 0;
+let fps = 0;
+
+function loop() {
+  frameCount++;
+  const now = performance.now();
+  const delta = now - lastTime;
+
+  if (delta >= 1000) {
+    fps = (frameCount * 1000) / delta;
+    frameCount = 0;
+    lastTime = now;
+    console.log('FPS:', fps.toFixed(1));
+  }
+
+  requestAnimationFrame(loop);
+}
+
+loop();
+
 let level
 let levelLoader
 let background = null;

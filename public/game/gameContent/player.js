@@ -9,6 +9,7 @@ export default class Player extends CustomWall {
     #rightKeyPressed = false;
 
     positionRedrawEnabled = true;
+    previousFrameRotationOffset = 0;
 
     #size = new Size(24, 10);
 
@@ -30,6 +31,7 @@ export default class Player extends CustomWall {
         window.addEventListener('keydown', this.#onKeyDown);
         window.addEventListener('keyup', this.#onKeyUp);
         this.#updateId = requestAnimationFrame(time => this.#update(time));
+
     }
 
     getPointPosition() { 
@@ -41,6 +43,7 @@ export default class Player extends CustomWall {
     }
 
     #onKeyDown = e => {
+        console.log(e.code)
         if (e.keyCode === 37) this.#leftKeyPressed = true;
         if (e.keyCode === 39) this.#rightKeyPressed = true;
 
@@ -61,6 +64,9 @@ export default class Player extends CustomWall {
         const frameTime = time - this.#lasttime;
         this.#lasttime = time;
         if (this.#movementEnabled) {
+            if (this.#leftKeyPressed || this.#rightKeyPressed) {
+                this.previousFrameRotationOffset = this.#rotationOffset
+            }
             if (this.#leftKeyPressed) this.#rotationOffset -= frameTime * this.#speedMult;
             if (this.#rightKeyPressed) this.#rotationOffset += frameTime * this.#speedMult;
         }

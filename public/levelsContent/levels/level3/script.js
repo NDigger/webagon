@@ -7,10 +7,10 @@ level.onInit = () => {
     level.setWallSpawnDistance(1500);
     level.setSides(4);
     level.set3dDepth(4);
-    level.set3dDistance(50);
+    level.set3dDistance(5);
+    level.setMainColor(Color.WHITE());
     // level.set3dColor(new Color(255, 255, 255));
-    level.setSkew(1);
-    level.setScale(new Vector2(.5, 1))
+    level.setSkew(.2);
     // level.setPlayerSize(new Size(97, 100))
     // level.setPlayerDistanceMult(.1);
 
@@ -26,11 +26,10 @@ let time = 0;
 // onUpdate is called every frame.
 level.onUpdate = ft => {
     level.setBackgroundTileColors([
-        Color.RED(),
-        Color.BLACK(),
+        new Color(25, 25, 25),
+        new Color(55, 55, 55),
     ])
     level.setRotationSpeed(level.getRotationSpeed() + 0.1*ft)
-    level.setMainColor(Color.hsvToRgb(time * 5, 1, 1))
     // level.setRadius(80 - (time * 2 - Math.floor(time * 2)) * 10)
     level.setRadius(Math.sin(time*10)* 5 + 60);
 }
