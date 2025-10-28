@@ -40,8 +40,8 @@ level.onInit = () => {
     level.set3dDepth(4);
     level.set3dDistance(50);
     level.setIncrementTime(10);
-    level.setWallSpeedIncrement(1);
-    level.setRotationSpeedIncrement(0.1);
+    level.setWallSpeedIncrement(.4);
+    level.setRotationSpeedIncrement(0.05);
     // level.set3dColor(new Color(255, 255, 255));
     // level.set3dFalloffColor(new Color(0, 0, 0));
     // level.setPlayerSize(new Size(97, 100))

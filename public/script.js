@@ -33,7 +33,7 @@ let lastTime = performance.now();
 let frameCount = 0;
 let fps = 0;
 
-function loop() {
+const loop = () => {
   frameCount++;
   const now = performance.now();
   const delta = now - lastTime;
@@ -42,7 +42,7 @@ function loop() {
     fps = (frameCount * 1000) / delta;
     frameCount = 0;
     lastTime = now;
-    console.log('FPS:', fps.toFixed(1));
+    document.getElementById('fps-counter').textContent = `${'fps:'} ${fps.toFixed(2)}`;
   }
 
   requestAnimationFrame(loop);
@@ -153,13 +153,13 @@ const shiftLevelListPosition = shift => {
 }
 
 const keyDownMenuListener = e => {
-    if (e.key === 'ArrowLeft' || e.key === 'a') {
+    if (e.code === 'ArrowLeft' || e.code === 'KeyA') {
         shiftLevelListPosition(-1)
-    } else if (e.key === 'ArrowRight' || e.key === 'd') {
+    } else if (e.code === 'ArrowRight' || e.code === 'KeyD') {
         shiftLevelListPosition(1)
-    } else if (e.key === 'Enter') loadLevel(updateJsonPaths(levelJsons[levelListSelectedLevel]))
+    } else if (e.code === 'Enter') loadLevel(updateJsonPaths(levelJsons[levelListSelectedLevel]))
 
-    if (e.key === 'ArrowLeft' || e.key === 'a' || e.key === 'ArrowRight' || e.key === 'd') 
+    if (e.code === 'ArrowLeft' || e.code === 'KeyA' || e.code === 'ArrowRight' || e.code === 'KeyD') 
         levelPreview.load(updateJsonPaths(levelJsons[levelListSelectedLevel]).scriptPath)
         backgroundTime = 0;
 }

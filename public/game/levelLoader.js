@@ -19,8 +19,8 @@ export default class LevelLoader {
     #handleKeyup = () => this.#keyPressed = false
     #handleKeydown = e => {
         if (this.#keyPressed) return
-        if (e.key === 'r' || e.key === 'ArrowUp') this.reload();
-        if (e.key === 'Escape') this.leave();
+        if (e.code === 'Enter' || e.code === 'ArrowUp' || e.code === 'KeyR') this.reload();
+        if (e.code === 'Escape') this.leave();
         this.#keyPressed = true;
     }
 

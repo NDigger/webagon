@@ -1,5 +1,4 @@
 import PolygonObject from "./polygonObject.js";
-import Wall from "../wall.js";
 import { Color } from "../../utils/structures.js";
 
 export default class Background extends PolygonObject {

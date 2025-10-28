@@ -43,21 +43,19 @@ export default class Player extends CustomWall {
     }
 
     #onKeyDown = e => {
-        console.log(e.code)
-        if (e.keyCode === 37) this.#leftKeyPressed = true;
-        if (e.keyCode === 39) this.#rightKeyPressed = true;
+        if (e.code === 'ArrowLeft' || e.code === 'KeyA') this.#leftKeyPressed = true;
+        if (e.code === 'ArrowRight' || e.code === 'KeyD') this.#rightKeyPressed = true;
 
-        if (e.keyCode === 32 && this.#swapEnabled && !this.#swapKeyPressed) {
+        if (e.code === 'Space' && this.#swapEnabled && !this.#swapKeyPressed) {
             this.#rotationOffset += 180;
             this.#swapKeyPressed = true;
         }
     }
 
     #onKeyUp = e => {
-        if (e.keyCode === 37) this.#leftKeyPressed = false;
-        if (e.keyCode === 39) this.#rightKeyPressed = false;
-
-        if (e.keyCode === 32) this.#swapKeyPressed = false;
+        if (e.code === 'ArrowLeft' || e.code === 'KeyA') this.#leftKeyPressed = false;
+        if (e.code === 'ArrowRight' || e.code === 'KeyD') this.#rightKeyPressed = false;
+        if (e.code === 'Space') this.#swapKeyPressed = false;
     }
 
     #update(time) {
