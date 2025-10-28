@@ -174,6 +174,7 @@ export default class Game extends GameObject {
             }
         }
         
+        this.#updateBackground();
         this.#background.draw();
         this.#polygon.draw();
 
