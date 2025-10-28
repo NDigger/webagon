@@ -1,4 +1,5 @@
 import { setLevel } from "../script";
+import { Color } from "../utils/structures";
 
 class LevelPreviewContent {
     onInit = () => {};
@@ -7,15 +8,16 @@ class LevelPreviewContent {
 
     #updateId;
     #lastTime;
-    #initTime;
 
-    #style = {
-
+    style = {
+        mainColor: 255,
+        backgroundTileColors: [new Color(0, 0, 0)],
+        rotationSpeed: 0,
+        sides: 6,
     }
 
     init() {
         this.onInit();
-        this.#initTime = performance.now();
         this.#lastTime = performance.now();
         this.#updateId = requestAnimationFrame(t => this.#update(t));
     }
@@ -29,12 +31,21 @@ class LevelPreviewContent {
     }
 
     setMainColor({r, g, b, a}) {
-        console.log(r, g, b, a)
+        this.style.mainColor = new Color(r, g, b, a);
     }
+    getMainColor() { return this.style.mainColor; }
+    setBackgroundTileColors(arr) {
+        this.style.backgroundTileColors = arr;
+    }
+    getBackgroundTileColors() { return this.style.backgroundTileColors; }
 
-    setSides(v) {
-        // console.log(v)
+    setRotationSpeed(v) {
+        this.style.rotationSpeed = v;
     }
+    getRotationSpeed() { return this.style.rotationSpeed }
+
+    setSides(v) { this.style.sides = v; }
+    getSides() { return this.style.sides; }
 
     destroy() {
         cancelAnimationFrame(this.#updateId);
@@ -43,6 +54,18 @@ class LevelPreviewContent {
 
 export default class LevelPreview {
     #levelPreview = null;
+
+    #lastTime;
+    #updateId;
+
+    onUpdate = () => {}
+    
+    #update(time) { // Created to conveniently apply styles 
+        const frameTime = time - this.#lastTime;
+        this.#lastTime = time;
+        this.onUpdate(frameTime/1000)
+        requestAnimationFrame(t => this.#update(t));
+    }
 
     load(path) {
         this.drop();
@@ -70,11 +93,16 @@ export default class LevelPreview {
 
         script.onload = () => {
             levelPreview.init()
+            this.#lastTime = performance.now();
+            this.#updateId = requestAnimationFrame(t => this.#update(t));
         }
     }
 
+    getStyle() { return this.#levelPreview?.style }
+
     drop() {
         if (this.#levelPreview != null) {
+            cancelAnimationFrame(this.#updateId)
             this.#levelPreview.destroy()
             this.#levelPreview = null
         }

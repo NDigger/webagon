@@ -2,15 +2,14 @@ import { Vector2, Color, Size, Lerp, level } from '../../common'
 
 level.onInit = () => {
     level.setSwapEnabled(true);
-    level.setRotationSpeed(.5);
-    level.setWallSpeedMult(6);
+    level.setRotationSpeed(.1);
+    level.setWallSpeedMult(2);
     level.setWallSpawnDistance(1500);
-    level.setSides(4);
+    level.setSides(7);
     level.set3dDepth(4);
     level.set3dDistance(50);
+    level.setMainColor(new Color(255, 255, 255))
     // level.set3dColor(new Color(255, 255, 255));
-    level.setSkew(1);
-    level.setScale(new Vector2(.5, 1))
     // level.setPlayerSize(new Size(97, 100))
     // level.setPlayerDistanceMult(.1);
 
@@ -27,10 +26,10 @@ let time = 0;
 level.onUpdate = ft => {
     level.setBackgroundTileColors([
         Color.RED(),
-        Color.BLACK(),
+        Color.GREEN(),
+        Color.BLUE(),
+        Color.CYAN(),
     ])
-    level.setRotationSpeed(level.getRotationSpeed() + 0.1*ft)
-    level.setMainColor(Color.hsvToRgb(time * 5, 1, 1))
     // level.setRadius(80 - (time * 2 - Math.floor(time * 2)) * 10)
     level.setRadius(Math.sin(time*10)* 5 + 60);
 }

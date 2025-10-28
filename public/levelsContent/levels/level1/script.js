@@ -31,7 +31,8 @@ level.onInit = () => {
     level.setMainColor(new Color(255, 0, 0));
     level.setBackgroundTileColors([
         Color.hsvToRgb(0, 1, .2),
-        Color.hsvToRgb(0, 1, .25)
+        Color.hsvToRgb(0, 1, .25),
+        Color.RED(),
     ])
     level.setRotationSpeed(0.1);
     level.setWallSpeedMult(3);
@@ -43,7 +44,6 @@ level.onInit = () => {
     level.setRotationSpeedIncrement(0.1);
     // level.set3dColor(new Color(255, 255, 255));
     // level.set3dFalloffColor(new Color(0, 0, 0));
-    level.setSkew(.05);
     // level.setPlayerSize(new Size(97, 100))
     // level.setPlayerDistanceMult(.1);
 
@@ -61,13 +61,11 @@ let time = 0;
 // onUpdate is called every frame.
 level.onUpdate = ft => {
     level.setBackgroundTileColors([
-        Lerp.interpolate(Color.hsvToRgb(time * 0.2, 1, 0.5), Color.hsvToRgb(time * 0.2, 1, 0.1), Lerp.CapMode.pingPong(time)),
-        Lerp.interpolate(Color.hsvToRgb(time * 0.2, 1, 0.4), Color.hsvToRgb(time * 0.2, 1, 0.2), Lerp.CapMode.pingPong(time)),
+        // Lerp.interpolate(Color.hsvToRgb(time * 0.2, 1, 0.5), Color.hsvToRgb(time * 0.2, 1, 0.1), Lerp.CapMode.pingPong(time)),
+        // Lerp.interpolate(Color.hsvToRgb(time * 0.2, 1, 0.4), Color.hsvToRgb(time * 0.2, 1, 0.2), Lerp.CapMode.pingPong(time)),
 
-        // Color.hsvToRgb(time * 0.2, 1, .25),
-        // Color.hsvToRgb(time * 0.2, 1, .2),
-        // Color.BLACK(255),
-        // Color.WHITE(),
+        Color.hsvToRgb(time * 0.2, 1, .25),
+        Color.hsvToRgb(time * 0.2, 1, .2),
     ])
     // level.setOffset(new Vector2(Math.sin(time * 10) * 50, Math.cos(time) * 80));
     // level.setScale(level.getScale().sub(new Vector2(ft*.1, ft*.3)))
@@ -80,5 +78,5 @@ level.onUpdate = ft => {
 
 level.onRender = ft => {
     time += ft;
-    level.setSkew(Math.sin(time*10) * .1 + .1)
+    // level.setSkew(Math.sin(time*10) * .1 + .1)
 }

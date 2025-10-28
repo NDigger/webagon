@@ -37,7 +37,7 @@ level.onUpdate = ft => {
         // Color.WHITE(),
     ])
     level.setMainColor(Color.hsvToRgb(time * 0.5, 1, 1))
-    level.set3dColor(Color.hsvToRgb(time * 0.5 + .5, 1, .2))
+    level.set3dColor(Color.hsvToRgb(time * 10.5 + .5, 1, .2))
     // level.setRadius(80 - (time * 2 - Math.floor(time * 2)) * 10)
     level.setRadius(Math.sin(time*10)* 5 + 60);
 }

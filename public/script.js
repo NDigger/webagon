@@ -25,24 +25,25 @@ const createApp = async () => {
     app.stage.sortableChildren = true;
     app.stage.sortChildren();
     app.canvas.id = 'game'
-    document.getElementById('game-content').appendChild(app.canvas);
+    document.querySelector('body').appendChild(app.canvas);
     return app;
 }
 
 let level
 let levelLoader
+let background = null;
 const audioManager = new AudioManager();
 (async () => {
     const app = await createApp()
     levelLoader = new LevelLoader(app);
     levelLoader.audioManager = audioManager;
     levelLoader.onLeave = () => loadMenu();
-    const background = new Background({pixiApp: app, drawHandler: new DrawHandler()})
+    background = new Background({pixiApp: app, drawHandler: new DrawHandler()})
     background.setTileColors([
         new Color(55, 0, 0),
         new Color(85, 0, 0)
     ])
-    background.setLayer(-1);
+    background.setLayer(-999);
 })()
 export { level }
 export function setLevel(v) {
@@ -50,6 +51,16 @@ export function setLevel(v) {
 }
 
 const levelPreview = new LevelPreview()
+levelPreview.onUpdate = ft => {
+    // if (background == null) return
+    // const style = levelPreview.getStyle()
+    // if (style == null) return
+    // background.setTileColors(style.backgroundTileColors)
+    // background.setRotation(performance.now() * style.rotationSpeed)
+    // document.documentElement.style.setProperty('--font-color', style.mainColor.getRGBAStyle());
+    // background.setSides(style.sides ?? 6);
+    // console.log(style.rotationSpeed)
+}
 
 const loadLevel = levelData => {
     levelLoader.load(levelData);
@@ -76,6 +87,7 @@ const levelPaths = [
     `${levelsFolderPath}/level1`,
     `${levelsFolderPath}/level2`,
     `${levelsFolderPath}/level3`,
+    `${levelsFolderPath}/level4`,
 ]
 const levelJsons = []
 

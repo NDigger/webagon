@@ -1,11 +1,9 @@
 import Level from './level';
 import { setLevel } from '../script';
-import LevelPreview from './levelPreview';
 
 export default class LevelLoader {
     #pixiApp;
     #level = null;
-    #levelPreview = null;
     
     #currentLevelData
     #attempt = 0;
@@ -34,7 +32,7 @@ export default class LevelLoader {
 
         this.onLeave();
 
-        // document.getElementById('game-content').style.display = 'none';
+        document.getElementById('game-content').style.display = 'none';
         document.getElementById('level-select').style.display = 'flex';
     }
 
@@ -51,7 +49,6 @@ export default class LevelLoader {
         document.querySelector('body').appendChild(script);
 
         if (this.#level != null) this.#level.destroy();
-        if (this.#levelPreview) this.#levelPreview.destroy();
 
         const level = new Level(this.#pixiApp, this.#currentLevelData);
         setLevel(level);
@@ -66,35 +63,6 @@ export default class LevelLoader {
             window.addEventListener('keydown', this.#handleKeydown);
             window.addEventListener('keyup', this.#handleKeyup)
             // this.level.onLoad();
-        }
-    }
-
-    setPreview(path) {
-        if (this.#levelPreview != null) this.#levelPreview.destroy();
-        const script = document.createElement('script');
-        script.type = 'module';
-        script.src = `${path}?${new Date().getTime()}`
-        document.querySelector('body').appendChild(script);
-
-        const levelPreview = new Proxy(new LevelPreview(), {
-            get(target, prop) {
-                if (prop in target) {
-                    const value = target[prop];
-                    if (typeof value === "function") return (...args) => value.apply(target, args);
-                    return value;
-                }
-                return () => {};
-            },
-            set(target, prop, value) {
-                if (prop in target) target[prop] = value;
-                return true;
-            }
-        });
-        setLevel(levelPreview)
-        this.#levelPreview = levelPreview
-
-        script.onload = () => {
-            levelPreview.init()
         }
     }
 }

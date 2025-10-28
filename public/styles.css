@@ -19,9 +19,17 @@
         "wdth" 100;
 }
 
-/* #game-content {
+:root {
+    --font-color: rgba(255, 0, 0, 255);
+}
+
+#game {
+    z-index: -1;
+}
+
+#game-content {
     display: none;
-} */
+}
 
 #game-content * {
     font-family: "Stalinist One", sans-serif;
@@ -119,38 +127,18 @@ canvas {
     height: 100vh;
 } 
 
-#level-list::before {
-    content: '';
-    height: 100vh;
-    width: 40px;
-    background: linear-gradient(to right, black, transparent);
-    position: absolute;
-    left: 0px;
-    top: 0px;
-}
-
-#level-list::after {
-    content: '';
-    height: 100vh;
-    width: 40px;
-    background: linear-gradient(to left, black, transparent);
-    position: absolute;
-    right: 0px;
-    top: 0px;
-}
-
 .level {
     position: relative;
     width: 1000px;
     height: 500px;
-    box-shadow: 0px 10px 25px rgba(0, 0, 0, .5);
-    backdrop-filter: blur(50px);
-    /* background-color: rgba(0, 0, 0, .2); */
+    box-shadow: 0px 10px 25px rgba(0, 0, 0, 1);
+    backdrop-filter: blur(5px);
+    background: radial-gradient(transparent, rgba(255, 255, 255, .15));
     padding: 20px;
 }
 
 .level * {
-    color: red;
+    color: var(--font-color);
 }
 
 .level .name {
@@ -170,7 +158,7 @@ canvas {
     position: absolute;
     top: -80px;
     left: calc(-100vw + 120px);
-    color: red;
+    color: var(--font-color);
     text-align: center;
     font-size: 4.5rem;
     background-color: black;

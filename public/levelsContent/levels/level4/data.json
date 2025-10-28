@@ -1,0 +1,15 @@
+{
+    "key": "level3", 
+
+    "name": "LEVEL 4 LEVEL 4 LEVEL 4",
+    "description": "This is level, yap",
+    "author": "NDagger",
+
+    "musicName": "Hexagon and On",
+    "musicAuthor": "Zanzlanz",
+    "musicAlbum": "",
+    "musicPath": "hexagonAndOn.ogg",
+    "musicTimestamps": [0],
+
+    "scriptPath": "script.js"
+}
