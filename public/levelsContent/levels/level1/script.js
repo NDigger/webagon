@@ -1,7 +1,5 @@
 
-import { Vector2, Color, Size } from '../../../utils/structures';
-import Lerp from '../../../utils/interpolation';
-import { level } from '../../../script';
+import { Vector2, Color, Size, Lerp, level } from '../../common'
 import initPatterns from '../../patterns';
 let patterns
 
@@ -43,7 +41,7 @@ level.onInit = () => {
     level.setIncrementTime(10);
     level.setWallSpeedIncrement(1);
     level.setRotationSpeedIncrement(0.1);
-    // level.set3dCoor(new Color(255, 255, 255));
+    // level.set3dColor(new Color(255, 255, 255));
     // level.set3dFalloffColor(new Color(0, 0, 0));
     level.setSkew(.05);
     // level.setPlayerSize(new Size(97, 100))
@@ -63,11 +61,11 @@ let time = 0;
 // onUpdate is called every frame.
 level.onUpdate = ft => {
     level.setBackgroundTileColors([
-        // Lerp.interpolate(Color.hsvToRgb(time * 0.2, 1, 0.5), Color.hsvToRgb(time * 0.2, 1, 0.1), (time/940-Math.floor(time/940))),
-        // Lerp.interpolate(Color.hsvToRgb(time * 0.2, 1, 0.4), Color.hsvToRgb(time * 0.2, 1, 0.2), (time/940-Math.floor(time/940))),
+        Lerp.interpolate(Color.hsvToRgb(time * 0.2, 1, 0.5), Color.hsvToRgb(time * 0.2, 1, 0.1), Lerp.CapMode.pingPong(time)),
+        Lerp.interpolate(Color.hsvToRgb(time * 0.2, 1, 0.4), Color.hsvToRgb(time * 0.2, 1, 0.2), Lerp.CapMode.pingPong(time)),
 
-        Color.hsvToRgb(time * 0.2, 1, .25),
-        Color.hsvToRgb(time * 0.2, 1, .2),
+        // Color.hsvToRgb(time * 0.2, 1, .25),
+        // Color.hsvToRgb(time * 0.2, 1, .2),
         // Color.BLACK(255),
         // Color.WHITE(),
     ])

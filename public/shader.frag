@@ -16,8 +16,8 @@ vec2 getCenterSquareResolution(in vec2 uv) {
 }
 
 const float sides = 6.;
-const vec3 u_firstColor = vec3(.2, 0., 0.);
-const vec3 u_secondColor = vec3(.25, 0., 0.);
+const vec3 u_firstColor = vec3(0., 0.2, 0.);
+const vec3 u_secondColor = vec3(0., 0.25, 0.);
 
 mat2 rotate2d(in float a) { 
     return mat2(cos(a), -sin(a), sin(a), cos(a));

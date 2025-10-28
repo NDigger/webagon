@@ -1,7 +1,4 @@
-
-import { Vector2, Color, Size } from '../../../utils/structures';
-import Lerp from '../../../utils/interpolation';
-import { level } from '../../../script';
+import { Vector2, Color, Size, Lerp, level } from '../../common'
 
 level.onInit = () => {
     // level.setSwapEnabled(true);
@@ -10,7 +7,9 @@ level.onInit = () => {
     level.setWallSpawnDistance(1500);
     level.setSides(3);
     level.set3dDepth(5);
-    level.set3dDistance(200);
+    level.set3dDistance(2);
+    level.setRotationSpeedIncrement(.2);
+    level.setIncrementTime(5);
     // level.set3dColor(new Color(255, 255, 255));
     level.setSkew(.5);
     level.setOffset(new Vector2(50, 0));

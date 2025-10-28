@@ -1,7 +1,4 @@
-
-import { Vector2, Color, Size } from '../../../utils/structures';
-import Lerp from '../../../utils/interpolation';
-import { level } from '../../../script';
+import { Vector2, Color, Size, Lerp, level } from '../../common'
 
 level.onInit = () => {
     level.setSwapEnabled(true);
