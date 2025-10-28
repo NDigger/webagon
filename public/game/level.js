@@ -9,6 +9,8 @@ export default class Level extends Game {
     onRender = () => {};
     // onLoad = () => {};
     onStep = async () => {};
+    onIncrement = () => {};
+    onPreIncrement = () => {};
 
     #destroyed = false;
     #levelInitTime = performance.now();

@@ -1,7 +1,7 @@
 
 const getRandomDir = () => Math.random() < .5 ? -1 : 1;
 const getShift = () => Math.floor(Math.random() * 2);
-const extraTunnelThickness = 10;
+const extraTunnelThickness = 40;
 export default function initPatterns(g) {
     const getRandomSide = () => Math.floor(Math.random() * g.getSides());
 

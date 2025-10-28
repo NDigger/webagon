@@ -10,7 +10,7 @@ class LevelPreviewContent {
     #lastTime;
 
     style = {
-        mainColor: 255,
+        mainColor: new Color(255, 255, 255),
         backgroundTileColors: [new Color(0, 0, 0)],
         rotationSpeed: 0,
         sides: 6,
@@ -61,6 +61,8 @@ export default class LevelPreview {
     onUpdate = () => {}
     
     #update(time) { // Created to conveniently apply styles 
+        const style = this.getStyle()
+        if (style == null) return
         const frameTime = time - this.#lastTime;
         this.#lastTime = time;
         this.onUpdate(frameTime/1000)

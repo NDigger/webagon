@@ -8,7 +8,7 @@ import LevelPreview from './game/levelPreview';
 
 import DrawHandler from './game/gameContent/drawHandler';
 import Background from './game/gameContent/background';
-import { Color } from './utils/structures';
+import { Color, Vector2 } from './utils/structures';
 
 const createApp = async () => {
     const app = new PIXI.Application();
@@ -56,12 +56,10 @@ levelPreview.onUpdate = ft => {
     backgroundTime += ft;
     if (background == null) return
     const style = levelPreview.getStyle()
-    if (style == null) return
     background.setTileColors(style.backgroundTileColors)
     background.setRotation(backgroundTime * style.rotationSpeed * 1000)
     document.documentElement.style.setProperty('--font-color', style.mainColor.getRGBAStyle());
     background.setSides(style.sides);
-    console.log(style.rotationSpeed)
 }
 
 const loadLevel = levelData => {
