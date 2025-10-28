@@ -232,6 +232,8 @@ export default class Game extends GameObject {
         wall.set3dLayer(this.#get3dLayer());
         wall.set3dColor(this.#get3dColor());
 
+        wall.draw();
+
         this.#walls.push(wall);
     }
     setLayer(v) {

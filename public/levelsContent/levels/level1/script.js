@@ -34,7 +34,7 @@ level.onInit = () => {
         Color.hsvToRgb(0, 1, .25),
         Color.RED(),
     ])
-    level.setRotationSpeed(10);
+    level.setRotationSpeed(0.1);
     level.setWallSpeedMult(3);
     level.setSides(5);
     level.set3dDepth(4);
@@ -78,5 +78,5 @@ level.onUpdate = ft => {
 
 level.onRender = ft => {
     time += ft;
-    // level.setSkew(Math.sin(time*10) * .1 + .1)
+    level.setSkew(Math.sin(time*10) * .1 + .1)
 }
