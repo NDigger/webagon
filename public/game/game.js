@@ -125,6 +125,12 @@ export default class Game extends GameObject {
         this.onDeath()
     }
 
+    scheduleDraw() {
+        this.#background.scheduleDraw();
+        this.#polygon.scheduleDraw();
+        if (this.#deathEffect != undefined) this.#deathEffect.scheduleDraw();
+    }
+
     #updateBackground() {
         this.#background.setRotation(this.#rotation + this.#backgroundRotationOffset);
         const bgTileColors = this.#backgroundTileColors;
@@ -137,7 +143,6 @@ export default class Game extends GameObject {
 
     #swapBackground() {
         this.#backgroundSwapped = !this.#backgroundSwapped;
-        this.#updateBackground()
     }
 
     #update(time) {
@@ -171,13 +176,14 @@ export default class Game extends GameObject {
                 wall.destroy()
                 return false;
             }
+
+            wall.draw();
             return true
         })
 
         if (!this.#died) {            
             this.#rotation += this.#rotationSpeed * this.#rotationDir * frameTime;
             this.#polygon.setRotation(this.#rotation)
-            this.#updateBackground()
 
             this.#backgroundSwapTimer -= frameTime;
             if (this.#backgroundSwapTimer < 0) {
@@ -185,6 +191,7 @@ export default class Game extends GameObject {
                 this.#swapBackground();
             }
         }
+
 
         this.#updateId = requestAnimationFrame(time => this.#update(time));
     }

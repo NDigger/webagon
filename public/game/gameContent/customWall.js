@@ -53,6 +53,7 @@ export default class CustomWall extends Mesh {
         super.setVertexPos4(pos[0], pos[1], pos[2], pos[3]);
         super.draw();
         this.#layers3d.setVertexPos4(pos[0], pos[1], pos[2], pos[3]);
+        this.#layers3d.draw();
     }
 
     setVertexPos4(pos1, pos2, pos3, pos4) {

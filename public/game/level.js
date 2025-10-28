@@ -147,6 +147,7 @@ export default class Level extends Game {
         this.setShakePower(10);
         new Lerp(v => {
             this.setShakePower(v);
+            super.scheduleDraw()
         }).apply(30).run(0, 0.35);
         this.#onDeath()
     }
