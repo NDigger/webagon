@@ -1,7 +1,6 @@
 
 import * as PIXI from 'pixi.js'
 import LevelLoader from './game/levelLoader';
-import FragmentShader from './utils/fragmentShader';
 import Lerp from './utils/interpolation';
 import AudioManager from './utils/audioManager';
 import LevelPreview from './game/levelPreview';
@@ -50,14 +49,16 @@ const loop = () => {
 
 loop();
 
+const audioManager = new AudioManager();
+const levelSelectAudio = audioManager.add(new Audio('./audio/levelSelect.mp3'))
+levelSelectAudio.startTime = .1;
+
 let level
 let levelLoader
 let background = null;
-const audioManager = new AudioManager();
 (async () => {
     const app = await createApp()
     levelLoader = new LevelLoader(app);
-    levelLoader.audioManager = audioManager;
     levelLoader.onLeave = () => loadMenu();
     background = new Background({pixiApp: app, drawHandler: new DrawHandler()})
     background.setTileColors([
@@ -84,24 +85,11 @@ levelPreview.onUpdate = ft => {
 }
 
 const loadLevel = levelData => {
-    levelLoader.load(levelData);
     levelPreview.drop();
+    document.getElementById('level-select').style.display = 'none'
+    levelLoader.load(levelData);
     document.removeEventListener('keydown', keyDownMenuListener)
 }
-
-// fetch('./shader.frag')
-// .then(res => res.text())
-// .then(frag => {
-//     const backgroundShader = new FragmentShader('level-select-background', frag);
-//     const render = time =>  {
-//         backgroundShader.setUniform('u_time', [time/1000]);
-//         requestAnimationFrame(render);
-//     }
-//     const setResolution = () => backgroundShader.setUniform('u_resolution', [window.innerWidth, window.innerHeight]);
-//     setResolution()
-//     window.addEventListener('resize', setResolution);
-//     requestAnimationFrame(render);
-// })
 
 const levelsFolderPath = './levelsContent/levels';
 const levelPaths = [
@@ -137,10 +125,7 @@ levelPaths.forEach(levelPath => {
             </div>
         `)
 
-        levelList.lastElementChild.querySelector('.level').addEventListener('click', () => {
-            loadLevel(updateJsonPaths(d))
-            document.getElementById('level-select').style.display = 'none'
-        })
+        levelList.lastElementChild.querySelector('.level').addEventListener('click', () => loadLevel(updateJsonPaths(d)))
 
         loadMenu();
     })
@@ -162,6 +147,7 @@ const keyDownMenuListener = e => {
     } else if (e.code === 'Enter') loadLevel(updateJsonPaths(levelJsons[levelListSelectedLevel]))
 
     if (e.code === 'ArrowLeft' || e.code === 'KeyA' || e.code === 'ArrowRight' || e.code === 'KeyD') 
+        audioManager.resetPlay(levelSelectAudio)
         levelPreview.load(updateJsonPaths(levelJsons[levelListSelectedLevel]).scriptPath)
         backgroundTime = 0;
 }

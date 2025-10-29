@@ -38,9 +38,9 @@ export default class LevelLoader {
     }
 
     reload() {
-        const savedAttempt = this.#attempt;
+        // const savedAttempt = this.#attempt;
         this.load(this.#currentLevelData);
-        this.#attempt = savedAttempt + 1;
+        // this.#attempt = savedAttempt + 1;
     }
 
     load(data) {
@@ -58,11 +58,11 @@ export default class LevelLoader {
         setLevel(level);
         this.#level = level;
 
-
         script.onload = () => {
             document.getElementById('restart-help-msg').style.display = 'none'
             document.getElementById('swap-enabled-msg').style.display = 'none'
             this.#level.init()
+            console.log(this.#level.onInit)
             document.getElementById('game-content').style.display = 'block'
             document.getElementById('level-select').style.display = 'none'
             window.addEventListener('keydown', this.#handleKeydown);
