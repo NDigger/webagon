@@ -1,32 +1,28 @@
-
-class AudioData {
-    audio
-    volume = 1
-    startTime = 0
-}
 export default class AudioManager {
     #masterVolume = 0;
-    library = [];
+    library = {};
 
     setMasterVolume(value) {
         this.#masterVolume = value;
         this.library.forEach(audioData => audioData.audio.volume = audioData.volume * value);
     }
 
-    setVolume(audioData, value) {
-        audioData.volume = value * this.#masterVolume;
+    setStartTime(key, value) {
+        this.library[key].startTime = value;
     }
 
-    resetPlay(audioData) {
-        audioData.audio.pause();
-        audioData.audio.currentTime = audioData.startTime;
-        audioData.audio.play();
+    setVolume(key, value) {
+        this.library[key].volume = value * this.#masterVolume;
     }
 
-    add(audio) {
-        const audioData = new AudioData();
-        audioData.audio = audio;
-        this.library.push(audioData);
-        return audioData;
+    resetPlay(key) {
+        this.library[key].audio.pause();
+        this.library[key].audio.currentTime = this.library[key].startTime;
+        console.log(this.library[key].audio)
+        this.library[key].audio.play();
+    }
+
+    add(key, audio) {
+        this.library[key] = { audio: audio, volume: 1, startTime: 0 }
     }
 }

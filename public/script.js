@@ -50,8 +50,8 @@ const loop = () => {
 loop();
 
 const audioManager = new AudioManager();
-const levelSelectAudio = audioManager.add(new Audio('./audio/levelSelect.mp3'))
-levelSelectAudio.startTime = .1;
+audioManager.add('level-select', new Audio('audio/levelSelect.mp3'))
+audioManager.setStartTime('level-select', .1)
 
 let level
 let levelLoader
@@ -147,7 +147,7 @@ const keyDownMenuListener = e => {
     } else if (e.code === 'Enter') loadLevel(updateJsonPaths(levelJsons[levelListSelectedLevel]))
 
     if (e.code === 'ArrowLeft' || e.code === 'KeyA' || e.code === 'ArrowRight' || e.code === 'KeyD') {
-        audioManager.resetPlay(levelSelectAudio)
+        audioManager.resetPlay('level-select')
         levelPreview.load(updateJsonPaths(levelJsons[levelListSelectedLevel]).scriptPath)
         backgroundTime = 0;
     }
