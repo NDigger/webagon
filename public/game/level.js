@@ -3,6 +3,7 @@ import Game from "./game";
 import { Color } from "../utils/structures";
 import Lerp from "../utils/interpolation";
 import { setBestScore } from "../script";
+import CustomWall from "./gameContent/customWall";
 
 export default class Level extends Game { 
     onInit = () => {};
@@ -39,9 +40,11 @@ export default class Level extends Game {
         selectFirstMusicTimestamp: false,
     }
 
+    drawHandler = new DrawHandler()
     #pixiApp
 
-    #games = []
+    #games = [];
+    #cws = [];
 
     constructor(pixiApp, levelData, props) {
         super({
@@ -118,12 +121,24 @@ export default class Level extends Game {
     #render(time) {
         const frameTime = time - this.#lastRenderTime;
         this.#lastRenderTime = time;
+
+        this.#cws.forEach(cw => {
+            cw.setSkew(this.getSkew());
+            cw.set3dDepth(this.get3dDepth());
+            cw.set3dDistance(this.get3dDistance());
+            cw.setRotation(this.getRotation());
+            cw.set3dColor(this.get3dColor());
+            if (this.get3dFalloffColor()) cw.set3dFalloffColor()
+            else cw.clear3dFalloffColor();
+        })
+
         this.onRender(frameTime/1000)
         this.#renderId = requestAnimationFrame(t => this.#render(t))
     }
     destroy() {
         this.#destroyed = true;
         this.#games.forEach(game => game.destroy());
+        this.#cws.forEach(cw => cw.destroy());
         super.destroy();
         cancelAnimationFrame(this.#updateId)
         cancelAnimationFrame(this.#renderId)
@@ -188,6 +203,7 @@ export default class Level extends Game {
 
     kill() {
         super.kill()
+        this.#games.forEach(game => game.kill())
         this.#onDeath()
     }
     setMainColor({r, g, b, a}) {
@@ -224,7 +240,7 @@ export default class Level extends Game {
     createGame() {
         const game = new Game({
             pixiApp: this.#pixiApp,
-            drawHandler: new DrawHandler()
+            drawHandler: this.drawHandler
         });
         game.setWallSpeedMult(this.getWallSpeedMult());
         game.setWallSpawnDistance(this.getWallSpawnDistance());
@@ -253,5 +269,12 @@ export default class Level extends Game {
         game.setSwapEnabled(this.getSwapEnabled());
         this.#games.push(game);
         return game;
+    }
+
+    createCustomWall() {
+        const cw = new CustomWall({pixiApp: this.#pixiApp, drawHandler: this.drawHandler});
+        cw.setLayer(this.getLayer() + 0.002)
+        this.#cws.push(cw);
+        return cw;
     }
 }

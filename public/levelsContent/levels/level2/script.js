@@ -1,11 +1,10 @@
 import { Vector2, Color, Size, Lerp, level } from '../../common'
 
-let game
 level.onInit = () => {
     // level.setSwapEnabled(true);
     level.setRotationSpeed(0.3);
-    level.setWallSpeedMult(8);
-    level.setWallSpawnDistance(1500);
+    level.setWallSpeedMult(5);
+    level.setWallSpawnDistance(1000);
     level.setSides(3);
     level.set3dDepth(5);
     level.set3dDistance(5);
@@ -20,24 +19,11 @@ level.onInit = () => {
             level.createWall(i + rnd, 50)
         }
     }, .4)
-    game = level.createGame();
-    if (game) {
-        game.setBackgroundRadius(200);
-        game.setBackgroundTileColors([
-            new Color(255, 255, 255),
-            new Color(155, 155, 155),
-        ])
-        game.setOffset(new Vector2(50, 50))
-    }
 }
 
 let time = 0;
 // onUpdate is called every frame.
 level.onUpdate = ft => {
-    if (game) {
-        game.setRotation(level.getRotation() * -1);
-        game.setMainColor(new Color(255, 255, 255));
-    }
     level.setBackgroundTileColors([
             Lerp.interpolate(new Color(Lerp.interpolate(0, 25, Lerp.CapMode.pingPong(time)), 15, 55), new Color(25, 25, 25), Lerp.CapMode.pingPong(time*20)),
             Lerp.interpolate(new Color(Lerp.interpolate(0, 25, Lerp.CapMode.pingPong(time)), 15, 85), new Color(25, 25, 25), Lerp.CapMode.pingPong(time*20)),

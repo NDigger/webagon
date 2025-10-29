@@ -128,12 +128,14 @@ export default class Mesh extends GameObject {
     }
 
     destroy() {
+        if (this.destroyed) return
         this.appContext.pixiApp.stage.removeChild(this.#object)
         window.removeEventListener('resize', this.draw);
         this.#object?.geometry.destroy();
         this.#object.destroy();
         this.#object = null;
         this.redrawEnabled = false;
+        this.destroyed = true;
     }
 
     setLayer(v) {

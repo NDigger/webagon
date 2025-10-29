@@ -133,6 +133,7 @@ export default class Game extends GameObject {
     #get3dColor() { return this.#color3d ?? this.#getDefault3dColor() }
 
     kill() {
+        if (this.destroyed) return
         // this.#polygon.player.positionRedrawEnabled = false;
         // this.#polygon.redrawEnabled = true;
         // this.#background.redrawEnabled = true;
@@ -450,6 +451,8 @@ export default class Game extends GameObject {
         this.#walls = [];
     }
     destroy() {
+        if (this.destroyed) return
+        this.destroyed = true;
         this.#died = true;
         cancelAnimationFrame(this.#updateId);
         requestAnimationFrame(() => {

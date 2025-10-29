@@ -136,7 +136,7 @@ export default class CustomWall extends Mesh {
     // }
 
     destroy() {
-        this.#layers3d.destroy();
         super.destroy()
+        this.#layers3d.destroy();
     }
 }

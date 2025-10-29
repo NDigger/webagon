@@ -1,6 +1,7 @@
 export default class GameObject {
     appContext;
     needsRedraw = false;
+    destroyed = false;
     redrawEnabled = true;
 
     constructor(appContext) {

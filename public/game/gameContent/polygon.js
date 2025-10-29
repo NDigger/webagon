@@ -141,6 +141,7 @@ export default class Polygon extends PolygonObject {
 
     destroy() {
         super.destroy();
+        this.destroyed = true
         this.player.destroy();
         this.#border.destroy();
     }

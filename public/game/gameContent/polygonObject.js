@@ -112,6 +112,8 @@ export default class PolygonObject extends GameObject {
         this.scheduleDraw();
     }
     destroy() {
+        if (this.destroyed) return
+        this.destroyed = true
         this._walls.forEach(wall => {
             wall.destroy()
         })
