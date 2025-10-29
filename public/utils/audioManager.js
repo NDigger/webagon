@@ -18,7 +18,6 @@ export default class AudioManager {
     resetPlay(key) {
         this.library[key].audio.pause();
         this.library[key].audio.currentTime = this.library[key].startTime;
-        console.log(this.library[key].audio)
         this.library[key].audio.play();
     }
 

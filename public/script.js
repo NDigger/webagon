@@ -100,10 +100,10 @@ const levelPaths = [
 ]
 const levelJsons = []
 
-const updateJsonPaths = jsonLevelObject => {
+const updateJsonPaths = (levelFolderPath, jsonLevelObject) => {
     const levelJson = structuredClone(jsonLevelObject);
-    levelJson.scriptPath = `${levelPaths[levelListSelectedLevel]}/${levelJson.scriptPath}`
-    levelJson.musicPath = `${levelPaths[levelListSelectedLevel]}/${levelJson.musicPath}`
+    levelJson.scriptPath = `${levelFolderPath}/${levelJson.scriptPath}`
+    levelJson.musicPath = `${levelFolderPath}/${levelJson.musicPath}`
     return levelJson
 }
 const levelList = document.getElementById('level-list');
@@ -115,17 +115,15 @@ levelPaths.forEach(levelPath => {
         const scores = scoresItem ? JSON.parse(scoresItem) : {}; 
         levelJsons.push(d);
         levelList.insertAdjacentHTML('beforeend', `
-            <div class="level-wrap">
-                <div class="level" id="level-${d.key}">
-                    <p class="name">${d.name}</p>
-                    <p class="description">${d.description}</p>
-                    <p class="author">${d.author}</p>
-                    <p class="best">${scores[d.key] ? scores[d.key] : 0.000}</p>
-                </div>
+            <div class="level" id="level-${d.key}">
+                <p class="name">${d.name}</p>
             </div>
         `)
+        // <p class="description">${d.description}</p>
+        //         <p class="author">${d.author}</p>
+        //         <p class="best">${scores[d.key] ? scores[d.key] : 0.000}</p>
 
-        levelList.lastElementChild.querySelector('.level').addEventListener('click', () => loadLevel(updateJsonPaths(d)))
+        levelList.lastElementChild.addEventListener('click', () => loadLevel(updateJsonPaths(levelPath, d)))
 
         loadMenu();
     })
@@ -136,19 +134,19 @@ const shiftLevelListPosition = shift => {
     if (levelListSelectedLevel === 0 && shift === -1) levelListSelectedLevel = levelPaths.length - 1;
     else if (levelListSelectedLevel === levelPaths.length - 1 && shift === 1) levelListSelectedLevel = 0;
     else levelListSelectedLevel += shift;  
-    levelListPositionXLerp.run(levelListSelectedLevel, .3, Lerp.Easing.EASE_OUT)
+    // levelListPositionXLerp.run(levelListSelectedLevel, .3, Lerp.Easing.EASE_OUT)
 }
 
 const keyDownMenuListener = e => {
-    if (e.code === 'ArrowLeft' || e.code === 'KeyA') {
+    if (e.code === 'ArrowUp' || e.code === 'KeyW') {
         shiftLevelListPosition(-1)
-    } else if (e.code === 'ArrowRight' || e.code === 'KeyD') {
+    } else if (e.code === 'ArrowDown' || e.code === 'KeyS') {
         shiftLevelListPosition(1)
-    } else if (e.code === 'Enter') loadLevel(updateJsonPaths(levelJsons[levelListSelectedLevel]))
+    } else if (e.code === 'Enter') loadLevel(updateJsonPaths(levelPaths[levelListSelectedLevel], levelJsons[levelListSelectedLevel]))
 
-    if (e.code === 'ArrowLeft' || e.code === 'KeyA' || e.code === 'ArrowRight' || e.code === 'KeyD') {
+    if (e.code === 'ArrowUp' || e.code === 'KeyW' || e.code === 'ArrowDown' || e.code === 'KeyS') {
         audioManager.resetPlay('level-select')
-        levelPreview.load(updateJsonPaths(levelJsons[levelListSelectedLevel]).scriptPath)
+        levelPreview.load(updateJsonPaths(levelPaths[levelListSelectedLevel], levelJsons[levelListSelectedLevel]).scriptPath)
         backgroundTime = 0;
     }
 }
@@ -158,6 +156,6 @@ const levelListPositionXLerp = new Lerp(v => levelList.style.transform = `transl
 
 const loadMenu = () => {
     document.addEventListener('keydown', keyDownMenuListener)
-    levelPreview.load(updateJsonPaths(levelJsons[levelListSelectedLevel]).scriptPath)
+    levelPreview.load(updateJsonPaths(levelPaths[levelListSelectedLevel], levelJsons[levelListSelectedLevel]).scriptPath)
     backgroundTime = 0;
 }
