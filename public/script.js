@@ -146,10 +146,11 @@ const keyDownMenuListener = e => {
         shiftLevelListPosition(1)
     } else if (e.code === 'Enter') loadLevel(updateJsonPaths(levelJsons[levelListSelectedLevel]))
 
-    if (e.code === 'ArrowLeft' || e.code === 'KeyA' || e.code === 'ArrowRight' || e.code === 'KeyD') 
+    if (e.code === 'ArrowLeft' || e.code === 'KeyA' || e.code === 'ArrowRight' || e.code === 'KeyD') {
         audioManager.resetPlay(levelSelectAudio)
         levelPreview.load(updateJsonPaths(levelJsons[levelListSelectedLevel]).scriptPath)
         backgroundTime = 0;
+    }
 }
 
 let levelListSelectedLevel = 0
