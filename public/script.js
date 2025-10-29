@@ -108,48 +108,77 @@ levelPaths.forEach((levelPath, i) => {
         //         <p class="best">${scores[d.key] ? scores[d.key] : 0.000}</p>
 
         levelList.lastElementChild.addEventListener('click', e => {
-            if (getSelectedLevel() !== e.currentTarget) setLevelListPosition(i)
+            if (getSelectedLevel() !== e.currentTarget) {
+                audioManager.resetPlay('level-select')
+                setLevelListPosition(i)
+            }
             else loadLevel(updatedJson)
         })
 
-        setLevelListPosition(0);
+        setLevelListPosition(parseInt(localStorage.getItem('webagon-selected-level')) ?? 0);
         loadMenu();
     })
 })
 
+const isMobileWidth = () => window.innerWidth <= 1068
+window.addEventListener('resize', () => {
+    const levelsArr = Array.from(document.querySelectorAll('.level'))
+    if (isMobileWidth()) levelsArr.forEach(level => level.style.transform = 'unset');
+    else {
+        levelsArr.forEach(level => level.style.transform = 'skewX(-20deg)')
+        getSelectedLevel().style.transform = 'skewX(-20deg) translateX(100px)'
+    };
+})
 
-const getTranslateX = element => {
-    const style = window.getComputedStyle(element);
-    const matrix = new DOMMatrix(style.transform);
-    return matrix.m41
-}
-const getLevelLerpSetter = element => v => element.style.transform = `translateX(${v}px) skewX(-20deg)`
 const getSelectedLevel = () => document.getElementById(`level-${levelJsons[levelListSelectedLevel].key}`);
 const beforeShift = () => {
     const selectedLevel = getSelectedLevel();
-    new Lerp(getLevelLerpSetter(selectedLevel))
-    .apply(getTranslateX(selectedLevel))
-    .run(0, .3, Lerp.Easing.EASE_IN)
+    selectedLevel.classList.remove('selected-animation')
+    void selectedLevel.offsetWidth;
+    selectedLevel.classList.add('unselected-animation')
 }
 const afterShift = () => {
     const selectedLevel = getSelectedLevel();
-    new Lerp(getLevelLerpSetter(selectedLevel))
-    .apply(getTranslateX(selectedLevel))
-    .run(100, .3, Lerp.Easing.EASE_OUT)
+    selectedLevel.classList.remove('unselected-animation');
+    void selectedLevel.offsetWidth;
+    selectedLevel.classList.add('selected-animation');
+
+    levelPreview.load(levelJsons[levelListSelectedLevel].scriptPath)
+
+    const currentJson = levelJsons[levelListSelectedLevel];
+    const selectedLevelInfo = document.getElementById('selected-level-info')
+    selectedLevelInfo.querySelector('.title-name').textContent = currentJson.name
+    selectedLevelInfo.querySelector('.name').textContent = `Name: ${currentJson.name}`
+    selectedLevelInfo.querySelector('.author').textContent = `Author: ${currentJson.author}`
+    selectedLevelInfo.querySelector('.description').textContent = `Description: ${currentJson.description}`
+    selectedLevelInfo.querySelector('.music-name').textContent = `Name: ${currentJson.musicName || 'None'}`
+    selectedLevelInfo.querySelector('.music-author').textContent = `Author: ${currentJson.musicAuthor || 'None'}`
+    selectedLevelInfo.querySelector('.music-album').textContent = `Album: ${currentJson.musicAlbum || 'None'}`
+    const scoresItem = localStorage.getItem('webagon-scores');
+    const scores = scoresItem ? JSON.parse(scoresItem) : {}; 
+    const safeScore =  scores[currentJson.key] ?? 0.0
+    let zeros = ''
+    if (parseFloat(safeScore) < 10) zeros = '00';
+    else if (parseFloat(safeScore) < 100) zeros = '0';
+    selectedLevelInfo.querySelector('.best').innerHTML = `<span style="opacity:.5">${zeros}</span>${safeScore}`
+
 }
 const shiftLevelListPosition = shift => {
     beforeShift()
     if (levelListSelectedLevel === 0 && shift === -1) levelListSelectedLevel = levelPaths.length - 1;
     else if (levelListSelectedLevel === levelPaths.length - 1 && shift === 1) levelListSelectedLevel = 0;
     else levelListSelectedLevel += shift;
+    localStorage.setItem('webagon-selected-level', levelListSelectedLevel)
     afterShift()
 }
 const setLevelListPosition = position => {
     beforeShift();
     levelListSelectedLevel = position;
+    localStorage.setItem('webagon-selected-level', levelListSelectedLevel)
     afterShift();
 }
 
+document.getElementById('play-btn').addEventListener('click', () => loadLevel(levelJsons[levelListSelectedLevel]))
 const keyDownMenuListener = e => {
     if (e.code === 'ArrowUp' || e.code === 'KeyW') {
         shiftLevelListPosition(-1)
@@ -159,7 +188,6 @@ const keyDownMenuListener = e => {
 
     if (e.code === 'ArrowUp' || e.code === 'KeyW' || e.code === 'ArrowDown' || e.code === 'KeyS') {
         audioManager.resetPlay('level-select')
-        levelPreview.load(levelJsons[levelListSelectedLevel].scriptPath)
         backgroundTime = 0;
     }
 }

@@ -24,7 +24,7 @@
 }
 
 #game {
-    z-index: -1;
+    z-index: -2;
 }
 
 #game-content {
@@ -114,30 +114,43 @@ canvas {
     justify-content: flex-start;
     gap: 5px;
 }
-/* 
-#level-list > .level-wrap {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 500px;
-    height: 100px;
-}  */
 
 .level {
-    transform: skewX(-20deg);
-    display: flex;
     align-items: center;
     justify-content: right;
     flex-direction: column;
     width: 700px;
     height: 70px;
+    border: 2px solid var(--font-color);
+    padding-right: 20px;
+    transform: skewX(-20deg);
+}
+
+.level.selected-animation {
+    animation: level-tab-anim .2s ease-out forwards;
+}
+.level.unselected-animation {
+    animation: level-tab-anim .2s ease-in forwards reverse;
+}
+
+@keyframes level-tab-anim {
+    from {
+        transform: skewX(-20deg);
+    } to {
+        transform: skewX(-20deg) translateX(100px);
+    }
+}
+
+.level, #selected-level-info {
+    display: flex;
     position: relative;
     box-shadow: 0px 10px 25px rgba(0, 0, 0, 1);
     /* background-color: rgba(0, 0, 0, .5); */
-    border: 2px solid var(--font-color);
-    padding-right: 20px;
-    backdrop-filter: hue-rotate(180deg) brightness(1.5);
+    backdrop-filter: hue-rotate(180deg) brightness(1);
+}
+
+#selected-level-info > * {
+    width: 100%;
 }
 
 .level:hover {
@@ -159,17 +172,110 @@ canvas {
     opacity: .5;    
 }
 
-#title {
-    display: none;
+#selected-level-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    flex-direction: column;
+    backdrop-filter: hue-rotate(180deg) brightness(.5);
     position: absolute;
-    top: -80px;
-    left: calc(-100vw + 120px);
+    right: 0px;
+    width: 500px;
+    height: 100vh;
+    border-left: 2px solid var(--font-color);
+}
+
+#selected-level-info p, #selected-level-info h1 {
+    padding: 0px 10px;
+}
+
+#selected-level-info * div {
+    padding: 10px 0;
+    margin: 10px 0;
+}
+
+#selected-level-info * {
     color: var(--font-color);
+}
+
+#selected-level-info .title-name {
+    font-size: 3rem;
+    width: 100%;
+}
+
+#selected-level-info .music {
+    border-top: 2px solid var(--font-color);
+    border-bottom: 2px solid var(--font-color);
+}
+
+#selected-level-info .best {
+    font-size: 5rem;
     text-align: center;
-    font-size: 4.5rem;
-    background-color: black;
-    padding: 20px;
-    padding-top: 110px;
-    width: 210vw;
-    rotate: -8deg;
+    width: 100%;
+}
+
+#selected-level-info .bottom {
+    border-top: 2px solid var(--font-color);
+}
+
+#selected-level-info .bottom * {
+    text-align: center;
+}
+
+#play-btn {
+    width: 100%;
+    height: 100px;
+    background-color: var(--font-color);
+    color: black;
+    font-size: 4rem;
+    border: none;
+    cursor: pointer;
+}
+
+#play-btn:focus {
+    outline: none;
+}
+
+@media (max-width: 1068px) {
+    html {
+        font-size: .8rem;
+    }
+
+    .level {
+        position: unset;
+        transform: unset;
+    }
+
+    #selected-level-info {
+        backdrop-filter: unset;
+        background-color: rgba(0, 0, 0, .8);
+        width: 100vw;
+        height: 100vh;
+        inset: 0;
+        display: none;
+
+    }
+
+    #level-list {
+        position: unset;
+        left: -200px;
+        top: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        gap: 5px;
+        width: 100vw;
+        height: 100vh;
+    }
+
+    #level-list > .level {
+        width: 100vw;
+    }
+
+    .level.selected-animation, .level.unselected-animation { animation: unset }
+    .level.selected-animation {
+        filter: hue-rotate(180deg);
+        background-color: rgba(255, 255, 255, .2);
+    }
+
 }
