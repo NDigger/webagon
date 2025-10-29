@@ -285,6 +285,7 @@ export default class Game extends GameObject {
             wall.set3dLayer(this.#get3dLayer());
         })
     }
+    getLayer() { return this.#layer }
     setRotation(v) { if (typeof(v) === 'number') this.#rotation = v; }
     getRotation() { return this.#rotation }
     setRotationSpeed(v) { if (typeof(v) === 'number') this.#rotationSpeed = v; }
@@ -438,7 +439,7 @@ export default class Game extends GameObject {
     setPlayerSize({width, height}) {
         this.#polygon.player.setSize(new Size(width, height));
     }
-    getPlayerSize() { return this.#polygon.player.getPlayerSize() }
+    getPlayerSize() { return this.#polygon.player.getSize() }
     setPlayerDistanceMult(v) {
         this.#polygon.setPlayerDistanceMult(v);
     }

@@ -39,11 +39,16 @@ export default class Level extends Game {
         selectFirstMusicTimestamp: false,
     }
 
+    #pixiApp
+
+    #games = []
+
     constructor(pixiApp, levelData, props) {
         super({
             pixiApp: pixiApp,
             drawHandler: new DrawHandler(),
         })
+        this.#pixiApp = pixiApp
         this.#props = props
         this.setBackgroundTileColors([Color.BLACK()]);
         this.#levelData = levelData
@@ -118,6 +123,7 @@ export default class Level extends Game {
     }
     destroy() {
         this.#destroyed = true;
+        this.#games.forEach(game => game.destroy());
         super.destroy();
         cancelAnimationFrame(this.#updateId)
         cancelAnimationFrame(this.#renderId)
@@ -213,5 +219,39 @@ export default class Level extends Game {
     clearIntervals() {
         this.#intervals.forEach(interval => clearInterval(interval));
         this.#intervals = []
+    }
+
+    createGame() {
+        const game = new Game({
+            pixiApp: this.#pixiApp,
+            drawHandler: new DrawHandler()
+        });
+        game.setWallSpeedMult(this.getWallSpeedMult());
+        game.setWallSpawnDistance(this.getWallSpawnDistance());
+        game.setRotationSpeed(this.getRotationSpeed());
+        game.setRotation(this.getRotation());
+        game.set3dColor(this.get3dColor());
+        game.set3dDepth(this.get3dDepth());
+        game.set3dDistance(this.get3dDistance());
+        if (this.get3dFalloffColor()) game.set3dFalloffColor(this.get3dFalloffColor());
+        game.setBackgroundRadius(this.getBackgroundRadius());
+        game.setBackgroundRotationOffset(this.getBackgroundRotationOffset());
+        game.setBackgroundSwapTime(this.getBackgroundSwapTime());
+        game.setBackgroundTileColors(this.getBackgroundTileColors());
+        game.setCenterOffset(this.getCenterOffset());
+        game.setLayer(this.getLayer());
+        game.setMainColor(this.getMainColor());
+        game.setOffset(this.getOffset());
+        game.setPlayerDistanceMult(this.getPlayerDistanceMult());
+        game.setPlayerRotationOffset(this.getPlayerRotationOffset());
+        game.setPlayerSize(this.getPlayerSize());
+        game.setPolygonColor(this.getPolygonColor());
+        game.setRadius(this.getRadius());
+        game.setScale(this.getScale());
+        game.setSides(this.getSides());
+        game.setSkew(this.getSkew());
+        game.setSwapEnabled(this.getSwapEnabled());
+        this.#games.push(game);
+        return game;
     }
 }
