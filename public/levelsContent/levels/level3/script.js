@@ -6,8 +6,8 @@ level.onInit = () => {
     level.setWallSpeedMult(6);
     level.setWallSpawnDistance(1500);
     level.setSides(4);
-    level.set3dDepth(4);
-    level.set3dDistance(10);
+    level.set3dDepth(20);
+    level.set3dDistance(100);
     level.setMainColor(Color.WHITE());
     // level.set3dColor(new Color(255, 255, 255));
     level.setSkew(.2);
@@ -31,7 +31,6 @@ level.onUpdate = ft => {
     ])
     level.setRotationSpeed(level.getRotationSpeed() + 0.1*ft)
     // level.setRadius(80 - (time * 2 - Math.floor(time * 2)) * 10)
-    level.setRadius(Math.sin(time*2)* 50 + 90);
 }
 
 level.onRender = ft => {

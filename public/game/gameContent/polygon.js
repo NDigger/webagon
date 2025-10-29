@@ -93,13 +93,13 @@ export default class Polygon extends PolygonObject {
     }
 
     set3dDepth(v) {
-        super.set3dDepth(v);
+        // super.set3dDepth(v);
         this.player.set3dDepth(v);
         this.#border.set3dDepth(v);
     }
 
     set3dDistance(v) {
-        super.set3dDepth(v);
+        // super.set3dDistance(v);
         this.player.set3dDistance(v);
         this.#border.set3dDistance(v);
     }

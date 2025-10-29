@@ -29,7 +29,7 @@ const back_in_out = (t, _pow = 1) => {
 const bounce_in = (t, _pow = 3) => 1.0 - bounce_out(1.0 - t, _pow);
 const bounce_out = (t, _pow = 3) => {
 	if (t < 0.75) return 1 - Math.pow(1 - t, _pow);
-	else return 1 - Math.pow(1 - t, _pow) + (sin((t - 0.75) * PI * 4) * 0.1 * (1 - t));
+	else return 1 - Math.pow(1 - t, _pow) + (Math.sin((t - 0.75) * Math.PI * 4) * 0.1 * (1 - t));
 }
 const bounce_in_out = (t, _pow = 3) => {
 	if (t < 0.5) return 0.5 * bounce_in(t * 2.0, _pow);
@@ -37,8 +37,8 @@ const bounce_in_out = (t, _pow = 3) => {
 }
 const exponential_in = (t, _pow = 1) => t > 0 ? Math.pow(2, (_pow * (t - 1))) : 0;
 const exponential_out = (t, _pow = 1) => t < 1 ? 1.0 - Math.pow(2, -_pow * t) : 1.0;
-const sine_in = (t, _pow = 1) => 1.0 - Math.cos(t * PI * 0.5);
-const sine_out = (t, _pow = 1) => Math.sin(t * PI * 0.5);
+const sine_in = (t, _pow = 1) => 1.0 - Math.cos(t * Math.PI * 0.5);
+const sine_out = (t, _pow = 1) => Math.sin(t * Math.PI * 0.5);
 
 export const Easing = Object.freeze({
     LINEAR: linear,

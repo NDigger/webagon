@@ -1,0 +1,15 @@
+{
+    "key": "example", 
+
+    "name": "Example Level",
+    "description": "Check code for instructions",
+    "author": "NDagger",
+
+    "musicName": "",
+    "musicAuthor": "",
+    "musicAlbum": "",
+    "musicPath": "",
+    "musicTimestamps": [0],
+
+    "scriptPath": "script.js"
+}

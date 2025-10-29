@@ -30,12 +30,14 @@ const createApp = async () => {
 const audioManager = new AudioManager();
 audioManager.add('level-select', new Audio('audio/levelSelect.mp3'))
 audioManager.setStartTime('level-select', .12)
+audioManager.add('level-load', new Audio('audio/levelLoad.ogg'))
+audioManager.setStartTime('level-load', .12)
 
 export function setBestScore(score) {
     let zeros = ''
     if (parseFloat(score) < 10) zeros = '00';
     else if (parseFloat(score) < 100) zeros = '0';
-    selectedLevelInfo.querySelector('.best').innerHTML = `<span style="opacity:.5">${zeros}</span>${score}`
+    selectedLevelInfo.querySelector('.best').innerHTML = `<span style="opacity:.5">${zeros}</span>${score.toFixed(3)}`
 }
 
 let level
@@ -67,6 +69,7 @@ levelPreview.onUpdate = ft => {
 
 const loadLevel = levelData => {
     levelPreview.drop();
+    audioManager.resetPlay('level-load');
     document.getElementById('level-select').style.display = 'none'
     levelLoader.load(levelData);
     document.removeEventListener('keydown', keyDownMenuListener)
@@ -147,6 +150,7 @@ const setLevelListPosition = position => {
 
 const levelsFolderPath = './levelsContent/levels';
 const levelPaths = [
+    `${levelsFolderPath}/exampleLevel`,
     `${levelsFolderPath}/firstSteps`,
     `${levelsFolderPath}/level1`,
     `${levelsFolderPath}/level2`,
@@ -163,7 +167,6 @@ levelPaths.forEach((levelPath, i) => {
         levelJsons.push(updatedJson);
 
         const scoresItem = localStorage.getItem('webagon-scores');
-        const scores = scoresItem ? JSON.parse(scoresItem) : {}; 
         levelList.insertAdjacentHTML('beforeend', `
             <div class="level" id="level-${d.key}">
                 <p class="name">${d.name}</p>

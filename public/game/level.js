@@ -46,6 +46,7 @@ export default class Level extends Game {
     
     init() {
         const audio = new Audio(this.#levelData.musicPath);
+        audio.loop = true;
         audio.oncanplay = () => {
             this.#audio = audio;
         }
@@ -140,6 +141,15 @@ export default class Level extends Game {
         document.removeEventListener('visibilitychange', this.#handleVisibilityChange);
         this.#gameOver = true
         cancelAnimationFrame(this.#updateId);
+
+        this.setShakePower(10);
+        new Lerp(v => {
+            this.setShakePower(v);
+            if (!this.#destroyed) super.draw()
+        }).apply(30).run(0, 0.35);
+        const flashLerp = new Lerp(v => document.getElementById('override-flash-effect').style.backgroundColor = v.getRGBAStyle());
+        flashLerp.apply(new Color(255, 255, 255, .6))
+        flashLerp.run(new Color(255, 255, 255, 0), 1)
         
         this.#saveScore()
     }
@@ -167,11 +177,6 @@ export default class Level extends Game {
 
     kill() {
         super.kill()
-        this.setShakePower(10);
-        new Lerp(v => {
-            this.setShakePower(v);
-            if (!this.#destroyed) super.draw()
-        }).apply(30).run(0, 0.35);
         this.#onDeath()
     }
     setMainColor({r, g, b, a}) {
