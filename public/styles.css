@@ -23,6 +23,18 @@
     --font-color: rgba(255, 0, 0, 255);
 }
 
+button {
+    border: none;
+}
+
+button:hover {
+    cursor: pointer;
+}
+
+button:focus {
+    outline: none;
+}
+
 #game {
     z-index: -2;
 }
@@ -113,11 +125,41 @@ canvas {
     flex-direction: column;
     justify-content: flex-start;
     gap: 5px;
+    /* for proper overflow hide */
+    padding-right: 200px;
+    padding-bottom: 50px;
+}
+
+#level-list, #selected-level-info {
+    overflow-y: auto;
+    scrollbar-width: 100px;    
+}
+
+#level-list::-webkit-scrollbar, #selected-level-info::-webkit-scrollbar {
+    display: none;
+}
+
+#selected-level-info::-webkit-scrollbar {
+    display: block;
+    width: 8px;
+}
+
+#selected-level-info::-webkit-scrollbar-track {
+    background: var(--font-color);
+}
+
+#selected-level-info::-webkit-scrollbar-thumb {
+    background: linear-gradient(to right, var(--font-color) 30%, black 3%, black 100%);
+}
+
+.container {
+  scrollbar-width: thin;
+  scrollbar-color: linear-gradient(to right, var(--font-color) 30%, black 3%, black 100%) var(--font-color); /* thumb, track */
 }
 
 .level {
     align-items: center;
-    justify-content: right;
+    justify-content: center;
     flex-direction: column;
     width: 700px;
     height: 70px;
@@ -149,10 +191,6 @@ canvas {
     backdrop-filter: hue-rotate(180deg) brightness(1);
 }
 
-#selected-level-info > * {
-    width: 100%;
-}
-
 .level:hover {
     filter: hue-rotate(180deg) brightness(2);
 }
@@ -165,6 +203,9 @@ canvas {
 
 .level .name {
     font-size: 2rem;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden; 
 }
 
 .level .author {
@@ -189,7 +230,7 @@ canvas {
     padding: 0px 10px;
 }
 
-#selected-level-info * div {
+#selected-level-info .distance {
     padding: 10px 0;
     margin: 10px 0;
 }
@@ -198,12 +239,51 @@ canvas {
     color: var(--font-color);
 }
 
-#selected-level-info .title-name {
-    font-size: 3rem;
+#selected-level-info > * {
     width: 100%;
 }
 
+#selected-level-info.show {
+    animation: selected-level-tab-anim .2s ease-out forwards
+}
+
+#selected-level-info.hide {
+    animation: selected-level-tab-anim .2s ease-in forwards reverse
+}
+
+@keyframes selected-level-tab-anim {
+    from {
+        top: 100vh;
+    } to {
+        top: 0px;
+    }
+}
+
+#selected-level-info .top {
+    display: flex;
+}
+
 #selected-level-info .music {
+    margin-top: 0;
+}
+
+#close-selected-level-info {
+    display: none;
+    width: 75px;
+    background-color: var(--font-color);
+    color: black;
+    font-size: 2rem;
+}
+
+#selected-level-info .title-name {
+    font-size: 3rem;
+    width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden; 
+}
+
+#selected-level-info .inner-container {
     border-top: 2px solid var(--font-color);
     border-bottom: 2px solid var(--font-color);
 }
@@ -228,17 +308,19 @@ canvas {
     background-color: var(--font-color);
     color: black;
     font-size: 4rem;
-    border: none;
-    cursor: pointer;
 }
 
-#play-btn:focus {
-    outline: none;
+@media (min-width: 1068px) {
+    #selected-level-info {
+        right: 0 !important;
+        bottom: 0 !important;
+        top: 0 !important;
+    }
 }
 
 @media (max-width: 1068px) {
     html {
-        font-size: .8rem;
+        font-size: 1rem;
     }
 
     .level {
@@ -251,9 +333,8 @@ canvas {
         background-color: rgba(0, 0, 0, .8);
         width: 100vw;
         height: 100vh;
-        inset: 0;
-        display: none;
-
+        right: 0;
+        border: 2px solid var(--font-color)
     }
 
     #level-list {
@@ -266,10 +347,16 @@ canvas {
         gap: 5px;
         width: 100vw;
         height: 100vh;
+        padding: 10px;        
     }
 
-    #level-list > .level {
-        width: 100vw;
+    #close-selected-level-info {
+        display: block;
+    }
+
+    .level {
+        width: 100%;
+        padding: 0 10px;
     }
 
     .level.selected-animation, .level.unselected-animation { animation: unset }
