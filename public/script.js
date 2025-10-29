@@ -31,6 +31,13 @@ const audioManager = new AudioManager();
 audioManager.add('level-select', new Audio('audio/levelSelect.mp3'))
 audioManager.setStartTime('level-select', .12)
 
+export function setBestScore(score) {
+    let zeros = ''
+    if (parseFloat(score) < 10) zeros = '00';
+    else if (parseFloat(score) < 100) zeros = '0';
+    selectedLevelInfo.querySelector('.best').innerHTML = `<span style="opacity:.5">${zeros}</span>${score}`
+}
+
 let level
 let levelLoader
 let background = null;
@@ -120,10 +127,7 @@ const afterShift = () => {
     const scoresItem = localStorage.getItem('webagon-scores');
     const scores = scoresItem ? JSON.parse(scoresItem) : {}; 
     const safeScore =  scores[currentJson.key] ?? 0.0
-    let zeros = ''
-    if (parseFloat(safeScore) < 10) zeros = '00';
-    else if (parseFloat(safeScore) < 100) zeros = '0';
-    selectedLevelInfo.querySelector('.best').innerHTML = `<span style="opacity:.5">${zeros}</span>${safeScore}`
+    setBestScore(safeScore)
 }
 
 const shiftLevelListPosition = shift => {
@@ -143,6 +147,7 @@ const setLevelListPosition = position => {
 
 const levelsFolderPath = './levelsContent/levels';
 const levelPaths = [
+    `${levelsFolderPath}/firstSteps`,
     `${levelsFolderPath}/level1`,
     `${levelsFolderPath}/level2`,
     `${levelsFolderPath}/level3`,

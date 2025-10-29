@@ -2,6 +2,7 @@ import DrawHandler from "./gameContent/drawHandler";
 import Game from "./game";
 import { Color } from "../utils/structures";
 import Lerp from "../utils/interpolation";
+import { setBestScore } from "../script";
 
 export default class Level extends Game { 
     onInit = () => {};
@@ -78,8 +79,8 @@ export default class Level extends Game {
     #increment() {
         this.#isIncrementing = false;
         this.setWallSpeedMult(this.getWallSpeedMult() + this.#wallSpeedIncrement);
-        this.#step();
         this.onIncrement();
+        this.#step();
     }
 
     #handleVisibilityChange = () => document.hidden && this.kill()
@@ -128,7 +129,8 @@ export default class Level extends Game {
         if (newScore > previousScore) {
             scores[this.#levelData.key] = newScore;
             localStorage.setItem('webagon-scores', JSON.stringify(scores));
-            document.getElementById(`level-${this.#levelData.key}`).querySelector('.best').textContent = newScore;
+            // document.getElementById(`level-${this.#levelData.key}`).querySelector('.best').textContent = newScore;
+            setBestScore(newScore)
         }
     }
 

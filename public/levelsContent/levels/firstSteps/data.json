@@ -1,0 +1,15 @@
+{
+    "key": "believe", 
+
+    "name": "Believe",
+    "description": "I believe I will finish this project.",
+    "author": "NDagger",
+
+    "musicName": "Hybrid Song",
+    "musicAuthor": "Quazar / Sanxion",
+    "musicAlbum": "",
+    "musicPath": "hybridSong.ogg",
+    "musicTimestamps": [3, 25, 40],
+
+    "scriptPath": "script.js"
+}
