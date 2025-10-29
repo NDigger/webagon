@@ -4,6 +4,7 @@ import LevelLoader from './game/levelLoader';
 import Lerp from './utils/interpolation';
 import AudioManager from './utils/audioManager';
 import LevelPreview from './game/levelPreview';
+import './frameCounter';
 
 import DrawHandler from './game/gameContent/drawHandler';
 import Background from './game/gameContent/background';
@@ -28,30 +29,9 @@ const createApp = async () => {
     return app;
 }
 
-let lastTime = performance.now();
-let frameCount = 0;
-let fps = 0;
-
-const loop = () => {
-  frameCount++;
-  const now = performance.now();
-  const delta = now - lastTime;
-
-  if (delta >= 1000) {
-    fps = (frameCount * 1000) / delta;
-    frameCount = 0;
-    lastTime = now;
-    document.getElementById('fps-counter').textContent = `${'fps:'} ${fps.toFixed(2)}`;
-  }
-
-  requestAnimationFrame(loop);
-}
-
-loop();
-
 const audioManager = new AudioManager();
 audioManager.add('level-select', new Audio('audio/levelSelect.mp3'))
-audioManager.setStartTime('level-select', .1)
+audioManager.setStartTime('level-select', .12)
 
 let level
 let levelLoader
@@ -100,41 +80,74 @@ const levelPaths = [
 ]
 const levelJsons = []
 
-const updateJsonPaths = (levelFolderPath, jsonLevelObject) => {
+const updateJSONPaths = (levelFolderPath, jsonLevelObject) => {
     const levelJson = structuredClone(jsonLevelObject);
     levelJson.scriptPath = `${levelFolderPath}/${levelJson.scriptPath}`
     levelJson.musicPath = `${levelFolderPath}/${levelJson.musicPath}`
     return levelJson
 }
+
 const levelList = document.getElementById('level-list');
-levelPaths.forEach(levelPath => {
+levelPaths.forEach((levelPath, i) => {
     fetch(`${levelPath}/data.json`)
     .then(res => res.json())
     .then(d => {
+        const updatedJson = updateJSONPaths(levelPath, d)
+        levelJsons.push(updatedJson);
+
         const scoresItem = localStorage.getItem('webagon-scores');
         const scores = scoresItem ? JSON.parse(scoresItem) : {}; 
-        levelJsons.push(d);
         levelList.insertAdjacentHTML('beforeend', `
             <div class="level" id="level-${d.key}">
                 <p class="name">${d.name}</p>
+                <p class="author">${d.author}</p>
             </div>
         `)
         // <p class="description">${d.description}</p>
         //         <p class="author">${d.author}</p>
         //         <p class="best">${scores[d.key] ? scores[d.key] : 0.000}</p>
 
-        levelList.lastElementChild.addEventListener('click', () => loadLevel(updateJsonPaths(levelPath, d)))
+        levelList.lastElementChild.addEventListener('click', e => {
+            if (getSelectedLevel() !== e.currentTarget) setLevelListPosition(i)
+            else loadLevel(updatedJson)
+        })
 
+        setLevelListPosition(0);
         loadMenu();
     })
 })
 
 
+const getTranslateX = element => {
+    const style = window.getComputedStyle(element);
+    const matrix = new DOMMatrix(style.transform);
+    return matrix.m41
+}
+const getLevelLerpSetter = element => v => element.style.transform = `translateX(${v}px) skewX(-20deg)`
+const getSelectedLevel = () => document.getElementById(`level-${levelJsons[levelListSelectedLevel].key}`);
+const beforeShift = () => {
+    const selectedLevel = getSelectedLevel();
+    new Lerp(getLevelLerpSetter(selectedLevel))
+    .apply(getTranslateX(selectedLevel))
+    .run(0, .3, Lerp.Easing.EASE_IN)
+}
+const afterShift = () => {
+    const selectedLevel = getSelectedLevel();
+    new Lerp(getLevelLerpSetter(selectedLevel))
+    .apply(getTranslateX(selectedLevel))
+    .run(100, .3, Lerp.Easing.EASE_OUT)
+}
 const shiftLevelListPosition = shift => {
+    beforeShift()
     if (levelListSelectedLevel === 0 && shift === -1) levelListSelectedLevel = levelPaths.length - 1;
     else if (levelListSelectedLevel === levelPaths.length - 1 && shift === 1) levelListSelectedLevel = 0;
-    else levelListSelectedLevel += shift;  
-    // levelListPositionXLerp.run(levelListSelectedLevel, .3, Lerp.Easing.EASE_OUT)
+    else levelListSelectedLevel += shift;
+    afterShift()
+}
+const setLevelListPosition = position => {
+    beforeShift();
+    levelListSelectedLevel = position;
+    afterShift();
 }
 
 const keyDownMenuListener = e => {
@@ -142,20 +155,18 @@ const keyDownMenuListener = e => {
         shiftLevelListPosition(-1)
     } else if (e.code === 'ArrowDown' || e.code === 'KeyS') {
         shiftLevelListPosition(1)
-    } else if (e.code === 'Enter') loadLevel(updateJsonPaths(levelPaths[levelListSelectedLevel], levelJsons[levelListSelectedLevel]))
+    } else if (e.code === 'Enter') loadLevel(levelJsons[levelListSelectedLevel])
 
     if (e.code === 'ArrowUp' || e.code === 'KeyW' || e.code === 'ArrowDown' || e.code === 'KeyS') {
         audioManager.resetPlay('level-select')
-        levelPreview.load(updateJsonPaths(levelPaths[levelListSelectedLevel], levelJsons[levelListSelectedLevel]).scriptPath)
+        levelPreview.load(levelJsons[levelListSelectedLevel].scriptPath)
         backgroundTime = 0;
     }
 }
 
 let levelListSelectedLevel = 0
-const levelListPositionXLerp = new Lerp(v => levelList.style.transform = `translateX(${-v*100}vw)`);
-
 const loadMenu = () => {
     document.addEventListener('keydown', keyDownMenuListener)
-    levelPreview.load(updateJsonPaths(levelPaths[levelListSelectedLevel], levelJsons[levelListSelectedLevel]).scriptPath)
+    levelPreview.load(levelJsons[levelListSelectedLevel].scriptPath)
     backgroundTime = 0;
 }

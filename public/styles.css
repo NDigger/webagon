@@ -107,7 +107,7 @@ canvas {
 
 #level-list {
     position: absolute;
-    left: -10vw;
+    left: -200px;
     top: 10px;
     display: flex;
     flex-direction: column;
@@ -125,33 +125,38 @@ canvas {
 }  */
 
 .level {
+    transform: skewX(-20deg);
     display: flex;
     align-items: center;
     justify-content: right;
-    width: 800px;
+    flex-direction: column;
+    width: 700px;
     height: 70px;
     position: relative;
     box-shadow: 0px 10px 25px rgba(0, 0, 0, 1);
-    background-color: rgba(0, 0, 0, .5);
+    /* background-color: rgba(0, 0, 0, .5); */
     border: 2px solid var(--font-color);
-    padding: 20px;
-    backdrop-filter: hue-rotate(180deg);
+    padding-right: 20px;
+    backdrop-filter: hue-rotate(180deg) brightness(1.5);
+}
+
+.level:hover {
+    filter: hue-rotate(180deg) brightness(2);
 }
 
 .level * {
+    text-align: right;
+    width: 100%;
     color: var(--font-color);
 }
 
 .level .name {
-    text-align: center;
     font-size: 2rem;
 }
 
-.level .best {
-    position: absolute;
-    bottom: -20px;
-    right: 20px;
+.level .author {
     font-size: 1rem;
+    opacity: .5;    
 }
 
 #title {

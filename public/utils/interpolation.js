@@ -83,42 +83,42 @@ export default class Lerp {
         if (typeof setter === 'function') this.setter = setter;
     }
 
-    async run(to, timeSeconds, easing = null, easingPow = null) {
+    run(to, timeSeconds, easing = null, easingPow = null) {
         this.#runId++;
-        this.#from = this.value;
         const currentRunId = this.#runId;
-        const loopLength = Math.max(1, Math.floor(timeSeconds * 100));
+        const start = performance.now();
+        const from = this.value;
 
-        for (let i = 0; i <= loopLength; i++) {
+        const step = now => {
             if (currentRunId !== this.#runId) return false;
 
-            let t = i / loopLength;
-            if (typeof(easing) === 'function') {
-                if (easingPow) {
-                t = easing(t, easingPow);
-                } else {
-                t = easing(t);
-                }
+            let t = (now - start) / (timeSeconds * 1000);
+            t = Math.min(t, 1);
+
+            if (typeof easing === 'function') {
+                t = easingPow ? easing(t, easingPow) : easing(t);
             }
 
-            this.value = Lerp.interpolate(this.#from, to, t);
-        
+            this.value = Lerp.interpolate(from, to, t);
             if (this.setter) this.setter(this.value);
 
-            await new Promise(resolve =>
-                setTimeout(resolve, (timeSeconds / loopLength) * 1000)
-            );
-        }
-        
-        return true;
+            if (t < 1) {
+                requestAnimationFrame(step);
+            }
+        };
+
+        requestAnimationFrame(step);
+        return this
     }
 
     apply(value) {
-        this.#runId++;
+        this.stop();
         this.value = value;
         this.setter(value);
         return this;
     }
+
+    stop() { this.#runId++ };
 
     static interpolate(a, b, t) {
         const clamped = Math.min(Math.max(t, 0), 1) 
