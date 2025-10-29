@@ -11,6 +11,7 @@ level.onInit = () => {
     level.setMainColor(Color.WHITE());
     // level.set3dColor(new Color(255, 255, 255));
     level.setSkew(.2);
+    level.set3dFalloffColor(new Color(0, 0, 0, 0));
     // level.setPlayerSize(new Size(97, 100))
     // level.setPlayerDistanceMult(.1);
 
@@ -26,9 +27,10 @@ let time = 0;
 // onUpdate is called every frame.
 level.onUpdate = ft => {
     level.setBackgroundTileColors([
-        new Color(25, 25, 25),
-        new Color(55, 55, 55),
+        Lerp.interpolate(new Color(25, 15, 25), new Color(45, 25, 35), Lerp.CapMode.pingPong(time*20)),
+        Lerp.interpolate(new Color(45, 15, 25), new Color(65, 25, 25), Lerp.CapMode.pingPong(time*20)),
     ])
+    level.setMainColor(Lerp.interpolate(Color.RED(), new Color(255, 155, 255), Lerp.CapMode.pingPong(time*20)))
     level.setRotationSpeed(level.getRotationSpeed() + 0.1*ft)
     // level.setRadius(80 - (time * 2 - Math.floor(time * 2)) * 10)
 }

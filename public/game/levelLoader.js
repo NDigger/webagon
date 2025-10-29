@@ -37,13 +37,18 @@ export default class LevelLoader {
         document.getElementById('level-select').style.display = 'flex';
     }
 
-    reload() {
-        // const savedAttempt = this.#attempt;
-        this.load(this.#currentLevelData);
-        // this.#attempt = savedAttempt + 1;
+    start(data) {
+        this.#attempt = 1;
+        this.#load(data)
     }
 
-    load(data) {
+    reload() {
+        const savedAttempt = this.#attempt;
+        this.#load(this.#currentLevelData);
+        this.#attempt = savedAttempt + 1;
+    }
+
+    #load(data) {
         this.#currentLevelData = data;
         const script = document.createElement('script');
         script.type = 'module';
@@ -54,7 +59,9 @@ export default class LevelLoader {
             this.#level.destroy();
         }
 
-        const level = new Level(this.#pixiApp, this.#currentLevelData);
+        const level = new Level(this.#pixiApp, this.#currentLevelData, {
+            selectFirstMusicTimestamp: this.#attempt === 1,
+        });
         setLevel(level);
         this.#level = level;
 

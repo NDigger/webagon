@@ -191,7 +191,6 @@ export default function initPatterns(g) {
             barrage(side);
             const inc = Math.floor(Math.random() * (g.getSides()/2))*getRandomDir();
             side += inc;
-            console.log(inc);
             if (i !== times - 1) await g.distanceDelay(Math.abs(inc) * delay + 60)
         }
         await g.distanceDelay(delayEnd);

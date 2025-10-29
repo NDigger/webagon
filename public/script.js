@@ -71,7 +71,7 @@ const loadLevel = levelData => {
     levelPreview.drop();
     audioManager.resetPlay('level-load');
     document.getElementById('level-select').style.display = 'none'
-    levelLoader.load(levelData);
+    levelLoader.start(levelData);
     document.removeEventListener('keydown', keyDownMenuListener)
 }
 

@@ -35,11 +35,16 @@ export default class Level extends Game {
     #rotationSpeedIncrement = 0;
     #wallSpeedIncrement = 0;
 
-    constructor(pixiApp, levelData) {
+    #props = {
+        selectFirstMusicTimestamp: false,
+    }
+
+    constructor(pixiApp, levelData, props) {
         super({
             pixiApp: pixiApp,
             drawHandler: new DrawHandler(),
         })
+        this.#props = props
         this.setBackgroundTileColors([Color.BLACK()]);
         this.#levelData = levelData
     }
@@ -51,7 +56,7 @@ export default class Level extends Game {
             this.#audio = audio;
         }
         const musicTimestamps = this.#levelData.musicTimestamps
-        audio.currentTime = musicTimestamps[Math.floor(Math.random() * musicTimestamps.length)] ?? 0
+        audio.currentTime = musicTimestamps[this.#props.selectFirstMusicTimestamp ? 0 : Math.floor(Math.random() * musicTimestamps.length)] ?? 0
         audio.play();
 
         this.onInit();

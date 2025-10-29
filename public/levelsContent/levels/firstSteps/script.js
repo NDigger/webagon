@@ -22,14 +22,9 @@ level.onInit = () => {
     // g.setBackgroundRadius(500);
     level.setSwapEnabled(true);
     level.setMainColor(new Color(255, 0, 0));
-    level.setBackgroundTileColors([
-        Color.hsvToRgb(0, 1, .2),
-        Color.hsvToRgb(0, 1, .25),
-        Color.RED(),
-    ])
     level.setRadius(70);
     level.setRotationSpeed(0.035);
-    level.setWallSpeedMult(2);
+    level.setWallSpeedMult(2.4);
     level.setSides(5);
     level.set3dDepth(8);
     level.set3dDistance(5);
