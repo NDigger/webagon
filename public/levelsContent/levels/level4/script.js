@@ -1,13 +1,12 @@
 import { Vector2, Color, Size, Lerp, level } from '../../common'
 
 level.onInit = () => {
-    level.setSwapEnabled(true);
     level.setRotationSpeed(0);
-    level.setWallSpeedMult(10);
-    level.setWallSpawnDistance(1500);
-    level.setSides(7);
-    level.set3dDepth(4);
-    level.set3dDistance(50);
+    level.setWallSpeedMult(2);
+    level.setSides(5);
+    level.set3dDepth(3);
+    level.set3dDistance(5);
+    level.setSkew(.1);
     level.setMainColor(new Color(255, 255, 255))
     // level.set3dColor(new Color(255, 255, 255));
     // level.setPlayerSize(new Size(97, 100))

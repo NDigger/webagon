@@ -36,7 +36,7 @@ level.onInit = () => {
     ])
     level.setRotationSpeed(0.1);
     level.setWallSpeedMult(3);
-    level.setSides(5);
+    level.setSides(6);
     level.set3dDepth(4);
     level.set3dDistance(50);
     level.setIncrementTime(10);
@@ -73,7 +73,7 @@ level.onUpdate = ft => {
     level.setMainColor(Color.hsvToRgb(time * 0.2, 1, 1))
     // level.setWallSpeedMult(level.getWallSpeedMult() + ft/10)
     // level.setRadius(80 - (time * 2 - Math.floor(time * 2)) * 10)
-    level.setRadius(Math.sin(time*10)* 5 + 60);
+    level.setRadius(Math.sin(time*10)* 10 + 70);
 }
 
 level.onRender = ft => {

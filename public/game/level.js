@@ -23,9 +23,10 @@ export default class Level extends Game {
     #updateId = null;
     #lastUpdateTime = performance.now();
     #lastRenderTime = performance.now();
+    #levelTime = 0;
 
     #audio;
-    #currentLevelData;
+    #levelData;
 
     #incrementTime = 15;
     #incrementTimer = 0;
@@ -33,21 +34,21 @@ export default class Level extends Game {
     #rotationSpeedIncrement = 0;
     #wallSpeedIncrement = 0;
 
-    constructor(pixiApp, currentLevelData) {
+    constructor(pixiApp, levelData) {
         super({
             pixiApp: pixiApp,
             drawHandler: new DrawHandler(),
         })
         this.setBackgroundTileColors([Color.BLACK()]);
-        this.#currentLevelData = currentLevelData
+        this.#levelData = levelData
     }
     
     init() {
-        const audio = new Audio(this.#currentLevelData.musicPath);
+        const audio = new Audio(this.#levelData.musicPath);
         audio.oncanplay = () => {
             this.#audio = audio;
         }
-        const musicTimestamps = this.#currentLevelData.musicTimestamps
+        const musicTimestamps = this.#levelData.musicTimestamps
         audio.currentTime = musicTimestamps[Math.floor(Math.random() * musicTimestamps.length)] ?? 0
         audio.play();
 
@@ -88,6 +89,7 @@ export default class Level extends Game {
         const frameTime = time - this.#lastUpdateTime;
         const levelTime = time - this.#levelInitTime;
         this.#lastUpdateTime = time;
+        this.#levelTime = time - this.#levelInitTime;
         this.onUpdate(frameTime/1000);
         
         this.#incrementTimer += frameTime/1000;
@@ -117,12 +119,27 @@ export default class Level extends Game {
         document.removeEventListener('visibilitychange', this.#handleVisibilityChange);
         if (this.#audio) this.#audio.pause()
     }
+
+    #saveScore() {
+        const webagonScoresItem = localStorage.getItem('webagon-scores');
+        const scores = webagonScoresItem ? JSON.parse(webagonScoresItem) : {};
+        const previousScore = scores[this.#levelData.key] ?? 0;
+        const newScore = Math.floor(this.#levelTime)/1000;
+        if (newScore > previousScore) {
+            scores[this.#levelData.key] = newScore;
+            localStorage.setItem('webagon-scores', JSON.stringify(scores));
+            document.getElementById(`level-${this.#levelData.key}`).querySelector('.best').textContent = newScore;
+        }
+    }
+
     #onDeath() {
         document.getElementById('restart-help-msg').style.display = 'block'
         if (this.#audio) this.#audio.pause()
         document.removeEventListener('visibilitychange', this.#handleVisibilityChange);
         this.#gameOver = true
         cancelAnimationFrame(this.#updateId);
+        
+        this.#saveScore()
     }
 
     setShakePower(v) {

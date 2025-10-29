@@ -38,11 +38,12 @@ export default class LevelLoader {
     }
 
     reload() {
+        const savedAttempt = this.#attempt;
         this.load(this.#currentLevelData);
+        this.#attempt = savedAttempt + 1;
     }
 
     load(data) {
-        this.#attempt = 0;
         this.#currentLevelData = data;
         const script = document.createElement('script');
         script.type = 'module';

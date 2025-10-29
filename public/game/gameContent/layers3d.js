@@ -81,7 +81,6 @@ export default class Layers3d extends GameObject {
 
     setVertexPos4(pos1, pos2, pos3, pos4) {
         this.#vertexPos4 = [pos1, pos2, pos3, pos4];
-        if (pos1 === undefined) console.log(pos1, pos2, pos3, pos4)
         this.#meshes.forEach((mesh, i) => {
             const inc = (i + 1) * this.#distance * this.#skew;
             mesh.setVertexPos4(

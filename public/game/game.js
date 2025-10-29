@@ -87,7 +87,7 @@ export default class Game extends GameObject {
     #falloffColor3d = null;
 
     #mainColor = new Color(0, 0, 0);
-    #wallSpawnDistance = 1000;
+    #wallSpawnDistance = 2000;
     #wallSpeedMult = 2;
 
     #updateId;
@@ -234,7 +234,6 @@ export default class Game extends GameObject {
             if (pointInQuad(this.#polygon.player.getPointAbsolutePosition(), pos[0], pos[1], pos[2], pos[3])
             && !this.#died) {
                 const side = closestSide(this.#polygon.player.getPointAbsolutePosition(), pos)
-                console.log(side)
                 if (side === 3) this.kill()
                 else {
                     this.#polygon.player.setRotationOffset(this.#polygon.player.previousFrameRotationOffset)

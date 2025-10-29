@@ -123,14 +123,16 @@ levelPaths.forEach(levelPath => {
     fetch(`${levelPath}/data.json`)
     .then(res => res.json())
     .then(d => {
+        const scoresItem = localStorage.getItem('webagon-scores');
+        const scores = scoresItem ? JSON.parse(scoresItem) : {}; 
         levelJsons.push(d);
         levelList.insertAdjacentHTML('beforeend', `
             <div class="level-wrap">
-                <div class="level">
+                <div class="level" id="level-${d.key}">
                     <p class="name">${d.name}</p>
                     <p class="description">${d.description}</p>
                     <p class="author">${d.author}</p>
-                    <p class="best">31.145</p>
+                    <p class="best">${scores[d.key] ? scores[d.key] : 0.000}</p>
                 </div>
             </div>
         `)

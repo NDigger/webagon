@@ -48,7 +48,17 @@ export default class Mesh extends GameObject {
 
     draw() {
         const s = pseudoRndShake(globalThis.shakePower ?? 0)
-        const positions = this._positions.map((v, i) => i % 2 === 0 ? v+s.x : v+s.y)
+        const baseWidth = 1920;
+        const baseHeight = 1080;
+        const scale = new Vector2(window.innerWidth / baseWidth, window.innerHeight / baseHeight);
+
+        const positions = this._positions.map((v, i) => {
+        if (i % 2 === 0) {
+            return (v + s.x) * scale.x
+        } else {
+            return (v + s.y) * scale.y
+        }
+        });
         if (this?._geometry?.positions) this._geometry.positions = new Float32Array(positions);
     }
 
