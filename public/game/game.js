@@ -240,13 +240,11 @@ export default class Game extends GameObject {
         }
         let hasDiedNextStep = this.#died;
         const steps = Math.max(Math.floor((240/(getFPS()||60))*this.#wallSpeedMult/10), 10)
-        console.log(steps)
         for (let i = 0; i < steps; i++) {
             if (hasDiedNextStep) break
             
             if (this.#polygon.player.getMovementEnabled()) {
                 const prevRotationOffset = this.#polygon.player.getRotationOffset();
-                console.log(prevRotationOffset)
                 if (this.#leftKeyPressed) this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() - frameTime * .6 / steps);
                 if (this.#rightKeyPressed) this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() + frameTime * .6 / steps);
                 this.#polygon.player.draw()
@@ -257,10 +255,10 @@ export default class Game extends GameObject {
                         if (pointInQuad(this.#polygon.player.getPointAbsolutePosition(), pos[0], pos[1], pos[2], pos[3])
                         && !this.#died) {
                             const side = closestSide(this.#polygon.player.getPointAbsolutePosition(), pos)
-                            if (side !== 3) {
-                                console.log(this.#polygon.player.getRotationOffset(), prevRotationOffset)
-                                this.#polygon.player.setRotationOffset(prevRotationOffset)
-                            }
+                            if (side !== 3) 
+                                {
+                                    this.#polygon.player.setRotationOffset(prevRotationOffset)
+                                }
                         };
                     })
                 }
@@ -450,8 +448,8 @@ export default class Game extends GameObject {
         this.#walls.forEach(w => w.clear3dFalloffColor());
     }
     setSwapEnabled(v) {
-        if (typeof(v) !== 'boolean') return
-        this.#polygon.player.setSwapEnabled(v)
+        if (typeof(v) !== 'boolean') return;
+        this.#swapEnabled = v;
     }
     getSwapEnabled() { return this.#polygon.player.getSwapEnabled(); }
     setScale({x, y}) {
