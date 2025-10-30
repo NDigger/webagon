@@ -29,9 +29,14 @@ export default class Wall extends CustomWall {
     }
 
     draw() {
+        this.updatePosition();
+        super.draw();
+    }
+
+    updatePosition() {
         const [pos1, pos2, pos3, pos4] = this.#getWallVertexPos4();
         this.setVertexPos4(pos1, pos2, pos3, pos4);
-        super.draw();
+        super.updatePosition()
     }
 
     setSide(v) {

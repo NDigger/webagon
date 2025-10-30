@@ -280,7 +280,7 @@ export default class Game extends GameObject {
                 }
 
                 wall.setRotation(this.#rotation)
-                wall.draw()
+                wall.updatePosition()
 
                 // Collision check
                 const pos = wall.getVertexAbsolutePos4();
@@ -296,7 +296,7 @@ export default class Game extends GameObject {
             })
         }
 
-        if (this.#died) this.#walls.forEach(w => w.draw());
+        this.#walls.forEach(w => w.draw());
 
         this.#updateId = requestAnimationFrame(time => this.#update(time));
     }
