@@ -4,7 +4,7 @@ import { Vector2, Color, Size } from "../utils/structures";
 import Background from "./gameContent/background";
 import GameObject from "./gameContent/gameObject";
 import Death from "./gameContent/death";
-import Lerp from "../utils/interpolation";
+import { getFPS } from "../frameCounter";
 
 const area = (a, b, c) => {
   return Math.abs(
@@ -213,37 +213,45 @@ export default class Game extends GameObject {
             this.#distanceDelay -= frameTime * this.#wallSpeedMult / 5;
             if (this.#distanceDelay <= 0 && typeof(this.#distanceSignal) === 'function') this.#distanceSignal()
         }
-        let hasDiedNextFrame = this.#died;
-        this.#walls = this.#walls.filter(wall => {
-            if (hasDiedNextFrame) return true
-            
-            if (wall.getDistance() > this.#polygon.getDistance() + this.#polygon.getThickness()) {
-                wall.setDistance(wall.getDistance() - frameTime * this.#wallSpeedMult / 5)
-            } else if (wall.getThickness() > 0) {
-                wall.setThickness(wall.getThickness() - frameTime * this.#wallSpeedMult / 5)
-            }
-
-            if (wall.getThickness() <= 0 || wall.getDistance() <= 0) {
-                wall.destroy()
-                return false;
-            }
-
-            wall.setRotation(this.#rotation)
-            wall.draw()
-
-            const pos = wall.getVertexAbsolutePos4();
-            if (pointInQuad(this.#polygon.player.getPointAbsolutePosition(), pos[0], pos[1], pos[2], pos[3])
-            && !this.#died) {
-                const side = closestSide(this.#polygon.player.getPointAbsolutePosition(), pos)
-                if (side === 3) this.kill()
-                else {
-                    this.#polygon.player.setRotationOffset(this.#polygon.player.previousFrameRotationOffset)
-                    this.#polygon.draw()
+        let hasDiedNextStep = this.#died;
+        const loopSize = Math.floor((240/(getFPS()||60))*this.#wallSpeedMult/10)
+        console.log(loopSize)
+        for (let i = 0; i < loopSize; i++) {
+            if (hasDiedNextStep) break
+            this.#walls = this.#walls.filter(wall => {
+                // if (hasDiedNextStep) return true
+                if (wall.getDistance() > this.#polygon.getDistance() + this.#polygon.getThickness()) {
+                    wall.setDistance(wall.getDistance() - frameTime * this.#wallSpeedMult / 5 / loopSize)
+                } else if (wall.getThickness() > 0) {
+                    wall.setThickness(wall.getThickness() - frameTime * this.#wallSpeedMult / 5 / loopSize)
                 }
-            };
 
-            return true
-        })
+                if (wall.getThickness() <= 0 || wall.getDistance() <= 0) {
+                    wall.destroy()
+                    return false;
+                }
+
+                wall.setRotation(this.#rotation)
+                wall.draw()
+
+                // Collision check
+                const pos = wall.getVertexAbsolutePos4();
+                if (pointInQuad(this.#polygon.player.getPointAbsolutePosition(), pos[0], pos[1], pos[2], pos[3])
+                && !this.#died) {
+                    const side = closestSide(this.#polygon.player.getPointAbsolutePosition(), pos)
+                    if (side === 3) {
+                        this.kill()
+                        hasDiedNextStep = true
+                    }
+                    else {
+                        this.#polygon.player.setRotationOffset(this.#polygon.player.previousFrameRotationOffset)
+                        this.#polygon.draw()
+                    }
+                };
+                return true
+            })
+        }
+
         if (this.#died) this.#walls.forEach(w => w.draw());
 
         this.#updateId = requestAnimationFrame(time => this.#update(time));

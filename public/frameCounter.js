@@ -17,4 +17,6 @@ const loop = () => {
   requestAnimationFrame(loop);
 }
 
-loop();
+export const getFPS = () => fps
+
+window.addEventListener('load', loop);

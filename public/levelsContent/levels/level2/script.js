@@ -3,10 +3,9 @@ import { Vector2, Color, Size, Lerp, level } from '../../common'
 level.onInit = () => {
     // level.setSwapEnabled(true);
     level.setRotationSpeed(0.3);
-    level.setWallSpeedMult(5);
-    level.setWallSpawnDistance(1000);
+    level.setWallSpeedMult(500);
     level.setSides(3);
-    level.set3dDepth(5);
+    level.set3dDepth(500);
     level.set3dDistance(5);
     level.setRadius(80);
     level.setRotationSpeedIncrement(.1);
@@ -18,7 +17,7 @@ level.onInit = () => {
         for (let i = 1; i < level.getSides(); i++) {
             level.createWall(i + rnd, 50)
         }
-    }, .4)
+    }, .2)
 }
 
 let time = 0;
