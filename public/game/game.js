@@ -200,6 +200,7 @@ export default class Game extends GameObject {
         this.#background.scheduleDraw();
         this.#polygon.scheduleDraw();
         if (this.#deathEffect != undefined) this.#deathEffect.scheduleDraw();
+        this.#walls.forEach(w => w.scheduleDraw());
     }
 
     #updateBackground() {
@@ -248,7 +249,7 @@ export default class Game extends GameObject {
                 const prevRotationOffset = this.#polygon.player.getRotationOffset();
                 if (this.#leftKeyPressed) this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() - frameTime * .6 / steps);
                 if (this.#rightKeyPressed) this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() + frameTime * .6 / steps);
-                this.#polygon.player.draw()
+                this.#polygon.player.updatePosition()
 
                 if (this.#leftKeyPressed || this.#rightKeyPressed) {
                     this.#walls.forEach(wall => {

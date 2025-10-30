@@ -81,6 +81,11 @@ export class Color {
             Math.round(b * 255)
         )
     }
+
+    static rgbToHex (r, g, b) {
+        return "#" + componentToHex(Math.floor(r)) + componentToHex(Math.floor(g)) + componentToHex(Math.floor(b));
+    }
+
     
     static hsvaToRgba(h, s, v, a) {
         const c = Color.hsvToRgb(h, s, v);

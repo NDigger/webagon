@@ -28,6 +28,7 @@ export default class Player extends CustomWall {
     setRotationOffset(v) {
         if (typeof(v) !== 'number') return
         this.#rotationOffset = v;
+        this.scheduleDraw();
     }
     getRotationOffset() { return this.#rotationOffset }
 

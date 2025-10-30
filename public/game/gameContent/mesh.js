@@ -7,10 +7,6 @@ const componentToHex = c => {
   return hex.length === 1 ? "0" + hex : hex;
 }
 
-const rgbToHex = (r, g, b) => {
-  return "#" + componentToHex(Math.floor(r)) + componentToHex(Math.floor(g)) + componentToHex(Math.floor(b));
-}
-
 let shakeTimer = 0 
 const f = () => {
     shakeTimer = performance.now();
@@ -26,6 +22,7 @@ export default class Mesh extends GameObject {
     #object;
     _geometry;
     _positions = [0, 0, 0, 0, 0, 0, 0, 0];
+    #absolutePositions = [new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0)];
     #layer;
     #color = new Color(0, 0, 0);
 
@@ -47,19 +44,7 @@ export default class Mesh extends GameObject {
     };
 
     draw() {
-        const s = pseudoRndShake(globalThis.shakePower ?? 0)
-        const baseWidth = 1920;
-        const baseHeight = 1080;
-        const scale = new Vector2(window.innerWidth / baseWidth, window.innerHeight / baseHeight);
-
-        const positions = this._positions.map((v, i) => {
-        if (i % 2 === 0) {
-            return (v + s.x) * scale.x
-        } else {
-            return (v + s.y) * scale.y
-        }
-        });
-        if (this?._geometry?.positions) this._geometry.positions = new Float32Array(positions);
+        if (this?._geometry?.positions) this._geometry.positions = new Float32Array(this.#absolutePositions);
     }
 
     setColor({r, g, b, a}) {
@@ -95,7 +80,7 @@ export default class Mesh extends GameObject {
     }
 
     getVertexAbsolutePos(point) {
-        const pos = this._geometry.positions;
+        const pos = this.#absolutePositions;
         const inc = point * 2;
         return new Vector2(pos[0 + inc], pos[1 + inc])
     }
@@ -119,7 +104,14 @@ export default class Mesh extends GameObject {
         this._positions[5] = vec3.y;
         this._positions[6] = vec4.x;
         this._positions[7] = vec4.y;
-        // if (this?._geometry?.positions) this._geometry.positions = new Float32Array(this._positions);
+
+        const s = pseudoRndShake(globalThis.shakePower ?? 0)
+        const baseWidth = 1920;
+        const baseHeight = 1080;
+        const scale = new Vector2(window.innerWidth / baseWidth, window.innerHeight / baseHeight);
+
+        this.#absolutePositions = this._positions.map((v, i) => i % 2 === 0 ? (v + s.x) * scale.x : (v + s.y) * scale.y);
+
         this.scheduleDraw();
     }
 
