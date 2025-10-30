@@ -90,6 +90,11 @@ export default class Game extends GameObject {
     #wallSpawnDistance = 2000;
     #wallSpeedMult = 2;
 
+    #leftKeyPressed = false;
+    #rightKeyPressed = false;
+    #swapKeyPressed = false;
+    #swapEnabled = false;
+
     #updateId;
     #lastUpdateTime = performance.now();
 
@@ -108,6 +113,7 @@ export default class Game extends GameObject {
         this.#polygon.setLayer(this.#getPolygonLayer());
         this.#polygon.set3dLayer(this.#get3dLayer());
 
+        
         // replacing schedule draw with normal draw
         this.#polygon.redrawEnabled = false;
         this.#background.redrawEnabled = false;
@@ -118,7 +124,26 @@ export default class Game extends GameObject {
             new Color(235, 235, 235),
         ])
 
+        window.addEventListener('keydown', this.#onKeyDown);
+        window.addEventListener('keyup', this.#onKeyUp);
+
         this.#updateId = requestAnimationFrame(time => this.#update(time));
+    }
+    
+    #onKeyDown = e => {
+        if (e.code === 'ArrowLeft' || e.code === 'KeyA') this.#leftKeyPressed = true;
+        if (e.code === 'ArrowRight' || e.code === 'KeyD') this.#rightKeyPressed = true;
+
+        if (e.code === 'Space' && this.#swapEnabled && !this.#swapKeyPressed) {
+            this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() + 180);
+            this.#swapKeyPressed = true;
+        }
+    }
+
+    #onKeyUp = e => {
+        if (e.code === 'ArrowLeft' || e.code === 'KeyA') this.#leftKeyPressed = false;
+        if (e.code === 'ArrowRight' || e.code === 'KeyD') this.#rightKeyPressed = false;
+        if (e.code === 'Space') this.#swapKeyPressed = false;
     }
 
     #getPolygonLayer() { return this.#layer + 0.004}
@@ -153,7 +178,7 @@ export default class Game extends GameObject {
         d.setSides(this.#sides)
         if (this.#falloffColor3d != null) d.set3dFalloffColor(this.#falloffColor3d)
 
-        this.#polygon.player.setSwapEnabled(false);
+        this.#swapEnabled = false;
         this.#polygon.player.setMovementEnabled(false);
 
         this.#deathEffect = d;
@@ -214,16 +239,39 @@ export default class Game extends GameObject {
             if (this.#distanceDelay <= 0 && typeof(this.#distanceSignal) === 'function') this.#distanceSignal()
         }
         let hasDiedNextStep = this.#died;
-        const loopSize = Math.max(Math.floor((240/(getFPS()||60))*this.#wallSpeedMult/10), 1)
-        console.log(loopSize)
-        for (let i = 0; i < loopSize; i++) {
+        const steps = Math.max(Math.floor((240/(getFPS()||60))*this.#wallSpeedMult/10), 10)
+        console.log(steps)
+        for (let i = 0; i < steps; i++) {
             if (hasDiedNextStep) break
+            
+            if (this.#polygon.player.getMovementEnabled()) {
+                const prevRotationOffset = this.#polygon.player.getRotationOffset();
+                console.log(prevRotationOffset)
+                if (this.#leftKeyPressed) this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() - frameTime * .6 / steps);
+                if (this.#rightKeyPressed) this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() + frameTime * .6 / steps);
+                this.#polygon.player.draw()
+
+                if (this.#leftKeyPressed || this.#rightKeyPressed) {
+                    this.#walls.forEach(wall => {
+                        const pos = wall.getVertexAbsolutePos4();
+                        if (pointInQuad(this.#polygon.player.getPointAbsolutePosition(), pos[0], pos[1], pos[2], pos[3])
+                        && !this.#died) {
+                            const side = closestSide(this.#polygon.player.getPointAbsolutePosition(), pos)
+                            if (side !== 3) {
+                                console.log(this.#polygon.player.getRotationOffset(), prevRotationOffset)
+                                this.#polygon.player.setRotationOffset(prevRotationOffset)
+                            }
+                        };
+                    })
+                }
+            }
+
             this.#walls = this.#walls.filter(wall => {
                 // if (hasDiedNextStep) return true
                 if (wall.getDistance() > this.#polygon.getDistance() + this.#polygon.getThickness()) {
-                    wall.setDistance(wall.getDistance() - frameTime * this.#wallSpeedMult / 5 / loopSize)
+                    wall.setDistance(wall.getDistance() - frameTime * this.#wallSpeedMult / 5 / steps)
                 } else if (wall.getThickness() > 0) {
-                    wall.setThickness(wall.getThickness() - frameTime * this.#wallSpeedMult / 5 / loopSize)
+                    wall.setThickness(wall.getThickness() - frameTime * this.#wallSpeedMult / 5 / steps)
                 }
 
                 if (wall.getThickness() <= 0 || wall.getDistance() <= 0) {
@@ -242,10 +290,6 @@ export default class Game extends GameObject {
                     if (side === 3) {
                         this.kill()
                         hasDiedNextStep = true
-                    }
-                    else {
-                        this.#polygon.player.setRotationOffset(this.#polygon.player.previousFrameRotationOffset)
-                        this.#polygon.draw()
                     }
                 };
                 return true
@@ -461,6 +505,8 @@ export default class Game extends GameObject {
     destroy() {
         if (this.destroyed) return
         this.destroyed = true;
+        window.removeEventListener('keydown', this.#onKeyDown)
+        window.removeEventListener('keyup', this.#onKeyUp)
         this.#died = true;
         cancelAnimationFrame(this.#updateId);
         requestAnimationFrame(() => {
