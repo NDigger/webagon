@@ -86,7 +86,7 @@ export default class Mesh extends GameObject {
     }
 
     getVertexAbsolutePos4() {
-        const pos = this._geometry.positions;
+        const pos = this.#absolutePositions;
         return [
             new Vector2(pos[0], pos[1]),
             new Vector2(pos[2], pos[3]),

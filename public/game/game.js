@@ -284,6 +284,7 @@ export default class Game extends GameObject {
 
                 // Collision check
                 const pos = wall.getVertexAbsolutePos4();
+                console.log(wall.getDistance())
                 if (pointInQuad(this.#polygon.player.getPointAbsolutePosition(), pos[0], pos[1], pos[2], pos[3])
                 && !this.#died) {
                     const side = closestSide(this.#polygon.player.getPointAbsolutePosition(), pos)
