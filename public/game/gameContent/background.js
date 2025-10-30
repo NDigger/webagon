@@ -2,18 +2,28 @@ import PolygonObject from "./polygonObject.js";
 import { Color } from "../../utils/structures.js";
 
 export default class Background extends PolygonObject {
-    tileColors = [new Color(0, 0, 0)];
+    #swapped = false;
+    #tileColors = [new Color(0, 0, 0)];
+    #activeTileColors = [new Color(0, 0, 0)];
+
+    #swapTime = 1000;
+    #swapTimer = 1000;
+
+    #lasttime = performance.now();
+    #updateId
 
     constructor(appContext) {
         super(appContext)
         this.setThickness(2500);
         this.draw()
+
+        this.#updateId = requestAnimationFrame(t => this.#update(t))
     }
 
     updateWallsProps() {
         super.updateWallsProps();
         this._walls.forEach((wall, i) => {
-            const tileColor = this.tileColors[i % this.tileColors.length];
+            const tileColor = this.#activeTileColors[i % this.#activeTileColors.length];
             const brightness = .7
             const color = (i === (this.getSides() - 1) && this.getSides() % 2 === 1) 
                         ? new Color(tileColor.r * brightness, tileColor.g * brightness, tileColor.b * brightness, tileColor.a)
@@ -22,12 +32,38 @@ export default class Background extends PolygonObject {
         })
     }
 
-    setTileColors(arr) {
-        this.tileColors = arr;
-        this.scheduleDraw();
+    #getActiveTileColors() {
+        if (this.#swapped) return this.#tileColors
+        else return [this.#tileColors[this.#tileColors.length - 1], ...this.#tileColors.slice(0, this.#tileColors.length - 1)];
     }
 
-    getTileColors() {
-        return this.tileColors
+    #update(time) {
+        const frameTime = time - this.#lasttime;
+        this.#lasttime = time;
+
+        this.#swapTimer -= frameTime;
+        if (this.#swapTimer < 0) {
+            this.#swapTimer = this.#swapTime;
+            this.#swapped = !this.#swapped;
+
+            this.#activeTileColors = this.#getActiveTileColors();
+        }
+
+        this.#updateId = requestAnimationFrame(t => this.#update(t));
+    }
+
+    getSwapped() { return this.#swapped }
+
+    setTileColors(arr) {
+        this.#tileColors = arr;
+        this.#activeTileColors = this.#getActiveTileColors();
+        this.scheduleDraw();
+    }
+    getTileColors() { return this.#tileColors }
+
+    setSwapTime(v) {
+        if (typeof(v) !== 'number') return
+        this.#swapTime = v*1000;
+        this.#swapTimer = v*1000;
     }
 }

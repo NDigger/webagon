@@ -58,9 +58,6 @@ const degToRad = deg => deg * Math.PI / 180;
 
 export default class Game extends GameObject {
     #background;
-    #backgroundSwapTime = 1000;
-    #backgroundSwapTimer = 1000;
-    #backgroundSwapped = false;
     #backgroundRotationOffset = 0;
 
     #died = false;
@@ -203,18 +200,9 @@ export default class Game extends GameObject {
         this.#walls.forEach(w => w.scheduleDraw());
     }
 
-    #updateBackground() {
+    #updatePolygonToBackground() {
         this.#background.setRotation(this.#rotation + this.#backgroundRotationOffset);
-        const bgTileColors = this.#backgroundTileColors;
-        const newArr = this.#backgroundSwapped
-                        ? bgTileColors
-                        : [bgTileColors[bgTileColors.length - 1], ...bgTileColors.slice(0, bgTileColors.length - 1)];
-        this.#background.setTileColors(newArr);
-        this.#polygon.setColor(bgTileColors[this.#backgroundSwapped || bgTileColors.length === 1 ? 0 : 1]);
-    }
-
-    #swapBackground() {
-        this.#backgroundSwapped = !this.#backgroundSwapped;
+        this.#polygon.setColor(this.#backgroundTileColors[this.#background.getSwapped() || this.#backgroundTileColors.length === 1 ? 0 : 1]);
     }
 
     #update(time) {
@@ -224,15 +212,9 @@ export default class Game extends GameObject {
         if (!this.#died) {            
             this.#rotation += this.#rotationSpeed * this.#rotationDir * frameTime;
             this.#polygon.setRotation(this.#rotation)
-
-            this.#backgroundSwapTimer -= frameTime;
-            if (this.#backgroundSwapTimer < 0) {
-                this.#backgroundSwapTimer = this.#backgroundSwapTime;
-                this.#swapBackground();
-            }
         }
         
-        this.#updateBackground();
+        this.#updatePolygonToBackground();
         this.#background.draw();
         this.#polygon.draw();
 
@@ -364,7 +346,8 @@ export default class Game extends GameObject {
     getSides() { return this.#sides; }
     setBackgroundTileColors(arr) {
         this.#backgroundTileColors = arr;
-        this.#updateBackground();
+        this.#background.setTileColors(arr);
+        this.#updatePolygonToBackground();
     }
     getBackgroundTileColors() { return this.#backgroundTileColors; }
     setBackgroundRotationOffset(v) {
@@ -481,10 +464,9 @@ export default class Game extends GameObject {
     getCenterOffset() { return this.#centerOffset; }
     setBackgroundSwapTime(v) {
         if (typeof(v) !== 'number') return
-        this.#backgroundSwapTime = v*1000;
-        this.#backgroundSwapTimer = v*1000;
+        this.#background.setSwapTime(v)
     }
-    getBackgroundSwapTime() { return this.#backgroundSwapTime }
+    getBackgroundSwapTime() { return this.#background.getSwapTime() }
     setPlayerRotationOffset(v) {
         this.#polygon.player.setRotationOffset(v);
     }

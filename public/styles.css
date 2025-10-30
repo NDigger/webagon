@@ -78,7 +78,12 @@ button:focus {
 }
 
 #timer {
-    font-size: 5rem; 
+    margin-top: 10px
+    /* font-size: 5rem;  */
+}
+
+#timer::before {
+    content: 'Time: '
 }
 
 html {
