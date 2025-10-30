@@ -214,7 +214,7 @@ export default class Game extends GameObject {
             if (this.#distanceDelay <= 0 && typeof(this.#distanceSignal) === 'function') this.#distanceSignal()
         }
         let hasDiedNextStep = this.#died;
-        const loopSize = Math.floor((240/(getFPS()||60))*this.#wallSpeedMult/10)
+        const loopSize = Math.min(Math.floor((240/(getFPS()||60))*this.#wallSpeedMult/10), 1)
         console.log(loopSize)
         for (let i = 0; i < loopSize; i++) {
             if (hasDiedNextStep) break
