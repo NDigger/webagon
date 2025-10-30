@@ -5,6 +5,7 @@ export default class Background extends PolygonObject {
     #swapped = false;
     #tileColors = [new Color(0, 0, 0)];
     #activeTileColors = [new Color(0, 0, 0)];
+    #darkenUnevenChunkEnabled = true;
 
     #swapTime = 1000;
     #swapTimer = 1000;
@@ -25,7 +26,7 @@ export default class Background extends PolygonObject {
         this._walls.forEach((wall, i) => {
             const tileColor = this.#activeTileColors[i % this.#activeTileColors.length];
             const brightness = .7
-            const color = (i === (this.getSides() - 1) && this.getSides() % 2 === 1) 
+            const color = (i === (this.getSides() - 1) && this.getSides() % 2 === 1 && this.#darkenUnevenChunkEnabled) 
                         ? new Color(tileColor.r * brightness, tileColor.g * brightness, tileColor.b * brightness, tileColor.a)
                         : tileColor
             wall.setColor(color)
@@ -60,6 +61,14 @@ export default class Background extends PolygonObject {
         this.scheduleDraw();
     }
     getTileColors() { return this.#tileColors }
+    setDarkenUnevenChunkEnabled(v) {
+        if (typeof(v) !== 'boolean') return;
+        this.#darkenUnevenChunkEnabled = v;
+        this.scheduleDraw();
+    }
+    getDarkenUnevenChunkEnabled() {
+        return this.#darkenUnevenChunkEnabled
+    }
 
     setSwapTime(v) {
         if (typeof(v) !== 'number') return

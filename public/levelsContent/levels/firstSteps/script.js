@@ -30,6 +30,8 @@ level.onInit = () => {
     level.set3dDistance(5);
     level.setWallSpeedIncrement(0.2);
     level.setRotationSpeedIncrement(0.015);
+    level.setBackgroundDarkenUnevenChunkEnabled(false);
+    console.log(level.getBackgroundDarkenUnevenChunkEnabled());
     // level.set3dColor(new Color(255, 255, 255));
     // level.set3dFalloffColor(new Color(0, 0, 0));
     // level.setPlayerSize(new Size(97, 100))

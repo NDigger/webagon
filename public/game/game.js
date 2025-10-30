@@ -467,6 +467,10 @@ export default class Game extends GameObject {
         this.#background.setSwapTime(v)
     }
     getBackgroundSwapTime() { return this.#background.getSwapTime() }
+    setBackgroundDarkenUnevenChunkEnabled(v) {
+        this.#background.setDarkenUnevenChunkEnabled(v)
+    }
+    getBackgroundDarkenUnevenChunkEnabled() { return this.#background.getDarkenUnevenChunkEnabled() }
     setPlayerRotationOffset(v) {
         this.#polygon.player.setRotationOffset(v);
     }
