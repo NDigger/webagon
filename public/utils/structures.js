@@ -37,6 +37,11 @@ export class Size {
     div(size) { return new Size(this.width / size.width, this.height / size.height) }
 }
 
+const componentToHex = c => {
+  var hex = c.toString(16);
+  return hex.length === 1 ? "0" + hex : hex;
+}
+
 export class Color {
     r = 0;
     g = 0;

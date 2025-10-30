@@ -49,7 +49,7 @@ export default class Mesh extends GameObject {
 
     setColor({r, g, b, a}) {
         this.#color = new Color(r, g, b, a);
-        this.#object.tint = rgbToHex(r, g, b);
+        this.#object.tint = Color.rgbToHex(r, g, b);
         if (typeof(a) === "number") this.#object.alpha = a/255;
     }
 

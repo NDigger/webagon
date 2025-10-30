@@ -31,6 +31,15 @@ export default class Player extends CustomWall {
         this.scheduleDraw();
     }
     getRotationOffset() { return this.#rotationOffset }
+    updatePosition() {
+        this.setVertexPos4(
+            new Vector2(this.#distance + this.#size.height, 0).rotate(degToRad(this.#rotationOffset)),
+            new Vector2(this.#distance, -this.#size.width/2).rotate(degToRad(this.#rotationOffset)),
+            new Vector2(this.#distance, 0).rotate(degToRad(this.#rotationOffset)),
+            new Vector2(this.#distance, this.#size.width/2).rotate(degToRad(this.#rotationOffset)),
+        )
+        super.updatePosition()
+    }
 
     setDistance(v) {
         if (typeof(v) !== 'number') return
@@ -39,12 +48,7 @@ export default class Player extends CustomWall {
     }
 
     draw() {
-        this.setVertexPos4(
-            new Vector2(this.#distance + this.#size.height, 0).rotate(degToRad(this.#rotationOffset)),
-            new Vector2(this.#distance, -this.#size.width/2).rotate(degToRad(this.#rotationOffset)),
-            new Vector2(this.#distance, 0).rotate(degToRad(this.#rotationOffset)),
-            new Vector2(this.#distance, this.#size.width/2).rotate(degToRad(this.#rotationOffset)),
-        )
+        this.updatePosition();
         super.draw();
     }
 
