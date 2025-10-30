@@ -241,7 +241,7 @@ export default class Game extends GameObject {
             if (this.#distanceDelay <= 0 && typeof(this.#distanceSignal) === 'function') this.#distanceSignal()
         }
         let hasDiedNextStep = this.#died;
-        const steps = Math.max(Math.floor((240/(getFPS()||60))*this.#wallSpeedMult/10), 10)
+        const steps = Math.max(Math.floor((240/(getFPS()||60))*this.#wallSpeedMult/10), 60)
         for (let i = 0; i < steps; i++) {
             if (hasDiedNextStep) break
             
@@ -284,7 +284,6 @@ export default class Game extends GameObject {
 
                 // Collision check
                 const pos = wall.getVertexAbsolutePos4();
-                console.log(wall.getDistance())
                 if (pointInQuad(this.#polygon.player.getPointAbsolutePosition(), pos[0], pos[1], pos[2], pos[3])
                 && !this.#died) {
                     const side = closestSide(this.#polygon.player.getPointAbsolutePosition(), pos)
