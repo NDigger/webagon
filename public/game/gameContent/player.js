@@ -4,14 +4,7 @@ import { Vector2, Color, Size } from "../../utils/structures";
 const degToRad = deg => deg * Math.PI / 180;
 
 export default class Player extends CustomWall {
-    positionRedrawEnabled = true;
-    previousFrameRotationOffset = 0;
-
     #size = new Size(24, 10);
-
-    #swapEnabled = false;
-    #movementEnabled = true;
-    
     #distance = 0;
     #rotationOffset = 0;
 
@@ -37,17 +30,7 @@ export default class Player extends CustomWall {
         this.#rotationOffset = v;
     }
     getRotationOffset() { return this.#rotationOffset }
-    setMovementEnabled(v) {
-        if (typeof(v) !== 'boolean') return
-        this.#movementEnabled = v;
-    }
-    getMovementEnabled() { return this.#movementEnabled; }
-    setSwapEnabled(v) {
-        if (typeof(v) !== 'boolean') return
-        this.#swapEnabled = v;
-    }
-    getSwapEnabled() { return this.#swapEnabled; }
-    
+
     setDistance(v) {
         if (typeof(v) !== 'number') return
         this.#distance = v;
@@ -55,14 +38,12 @@ export default class Player extends CustomWall {
     }
 
     draw() {
-        if (this.positionRedrawEnabled) {
-            this.setVertexPos4(
-                new Vector2(this.#distance + this.#size.height, 0).rotate(degToRad(this.#rotationOffset)),
-                new Vector2(this.#distance, -this.#size.width/2).rotate(degToRad(this.#rotationOffset)),
-                new Vector2(this.#distance, 0).rotate(degToRad(this.#rotationOffset)),
-                new Vector2(this.#distance, this.#size.width/2).rotate(degToRad(this.#rotationOffset)),
-            )
-        }
+        this.setVertexPos4(
+            new Vector2(this.#distance + this.#size.height, 0).rotate(degToRad(this.#rotationOffset)),
+            new Vector2(this.#distance, -this.#size.width/2).rotate(degToRad(this.#rotationOffset)),
+            new Vector2(this.#distance, 0).rotate(degToRad(this.#rotationOffset)),
+            new Vector2(this.#distance, this.#size.width/2).rotate(degToRad(this.#rotationOffset)),
+        )
         super.draw();
     }
 

@@ -94,6 +94,7 @@ export default class Game extends GameObject {
     #rightKeyPressed = false;
     #swapKeyPressed = false;
     #swapEnabled = false;
+    #playerMovementEnabled = true;
 
     #updateId;
     #lastUpdateTime = performance.now();
@@ -179,7 +180,7 @@ export default class Game extends GameObject {
         if (this.#falloffColor3d != null) d.set3dFalloffColor(this.#falloffColor3d)
 
         this.#swapEnabled = false;
-        this.#polygon.player.setMovementEnabled(false);
+        this.#playerMovementEnabled = false;
 
         this.#deathEffect = d;
         this.#died = true;
@@ -243,7 +244,7 @@ export default class Game extends GameObject {
         for (let i = 0; i < steps; i++) {
             if (hasDiedNextStep) break
             
-            if (this.#polygon.player.getMovementEnabled()) {
+            if (this.#playerMovementEnabled) {
                 const prevRotationOffset = this.#polygon.player.getRotationOffset();
                 if (this.#leftKeyPressed) this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() - frameTime * .6 / steps);
                 if (this.#rightKeyPressed) this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() + frameTime * .6 / steps);
