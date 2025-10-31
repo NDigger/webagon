@@ -2,7 +2,7 @@ import Level from './level';
 import { setLevel } from '../script';
 
 export default class LevelLoader {
-    #pixiApp;
+    app;
     #level = null;
     
     #currentLevelData
@@ -12,8 +12,8 @@ export default class LevelLoader {
 
     onLeave = () => {}
 
-    constructor(pixiApp) {
-        this.#pixiApp = pixiApp
+    constructor(app) {
+        this.app = app
     }
 
     #handleKeyup = () => this.#keyPressed = false
@@ -59,7 +59,7 @@ export default class LevelLoader {
             this.#level.destroy();
         }
 
-        const level = new Level(this.#pixiApp, this.#currentLevelData, {
+        const level = new Level(this.app, this.#currentLevelData, {
             selectFirstMusicTimestamp: this.#attempt === 1,
         });
         setLevel(level);

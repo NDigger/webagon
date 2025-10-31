@@ -42,28 +42,24 @@ export default class Wall extends CustomWall {
     setSide(v) {
         if (typeof(v) !== 'number') return;
          this.#side = Math.floor(v);
-        this.scheduleDraw();
     }
     getSide() { return this.#side; }
 
     setSides(v) {
         if (typeof(v) !== 'number') return;
         this.#sides = Math.max(Math.floor(v), 3);
-        this.scheduleDraw();
     }
     getSides() { return this.#sides; }
 
     setThickness(v) {
         if (typeof(v) !== 'number') return;
         this.#thickness = v;
-        this.scheduleDraw();
     }
     getThickness() { return this.#thickness; }
 
     setDistance(v) {
         if (typeof(v) !== 'number') return;
         this.#distance = v;
-        this.scheduleDraw();
     }
     getDistance() { return this.#distance; }
 }

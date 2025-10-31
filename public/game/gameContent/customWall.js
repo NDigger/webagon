@@ -17,7 +17,7 @@ const rotatePoint = (point, center, angleDeg) => {
 }
 
 export default class CustomWall extends Mesh {
-    #layers3d = new Layers3d(this.appContext);
+    #layers3d = new Layers3d(this.app);
     #skew = 0;
     #rotation = 0;
     #scale = new Vector2(1, 1);
@@ -73,17 +73,14 @@ export default class CustomWall extends Mesh {
     setRotation(v) {
         if (typeof(v) !== 'number') return 
         this.#rotation = v;
-        this.scheduleDraw();
     }
     getRotation() { return this.#rotation; }
     setOffset({x, y}) {
         this.#offset = new Vector2(x, y);
-        this.scheduleDraw();
     }
     getOffset() { return this.#offset }
     setCenterOffset({x, y}) {
         this.#centerOffset = new Vector2(x, y);
-        this.scheduleDraw();
     }
     getCenterOffset() { return this.#centerOffset; }
 
@@ -91,7 +88,6 @@ export default class CustomWall extends Mesh {
         if (typeof(v) !== 'number') return 
         this.#skew = v;
         this.#layers3d.setSkew(v);
-        this.scheduleDraw();
     }
     getSkew() { return this.#skew; }
     setScale({x, y}) {

@@ -13,16 +13,12 @@ export default class Layers3d extends GameObject {
     #skew = 0;
     #color = new Color(0, 0, 0);
     #falloffColor = null;
-
-    constructor(appContext) {
-        super(appContext)
-    }
-
+    
     draw() {
         this.#meshes.forEach(mesh => mesh.destroy())
         this.#meshes = [];
         for (let i = 1; i <= this.#depth; i++) {
-            const mesh = new Mesh(this.appContext)
+            const mesh = new Mesh(this.app)
             if (this.#falloffColor == null) mesh.setColor(this.#color);
             else mesh.setColor(Lerp.interpolate(this.#color, this.#falloffColor, i/this.#depth))
             mesh.setLayer(this.#layer - i*0.00001)
@@ -38,19 +34,16 @@ export default class Layers3d extends GameObject {
     setDepth(v) {
         if (v === this.#meshes.length || typeof(v) !== 'number') return
         this.#depth = v;
-        this.scheduleDraw()
     }
 
     setDistance(v) {
         if (typeof(v) !== 'number') return
         this.#distance = v;
-        this.scheduleDraw();
     }
 
     setSkew(v) {
         if (typeof(v) !== 'number') return;
         this.#skew = v;
-        this.scheduleDraw();
     }
 
     setLayer(v) {
@@ -60,17 +53,14 @@ export default class Layers3d extends GameObject {
 
     setColor({r, g, b, a}) {
         this.#color = new Color(r, g, b, a);
-        this.scheduleDraw();
     }
 
     setFalloffColor({r, g, b, a}) {
         this.#falloffColor = new Color(r, g, b, a);
-        this.scheduleDraw();
     }
 
     clearFalloffColor() {
         this.#falloffColor = null;
-        this.scheduleDraw();
     }
 
     destroy() {

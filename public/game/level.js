@@ -40,18 +40,11 @@ export default class Level extends Game {
         selectFirstMusicTimestamp: false,
     }
 
-    drawHandler = new DrawHandler()
-    #pixiApp
-
     #games = [];
     #cws = [];
 
-    constructor(pixiApp, levelData, props) {
-        super({
-            pixiApp: pixiApp,
-            drawHandler: new DrawHandler(),
-        })
-        this.#pixiApp = pixiApp
+    constructor(app, levelData, props) {
+        super(app)
         this.#props = props
         this.setBackgroundTileColors([Color.BLACK()]);
         this.#levelData = levelData
@@ -238,10 +231,7 @@ export default class Level extends Game {
     }
 
     createGame() {
-        const game = new Game({
-            pixiApp: this.#pixiApp,
-            drawHandler: this.drawHandler
-        });
+        const game = new Game(app);
         game.setWallSpeedMult(this.getWallSpeedMult());
         game.setWallSpawnDistance(this.getWallSpawnDistance());
         game.setRotationSpeed(this.getRotationSpeed());
@@ -272,7 +262,7 @@ export default class Level extends Game {
     }
 
     createCustomWall() {
-        const cw = new CustomWall({pixiApp: this.#pixiApp, drawHandler: this.drawHandler});
+        const cw = new CustomWall(app);
         cw.setLayer(this.getLayer() + 0.002)
         this.#cws.push(cw);
         return cw;

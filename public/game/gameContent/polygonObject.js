@@ -28,7 +28,7 @@ export default class PolygonObject extends GameObject {
             this._walls.forEach(wall => wall.destroy());
             this._walls = [];
             for (let i = 0; i < this.#sides; i++) {
-                const wall = new Wall(this.appContext);
+                const wall = new Wall(this.app);
                 wall.setSide(i);
                 wall.setSides(this.#sides);
                 this._walls.push(wall);
@@ -39,77 +39,65 @@ export default class PolygonObject extends GameObject {
         }
     }
 
-    setSides(v) { if (typeof v === 'number') { this.#sides = v; this.scheduleDraw(); } }
+    setSides(v) { if (typeof v === 'number') { this.#sides = v } }
     getSides() { return this.#sides; }
-    setRotation(v) { if (typeof v === 'number') { this.#rotation = v; this.scheduleDraw(); } }
+    setRotation(v) { if (typeof v === 'number') { this.#rotation = v } }
     getRotation() { return this.#rotation; }
-    setSkew(v) { if (typeof v === 'number') { this.#skew = v; this.scheduleDraw(); } }
+    setSkew(v) { if (typeof v === 'number') { this.#skew = v } }
     getSkew() { return this.#skew; }
-    setLayer(v) { if (typeof v === 'number') { this.#layer = v; this.scheduleDraw(); } }
+    setLayer(v) { if (typeof v === 'number') { this.#layer = v } }
     getLayer() { return this.#layer; }
     setThickness(v) {
         if (typeof(v) !== 'number') return
         this.#thickness = v;
-        this.scheduleDraw();
     }
     getThickness() { return this.#thickness; }
     setDistance(v) {
         if (typeof(v) !== 'number') return
         this.#distance = v;
-        this.scheduleDraw();
     }
     getDistance() { return this.#distance; }
     setScale({x, y}) {
         this.#scale = new Vector2(x, y);
-        this.scheduleDraw();
     }
     setColor({r, g, b, a}) {
         this.#color = new Color(r, g, b, a);
-        this.scheduleDraw();
     }
     getColor() { return this.#color; }
     setCenterOffset({x, y}) {
         this.#centerOffset = new Vector2(x, y);
-        this.scheduleDraw();
     }
     getCenterOffset() { return this.#centerOffset }
     setOffset({x, y}) {
         this.#offset = new Vector2(x, y);
-        this.scheduleDraw();
     }
     getOffset() { return this.#offset }
 
     set3dDepth(v) {
         if (typeof(v) !== 'number') return 
         this.#depth3d = v;
-        this.scheduleDraw();
     }
     get3dDepth() { return this.#depth3d; }
     set3dDistance(v) {
         if (typeof(v) !== 'number') return
         this.#distance3d = v;
-        this.scheduleDraw();
     }
     get3dDistance() { return this.#distance3d; }
     set3dLayer(v) {
         if (typeof(v) !== 'number') return
         this.#layer3d = v;
-        this.scheduleDraw();
     }
     get3dLayer() { return this.#layer3d; }
     set3dColor({r, g, b, a}) {
         this.#color3d = new Color(r, g, b, a);
-        this.scheduleDraw();
     }
     get3dColor() { return this.#color3d; }
     set3dFalloffColor({r, g, b, a}) {
         this.#falloffColor3d = new Color(r, g, b, a);
-        this.scheduleDraw();
     }
     get3dFalloffColor() { return this.#falloffColor3d; }
     clear3dFalloffColor() {
         this.#falloffColor3d = null;
-        this.scheduleDraw();
     }
     destroy() {
         if (this.destroyed) return

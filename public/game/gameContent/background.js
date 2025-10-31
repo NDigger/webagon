@@ -13,8 +13,8 @@ export default class Background extends PolygonObject {
     #lasttime = performance.now();
     #updateId
 
-    constructor(appContext) {
-        super(appContext)
+    constructor(app) {
+        super(app)
         this.setThickness(2500);
         this.draw()
 
@@ -58,13 +58,11 @@ export default class Background extends PolygonObject {
     setTileColors(arr) {
         this.#tileColors = arr;
         this.#activeTileColors = this.#getActiveTileColors();
-        this.scheduleDraw();
     }
     getTileColors() { return this.#tileColors }
     setDarkenUnevenChunkEnabled(v) {
         if (typeof(v) !== 'boolean') return;
         this.#darkenUnevenChunkEnabled = v;
-        this.scheduleDraw();
     }
     getDarkenUnevenChunkEnabled() {
         return this.#darkenUnevenChunkEnabled

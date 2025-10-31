@@ -47,7 +47,7 @@ let background = null;
     const app = await createApp()
     levelLoader = new LevelLoader(app);
     levelLoader.onLeave = () => loadMenu();
-    background = new Background({pixiApp: app, drawHandler: new DrawHandler()})
+    background = new Background(app);
     background.setLayer(-999);
 })()
 export { level }

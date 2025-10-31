@@ -3,20 +3,20 @@ import { Color, Vector2 } from "../../utils/structures";
 import Player from "./player";
 
 class PolygonBorder extends PolygonObject {
-    constructor(appContext) {
-        super(appContext);
+    constructor(app) {
+        super(app);
         this.setThickness(5);
         this.draw();
     }
 }
 
 export default class Polygon extends PolygonObject {
-    player = new Player(this.appContext);
-    #border = new PolygonBorder(this.appContext);
+    player = new Player(this.app);
+    #border = new PolygonBorder(this.app);
     #playerDistanceMult = 1.25;
 
-    constructor(appContext) {
-        super(appContext);
+    constructor(app) {
+        super(app);
         this.setThickness(60);
         this.draw();
     }
@@ -25,12 +25,6 @@ export default class Polygon extends PolygonObject {
         super.draw();
         this.player.draw();
         this.#border.draw();
-    }
-
-    scheduleDraw() {
-        super.scheduleDraw();
-        this.player.scheduleDraw();
-        this.#border.scheduleDraw();
     }
 
     setSides(v) {
@@ -47,8 +41,8 @@ export default class Polygon extends PolygonObject {
     setPlayerDistanceMult(v) {
         if (typeof(v) !== 'number') return
         this.#playerDistanceMult = v;
-        this.scheduleDraw();
     }
+
     getPlayerDistanceMult() { return this.#playerDistanceMult }
 
     setThickness(v) {

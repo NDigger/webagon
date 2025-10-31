@@ -8,8 +8,8 @@ export default class Player extends CustomWall {
     #distance = 0;
     #rotationOffset = 0;
 
-    constructor(appContext) {
-        super(appContext)
+    constructor(app) {
+        super(app)
         this.setColor(new Color(0, 0, 0))
     }
 
@@ -28,7 +28,6 @@ export default class Player extends CustomWall {
     setRotationOffset(v) {
         if (typeof(v) !== 'number') return
         this.#rotationOffset = v;
-        this.scheduleDraw();
     }
     getRotationOffset() { return this.#rotationOffset }
     updatePosition() {
@@ -44,7 +43,6 @@ export default class Player extends CustomWall {
     setDistance(v) {
         if (typeof(v) !== 'number') return
         this.#distance = v;
-        this.scheduleDraw();
     }
 
     draw() {

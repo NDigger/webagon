@@ -103,11 +103,11 @@ export default class Game extends GameObject {
     onIncrement = () => {}
     onPreIncrement = () => {}
 
-    constructor(appContext) {
-        super(appContext)
-        this.#background = new Background(appContext);
+    constructor(app) {
+        super(app)
+        this.#background = new Background(app);
         this.#background.setLayer(this.#getBackgroundLayer());
-        this.#polygon = new Polygon(appContext);
+        this.#polygon = new Polygon(app);
         this.#polygon.setLayer(this.#getPolygonLayer());
         this.#polygon.set3dLayer(this.#get3dLayer());
 
@@ -162,7 +162,7 @@ export default class Game extends GameObject {
         // this.#background.redrawEnabled = true;
         // this.#walls.forEach(w => w.redrawEnabled = true);
 
-        const d = new Death(this.appContext);
+        const d = new Death(this.app);
         d.setSkew(this.#skew);
         d.setOffset(this.#polygon.player.getPointPosition());
         d.setRotation(this.#rotation)
@@ -191,13 +191,6 @@ export default class Game extends GameObject {
         this.#polygon.draw();
         if (this.#deathEffect) this.#deathEffect.draw();
         this.#walls.forEach(w => w.draw());
-    }
-
-    scheduleDraw() {
-        this.#background.scheduleDraw();
-        this.#polygon.scheduleDraw();
-        if (this.#deathEffect != undefined) this.#deathEffect.scheduleDraw();
-        this.#walls.forEach(w => w.scheduleDraw());
     }
 
     #updatePolygonToBackground() {
@@ -278,6 +271,7 @@ export default class Game extends GameObject {
             })
         }
 
+        if (this.#deathEffect) this.#deathEffect.draw();
         this.#walls.forEach(w => w.draw());
 
         this.#updateId = requestAnimationFrame(time => this.#update(time));
@@ -285,7 +279,7 @@ export default class Game extends GameObject {
 
     createWall(side, thickness) {
         if (this.#died) return; 
-        const wall = new Wall(this.appContext);
+        const wall = new Wall(this.app);
         wall.setSides(this.#sides)
         wall.setSide(Math.floor(side))
         wall.setThickness(thickness);

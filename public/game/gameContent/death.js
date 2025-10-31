@@ -5,8 +5,8 @@ export default class Death extends PolygonObject {
     #updateId;
     #lasttime = performance.now();
 
-    constructor(appContext) {
-        super(appContext);
+    constructor(app) {
+        super(app);
         this.setColor(new Color(255, 0, 0));
         this.setLayer(100);
 
