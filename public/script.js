@@ -61,8 +61,10 @@ levelPreview.onUpdate = ft => {
     backgroundTime += ft;
     if (background == null) return
     const style = levelPreview.getStyle()
-    background.setTileColors(style.backgroundTileColors)
-    background.setRotation(backgroundTime * style.rotationSpeed * 1000)
+    background.setTileColors(style.backgroundTileColors);
+    background.setRotation(backgroundTime * style.rotationSpeed * 1000);
+    background.setDarkenUnevenChunkEnabled(style.backgroundDarkenUnevenChunkEnabled);
+    background.setSwapTime(style.backgroundSwapTime);
     document.documentElement.style.setProperty('--font-color', style.mainColor.getRGBAStyle());
     background.setSides(style.sides);
 }
@@ -75,20 +77,11 @@ const loadLevel = levelData => {
     document.removeEventListener('keydown', keyDownMenuListener)
 }
 
-const updateJSONPaths = (levelFolderPath, jsonLevelObject) => {
-    const levelJson = structuredClone(jsonLevelObject);
-    levelJson.scriptPath = `${levelFolderPath}/${levelJson.scriptPath}`
-    levelJson.musicPath = `${levelFolderPath}/${levelJson.musicPath}`
-    return levelJson
-}
-
 document.getElementById('play-btn').addEventListener('click', () => loadLevel(levelJsons[levelListSelectedLevel]))
 const keyDownMenuListener = e => {
-    if (e.code === 'ArrowUp' || e.code === 'KeyW') {
-        shiftLevelListPosition(-1)
-    } else if (e.code === 'ArrowDown' || e.code === 'KeyS') {
-        shiftLevelListPosition(1)
-    } else if (e.code === 'Enter') loadLevel(levelJsons[levelListSelectedLevel])
+    if (e.code === 'ArrowUp' || e.code === 'KeyW') shiftLevelListPosition(-1)
+    else if (e.code === 'ArrowDown' || e.code === 'KeyS') shiftLevelListPosition(1)
+    else if (e.code === 'Enter') loadLevel(levelJsons[levelListSelectedLevel])
 
     if (e.code === 'ArrowUp' || e.code === 'KeyW' || e.code === 'ArrowDown' || e.code === 'KeyS') {
         audioManager.resetPlay('level-select')
@@ -135,8 +128,8 @@ const afterShift = () => {
 
 const shiftLevelListPosition = shift => {
     beforeShift()
-    if (levelListSelectedLevel === 0 && shift === -1) levelListSelectedLevel = levelPaths.length - 1;
-    else if (levelListSelectedLevel === levelPaths.length - 1 && shift === 1) levelListSelectedLevel = 0;
+    if (levelListSelectedLevel === 0 && shift === -1) levelListSelectedLevel = levelJsons.length - 1;
+    else if (levelListSelectedLevel === levelJsons.length - 1 && shift === 1) levelListSelectedLevel = 0;
     else levelListSelectedLevel += shift;
     localStorage.setItem('webagon-selected-level', levelListSelectedLevel)
     afterShift()
@@ -148,25 +141,25 @@ const setLevelListPosition = position => {
     afterShift();
 }
 
-const levelsFolderPath = './levelsContent/levels';
-const levelPaths = [
-    `${levelsFolderPath}/exampleLevel`,
-    `${levelsFolderPath}/firstSteps`,
-    `${levelsFolderPath}/level1`,
-    `${levelsFolderPath}/level2`,
-    `${levelsFolderPath}/level3`,
-    `${levelsFolderPath}/level4`,
-]
 const levelJsons = []
 const levelList = document.getElementById('level-list');
-levelPaths.forEach((levelPath, i) => {
+fetch('./levelPaths.json')
+.then(res => res.json())
+.then(levelPaths => {
+    levelPaths.forEach((levelPath, i) => {
     fetch(`${levelPath}/data.json`)
     .then(res => res.json())
     .then(d => {
-        const updatedJson = updateJSONPaths(levelPath, d)
+        const updateJSONPath = jsonLevelObject => {
+            const levelJson = structuredClone(jsonLevelObject);
+            levelJson.scriptPath = `${levelPath}/${levelJson.scriptPath}`
+            levelJson.musicPath = `${levelPath}/${levelJson.musicPath}`
+            return levelJson
+        }
+
+        const updatedJson = updateJSONPath(d)
         levelJsons.push(updatedJson);
 
-        const scoresItem = localStorage.getItem('webagon-scores');
         levelList.insertAdjacentHTML('beforeend', `
             <div class="level" id="level-${d.key}">
                 <p class="name">${d.name}</p>
@@ -186,7 +179,8 @@ levelPaths.forEach((levelPath, i) => {
         })
 
         requestAnimationFrame(() => setLevelListPosition(parseInt(localStorage.getItem('webagon-selected-level')) ?? 0));
-        loadMenu();
+            loadMenu();
+        })
     })
 })
 

@@ -73,6 +73,6 @@ export default class Background extends PolygonObject {
     setSwapTime(v) {
         if (typeof(v) !== 'number') return
         this.#swapTime = v*1000;
-        this.#swapTimer = v*1000;
+        // this.#swapTimer = v*1000;
     }
 }

@@ -5,22 +5,18 @@ import initPatterns from '../../patterns';
 
 let patterns = initPatterns(level);
 
-const delay = s => new Promise(resolve => setTimeout(resolve, s*1000));
-
 const addPattern = async pKey => {
     if (pKey === 0) await patterns.pInverseBarrage(Utils.mathRandom(2, 3), 500, 300);
     else if (pKey === 1) await patterns.pSpiralBarrage(Utils.mathRandom(4, 6), 300, 300);
     else if (pKey === 2) await patterns.pSpiral(Utils.mathRandom(7, 9), 100, 300, 1);
-    else if (pKey === 3) await patterns.pRandomBarrage(Utils.mathRandom(3, 4), 300, 400);
-    else if (pKey === 4) await patterns.pTunnel(Utils.mathRandom(2, 3), 700, 600);
+    else if (pKey === 3) await patterns.pTunnel(Utils.mathRandom(2, 3), 700, 600);
 }
 
-const pKeys = [0, 1, 2, 3, 4];
+const pKeys = [0, 1, 2, 3];
 let activeKeys = [];
 
 level.onInit = () => {
     // g.setBackgroundRadius(500);
-    level.setSwapEnabled(true);
     level.setMainColor(new Color(255, 0, 0));
     level.setRadius(70);
     level.setRotationSpeed(0.035);
@@ -30,8 +26,8 @@ level.onInit = () => {
     level.set3dDistance(5);
     level.setWallSpeedIncrement(0.2);
     level.setRotationSpeedIncrement(0.015);
-    level.setBackgroundDarkenUnevenChunkEnabled(false);
-    console.log(level.getBackgroundDarkenUnevenChunkEnabled());
+    // level.setBackgroundSwapTime(1);
+    // level.setBackgroundDarkenUnevenChunkEnabled(false);
     // level.set3dColor(new Color(255, 255, 255));
     // level.set3dFalloffColor(new Color(0, 0, 0));
     // level.setPlayerSize(new Size(97, 100))

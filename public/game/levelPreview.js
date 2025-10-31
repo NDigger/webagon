@@ -14,6 +14,8 @@ class LevelPreviewContent {
         backgroundTileColors: [new Color(0, 0, 0)],
         rotationSpeed: 0,
         sides: 6,
+        backgroundDarkenUnevenChunkEnabled: true,
+        backgroundSwapTime: 1000,
     }
 
     init() {
@@ -38,7 +40,14 @@ class LevelPreviewContent {
         this.style.backgroundTileColors = arr;
     }
     getBackgroundTileColors() { return this.style.backgroundTileColors; }
-
+    setBackgroundDarkenUnevenChunkEnabled(v) {
+        this.style.backgroundDarkenUnevenChunkEnabled = v
+    }
+    getBackgroundDarkenUnevenChunkEnabled() { return this.style.backgroundDarkenUnevenChunkEnabled }
+    setBackgroundSwapTime(v) {
+        this.style.backgroundSwapTime = v;
+    }
+    getBackgroundSwapTime() { return this.style.backgroundSwapTime }
     setRotationSpeed(v) {
         this.style.rotationSpeed = v;
     }
