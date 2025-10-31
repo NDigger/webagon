@@ -15,7 +15,7 @@ class LevelPreviewContent {
         rotationSpeed: 0,
         sides: 6,
         backgroundDarkenUnevenChunkEnabled: true,
-        backgroundSwapTime: 1000,
+        backgroundSwapTime: 1,
     }
 
     init() {
@@ -45,7 +45,7 @@ class LevelPreviewContent {
     }
     getBackgroundDarkenUnevenChunkEnabled() { return this.style.backgroundDarkenUnevenChunkEnabled }
     setBackgroundSwapTime(v) {
-        this.style.backgroundSwapTime = v;
+        this.style.backgroundSwapTime = v/1000;
     }
     getBackgroundSwapTime() { return this.style.backgroundSwapTime }
     setRotationSpeed(v) {
