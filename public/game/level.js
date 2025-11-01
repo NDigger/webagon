@@ -206,6 +206,11 @@ export default class Level extends Game {
         const gameUi = document.getElementById('game-ui')
         gameUi.style.color = this.getMainColor().getRGBStyle();
     }
+    // setBackgroundTileColors(arr) {
+    //     super.setBackgroundTileColors(arr)
+    //     const gameUi = document.getElementById('game-ui')
+    //     gameUi.style.color = this.getMainColor().getRGBStyle();
+    // }
     setSwapEnabled(v) {
         super.setSwapEnabled(v);
         document.getElementById('swap-enabled-msg').style.display = v ? 'block' : 'none';
