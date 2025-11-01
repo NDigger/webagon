@@ -167,6 +167,8 @@ export default class Game extends GameObject {
         // this.#background.redrawEnabled = true;
         // this.#walls.forEach(w => w.redrawEnabled = true);
 
+        console.log('result:', this.#polygon.player.getRotationOffset());
+
         const d = new Death(this.app);
         d.setSkew(this.#skew);
         d.setOffset(this.#polygon.player.getPointPosition());
@@ -224,27 +226,30 @@ export default class Game extends GameObject {
         }
         let hasDiedNextStep = this.#died;
         const steps = Math.max(Math.floor((240/(getFPS()||60))*this.#wallSpeedMult/10), 60)
+        const prevRotationOffset = this.#polygon.player.getRotationOffset();
         for (let i = 0; i < steps; i++) {
             if (hasDiedNextStep) break
             
             if (this.#playerMovementEnabled) {
-                const prevRotationOffset = this.#polygon.player.getRotationOffset();
                 if (this.#leftKeyPressed) this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() - frameTime * .6 / steps);
                 if (this.#rightKeyPressed) this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() + frameTime * .6 / steps);
                 this.#polygon.player.updatePosition()
 
+                let collided = false;
                 if (this.#leftKeyPressed || this.#rightKeyPressed) {
-                    this.#walls.forEach(wall => {
+                    for (let i = 0; i < this.#walls.length; i++) {
+                        const wall = this.#walls[i];
                         const pos = wall.getVertexAbsolutePos4();
                         if (pointInQuad(this.#polygon.player.getPointAbsolutePosition(), pos[0], pos[1], pos[2], pos[3])
                         && !this.#died) {
                             const side = closestSide(this.#polygon.player.getPointAbsolutePosition(), pos)
-                            if (side !== 3) 
-                                {
-                                    this.#polygon.player.setRotationOffset(prevRotationOffset)
-                                }
+                            collided = true;                                    
                         };
-                    })
+                    }
+                }
+                if (collided) {
+                    this.#polygon.player.setRotationOffset(prevRotationOffset)
+                    this.#polygon.player.updatePosition()
                 }
             }
 
@@ -270,6 +275,7 @@ export default class Game extends GameObject {
                 && !this.#died) {
                     const side = closestSide(this.#polygon.player.getPointAbsolutePosition(), pos)
                     if (side === 3) {
+                        console.log('123', this.#polygon.player.getPointAbsolutePosition(), pos)
                         this.kill()
                         hasDiedNextStep = true
                     }

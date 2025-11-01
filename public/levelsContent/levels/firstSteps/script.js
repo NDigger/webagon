@@ -12,7 +12,8 @@ const addPattern = async pKey => {
     else if (pKey === 3) await patterns.pTunnel(Utils.mathRandom(2, 3), 700, 600);
 }
 
-const pKeys = [0, 1, 2, 3];
+// const pKeys = [0, 1, 2, 3];
+const pKeys = [3];
 let activeKeys = [];
 
 level.onInit = () => {
