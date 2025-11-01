@@ -28,6 +28,7 @@ export default class Level extends Game {
 
     #audio;
     #levelData;
+    #audioTimestamp;
 
     #incrementTime = 15;
     #incrementTimer = 0;
@@ -56,7 +57,9 @@ export default class Level extends Game {
             this.#audio = audio;
         }
         const musicTimestamps = this.#levelData.musicTimestamps
-        audio.currentTime = musicTimestamps[this.#props.selectFirstMusicTimestamp ? 0 : Math.floor(Math.random() * musicTimestamps.length)] ?? 0
+        const timestamp = musicTimestamps[this.#props.selectFirstMusicTimestamp ? 0 : Math.floor(Math.random() * musicTimestamps.length)] ?? 0
+        this.#audioTimestamp = timestamp;
+        audio.currentTime = timestamp
         audio.play();
 
         this.onInit();
@@ -206,6 +209,9 @@ export default class Level extends Game {
     setSwapEnabled(v) {
         super.setSwapEnabled(v);
         document.getElementById('swap-enabled-msg').style.display = v ? 'block' : 'none';
+    }
+    getTimestamp() {
+        return this.#audioTimestamp
     }
 
     createEvent(event, timeSeconds) {

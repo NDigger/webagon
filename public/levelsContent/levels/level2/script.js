@@ -12,6 +12,7 @@ level.onInit = () => {
     level.setIncrementTime(5);
     level.setSkew(.5);
     level.set3dColor(new Color(0, 0, 0));
+    console.log(level.getTimestamp())
     level.createInterval(() => {
         const rnd = Math.random() * level.getSides()
         for (let i = 1; i < level.getSides(); i++) {
