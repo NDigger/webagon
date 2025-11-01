@@ -1,7 +1,7 @@
 [
     "./levelsContent/levels/exampleLevel",
-    "./levelsContent/levels/1_firstSteps",
-    "./levelsContent/levels/2_allINeed",
+    "./levelsContent/levels/firstSteps",
+    "./levelsContent/levels/allINeed",
     "./levelsContent/levels/level1",
     "./levelsContent/levels/level2",
     "./levelsContent/levels/level3",

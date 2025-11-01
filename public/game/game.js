@@ -63,6 +63,7 @@ export default class Game extends GameObject {
     #died = false;
     #layer = 0;
 
+    #polygonColor = null;
     #polygon;
     #deathEffect;
 
@@ -85,7 +86,7 @@ export default class Game extends GameObject {
     #falloffColor3d = null;
 
     #mainColor = new Color(0, 0, 0);
-    #wallSpawnDistance = 2000;
+    #wallSpawnDistance = 1500;
     #wallSpeedMult = 2;
 
     #leftKeyPressed = false;
@@ -154,6 +155,9 @@ export default class Game extends GameObject {
         const brightness = .7
         return new Color(this.#mainColor.r * brightness, this.#mainColor.g * brightness, this.#mainColor.b * brightness, this.#mainColor.a) 
     }
+    #getPolygonColor() {
+        return this.#polygonColor ?? this.#backgroundTileColors[this.#background.getSwapped() || this.#backgroundTileColors.length === 1 ? 0 : 1]
+    }
     #get3dColor() { return this.#color3d ?? this.#getDefault3dColor() }
 
     kill() {
@@ -194,9 +198,11 @@ export default class Game extends GameObject {
         this.#walls.forEach(w => w.draw());
     }
 
+
+
     #updatePolygonToBackground() {
         this.#background.setRotation(this.#rotation + this.#backgroundRotationOffset);
-        this.#polygon.setColor(this.#backgroundTileColors[this.#background.getSwapped() || this.#backgroundTileColors.length === 1 ? 0 : 1]);
+        this.#polygon.setColor(this.#getPolygonColor());
     }
 
     #update(time) {
@@ -370,9 +376,15 @@ export default class Game extends GameObject {
     }
     getMainColor() { return this.#mainColor }
     setPolygonColor({r, g, b, a}) {
-        this.#polygon.setColor(new Color(r, g, b, a))
+        const color = new Color(r, g, b, a);
+        this.#polygonColor = color;
+        this.#polygon.setColor(this.#getPolygonColor());
     }
-    getPolygonColor() { return this.#polygon.getColor() }
+    getPolygonColor() { return this.#polygonColor }
+    clearPolygonColor() {
+        this.#polygonColor = null;
+        this.#polygon.setColor(this.#getPolygonColor());
+    }
     setWallSpawnDistance(v) {
         if (typeof(v) !== 'number') return;
         this.#wallSpawnDistance = v;

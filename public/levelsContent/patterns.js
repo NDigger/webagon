@@ -191,7 +191,7 @@ export default function initPatterns(level) {
             barrage(side);
             const inc = Math.floor(Math.random() * (level.getSides()/2))*getRandomDir();
             side += inc;
-            if (i !== times - 1) await level.distanceDelay(Math.abs(inc) * delay + 60)
+            if (i !== times - 1) await level.distanceDelay(Math.abs(inc) * delay / level.getSides() * 4 + 60)
         }
         await level.distanceDelay(delayEnd);
     }
@@ -205,7 +205,17 @@ export default function initPatterns(level) {
         await level.distanceDelay(delayEnd);
     }
 
+    const pAltBarrage = async (times, delay, delayEnd) => {
+        const side = getRandomSide();
+        for (let i = 0; i < times; i++) {
+            alt(side + i)
+            await level.distanceDelay(delay);
+        }
+        await level.distanceDelay(delayEnd);
+    }
+
     return {
+        pAltBarrage,
         pInverseBarrage,
         pSpiral,
         pDoubleSpiral,
