@@ -3,9 +3,9 @@ import { Vector2, Color, Size, Lerp, level } from '../../common'
 level.onInit = () => {
     // level.setSwapEnabled(true);
     level.setRotationSpeed(0.3);
-    level.setWallSpeedMult(50);
+    level.setWallSpeedMult(5);
     level.setSides(3);
-    level.set3dDepth(50);
+    level.set3dDepth(3);
     level.set3dDistance(5);
     level.setRadius(80);
     level.setRotationSpeedIncrement(.1);
@@ -17,7 +17,7 @@ level.onInit = () => {
         for (let i = 1; i < level.getSides(); i++) {
             level.createWall(i + rnd, 50)
         }
-    }, .2)
+    }, .5)
 }
 
 let time = 0;
@@ -28,6 +28,9 @@ level.onUpdate = ft => {
             Lerp.interpolate(new Color(Lerp.interpolate(0, 25, Lerp.CapMode.pingPong(time)), 15, 85), new Color(25, 25, 25), Lerp.CapMode.pingPong(time*20)),
         ])
     level.setMainColor(Lerp.interpolate(new Color(Lerp.interpolate(0, 255, Lerp.CapMode.pingPong(time)), 15, 255), new Color(255, 255, 255), Lerp.CapMode.pingPong(time*20)))
+
+    const s = Lerp.CapMode.pingPong(time * 20) * .5 + 1;
+    level.setWallScale(new Vector2(s, s));
 }
 
 level.onRender = ft => {

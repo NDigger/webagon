@@ -74,6 +74,7 @@ export default class Game extends GameObject {
     #sides = 6;
     #skew = 0;
     #scale = new Vector2(1, 1);
+    #wallScale = new Vector2(1, 1);
     #offset = new Vector2(0, 0);
     #centerOffset = new Vector2(0, 0);
     #backgroundTileColors = [];
@@ -288,7 +289,7 @@ export default class Game extends GameObject {
         wall.setDistance(this.#wallSpawnDistance);
         wall.setLayer(this.#getWallsLayer());
         wall.setSkew(this.#skew);
-        wall.setScale(this.#scale)
+        wall.setScale(this.#scale.mul(this.#wallScale))
         wall.setCenterOffset(this.#centerOffset);
         wall.setOffset(this.#offset)
         wall.redrawEnabled = false;
@@ -431,15 +432,24 @@ export default class Game extends GameObject {
         this.#swapEnabled = v;
     }
     getSwapEnabled() { return this.#polygon.player.getSwapEnabled(); }
+    #updateWallScale() {
+        this.#walls.forEach(wall => wall.setScale(this.#scale.mul(this.#wallScale)))
+    }
     setScale({x, y}) {
         const scale = new Vector2(x, y);
         this.#scale = scale;
         this.#polygon.setScale(scale);
         this.#background.setScale(scale);
         if (this.#deathEffect !== undefined) this.#deathEffect.setScale(scale);
-        this.#walls.forEach(wall => wall.setScale(scale));
+        this.#updateWallScale()
     }
     getScale() { return this.#scale; }
+    setWallScale({x, y}) {
+        const scale = new Vector2(x, y);
+        this.#wallScale = scale;
+        this.#updateWallScale();
+    }
+    getWallScale() { return this.#wallScale; }    
     setOffset({x, y}) {
         const offset = new Vector2(x, y);
         this.#offset = offset;
