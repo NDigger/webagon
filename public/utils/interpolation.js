@@ -58,7 +58,7 @@ export const Easing = Object.freeze({
 })
 
 const fract = t => t - Math.floor(t);
-const pingPong = t => (Math.floor(t) % 2 === 0) ? fract(t) : 1.-fract(t)
+const pingPong = t => (Math.floor(t * 2) % 2 === 0) ? fract(t * 2) : 1.-fract(t*2)
 
 export const CapMode = Object.freeze({
     fract: fract,

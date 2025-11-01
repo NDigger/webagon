@@ -1,0 +1,15 @@
+{
+    "key": "allINeed", 
+
+    "name": "All I Need",
+    "description": "",
+    "author": "NDagger",
+
+    "musicName": "All I Need",
+    "musicAuthor": "Dezza",
+    "musicAlbum": "Unified Vol.8",
+    "musicPath": "allINeed.ogg",
+    "musicTimestamps": [33, 126],
+
+    "scriptPath": "script.js"
+}

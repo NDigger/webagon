@@ -151,7 +151,7 @@ export default class Game extends GameObject {
     #getBackgroundLayer() { return this.#layer + 0.001}
 
     #getDefault3dColor() { 
-        const brightness = .5
+        const brightness = .7
         return new Color(this.#mainColor.r * brightness, this.#mainColor.g * brightness, this.#mainColor.b * brightness, this.#mainColor.a) 
     }
     #get3dColor() { return this.#color3d ?? this.#getDefault3dColor() }
@@ -244,13 +244,13 @@ export default class Game extends GameObject {
 
             this.#walls = this.#walls.filter(wall => {
                 // if (hasDiedNextStep) return true
-                if (wall.getDistance() > this.#polygon.getDistance() + this.#polygon.getThickness()) {
+                if (wall.getDistance() > 0) {//this.#polygon.getDistance() + this.#polygon.getThickness()) {
                     wall.setDistance(wall.getDistance() - frameTime * this.#wallSpeedMult / 5 / steps)
                 } else if (wall.getThickness() > 0) {
                     wall.setThickness(wall.getThickness() - frameTime * this.#wallSpeedMult / 5 / steps)
                 }
 
-                if (wall.getThickness() <= 0 || wall.getDistance() <= 0) {
+                if (wall.getThickness() <= 0 && wall.getDistance() <= 0) {
                     wall.destroy()
                     return false;
                 }
@@ -346,7 +346,9 @@ export default class Game extends GameObject {
     }
     getBackgroundTileColors() { return this.#backgroundTileColors; }
     setBackgroundRotationOffset(v) {
-        if (typeof(v) === 'number') this.#backgroundRotationOffset = v;
+        if (typeof(v) !== 'number') return 
+        this.#backgroundRotationOffset = v;
+        this.#background.setRotation(this.#backgroundRotationOffset + this.#rotation)
     }
     getBackgroundRotationOffset() { return this.#backgroundRotationOffset; }
     setBackgroundRadius(v) {
