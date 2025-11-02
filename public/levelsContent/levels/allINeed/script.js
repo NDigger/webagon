@@ -27,6 +27,7 @@ level.onInit = () => {
     level.setWallSpeedIncrement(.1);
     level.setRotationSpeedIncrement(.035);
     level.set3dFalloffColor(new Color(0, 0, 0));
+    level.setIncrementSpinPower(.4);
 }
 
 // onStep must be async and use delays in order to work. No delays may cause crash.

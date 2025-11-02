@@ -167,8 +167,6 @@ export default class Game extends GameObject {
         // this.#background.redrawEnabled = true;
         // this.#walls.forEach(w => w.redrawEnabled = true);
 
-        console.log('result:', this.#polygon.player.getRotationOffset());
-
         const d = new Death(this.app);
         d.setSkew(this.#skew);
         d.setOffset(this.#polygon.player.getPointPosition());
@@ -212,7 +210,7 @@ export default class Game extends GameObject {
         this.#lastUpdateTime = time;
 
         if (!this.#died) {            
-            this.#rotation += this.#rotationSpeed * this.#rotationDir * frameTime;
+            this.#rotation += this.#rotationSpeed * frameTime;
             this.#polygon.setRotation(this.#rotation)
         }
         
@@ -275,7 +273,6 @@ export default class Game extends GameObject {
                 && !this.#died) {
                     const side = closestSide(this.#polygon.player.getPointAbsolutePosition(), pos)
                     if (side === 3) {
-                        console.log('123', this.#polygon.player.getPointAbsolutePosition(), pos)
                         this.kill()
                         hasDiedNextStep = true
                     }

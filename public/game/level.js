@@ -36,6 +36,8 @@ export default class Level extends Game {
     #rotationSpeedIncrement = 0;
     #wallSpeedIncrement = 0;
 
+    #incrementSpinPower = 0;
+
     #props = {
         selectFirstMusicTimestamp: false,
     }
@@ -83,8 +85,16 @@ export default class Level extends Game {
         this.onPreIncrement();
         this.#isIncrementing = true;
         const inc = this.getRotationSpeed() >= 0 ? this.#rotationSpeedIncrement : -this.#rotationSpeedIncrement
-        this.setRotationSpeed((this.getRotationSpeed() + inc)*-1);
+        const newRotation = (this.getRotationSpeed() + inc)*-1;
+        if (this.#incrementSpinPower !== 0) {
+            const rotationSpeedLerp = new Lerp(v => { this.setRotationSpeed(v); console.log(v)});
+            rotationSpeedLerp.apply(newRotation > 0 ? newRotation + this.#incrementSpinPower : newRotation - this.#incrementSpinPower)
+            rotationSpeedLerp.run(newRotation, .5)
+        } else {
+            this.setRotationSpeed((this.getRotationSpeed() + inc)*-1);
+        }
     }
+
     #increment() {
         this.#isIncrementing = false;
         this.setWallSpeedMult(this.getWallSpeedMult() + this.#wallSpeedIncrement);
@@ -195,6 +205,11 @@ export default class Level extends Game {
         this.#rotationSpeedIncrement = v;
     }
     getRotationSpeedIncrement() { return this.#rotationSpeedIncrement }
+    setIncrementSpinPower(v) {
+        if (typeof(v) !== 'number') return
+        this.#incrementSpinPower = v
+    }
+    getIncrementSpinPower() { return this.#incrementSpinPower }
 
     kill() {
         super.kill()
