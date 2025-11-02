@@ -95,6 +95,10 @@ export default class Level extends Game {
         }
     }
 
+    callIncrement() {
+        this.#preIncrement();
+    }
+
     #increment() {
         this.#isIncrementing = false;
         this.setWallSpeedMult(this.getWallSpeedMult() + this.#wallSpeedIncrement);
@@ -114,7 +118,7 @@ export default class Level extends Game {
         
         this.#incrementTimer += frameTime/1000;
         if (this.#incrementTimer > this.#incrementTime) {
-            this.#preIncrement();
+            this.callIncrement();
         }
         if (this.#isIncrementing && this.getWallCount() === 0) this.#increment();
 
