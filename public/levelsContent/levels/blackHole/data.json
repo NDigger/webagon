@@ -1,7 +1,7 @@
 {
     "key": "level3", 
 
-    "name": "Ur problem",
+    "name": "Black Hole",
     "description": "This is level, yep",
     "author": "NDagger",
 
@@ -9,7 +9,7 @@
     "musicAuthor": "Phil Gonzo",
     "musicAlbum": "As We Proceed",
     "musicPath": "music.ogg",
-    "musicTimestamps": [0],
+    "musicTimestamps": [0, 40, 120],
 
     "scriptPath": "script.js"
 }

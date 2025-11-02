@@ -1,41 +1,74 @@
 import { Vector2, Color, Size, Lerp, level } from '../../common'
+import * as Utils from '../../utils'
+import initPatterns from '../../patterns';
+const patterns = initPatterns(level);
 
+// Pattern spawn conditions, uses level.onStep
+const addPattern = async pKey => {
+    if (pKey === 0) await patterns.pTunnel(Utils.mathRandom(3, 4), 450, 400);
+    else if (pKey === 1) await patterns.pDoubleSpiral(Utils.mathRandom(4, 5), 200, 200, 1)
+    else if (pKey === 2) await patterns.pInverseBarrage(4, 350, 200)
+    else if (pKey === 3) await patterns.pWallExVortex(Utils.mathRandom(4, 5), 200, 200);
+    else if (pKey === 4) await patterns.pSpiralBarrage(Utils.mathRandom(4, 5), 200, 200);
+    else if (pKey === 5) await patterns.pAltBarrage(Utils.mathRandom(4, 5), 200, 200);
+    else if (pKey === 6) await patterns.pAltSpam(3, 50, 200, 1);
+    else if (pKey === 7) await patterns.pWallExSpam(3, 50, 200, 1);
+}
+
+const pKeys = [0, 1, 2, 3, 4, 5, 6, 7];
+let activeKeys = [];
+
+// onInit is called on the first frame when level is created.
 level.onInit = () => {
-    level.setSwapEnabled(true);
-    level.setRotationSpeed(.5);
-    level.setWallSpeedMult(6);
+    level.setWallSpeedMult(2.6);
     level.setWallSpawnDistance(1500);
-    level.setSides(4);
-    level.set3dDepth(20);
-    level.set3dDistance(100);
+    level.setSides(6);
     level.setMainColor(Color.WHITE());
-    // level.set3dColor(new Color(255, 255, 255));
-    level.setSkew(.2);
+    level.setSkew(0);
     level.set3dFalloffColor(new Color(0, 0, 0, 0));
-    // level.setPlayerSize(new Size(97, 100))
-    // level.setPlayerDistanceMult(.1);
+    level.setScale(new Vector2(1.3, 1.3))
+    level.setIncrementTime(15);
+    level.setWallSpeedIncrement(.2);
+    level.setBackgroundSwapTime(.1);
 
-    level.createInterval(() => {
-        const rnd = Math.random() * level.getSides()
-        for (let i = 1; i < level.getSides(); i++) {
-            level.createWall(i + rnd, 50)
-        }
-    }, .4)
+    level.setBackgroundTileColors([
+        new Color(0, 0, 0),
+        new Color(10, 10, 10)
+    ]);
+    level.setMainColor(Color.WHITE())
 }
 
 let time = 0;
+let rotationTime = 0;
+const rotationLerp = new Lerp(v => level.setRotation(v))
 // onUpdate is called every frame.
 level.onUpdate = ft => {
-    level.setBackgroundTileColors([
-        Lerp.interpolate(new Color(25, 15, 25), new Color(45, 25, 35), Lerp.CapMode.pingPong(time*20)),
-        Lerp.interpolate(new Color(45, 15, 25), new Color(65, 25, 25), Lerp.CapMode.pingPong(time*20)),
-    ])
-    level.setMainColor(Lerp.interpolate(Color.RED(), new Color(255, 155, 255), Lerp.CapMode.pingPong(time*20)))
-    level.setRotationSpeed(level.getRotationSpeed() + 0.1*ft)
-    // level.setRadius(80 - (time * 2 - Math.floor(time * 2)) * 10)
+    rotationTime -= ft;
+    if (rotationTime < 0) {
+        rotationTime = Math.random() * 2 + 1
+        rotationLerp.run(Utils.mathRandom(0, 5) * 60 + 30, 1.3, Lerp.Easing.EASE_IN_OUT)
+    }
+    level.setRadius(60 + Math.sin(time * 3) * 3)
 }
 
 level.onRender = ft => {
     time += ft;
     // level.setSkew(Math.sin(time*10) * .1 + .1)
 }
+
+// onStep must be async and use delays in order to work. No delays may cause crash.
+level.onStep = async () => {
+    if (activeKeys.length === 0) activeKeys = pKeys.slice();
+    const rndIndex = Math.floor(Math.random() * activeKeys.length)
+    await addPattern(activeKeys.splice(rndIndex, 1)[0])
+}
+
+
+// onPreIncrement is called immediately when increment time is achieved
+level.onPreIncrement = () => {}
+
+// onIncrement is called every time walls are gone and level speed incremented
+level.onIncrement = () => {}
+
+// onDeath is called when main player of level object touches deadly wall side
+level.onDeath = () => {}
