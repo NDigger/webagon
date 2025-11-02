@@ -1,6 +1,7 @@
 import LevelPreview from './game/levelPreview';
 import Background from './game/gameContent/background';
 import { app, setBestScore, audioManager, levelLoader } from './script';
+import { Color } from './utils/structures';
 
 const selectedLevelInfo = document.getElementById('selected-level-info')
 
@@ -12,7 +13,7 @@ background.setLayer(-999);
 let backgroundTime;
 
 const levelPreview = new LevelPreview()
-levelPreview.onUpdate = ft => {
+const levelPreviewUpdate = ft =>{
     backgroundTime += ft;
     const style = levelPreview.getStyle()
     background.setTileColors(style.backgroundTileColors);
@@ -30,9 +31,14 @@ const loadLevel = levelData => {
     document.getElementById('level-select').style.display = 'none'
     levelLoader.start(levelData);
     document.removeEventListener('keydown', keyDownMenuListener)
+
+    levelPreview.onUpdate = () => {}
+    background.setTileColors([new Color(0, 0, 0, 0)]);
+    background.draw();
 }
 
 const loadMenu = () => {
+    levelPreview.onUpdate = ft => levelPreviewUpdate(ft);
     document.addEventListener('keydown', keyDownMenuListener)
     levelPreview.load(levelJsons[levelListSelectedLevel].scriptPath)
     backgroundTime = 0;

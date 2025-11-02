@@ -17,7 +17,6 @@ let activeKeys = [];
 
 // onInit is called on the first frame when level is created.
 level.onInit = () => {
-    // level.setSwapEnabled(true);
     level.setRotationSpeed(0.335);
     level.setWallSpeedMult(2.8);
     level.setSides(6);

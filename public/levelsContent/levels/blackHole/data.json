@@ -5,10 +5,10 @@
     "description": "This is level, yep",
     "author": "NDagger",
 
-    "musicName": "Hexagon and On",
-    "musicAuthor": "Zanzlanz",
-    "musicAlbum": "",
-    "musicPath": "hexagonAndOn.ogg",
+    "musicName": "FVCK",
+    "musicAuthor": "Phil Gonzo",
+    "musicAlbum": "As We Proceed",
+    "musicPath": "music.ogg",
     "musicTimestamps": [0],
 
     "scriptPath": "script.js"

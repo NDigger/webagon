@@ -1,0 +1,15 @@
+{
+    "key": "jungle", 
+
+    "name": "Jungle",
+    "description": "First trans level",
+    "author": "NDagger",
+
+    "musicName": "Scarab",
+    "musicAuthor": "Trancentral",
+    "musicAlbum": "Prana",
+    "musicPath": "music.ogg",
+    "musicTimestamps": [54],
+
+    "scriptPath": "script.js"
+}
