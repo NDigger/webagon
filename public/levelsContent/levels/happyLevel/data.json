@@ -1,0 +1,15 @@
+{
+    "key": "happyLevel", 
+
+    "name": "Happy Level",
+    "description": "I made this level when I had a bad mood!",
+    "author": "NDagger",
+
+    "musicName": "Pulvermoose",
+    "musicAuthor": "Rymdkraft",
+    "musicAlbum": "",
+    "musicPath": "music.ogg",
+    "musicTimestamps": [6],
+
+    "scriptPath": "script.js"
+}

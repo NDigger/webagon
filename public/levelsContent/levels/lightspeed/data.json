@@ -1,0 +1,15 @@
+{
+    "key": "lightspeed", 
+
+    "name": "Lightspeed",
+    "description": "Inspired by theepicosity levels",
+    "author": "NDagger",
+
+    "musicName": "Lightspeed",
+    "musicAuthor": "Waterflame",
+    "musicAlbum": "",
+    "musicPath": "music.ogg",
+    "musicTimestamps": [0],
+
+    "scriptPath": "script.js"
+}

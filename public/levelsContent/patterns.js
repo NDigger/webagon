@@ -61,6 +61,30 @@ export default function initPatterns(level) {
         await level.distanceDelay(delayEnd);
     }
 
+    const pDoubleInverseSpiral = async (times, delay, delayEnd = 0, extra = 1) => {
+        let side = getRandomSide();
+        const dir = getRandomDir();
+        for(let i = 0; i < times; i++) {
+            side += dir;
+            console.log(side)
+            for(let k = 0; k < extra; k++) {
+                level.createWall(side+k, delay);
+                level.createWall(side+k+level.getSides()/2, delay);
+            }
+            await level.distanceDelay(delay);
+        }
+        for(let i = 0; i < times; i++) {
+            side -= dir;
+            for(let k = 0; k < extra; k++) {
+                level.createWall(side+k, delay);
+                level.createWall(side+k+level.getSides()/2, delay);
+            }
+            await level.distanceDelay(delay);
+        }
+        await level.distanceDelay(delayEnd);
+    }
+
+
     const pSpiralBarrage = async (times, delay, delayEnd = 0, step = 1) => {
         const side = getRandomSide();
         const dir = getRandomDir();
@@ -232,5 +256,6 @@ export default function initPatterns(level) {
         pRandomLRBarrage,
         pRandomBarrage,
         pBarrageSpam,
+        pDoubleInverseSpiral,
     }
 }

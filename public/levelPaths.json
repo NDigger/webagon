@@ -3,6 +3,9 @@
     "./levelsContent/levels/firstSteps",
     "./levelsContent/levels/allINeed",
     "./levelsContent/levels/jungle",
+    "./levelsContent/levels/lightspeed",
+    "./levelsContent/levels/flipFlop",
+    "./levelsContent/levels/happyLevel",
     "./levelsContent/levels/blackHole",
     "./levelsContent/levels/level1",
     "./levelsContent/levels/level4"

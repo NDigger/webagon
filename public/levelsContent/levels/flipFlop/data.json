@@ -1,0 +1,15 @@
+{
+    "key": "flipFlop", 
+
+    "name": "Flip Flop",
+    "description": "-> -> 12321 <- <-",
+    "author": "NDagger",
+
+    "musicName": "Thrillseeker",
+    "musicAuthor": "PrototypeRaptor",
+    "musicAlbum": "",
+    "musicPath": "music.ogg",
+    "musicTimestamps": [0],
+
+    "scriptPath": "script.js"
+}

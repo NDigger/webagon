@@ -30,6 +30,7 @@ level.onInit = () => {
     level.setIncrementTime(15);
     level.setWallSpeedIncrement(.2);
     level.setBackgroundSwapTime(.1);
+    level.setPlayerSize(new Size(18, 10))
 
     level.setBackgroundTileColors([
         new Color(0, 0, 0),
