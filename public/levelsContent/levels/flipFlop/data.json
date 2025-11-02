@@ -9,7 +9,7 @@
     "musicAuthor": "PrototypeRaptor",
     "musicAlbum": "",
     "musicPath": "music.ogg",
-    "musicTimestamps": [0],
+    "musicTimestamps": [0.8, 162],
 
     "scriptPath": "script.js"
 }

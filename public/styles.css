@@ -177,7 +177,7 @@ canvas {
     height: 70px;
     border: 2px solid var(--font-color);
     padding-right: 20px;
-    transform: skewX(-20deg);
+    /* transform: skewX(-20deg); */
 }
 
 .level.selected-animation {
@@ -189,9 +189,10 @@ canvas {
 
 @keyframes level-tab-anim {
     from {
-        transform: skewX(-20deg);
+        /* transform: skewX(-20deg); */
+        transform: none
     } to {
-        transform: skewX(-20deg) translateX(100px);
+        transform: translateX(100px);
     }
 }
 
