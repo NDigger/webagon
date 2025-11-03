@@ -8,11 +8,11 @@ let patterns = initPatterns(level); // Patterns require level object in order to
 const addPattern = async pKey => {
     if (pKey === 0) await patterns.pInverseBarrage(Utils.mathRandom(2, 3), 420, 200);
     else if (pKey === 1) await patterns.pSpiralBarrage(Utils.mathRandom(4, 6), 300, 300);
-    else if (pKey === 3) await patterns.pRandomBarrage(Utils.mathRandom(3, 4), 250, 400);
-    else if (pKey === 4) await patterns.pTunnel(Utils.mathRandom(2, 3), 550, 400);
+    else if (pKey === 2) await patterns.pRandomBarrage(Utils.mathRandom(3, 4), 250, 400);
+    else if (pKey === 3) await patterns.pTunnel(Utils.mathRandom(2, 3), 550, 400);
 }
 
-const pKeys = [0, 1, 2, 3, 4];
+const pKeys = [0, 1, 2, 3];
 let activeKeys = [];
 
 // onInit is called on the first frame when level is created.
