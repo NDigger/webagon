@@ -40,7 +40,8 @@ const loadLevel = levelData => {
 const loadMenu = () => {
     levelPreview.onUpdate = ft => levelPreviewUpdate(ft);
     document.addEventListener('keydown', keyDownMenuListener)
-    levelPreview.load(levelJsons[levelListSelectedLevel].scriptPath)
+    const path = levelJsons[levelListSelectedLevel]?.scriptPath ?? undefined
+    if (path != undefined) levelPreview.load(path)
     backgroundTime = 0;
 }
 
@@ -91,12 +92,14 @@ let levelListSelectedLevel = 0
 const getSelectedLevel = () => document.getElementById(`level-${levelJsons[levelListSelectedLevel]?.key}`);
 const beforeShift = () => {
     const selectedLevel = getSelectedLevel();
+    if (selectedLevel == undefined) return
     selectedLevel.classList.remove('selected-animation')
     void selectedLevel.offsetWidth;
     selectedLevel.classList.add('unselected-animation')
 }
 const afterShift = () => {
     const selectedLevel = getSelectedLevel();
+    if (selectedLevel == undefined) return
     selectedLevel.classList.remove('unselected-animation');
     void selectedLevel.offsetWidth;
     selectedLevel.classList.add('selected-animation');
