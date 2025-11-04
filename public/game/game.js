@@ -133,10 +133,10 @@ export default class Game extends GameObject {
     }
     
     addEventListeners() {
-        gameArrowLeft.addEventListener('touchstart', this.#onGameArrowLeftPressed)
-        gameArrowLeft.addEventListener('touchend', this.#onGameArrowLeftReleased)
-        gameArrowRight.addEventListener('touchstart', this.#onGameArrowRightPressed)
-        gameArrowRight.addEventListener('touchend', this.#onGameArrowRightReleased)
+        gameArrowLeft.addEventListener('touchstart', this.#onGameArrowLeftPressed, {passive: true})
+        gameArrowLeft.addEventListener('touchend', this.#onGameArrowLeftReleased, {passive: true})
+        gameArrowRight.addEventListener('touchstart', this.#onGameArrowRightPressed, {passive: true})
+        gameArrowRight.addEventListener('touchend', this.#onGameArrowRightReleased, {passive: true})
 
         window.addEventListener('keydown', this.#onKeyDown);
         window.addEventListener('keyup', this.#onKeyUp);
