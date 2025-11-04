@@ -11,7 +11,7 @@ const loop = () => {
     fps = (frameCount * 1000) / delta;
     frameCount = 0;
     lastTime = now;
-    document.getElementById('fps-counter').textContent = `${'fps:'} ${fps.toFixed(2)}`;
+    document.getElementById('fps-counter').textContent = `${'fps:'} ${fps.toFixed(0)}`;
   }
 
   requestAnimationFrame(loop);

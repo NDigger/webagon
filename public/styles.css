@@ -3,6 +3,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Stalinist+One&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Tektur:wght@400..900&display=swap');
 
+@font-face {
+    font-family: "uasquare";
+    src: url("./UASQUARE.TTF") format("truetype");
+}
+
+@font-face {
+    font-family: "metro";
+    src: url("./Metro.otf") format("truetype");
+}
+
 *,
 *::before,
 *::after {
@@ -13,7 +23,7 @@
 
 * {
     user-select: none;
-    font-family: "Tektur", sans-serif;
+    font-family: "uasquare", sans-serif; /*"Tektur"*/
     font-optical-sizing: auto;
     font-weight: 800;
     font-style: normal;
@@ -54,16 +64,6 @@ button:focus {
 
 #game-content {
     display: none;
-}
-
-@font-face {
-    font-family: "uasquare";
-    src: url("./UASQUARE.TTF") format("truetype");
-}
-
-@font-face {
-    font-family: "metro";
-    src: url("./Metro.otf") format("truetype");
 }
 
 #game-content * {
