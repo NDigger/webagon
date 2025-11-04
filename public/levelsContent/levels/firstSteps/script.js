@@ -51,8 +51,8 @@ level.onUpdate = ft => {
     ])
     level.setMainColor(Color.hsvToRgb(time * 0.2, 1, 1))
     level.setScale(new Vector2(
-        Lerp.CapMode.pingPong(time * .5) * .2 + 1, 
-        Lerp.CapMode.pingPong(time * .5) * .2 + 1)
+        Utils.pingPong(time * .5) * .2 + 1, 
+        Utils.pingPong(time * .5) * .2 + 1)
     )
 }
 
@@ -62,5 +62,5 @@ level.onIncrement = () => {
 
 level.onRender = ft => {
     time += ft;
-    level.setSkew(Lerp.CapMode.pingPong(time/5)/2)
+    level.setSkew(Utils.pingPong(time/5)/2)
 }

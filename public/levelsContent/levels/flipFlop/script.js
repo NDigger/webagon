@@ -48,9 +48,9 @@ level.onUpdate = ft => {
         Color.BLACK()
     ])
 
-    const t = Lerp.CapMode.pingPong(Lerp.Easing.EASE_OUT(Lerp.CapMode.fract(time * 2.2)))
-    level.setMainColor(Lerp.interpolate(new Color(0, 0, 0), Color.hsvToRgb(Lerp.CapMode.pingPong(time * 3) * .1 + .9, 1., .9), t))
-    level.set3dFalloffColor(Lerp.interpolate(Color.hsvToRgb(Lerp.CapMode.pingPong(time * 3) * .1 + .9, 1., .9), new Color(0, 0, 0), t))
+    const t = Utils.pingPong(Lerp.Easing.EASE_OUT(Utils.fract(time * 2.2)))
+    level.setMainColor(Lerp.interpolate(new Color(0, 0, 0), Color.hsvToRgb(Utils.pingPong(time * 3) * .1 + .9, 1., .9), t))
+    level.set3dFalloffColor(Lerp.interpolate(Color.hsvToRgb(Utils.pingPong(time * 3) * .1 + .9, 1., .9), new Color(0, 0, 0), t))
     const s = t * .5 + 1
     level.setWallScale(new Vector2(s, s))
 }
@@ -58,7 +58,7 @@ level.onUpdate = ft => {
 // onRender is called every frame. It works when player is died.
 level.onRender = ft => {
     time += ft;
-    level.setSkew(Lerp.CapMode.pingPong(time * 2)*.2 + .5)
+    level.setSkew(Utils.pingPong(time * 2)*.2 + .5)
 }
 
 // onPreIncrement is called immediately when increment time is achieved

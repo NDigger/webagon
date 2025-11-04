@@ -34,15 +34,15 @@ let time = 0;
 // onUpdate is called every frame.
 level.onUpdate = ft => {
     level.setBackgroundTileColors([
-            Color.hsvToRgb(.4 - Lerp.CapMode.pingPong(time * 10) * .2, 1, .5  - Lerp.CapMode.pingPong(time * 2) * .4),
-            Color.hsvToRgb(.4 - Lerp.CapMode.pingPong(time * 10) * .2, 1, .4 - Lerp.CapMode.pingPong(time * 2) * .2),
+            Color.hsvToRgb(.4 - Utils.pingPong(time * 10) * .2, 1, .5  - Utils.pingPong(time * 2) * .4),
+            Color.hsvToRgb(.4 - Utils.pingPong(time * 10) * .2, 1, .4 - Utils.pingPong(time * 2) * .2),
         ])
-    level.setMainColor(Color.hsvToRgb(.4 - Lerp.CapMode.pingPong(time * 10) * .2, 1, 1))
+    level.setMainColor(Color.hsvToRgb(.4 - Utils.pingPong(time * 10) * .2, 1, 1))
 
-    const s = Lerp.CapMode.pingPong(time * 2) * 1 + 1.5;
+    const s = Utils.pingPong(time * 2) * 1 + 1.5;
     level.setWallScale(new Vector2(s, s));
-    level.setRadius(100 - Lerp.CapMode.fract(time * 2.4) * 20);
-    level.setBackgroundRadius(1000 + Lerp.CapMode.pingPong(time * 1.8) * 1500);
+    level.setRadius(100 - Utils.fract(time * 2.4) * 20);
+    level.setBackgroundRadius(1000 + Utils.pingPong(time * 1.8) * 1500);
 }
 
 level.onRender = ft => {

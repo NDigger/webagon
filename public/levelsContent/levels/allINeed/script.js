@@ -45,17 +45,17 @@ level.onUpdate = ft => {
             new Color(250, 250, 250),
         ])
     level.setMainColor(new Color(255, 255, 255))
-    const v = 225 + Lerp.CapMode.pingPong(time * 1.05) * 30;
+    const v = 225 + Utils.pingPong(time * 1.05) * 30;
     level.setPolygonColor(new Color(v, v, v));
     
-    const s = Lerp.CapMode.pingPong(1-Lerp.Easing.EASE_OUT(Lerp.CapMode.fract(time * 1.05))) * .9 + 1;
+    const s = Utils.pingPong(1-Lerp.Easing.EASE_OUT(Utils.fract(time * 1.05))) * .9 + 1;
     level.setWallScale(new Vector2(s, s));
 }
 
 // onRender is called every frame. It works when player is died.
 level.onRender = ft => {
     time += ft;
-    level.setSkew(Lerp.CapMode.pingPong(time * 1.05) * .5 - .2)
+    level.setSkew(Utils.pingPong(time * 1.05) * .5 - .2)
 }
 
 // onPreIncrement is called immediately when increment time is achieved

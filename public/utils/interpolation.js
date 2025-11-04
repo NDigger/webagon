@@ -57,14 +57,6 @@ export const Easing = Object.freeze({
     SINE_OUT: sine_out
 })
 
-const fract = t => t - Math.floor(t);
-const pingPong = t => (Math.floor(t * 2) % 2 === 0) ? fract(t * 2) : 1.-fract(t*2)
-
-export const CapMode = Object.freeze({
-    fract: fract,
-    pingPong: pingPong,
-})
-
 const isFromToInstanceOf = (from, to, variant) => 
     (variant === Number ? typeof from === 'number' && typeof to === 'number' 
     : from instanceof variant && to instanceof variant);
@@ -77,7 +69,6 @@ export default class Lerp {
     #from = 0;
 
     static Easing = Easing;
-    static CapMode = CapMode;
 
     constructor(setter) {
         if (typeof setter === 'function') this.setter = setter;
