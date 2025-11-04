@@ -25,7 +25,6 @@ level.onInit = () => {
     level.setRotationSpeedIncrement(.05);
     level.setIncrementTime(12);
     level.setSkew(.5);
-    console.log(level.getTimestamp())
     level.setIncrementSpinPower(.4);
     level.set3dFalloffColor(new Color(0, 0, 0, 0))
 }

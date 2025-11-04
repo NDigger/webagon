@@ -66,7 +66,6 @@ export default function initPatterns(level) {
         const dir = getRandomDir();
         for(let i = 0; i < times; i++) {
             side += dir;
-            console.log(side)
             for(let k = 0; k < extra; k++) {
                 level.createWall(side+k, delay);
                 level.createWall(side+k+level.getSides()/2, delay);

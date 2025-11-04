@@ -56,6 +56,9 @@ function closestSide(pos, points) {
 
 const degToRad = deg => deg * Math.PI / 180;
 
+const gameArrowLeft = document.getElementById('game-arrow-left');
+const gameArrowRight = document.getElementById('game-arrow-right');
+
 export default class Game extends GameObject {
     #background;
     #backgroundRotationOffset = 0;
@@ -124,11 +127,35 @@ export default class Game extends GameObject {
             new Color(235, 235, 235),
         ])
 
-        window.addEventListener('keydown', this.#onKeyDown);
-        window.addEventListener('keyup', this.#onKeyUp);
+        this.addEventListeners();
 
         this.#updateId = requestAnimationFrame(time => this.#update(time));
     }
+    
+    addEventListeners() {
+        gameArrowLeft.addEventListener('mousedown', this.#onGameArrowLeftPressed)
+        gameArrowLeft.addEventListener('mouseup', this.#onGameArrowLeftReleased)
+        gameArrowRight.addEventListener('mousedown', this.#onGameArrowRightPressed)
+        gameArrowRight.addEventListener('mouseup', this.#onGameArrowRightReleased)
+
+        window.addEventListener('keydown', this.#onKeyDown);
+        window.addEventListener('keyup', this.#onKeyUp);
+    }
+
+    removeEventListeners() {
+        gameArrowLeft.removeEventListener('mousedown', this.#onGameArrowLeftPressed)
+        gameArrowLeft.removeEventListener('mouseup', this.#onGameArrowLeftReleased)
+        gameArrowRight.removeEventListener('mousedown', this.#onGameArrowRightPressed)
+        gameArrowRight.removeEventListener('mouseup', this.#onGameArrowRightReleased)
+
+        window.removeEventListener('keydown', this.#onKeyDown);
+        window.removeEventListener('keyup', this.#onKeyUp);
+    }
+
+    #onGameArrowLeftPressed = () => this.#leftKeyPressed = true;
+    #onGameArrowLeftReleased = () => this.#leftKeyPressed = false;
+    #onGameArrowRightPressed = () => this.#rightKeyPressed = true;
+    #onGameArrowRightReleased = () => this.#rightKeyPressed = false;
     
     #onKeyDown = e => {
         if (e.code === 'ArrowLeft' || e.code === 'KeyA') this.#leftKeyPressed = true;
@@ -512,8 +539,7 @@ export default class Game extends GameObject {
     destroy() {
         if (this.destroyed) return
         this.destroyed = true;
-        window.removeEventListener('keydown', this.#onKeyDown)
-        window.removeEventListener('keyup', this.#onKeyUp)
+        this.removeEventListeners();
         this.#died = true;
         cancelAnimationFrame(this.#updateId);
         requestAnimationFrame(() => {
