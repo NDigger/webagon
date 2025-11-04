@@ -14,6 +14,9 @@ export default class LevelLoader {
 
     constructor(app) {
         this.app = app
+
+        document.getElementById('level-restart-btn').addEventListener('click', () => this.reload())
+        document.getElementById('level-leave-btn').addEventListener('click', () => this.leave())
     }
 
     #handleKeyup = () => this.#keyPressed = false
@@ -66,11 +69,14 @@ export default class LevelLoader {
         this.#level = level;
 
         script.onload = () => {
+            document.querySelector('#game-ui .top-right').style.display = 'none'
+
             document.getElementById('restart-help-msg').style.display = 'none'
             document.getElementById('swap-enabled-msg').style.display = 'none'
             this.#level.init()
             document.getElementById('game-content').style.display = 'block'
             document.getElementById('level-select').style.display = 'none'
+            
             window.addEventListener('keydown', this.#handleKeydown);
             window.addEventListener('keyup', this.#handleKeyup)
             // this.level.onLoad();

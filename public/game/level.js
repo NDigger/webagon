@@ -171,6 +171,8 @@ export default class Level extends Game {
     }
 
     #onDeath() {
+        document.querySelector('#game-ui .top-right').style.display = 'block'
+
         document.getElementById('restart-help-msg').style.display = 'block'
         if (this.#audio) this.#audio.pause()
         document.removeEventListener('visibilitychange', this.#handleVisibilityChange);
@@ -220,10 +222,13 @@ export default class Level extends Game {
         this.#games.forEach(game => game.kill())
         this.#onDeath()
     }
+
     setMainColor({r, g, b, a}) {
-        super.setMainColor({r: r, g: g, b: b, a: a})
-        const gameUi = document.getElementById('game-ui')
-        gameUi.style.color = this.getMainColor().getRGBStyle();
+        const color = new Color(r, g, b, a);
+        super.setMainColor(color)
+        document.documentElement.style.setProperty('--font-color', color.getRGBAStyle());
+        // const gameUi = document.getElementById('game-ui')
+        // gameUi.style.color = this.getMainColor().getRGBStyle();
     }
     // setBackgroundTileColors(arr) {
     //     super.setBackgroundTileColors(arr)
