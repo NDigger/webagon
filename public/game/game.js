@@ -133,20 +133,20 @@ export default class Game extends GameObject {
     }
     
     addEventListeners() {
-        gameArrowLeft.addEventListener('mousedown', this.#onGameArrowLeftPressed)
-        gameArrowLeft.addEventListener('mouseup', this.#onGameArrowLeftReleased)
-        gameArrowRight.addEventListener('mousedown', this.#onGameArrowRightPressed)
-        gameArrowRight.addEventListener('mouseup', this.#onGameArrowRightReleased)
+        gameArrowLeft.addEventListener('touchstart', this.#onGameArrowLeftPressed)
+        gameArrowLeft.addEventListener('touchend', this.#onGameArrowLeftReleased)
+        gameArrowRight.addEventListener('touchstart', this.#onGameArrowRightPressed)
+        gameArrowRight.addEventListener('touchend', this.#onGameArrowRightReleased)
 
         window.addEventListener('keydown', this.#onKeyDown);
         window.addEventListener('keyup', this.#onKeyUp);
     }
 
     removeEventListeners() {
-        gameArrowLeft.removeEventListener('mousedown', this.#onGameArrowLeftPressed)
-        gameArrowLeft.removeEventListener('mouseup', this.#onGameArrowLeftReleased)
-        gameArrowRight.removeEventListener('mousedown', this.#onGameArrowRightPressed)
-        gameArrowRight.removeEventListener('mouseup', this.#onGameArrowRightReleased)
+        gameArrowLeft.removeEventListener('touchstart', this.#onGameArrowLeftPressed)
+        gameArrowLeft.removeEventListener('touchend', this.#onGameArrowLeftReleased)
+        gameArrowRight.removeEventListener('touchstart', this.#onGameArrowRightPressed)
+        gameArrowRight.removeEventListener('touchend', this.#onGameArrowRightReleased)
 
         window.removeEventListener('keydown', this.#onKeyDown);
         window.removeEventListener('keyup', this.#onKeyUp);
