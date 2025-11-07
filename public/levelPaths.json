@@ -3,6 +3,7 @@
     "./levelsContent/levels/firstSteps",
     "./levelsContent/levels/allINeed",
     "./levelsContent/levels/jungle",
-    "./levelsContent/levels/flipFlop",
+    "./levelsContent/levels/hell",
+    "./levelsContent/levels/neon",
     "./levelsContent/levels/happyLevel"
 ]

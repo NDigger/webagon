@@ -64,6 +64,8 @@ export default class Level extends Game {
         audio.currentTime = timestamp
         audio.play();
 
+        this.setShakePower(0);
+        
         this.onInit();
         this.#step();
 

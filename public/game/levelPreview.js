@@ -55,7 +55,9 @@ class LevelPreviewContent {
 
     setSides(v) { this.style.sides = v; }
     getSides() { return this.style.sides; }
-
+    getTime() {
+        return this.#lastTime/1000
+    }
     destroy() {
         cancelAnimationFrame(this.#updateId);
     }
