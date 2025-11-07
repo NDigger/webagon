@@ -21,8 +21,8 @@ level.onInit = () => {
     level.setRadius(90);
     level.setRotationSpeed(0.2);
     level.setWallSpeedMult(5);
-    level.setSides(5);
-    level.set3dDepth(10);
+    level.setSides(4);
+    level.set3dDepth(0);
     level.set3dDistance(10);
     level.setWallSpeedIncrement(0.2);
     level.setRotationSpeedIncrement(0.03);
@@ -43,16 +43,18 @@ level.onStep = async () => {
 let time = 0;
 // onUpdate is called every frame.
 level.onUpdate = ft => {
+    console.log(level.getTime())
     const colorTime = time / 4;
     level.setBackgroundTileColors([
-        Color.BLACK()
+        new Color(15, 0, 0),
+        new Color(25, 0, 0),
     ])
 
     const t = Utils.pingPong(Lerp.Easing.EASE_OUT(Utils.fract(time * 2.2)))
     level.setMainColor(Lerp.interpolate(new Color(0, 0, 0), Color.hsvToRgb(Utils.pingPong(time * 3) * .1 + .9, 1., .9), t))
     level.set3dFalloffColor(Lerp.interpolate(Color.hsvToRgb(Utils.pingPong(time * 3) * .1 + .9, 1., .9), new Color(0, 0, 0), t))
-    const s = t * .5 + 1
-    level.setWallScale(new Vector2(s, s))
+    // const s = t * .5 + 1
+    // level.setWallScale(new Vector2(s, s))
 }
 
 // onRender is called every frame. It works when player is died.

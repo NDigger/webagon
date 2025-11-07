@@ -5,11 +5,11 @@
     "description": "-> -> 12321 <- <-",
     "author": "NDagger",
 
-    "musicName": "Thrillseeker",
-    "musicAuthor": "PrototypeRaptor",
+    "musicName": "Hell Space",
+    "musicAuthor": "Aresdev",
     "musicAlbum": "",
     "musicPath": "music.ogg",
-    "musicTimestamps": [0.8, 162],
+    "musicTimestamps": [24],
 
     "scriptPath": "script.js"
 }

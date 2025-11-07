@@ -239,6 +239,9 @@ export default class Level extends Game {
         super.setSwapEnabled(v);
         document.getElementById('swap-enabled-msg').style.display = v ? 'block' : 'none';
     }
+    getTime() {
+        return this.#levelTime/1000
+    }
     getTimestamp() {
         return this.#audioTimestamp
     }
