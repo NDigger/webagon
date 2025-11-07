@@ -226,7 +226,7 @@ export default class Level extends Game {
     setMainColor({r, g, b, a}) {
         const color = new Color(r, g, b, a);
         super.setMainColor(color)
-        document.documentElement.style.setProperty('--font-color', color.getRGBAStyle());
+        document.documentElement.style.setProperty('--main-color', color.getRGBAStyle());
         // const gameUi = document.getElementById('game-ui')
         // gameUi.style.color = this.getMainColor().getRGBStyle();
     }

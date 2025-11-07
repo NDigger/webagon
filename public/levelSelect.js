@@ -20,7 +20,7 @@ const levelPreviewUpdate = ft =>{
     background.setRotation(backgroundTime * style.rotationSpeed * 1000);
     background.setDarkenUnevenChunkEnabled(style.backgroundDarkenUnevenChunkEnabled);
     background.setSwapTime(style.backgroundSwapTime);
-    document.documentElement.style.setProperty('--font-color', style.mainColor.getRGBAStyle());
+    document.documentElement.style.setProperty('--main-color', style.mainColor.getRGBAStyle());
     background.setSides(style.sides);
     background.draw();
 }
