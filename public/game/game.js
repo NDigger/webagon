@@ -91,6 +91,10 @@ export default class Game extends GameObject {
     #mainColor = new Color(0, 0, 0);
     #wallSpawnDistance = 1500;
     #wallSpeedMult = 2;
+    #wallSkewLeft = 0;
+    #wallSkewRight = 0;
+    #wallAngleLeft = 0;
+    #wallAngleRight = 0;
 
     #leftKeyPressed = false;
     #rightKeyPressed = false;
@@ -105,8 +109,6 @@ export default class Game extends GameObject {
     #distanceDelay = -1;
 
     onDeath = () => {}
-    onIncrement = () => {}
-    onPreIncrement = () => {}
 
     constructor(app) {
         super(app)
@@ -225,8 +227,6 @@ export default class Game extends GameObject {
         this.#walls.forEach(w => w.draw());
     }
 
-
-
     #updatePolygonToBackground() {
         this.#background.setRotation(this.#rotation + this.#backgroundRotationOffset);
         this.#polygon.setColor(this.#getPolygonColor());
@@ -329,6 +329,11 @@ export default class Game extends GameObject {
         wall.setCenterOffset(this.#centerOffset);
         wall.setOffset(this.#offset)
         wall.redrawEnabled = false;
+
+        wall.setSkewLeft(this.#wallSkewLeft)
+        wall.setSkewRight(this.#wallSkewRight)
+        wall.setLeftAngleOffset(this.#wallAngleLeft)
+        wall.setRightAngleOffset(this.#wallAngleRight)
 
         if (this.#falloffColor3d) wall.set3dFalloffColor(this.#falloffColor3d);
         wall.set3dDepth(this.#depth3d);
@@ -493,7 +498,31 @@ export default class Game extends GameObject {
         this.#wallScale = scale;
         this.#updateWallScale();
     }
-    getWallScale() { return this.#wallScale; }    
+    getWallScale() { return this.#wallScale; }
+    setWallSkewLeft(v) {
+        if (typeof(v) !== 'number') return
+        this.#wallSkewLeft = v;
+        this.#walls.forEach(wall => wall.setSkewLeft(v))
+    }  
+    getWallSkewLeft() { return this.#wallSkewLeft }
+    setWallSkewRight(v) {
+        if (typeof(v) !== 'number') return
+        this.#wallSkewRight = v;
+        this.#walls.forEach(wall => wall.setSkewRight(v))
+    }
+    getWallSkewRight() { return this.#wallSkewRight }
+    setWallAngleLeft(v) {
+        if (typeof(v) !== 'number') return
+        this.#wallAngleLeft = v;
+        this.#walls.forEach(wall => wall.setLeftAngleOffset(v))
+    }
+    getWallAngleLeft() { return this.#wallAngleLeft }
+    setWallAngleRight(v) {
+        if (typeof(v) !== 'number') return
+        this.#wallAngleRight = v;
+        this.#walls.forEach(wall => wall.setRightAngleOffset(v))
+    }
+    getWallAngleRight() { return this.#wallAngleRight }
     setOffset({x, y}) {
         const offset = new Vector2(x, y);
         this.#offset = offset;

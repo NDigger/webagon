@@ -7,16 +7,22 @@ export default class Wall extends CustomWall {
     #thickness = 40;
     #distance = 0;
 
+    #leftAngleOffset = 0;
+    #rightAngleOffset = 0;
+    #skewLeft = 0;
+    #skewRight = 0;
+
+
     #getWallVertexPos4() {
         const halfSides = this.#sides / 2;
         const firstAngle = this.#side * Math.PI / halfSides + Math.PI / this.#sides;
         const secondAngle = (firstAngle + 0.5 * Math.PI / halfSides + Math.PI / this.#sides);
         const x1 = (this.#distance * Math.cos(firstAngle));
         const y1 = (this.#distance * Math.sin(firstAngle));
-        const x2 = ((this.#thickness + this.#distance) * Math.cos(firstAngle));
-        const y2 = ((this.#thickness + this.#distance) * Math.sin(firstAngle));
-        const x3 = ((this.#thickness + this.#distance) * Math.cos(secondAngle));
-        const y3 = ((this.#thickness + this.#distance) * Math.sin(secondAngle));
+        const x2 = ((this.#thickness + this.#distance + this.#skewLeft) * Math.cos(firstAngle + this.#leftAngleOffset));
+        const y2 = ((this.#thickness + this.#distance + this.#skewLeft) * Math.sin(firstAngle + this.#leftAngleOffset));
+        const x3 = ((this.#thickness + this.#distance + this.#skewRight) * Math.cos(secondAngle + this.#rightAngleOffset));
+        const y3 = ((this.#thickness + this.#distance + this.#skewRight) * Math.sin(secondAngle + this.#rightAngleOffset));
         const x4 = (this.#distance * Math.cos(secondAngle));
         const y4 = (this.#distance * Math.sin(secondAngle));
 
@@ -62,6 +68,30 @@ export default class Wall extends CustomWall {
         this.#distance = v;
     }
     getDistance() { return this.#distance; }
+
+    setLeftAngleOffset(v) {
+        if (typeof(v) !== 'number') return;
+        this.#leftAngleOffset = v;
+    }
+    getLeftAngleOffset() { return this.#leftAngleOffset }
+
+    setRightAngleOffset(v) {
+        if (typeof(v) !== 'number') return;
+        this.#rightAngleOffset = v;
+    }
+    getRightAngleOffset() { return this.#rightAngleOffset }
+
+    setSkewLeft(v) {
+        if (typeof(v) !== 'number') return;
+        this.#skewLeft = v;
+    }
+    getSkewLeft() { return this.#skewLeft }
+
+    setSkewRight(v) {
+        if (typeof(v) !== 'number') return;
+        this.#skewRight = v;
+    }
+    getSkewRight() { return this.#skewRight }
 }
 
 const getWallVertex4 = ({sides, side, thickness, distance}) => {

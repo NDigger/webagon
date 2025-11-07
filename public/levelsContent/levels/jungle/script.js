@@ -41,6 +41,10 @@ level.onUpdate = ft => {
     const s = Utils.pingPong(time * 2) * 1 + 1.5;
     level.setWallScale(new Vector2(s, s));
     level.setRadius(100 - Utils.fract(time * 2.4) * 20);
+
+    // level.setWallAngleLeft(.5 - Utils.fract(time * 2.4) * .6);
+    // level.setWallAngleRight(-.5 + Utils.fract(time * 2.4) * .6);
+
     level.setBackgroundRadius(1000 + Utils.pingPong(time * 1.8) * 1500);
 }
 
