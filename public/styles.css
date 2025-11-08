@@ -266,7 +266,7 @@ canvas {
 .level, #selected-level-info {
     display: flex;
     position: relative;
-    box-shadow: 0px 5px 10px rgba(0, 0, 0, 1);
+    box-shadow: 0px 5px 10px var(--background-tile-color);
     /* background-color: rgba(0, 0, 0, .5); */
     backdrop-filter: hue-rotate(180deg) brightness(.5);
 }

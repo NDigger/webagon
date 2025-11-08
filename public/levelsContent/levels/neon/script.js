@@ -44,7 +44,6 @@ const pSwapTunnel = async (times, delay, delayEnd) => {
         if (bSide === (side % 6) || bSide === (side + Math.floor(level.getSides()/2)) % 6) {
             bSide += Math.random() > .5 ? 1 : -1;
         }
-        console.log((side % 6), (side % 6) + Math.floor(level.getSides()/2))
         barrage(bSide + 1)
         if (i !== times - 1) {
             level.createWall(side, delay + extraThickness);
@@ -86,13 +85,13 @@ const pSwapTunnel2 = async (times, delay, delayEnd) => {
 
 // Pattern spawn conditions, uses level.onStep
 const addPattern = async pKey => {
-    if (pKey === 0) await pSwapper(250, 250);
-    else if (pKey === 1) await pSwappers(Utils.mathRandom(3, 4), 250, 250);
-    else if (pKey === 2) await pSwapTunnel(Utils.mathRandom(3, 4), 250, 250);
-    else if (pKey === 3) await patterns.pInverseBarrage(Utils.mathRandom(3, 4), 200, 250);
-    else if (pKey === 4) await pSwapSpiral(Utils.mathRandom(3, 4), 150, 250);
-    else if (pKey === 5) await pSwapTunnel2(Utils.mathRandom(2, 3), 250, 250);
-    else if (pKey === 6) await pSwapperInverse(250, 250);
+    if (pKey === 0) await pSwapper(250, 320);
+    else if (pKey === 1) await pSwappers(Utils.mathRandom(3, 4), 320, 320);
+    else if (pKey === 2) await pSwapTunnel(Utils.mathRandom(3, 4), 320, 320);
+    else if (pKey === 3) await patterns.pInverseBarrage(Utils.mathRandom(4, 6), 240, 320);
+    else if (pKey === 4) await pSwapSpiral(Utils.mathRandom(3, 4), 200, 320);
+    else if (pKey === 5) await pSwapTunnel2(Utils.mathRandom(2, 3), 250, 320);
+    else if (pKey === 6) await pSwapperInverse(250, 320);
 }
 
 const pKeys = [0, 1, 2, 3, 4, 5, 6];
@@ -102,14 +101,12 @@ let activeKeys = [];
 // onInit is called on the first frame when level is created.
 level.onInit = () => {
     level.setSwapEnabled(true);
-    level.setWallSpeedMult(2.5);
+    level.setWallSpeedMult(3);
     level.setSides(6);
     level.set3dDepth(5);
     level.set3dDistance(8);
     level.setWallSpeedIncrement(0.2);
     level.setIncrementTime(12);
-    
-    level.setRotationSpeedIncrement(0.015);
     level.set3dColor(new Color(0, 0, 0));
 }
 
@@ -144,7 +141,7 @@ level.onUpdate = ft => {
     level.setRadius(85 - f * 15);
     level.setRotationSpeed()
 
-    level.setMainColor(Color.hsvToRgb(Utils.pingPong(syncTime) * .1 + hueShift, 1, 1))
+    level.setMainColor(Lerp.interpolate(Color.hsvToRgb(Utils.pingPong(syncTime) * .1 + hueShift, 1, 1), Color.hsvToRgb(Utils.pingPong(syncTime) * .1 + hueShift, .2, 1), Utils.pingPong(time * 10)))
 
     const s = 1.2 + Utils.pingPong(syncTime) * .5
     level.setWallScale(new Vector2(s, s))
@@ -161,7 +158,7 @@ let rotationSpeed = .35;
 // onPreIncrement is called immediately when increment time is achieved
 level.onPreIncrement = () => {
     rotationDir *= -1;
-    rotationSpeed += .04;
+    rotationSpeed += .06;
 }
 
 // onIncrement is called every time walls are gone and level speed incremented

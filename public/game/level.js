@@ -90,7 +90,7 @@ export default class Level extends Game {
         this.#isIncrementing = true;
         const inc = this.getRotationSpeed() >= 0 ? this.#rotationSpeedIncrement : -this.#rotationSpeedIncrement
         const newRotation = (this.getRotationSpeed() + inc)*-1;
-        const cappedRotation = newRotation >= 0 ? Math.min(newRotation, this.#rotationSpeedMax) : Math.max(newRotation, this.#rotationSpeedMax);
+        const cappedRotation = newRotation >= 0 ? Math.min(newRotation, this.#rotationSpeedMax) : Math.max(newRotation, -this.#rotationSpeedMax);
         if (this.#incrementSpinPower !== 0) {
             const rotationSpeedLerp = new Lerp(v => this.setRotationSpeed(v));
             rotationSpeedLerp.apply(cappedRotation > 0 ? cappedRotation + this.#incrementSpinPower : cappedRotation - this.#incrementSpinPower)

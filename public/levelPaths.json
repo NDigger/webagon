@@ -1,6 +1,6 @@
 [
-    "./levelsContent/levels/exampleLevel",
     "./levelsContent/levels/firstSteps",
+    "./levelsContent/levels/tranquility",
     "./levelsContent/levels/allINeed",
     "./levelsContent/levels/jungle",
     "./levelsContent/levels/hell",
