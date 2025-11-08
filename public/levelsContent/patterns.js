@@ -33,7 +33,7 @@ export default function initPatterns(level) {
         const side = getRandomSide();
         for(let i = 0; i < times; i++) {
             barrage((i%2)*level.getSides()/2+side);
-            await level.distanceDelay(delay);
+            if (i !== times - 1) await level.distanceDelay(delay);
         }
         await level.distanceDelay(delayEnd);
     }
@@ -89,7 +89,7 @@ export default function initPatterns(level) {
         const dir = getRandomDir();
         for(let i = 0; i < times; i++) {
             barrage(i * step * dir + side);
-            await level.distanceDelay(delay);
+            if (i !== times - 1) await level.distanceDelay(delay);
         }
         await level.distanceDelay(delayEnd);
     }
@@ -102,7 +102,7 @@ export default function initPatterns(level) {
             } else {
                 level.createWall(side - 1, 40)
             }
-            await level.distanceDelay(delay);
+            if (i !== times - 1) await level.distanceDelay(delay);
         }
         await level.distanceDelay(delayEnd);
     }
@@ -112,7 +112,7 @@ export default function initPatterns(level) {
         const shift = getShift();
         for (let i = 0; i < times; i++) {
             barrage(side + ((i+shift) % 2 === 0 ? step : 0));
-            await level.distanceDelay(delay);
+            if (i !== times - 1) await level.distanceDelay(delay);
         }
         await level.distanceDelay(delayEnd);
     } 
@@ -129,7 +129,7 @@ export default function initPatterns(level) {
         for (let i = 0; i < times - 1; i++) {
             shift -= dir;
             wallEx(side + shift);
-            await level.distanceDelay(delay);
+            if (i !== times - 1) await level.distanceDelay(delay);
         }
         await level.distanceDelay(delayEnd);
     }
@@ -153,7 +153,7 @@ export default function initPatterns(level) {
         for(let i = 0; i < times; i++) {
             alt((i % 2 === 0) ? side + shift : side - 1 + shift);
             for (let k = 0; k < extra; k++) level.createWall(side - 2 + k, i !== times - 1 ? delay + extraTunnelThickness : 40);
-            await level.distanceDelay(delay);
+            if (i !== times - 1) await level.distanceDelay(delay);
         }
         await level.distanceDelay(delayEnd);
     }
@@ -163,7 +163,7 @@ export default function initPatterns(level) {
         const dir = getRandomDir();
         for (let i = 0; i < times; i++) {
             wallEx(i * step * dir + side);
-            await level.distanceDelay(delay);
+            if (i !== times - 1) await level.distanceDelay(delay);
         }
         await level.distanceDelay(delayEnd);
     }
@@ -172,7 +172,7 @@ export default function initPatterns(level) {
         const side = getRandomSide();
         for (let i = 0; i < times; i++) {
             alt(side);
-            await level.distanceDelay(delay);
+            if (i !== times - 1) await level.distanceDelay(delay);
         }
         await level.distanceDelay(delayEnd);
     }
@@ -181,7 +181,7 @@ export default function initPatterns(level) {
         const side = getRandomSide();
         for (let i = 0; i < times; i++) {
             wallEx(side);
-            await level.distanceDelay(delay);
+            if (i !== times - 1) await level.distanceDelay(delay);
         }
         await level.distanceDelay(delayEnd);
     }
@@ -193,7 +193,7 @@ export default function initPatterns(level) {
             wallEx((i + shift) % 2 === 0 ? side : side + 2);
             level.createWall(side, i !== times -1 ? delay + extraTunnelThickness : 40);
             level.createWall(side + level.getSides()/2, i !== times -1 ? delay + extraTunnelThickness : 40);
-            await level.distanceDelay(delay)
+            if (i !== times - 1) await level.distanceDelay(delay)
         }
         await level.distanceDelay(delayEnd);
     }
@@ -203,7 +203,7 @@ export default function initPatterns(level) {
         for (let i = 0; i < times; i++) {
             side += getRandomDir();
             barrage(side);
-            await level.distanceDelay(delay)
+            if (i !== times - 1) await level.distanceDelay(delay)
         }
         await level.distanceDelay(delayEnd)
     }
@@ -223,7 +223,7 @@ export default function initPatterns(level) {
         const side = getRandomSide();
         for (let i = 0; i < times; i++) {
             barrage(side)
-            await level.distanceDelay(delay);
+            if (i !== times - 1) await level.distanceDelay(delay);
         }
         await level.distanceDelay(delayEnd);
     }
@@ -232,12 +232,16 @@ export default function initPatterns(level) {
         const side = getRandomSide();
         for (let i = 0; i < times; i++) {
             alt(side + i)
-            await level.distanceDelay(delay);
+            if (i !== times - 1) await level.distanceDelay(delay);
         }
         await level.distanceDelay(delayEnd);
     }
 
     return {
+        barrage,
+        alt,
+        wallEx,
+        
         pAltBarrage,
         pInverseBarrage,
         pSpiral,

@@ -245,15 +245,16 @@ export default class Game extends GameObject {
         this.#background.draw();
         this.#polygon.draw();
 
-        if (!this.#died && this.#distanceDelay > 0) {
-            this.#distanceDelay -= frameTime * this.#wallSpeedMult / 5;
-            if (this.#distanceDelay <= 0 && typeof(this.#distanceSignal) === 'function') this.#distanceSignal()
-        }
         let hasDiedNextStep = this.#died;
         const steps = Math.max(Math.floor((240/(getFPS()||60))*this.#wallSpeedMult/10), 60)
         const prevRotationOffset = this.#polygon.player.getRotationOffset();
         for (let i = 0; i < steps; i++) {
             if (hasDiedNextStep) break
+
+            if (!this.#died && this.#distanceDelay > 0) {
+                this.#distanceDelay -= frameTime * this.#wallSpeedMult / 5 / steps;
+                if (this.#distanceDelay <= 0 && typeof(this.#distanceSignal) === 'function') this.#distanceSignal()
+            }
             
             if (this.#playerMovementEnabled) {
                 if (this.#leftKeyPressed) this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() - frameTime * .6 / steps);

@@ -6,12 +6,12 @@ let patterns = initPatterns(level); // Patterns require level object in order to
 
 // Pattern spawn conditions, uses level.onStep
 const addPattern = async pKey => {
-    if (pKey === 0) await patterns.pInverseBarrage(Utils.mathRandom(2, 3), 550, 300);
-    else if (pKey === 1) await patterns.pSpiralBarrage(Utils.mathRandom(4, 6), 350, 400);
-    else if (pKey === 2) await patterns.pRandomBarrage(Utils.mathRandom(6, 9), 370, 600);
-    else if (pKey === 3) await patterns.pTunnel(Utils.mathRandom(2, 3), 650, 600);
-    else if (pKey === 4) await patterns.pSpiral(Utils.mathRandom(6, 8), 380, 500, 2)
-    else if (pKey === 5) await patterns.pAltBarrage(Utils.mathRandom(3, 5), 380, 200)
+    if (pKey === 0) await patterns.pInverseBarrage(Utils.mathRandom(2, 3), 650, 700);
+    else if (pKey === 1) await patterns.pSpiralBarrage(Utils.mathRandom(4, 6), 350, 700);
+    else if (pKey === 2) await patterns.pRandomBarrage(Utils.mathRandom(6, 9), 370, 700);
+    else if (pKey === 3) await patterns.pTunnel(Utils.mathRandom(2, 3), 650, 700);
+    else if (pKey === 4) await patterns.pSpiral(Utils.mathRandom(6, 8), 380, 600, 2)
+    else if (pKey === 5) await patterns.pAltBarrage(Utils.mathRandom(3, 5), 380, 700)
 }
 
 const pKeys = [0, 1, 2, 2, 2, 3, 4, 5];
@@ -67,7 +67,7 @@ level.onUpdate = ft => {
     level.setShakePower(2+level.getTime()/30)
 
     const t = Utils.pingPong(level.getTime() * (level.getTime() / 50 + 1))
-    level.setMainColor(Lerp.interpolate(Color.RED(), new Color(0, 0, 0, 0), t))
+    level.setMainColor(Lerp.interpolate(Color.RED(), new Color(0, 0, 0), t))
 }
 
 // onRender is called every frame. It works when player is died.

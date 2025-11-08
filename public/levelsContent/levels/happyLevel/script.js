@@ -16,10 +16,7 @@ let activeKeys = [];
 
 // onInit is called on the first frame when level is created.
 level.onInit = () => {
-    // g.setBackgroundRadius(500);
-    level.setSwapEnabled(true);
-    level.setMainColor(new Color(255, 0, 0));
-    level.setRadius(70);
+    level.setRadius(80);
     level.setRotationSpeed(0.1);
     level.setWallSpeedMult(3);
     level.setSides(6);
@@ -42,19 +39,19 @@ level.onStep = async () => {
 let time = 0;
 // onUpdate is called every frame.
 level.onUpdate = ft => {
-    const colorTime = time/2;
+    const colorTime = time;
     level.setBackgroundTileColors([
-        Color.hsvToRgb(colorTime, 1., .9),
-        Color.hsvToRgb(colorTime + 1/24, 1., 1),
-        Color.hsvToRgb(colorTime + 2/24, 1., .9),
-        Color.hsvToRgb(colorTime + 3/24, 1., 1),
-        Color.hsvToRgb(colorTime + 2/24, 1., .9),
-        Color.hsvToRgb(colorTime + 1/24, 1., 1),
+        Color.hsvToRgb(colorTime, 1., .4),
+        Color.hsvToRgb(colorTime + 1/12, 1., .4),
+        Color.hsvToRgb(colorTime + 2/12, 1., .4),
+        Color.hsvToRgb(colorTime + 3/12, 1., .4),
+        Color.hsvToRgb(colorTime + 2/12, 1., .4),
+        Color.hsvToRgb(colorTime + 1/12, 1., .4),
     ])
     level.setOffset(new Vector2(Math.sin(time * 3) * 50, 0));
     level.setCenterOffset(new Vector2(0, Math.sin(time * 3) * 50));
 
-    level.setMainColor(Color.hsvToRgb(colorTime, 0, 1))
+    level.setMainColor(Color.hsvToRgb(colorTime, .1, 1))
     const s = 1 + Utils.pingPong(time) * .2
     level.setScale(new Vector2(s, s))
 }
