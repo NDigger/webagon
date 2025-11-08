@@ -33,6 +33,7 @@
 
 :root {
     --main-color: rgba(255, 0, 0, 255);
+    --background-tile-color: rgba(0, 0, 0, 255);
 }
 
 button {
@@ -78,9 +79,9 @@ button:focus {
     text-align: left;
     position: absolute; 
     font-size: 1.5rem;
-    text-shadow: 1.5px 0 black, -1.5px 0 black, 0 1.5px black, 0 1.5px black,
-               1.5px 1.5px black, -1.5px -1.5px black, 1.5px -1.5px black, -1.5px 1.5px black
-               , 0px 2px 10px rgba(0, 0, 0, .5);
+    text-shadow: 2.5px 0 var(--background-tile-color), -2.5px 0 var(--background-tile-color), 0 2.5px var(--background-tile-color), 0 2.5px var(--background-tile-color),
+               2.5px 2.5px var(--background-tile-color), -2.5px -2.5px var(--background-tile-color), 2.5px -2.5px var(--background-tile-color), -2.5px 2.5px var(--background-tile-color)
+               /* , 0px 2px 10px rgba(0, 0, 0, .5); */
     /* display: none; */
 }
 
@@ -138,9 +139,9 @@ button:focus {
     width: 80px;
     height: 80px;
     font-size: 4rem;
-    text-shadow: 1.5px 0 black, -1.5px 0 black, 0 1.5px black, 0 1.5px black,
-               1.5px 1.5px black, -1.5px -1.5px black, 1.5px -1.5px black, -1.5px 1.5px black
-               , 0px 2px 10px rgba(0, 0, 0, .5);;
+    text-shadow: 1.5px 0 var(--background-tile-color), -1.5px 0 var(--background-tile-color), 0 1.5px var(--background-tile-color), 0 1.5px var(--background-tile-color),
+               1.5px 1.5px var(--background-tile-color), -1.5px -1.5px var(--background-tile-color), 1.5px -1.5px var(--background-tile-color), -1.5px 1.5px var(--background-tile-color)
+               /* , 0px 2px 10px rgba(0, 0, 0, .5); */
 }
 
 #timer {

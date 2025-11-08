@@ -225,6 +225,10 @@ export default class Level extends Game {
         this.#onDeath()
     }
 
+    setBackgroundTileColors(arr) {
+        super.setBackgroundTileColors(arr);
+        document.documentElement.style.setProperty('--background-tile-color', arr[0].getRGBAStyle());
+    }
     setMainColor({r, g, b, a}) {
         const color = new Color(r, g, b, a);
         super.setMainColor(color)

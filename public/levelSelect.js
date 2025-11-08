@@ -21,6 +21,7 @@ const levelPreviewUpdate = ft =>{
     background.setDarkenUnevenChunkEnabled(style.backgroundDarkenUnevenChunkEnabled);
     background.setSwapTime(style.backgroundSwapTime);
     document.documentElement.style.setProperty('--main-color', style.mainColor.getRGBAStyle());
+    document.documentElement.style.setProperty('--background-tile-color', style.backgroundTileColors[0].getRGBAStyle());
     background.setSides(style.sides);
     background.draw();
 }
