@@ -30,6 +30,9 @@ export default class Level extends Game {
     #levelData;
     #audioTimestamp;
 
+    #rotationSpeedMax = Number.MAX_SAFE_INTEGER;
+    #wallSpeedMax = Number.MAX_SAFE_INTEGER;
+
     #incrementTime = 15;
     #incrementTimer = 0;
     #isIncrementing = false;
@@ -84,17 +87,18 @@ export default class Level extends Game {
 
     #preIncrement() {
         this.#incrementTimer = 0;
-        this.onPreIncrement();
         this.#isIncrementing = true;
         const inc = this.getRotationSpeed() >= 0 ? this.#rotationSpeedIncrement : -this.#rotationSpeedIncrement
         const newRotation = (this.getRotationSpeed() + inc)*-1;
+        const cappedRotation = newRotation >= 0 ? Math.min(newRotation, this.#rotationSpeedMax) : Math.max(newRotation, this.#rotationSpeedMax);
         if (this.#incrementSpinPower !== 0) {
             const rotationSpeedLerp = new Lerp(v => this.setRotationSpeed(v));
-            rotationSpeedLerp.apply(newRotation > 0 ? newRotation + this.#incrementSpinPower : newRotation - this.#incrementSpinPower)
-            rotationSpeedLerp.run(newRotation, .5)
+            rotationSpeedLerp.apply(cappedRotation > 0 ? cappedRotation + this.#incrementSpinPower : cappedRotation - this.#incrementSpinPower)
+            rotationSpeedLerp.run(cappedRotation, .5)
         } else {
             this.setRotationSpeed((this.getRotationSpeed() + inc)*-1);
         }
+        this.onPreIncrement();
     }
 
     callIncrement() {
@@ -103,7 +107,7 @@ export default class Level extends Game {
 
     #increment() {
         this.#isIncrementing = false;
-        this.setWallSpeedMult(this.getWallSpeedMult() + this.#wallSpeedIncrement);
+        this.setWallSpeedMult(Math.min(this.getWallSpeedMult() + this.#wallSpeedIncrement, this.#wallSpeedMax));
         this.onIncrement();
         this.#step();
     }
@@ -245,6 +249,18 @@ export default class Level extends Game {
         super.setSwapEnabled(v);
         document.getElementById('swap-enabled-msg').style.display = v ? 'block' : 'none';
     }
+
+    setRotationSpeedMax(v) {
+        if (typeof(v) !== 'number') return
+        this.#rotationSpeedMax = v
+    }
+    getRotationSpeedMax() { return this.#rotationSpeedMax }
+    setWallSpeedMax(v) {
+        if (typeof(v) !== 'number') return
+        this.#wallSpeedMax = v
+    }
+    getWallSpeedMax() { return this.#wallSpeedMax }
+
     getTime() {
         return this.#levelTime/1000
     }
