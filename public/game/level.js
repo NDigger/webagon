@@ -96,7 +96,7 @@ export default class Level extends Game {
             rotationSpeedLerp.apply(cappedRotation > 0 ? cappedRotation + this.#incrementSpinPower : cappedRotation - this.#incrementSpinPower)
             rotationSpeedLerp.run(cappedRotation, .5)
         } else {
-            this.setRotationSpeed((this.getRotationSpeed() + inc)*-1);
+            this.setRotationSpeed(cappedRotation);
         }
         this.onPreIncrement();
     }
