@@ -78,7 +78,7 @@ fetch('./levelPaths.json')
         `)
 
         levelList.lastElementChild.addEventListener('click', e => {
-            if (getSelectedLevel() !== e.currentTarget || (window.innerWidth < 1068 && !selectedLevelInfo.classList.contains('show'))) {
+            if (getSelectedLevelElement() !== e.currentTarget || (window.innerWidth < 1068 && !selectedLevelInfo.classList.contains('show'))) {
                 audioManager.resetPlay('level-select')
                 setLevelListPosition(i)
                 selectedLevelInfo.classList.remove('hide');
