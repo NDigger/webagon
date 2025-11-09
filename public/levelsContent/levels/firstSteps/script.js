@@ -36,17 +36,17 @@ level.onStep = async () => {
     await addPattern(activeKeys.splice(rndIndex, 1)[0])
 }
 
-let time = 0;
 // onUpdate is called every frame.
 level.onUpdate = ft => {
     level.setBackgroundTileColors([
         new Color(75, 75, 75),
         new Color(85, 85, 85),
     ])
-    level.setMainColor(Color.hsvToRgb(time * 0.2, 1, 1))
+    const t = level.getTime();
+    level.setMainColor(Color.hsvToRgb(t * 0.2, 1, 1))
     level.setScale(new Vector2(
-        Utils.pingPong(time * .5) * .2 + 1, 
-        Utils.pingPong(time * .5) * .2 + 1)
+        Utils.pingPong(t * .5) * .2 + 1, 
+        Utils.pingPong(t * .5) * .2 + 1)
     )
 }
 
@@ -55,6 +55,5 @@ level.onIncrement = () => {
 }
 
 level.onRender = ft => {
-    time += ft;
-    level.setSkew(Utils.pingPong(time*.07)*.5)
+    level.setSkew(Utils.pingPong(level.getTime()*.07)*.5)
 }

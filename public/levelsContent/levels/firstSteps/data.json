@@ -1,15 +1,15 @@
 {
     "key": "believe", 
 
-    "name": "Believe",
-    "description": "I believe I will finish this project.",
+    "name": "Origin",
+    "description": "That's what I began from",
     "author": "NDagger",
 
     "musicName": "Hybrid Song",
     "musicAuthor": "Quazar / Sanxion",
     "musicAlbum": "",
     "musicPath": "hybridSong.ogg",
-    "musicTimestamps": [3, 25, 40],
+    "musicTimestamps": [3, 25, 50],
 
     "scriptPath": "script.js"
 }

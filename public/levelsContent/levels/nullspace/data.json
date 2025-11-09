@@ -1,0 +1,15 @@
+{
+    "key": "nullspace", 
+
+    "name": "Nullspace",
+    "description": "",
+    "author": "NDagger",
+
+    "musicName": "145",
+    "musicAuthor": "Coeter One",
+    "musicAlbum": "110 EP",
+    "musicPath": "music.ogg",
+    "musicTimestamps": [10, 70, 150, 220, 290, 350],
+
+    "scriptPath": "script.js"
+}

@@ -2,14 +2,14 @@
     "key": "impulse", 
 
     "name": "Impulse",
-    "description": "three, two, one...",
+    "description": "Watered electricity",
     "author": "NDagger",
 
     "musicName": "Encounter",
     "musicAuthor": "F.O.O.L & Waveshaper",
     "musicAlbum": "",
     "musicPath": "music.ogg",
-    "musicTimestamps": [8, 78, 108, 148],
+    "musicTimestamps": [8, 78, 108, 148, 160],
 
     "scriptPath": "script.js"
 }

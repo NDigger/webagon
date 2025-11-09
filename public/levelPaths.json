@@ -4,6 +4,7 @@
     "./levelsContent/levels/allINeed",
     "./levelsContent/levels/jungle",
     "./levelsContent/levels/hell",
+    "./levelsContent/levels/nullspace",
     "./levelsContent/levels/neon",
     "./levelsContent/levels/happyLevel",
     "./levelsContent/levels/impulse"
