@@ -1,5 +1,9 @@
 import Lerp from "../utils/interpolation";
 
+export const getRandomSide = level => Math.floor(Math.random() * level.getSides()); 
+export const getRandomDir = () => Math.random() < .5 ? -1 : 1;
+export const getShift = () => Math.floor(Math.random() * 2);
+
 export const mathRandom = (min, max) => min + Math.floor(Math.random() * (max - min + 1))
 export const fract = t => t - Math.floor(t);
 export const pingPong = t => (Math.floor(t * 2) % 2 === 0) ? fract(t * 2) : 1.-fract(t*2)

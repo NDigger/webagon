@@ -18,8 +18,6 @@ let activeKeys = [];
 
 // onInit is called on the first frame when level is created.
 level.onInit = () => {
-    // g.setBackgroundRadius(500);
-    level.setSwapEnabled(true);
     level.setMainColor(new Color(255, 0, 0));
     level.setRadius(70);
     level.setRotationSpeed(0.035);
@@ -28,6 +26,7 @@ level.onInit = () => {
     level.set3dDepth(4);
     level.set3dDistance(50);
     level.setWallSpeedIncrement(0.2);
+    level.setWallSpeedIncrement(0.015);
     level.setRotationSpeedIncrement(0.015);
 }
 

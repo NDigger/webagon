@@ -1,10 +1,8 @@
 
-const getRandomDir = () => Math.random() < .5 ? -1 : 1;
-const getShift = () => Math.floor(Math.random() * 2);
+import { getRandomSide, getRandomDir, getShift } from './utils'
+
 const extraTunnelThickness = 40;
 export default function initPatterns(level) {
-    const getRandomSide = () => Math.floor(Math.random() * level.getSides());
-
     const barrage = side => {
         for(let i = 0; i < level.getSides() - 1; i++) {
             level.createWall(i + side, 40)
@@ -30,7 +28,7 @@ export default function initPatterns(level) {
     }
 
     const pInverseBarrage = async (times, delay, delayEnd = 0) => {
-        const side = getRandomSide();
+        const side = getRandomSide(level);
         for(let i = 0; i < times; i++) {
             barrage((i%2)*level.getSides()/2+side);
             if (i !== times - 1) await level.distanceDelay(delay);
@@ -39,7 +37,7 @@ export default function initPatterns(level) {
     }
 
     const pSpiral = async (times, delay, delayEnd = 0, extra = 1) => {
-        const side = getRandomSide();
+        const side = getRandomSide(level);
         const dir = getRandomDir();
         for(let i = 0; i < times; i++) {
             for(let k = 0; k < extra; k++) level.createWall((i+k) * dir + side, delay)
@@ -49,7 +47,7 @@ export default function initPatterns(level) {
     }
 
     const pDoubleSpiral = async (times, delay, delayEnd = 0, extra = 1) => {
-        const side = getRandomSide();
+        const side = getRandomSide(level);
         const dir = getRandomDir();
         for(let i = 0; i < times; i++) {
             for(let k = 0; k < extra; k++) {
@@ -62,7 +60,7 @@ export default function initPatterns(level) {
     }
 
     const pDoubleInverseSpiral = async (times, delay, delayEnd = 0, extra = 1) => {
-        let side = getRandomSide();
+        let side = getRandomSide(level);
         const dir = getRandomDir();
         for(let i = 0; i < times; i++) {
             side += dir;
@@ -85,7 +83,7 @@ export default function initPatterns(level) {
 
 
     const pSpiralBarrage = async (times, delay, delayEnd = 0, step = 1) => {
-        const side = getRandomSide();
+        const side = getRandomSide(level);
         const dir = getRandomDir();
         for(let i = 0; i < times; i++) {
             barrage(i * step * dir + side);
@@ -95,7 +93,7 @@ export default function initPatterns(level) {
     }
 
     const pLeftRight = async (times, delay, delayEnd = 0) => {
-        const side = getRandomSide();
+        const side = getRandomSide(level);
         for(let i = 0; i < times; i++) {
             if (i % 2 === 0) {
                 barrage(side);
@@ -108,7 +106,7 @@ export default function initPatterns(level) {
     }
 
     const pLRBarrage = async (times, delay, delayEnd = 0, step = 1) => {
-        const side = getRandomSide();
+        const side = getRandomSide(level);
         const shift = getShift();
         for (let i = 0; i < times; i++) {
             barrage(side + ((i+shift) % 2 === 0 ? step : 0));
@@ -118,7 +116,7 @@ export default function initPatterns(level) {
     } 
 
     const pWallExVortex = async (times, delay, delayEnd = 0) => {
-        const side = getRandomSide();
+        const side = getRandomSide(level);
         const dir = getRandomDir();
         let shift = 0;
         for (let i = 0; i < times; i++) {
@@ -135,7 +133,7 @@ export default function initPatterns(level) {
     }
 
     const pTunnel = async (times, delay, delayEnd = 0) => {
-        const side = getRandomSide();
+        const side = getRandomSide(level);
         const shift = getShift();
         for(let i = 0; i < times; i++) {
             barrage(((i + shift) % 2 === 0) ? side : side - 2);
@@ -148,7 +146,7 @@ export default function initPatterns(level) {
     }
 
     const pAltTunnel = async (times, delay, delayEnd = 0, extra = 1) => {
-        const side = getRandomSide();
+        const side = getRandomSide(level);
         const shift = getShift();
         for(let i = 0; i < times; i++) {
             alt((i % 2 === 0) ? side + shift : side - 1 + shift);
@@ -159,7 +157,7 @@ export default function initPatterns(level) {
     }
 
     const pWallExSpiral = async (times, delay, delayEnd, step = 1) => {
-        const side = getRandomSide();
+        const side = getRandomSide(level);
         const dir = getRandomDir();
         for (let i = 0; i < times; i++) {
             wallEx(i * step * dir + side);
@@ -169,7 +167,7 @@ export default function initPatterns(level) {
     }
 
     const pAltSpam = async (times, delay, delayEnd) => {
-        const side = getRandomSide();
+        const side = getRandomSide(level);
         for (let i = 0; i < times; i++) {
             alt(side);
             if (i !== times - 1) await level.distanceDelay(delay);
@@ -178,7 +176,7 @@ export default function initPatterns(level) {
     }
 
     const pWallExSpam = async (times, delay, delayEnd) => {
-        const side = getRandomSide();
+        const side = getRandomSide(level);
         for (let i = 0; i < times; i++) {
             wallEx(side);
             if (i !== times - 1) await level.distanceDelay(delay);
@@ -187,7 +185,7 @@ export default function initPatterns(level) {
     }
 
     const pWallExTunnel = async (times, delay, delayEnd) => {
-        const side = getRandomSide();
+        const side = getRandomSide(level);
         const shift = getShift();
         for (let i = 0; i < times; i++) {
             wallEx((i + shift) % 2 === 0 ? side : side + 2);
@@ -199,7 +197,7 @@ export default function initPatterns(level) {
     }
 
     const pRandomLRBarrage = async (times, delay, delayEnd) => {
-        let side = getRandomSide();
+        let side = getRandomSide(level);
         for (let i = 0; i < times; i++) {
             side += getRandomDir();
             barrage(side);
@@ -209,7 +207,7 @@ export default function initPatterns(level) {
     }
 
     const pRandomBarrage = async (times, delay, delayEnd) => {
-        let side = getRandomSide();
+        let side = getRandomSide(level);
         for (let i = 0; i < times; i++) {
             barrage(side);
             const inc = Math.floor(Math.random() * (level.getSides()/2))*getRandomDir();
@@ -220,7 +218,7 @@ export default function initPatterns(level) {
     }
 
     const pBarrageSpam = async (times, delay, delayEnd) => {
-        const side = getRandomSide();
+        const side = getRandomSide(level);
         for (let i = 0; i < times; i++) {
             barrage(side)
             if (i !== times - 1) await level.distanceDelay(delay);
@@ -229,7 +227,7 @@ export default function initPatterns(level) {
     }
 
     const pAltBarrage = async (times, delay, delayEnd) => {
-        const side = getRandomSide();
+        const side = getRandomSide(level);
         for (let i = 0; i < times; i++) {
             alt(side + i)
             if (i !== times - 1) await level.distanceDelay(delay);

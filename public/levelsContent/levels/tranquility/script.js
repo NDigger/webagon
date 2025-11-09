@@ -18,8 +18,6 @@ let activeKeys = [];
 
 // onInit is called on the first frame when level is created.
 level.onInit = () => {
-    // g.setBackgroundRadius(500);
-    level.setSwapEnabled(true);
     level.setMainColor(new Color(255, 0, 0));
     level.setRadius(80);
     level.setRotationSpeed(0.04);
