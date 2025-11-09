@@ -5,7 +5,7 @@ import initPatterns from '../../patterns';
 let patterns = initPatterns(level); // Patterns require level object in order to be spawned.
 
 const pSpiral = async (times, delay, delayEnd = 0, extra = 1) => {
-    const side = Utils.getRandomSide();
+    const side = Utils.getRandomSide(level);
     const dir = Utils.getRandomDir();
     for(let i = 0; i < times; i++) {
         for(let k = 0; k < extra; k++) level.createWall((i+k) * dir + side, 40)
@@ -16,27 +16,27 @@ const pSpiral = async (times, delay, delayEnd = 0, extra = 1) => {
 
 // Pattern spawn conditions, uses level.onStep
 const addPattern = async pKey => {
-    if (pKey === 0) await patterns.pInverseBarrage(Utils.mathRandom(2, 3), 400, 400);
-    else if (pKey === 1) await patterns.pSpiralBarrage(Utils.mathRandom(3, 4), 250, 400);
-    else if (pKey === 2) await pSpiral(Utils.mathRandom(5, 7), 150, 400, 2);
-    else if (pKey === 3) await patterns.pRandomBarrage(Utils.mathRandom(5, 6), 200, 400);
-    else if (pKey === 4) await patterns.pTunnel(Utils.mathRandom(2, 3), 400, 400);
+    if (pKey === 0) await patterns.pInverseBarrage(Utils.mathRandom(2, 3), 375, 375);
+    else if (pKey === 1) await patterns.pSpiralBarrage(Utils.mathRandom(3, 4), 250, 375);
+    else if (pKey === 2) await pSpiral(Utils.mathRandom(5, 7), 150, 150, Utils.mathRandom(1, 2));
+    else if (pKey === 3) await patterns.pRandomBarrage(Utils.mathRandom(5, 6), 250, 375);
+    else if (pKey === 5) await patterns.pAltBarrage(Utils.mathRandom(3, 4), 375, 375);
 }
 
-const pKeys = [0, 1, 2, 3, 3, 3, 4];
+const pKeys = [0, 1, 2, 3, 3, 3, 3, 4];
 let activeKeys = [];
 
 // onInit is called on the first frame when level is created.
 level.onInit = () => {
-    level.setMainColor(new Color(255, 0, 0));
     level.setRadius(70);
     level.setRotationSpeed(0.15);
-    level.setWallSpeedMult(4);
-    level.setSides(4);
+    level.setWallSpeedMult(4.6);
+    level.setSides(5);
     level.set3dDepth(8);
     level.set3dDistance(16);
-    level.setWallSpeedIncrement(0.2);
-    level.setRotationSpeedIncrement(0.015);
+    level.setIncrementTime(11.5);
+    level.setWallSpeedIncrement(.2);
+    level.setWallSpeedMax(6.4);
     level.set3dFalloffColor(new Color(0, 0, 0, 0));
 }
 
@@ -53,27 +53,35 @@ level.onUpdate = ft => {
     const t = level.getTime()
     level.setBackgroundTileColors([
         Utils.interpolate(new Color(0, 0, 25), new Color(0, 0, 0), Utils.pingPong(t*10)),
+        Utils.interpolate(new Color(0, 0, 0), new Color(15, 15, 15), Utils.pingPong(t*10)),
     ])
     const syncTime = t * 1.9;
 
     level.setRadius(90 - Utils.fract(syncTime) * 20)
     level.setWallSkewLeft(-Utils.fract(syncTime) * 40)
     level.setWallSkewRight(-Utils.fract(syncTime) * 40)
+    const rs = rotationSpeed;
+    level.setRotationSpeed((rs - Utils.fract(syncTime) * rs + rs * .3) * rotationDir)
 
-    level.setMainColor(Utils.interpolate(new Color(255, 0, 0), new Color(0, 255, 255), Utils.pingPong(t * 10)))
+    level.setMainColor(Utils.interpolate(new Color(255, 155, 0), new Color(0, 255, 255), Utils.pingPong(t * 10)))
 
     // Imitating level pulse with pingPong function
-    const s = Utils.fract(Utils.easeOut(Utils.fract(syncTime))) * .8 + 1.5
+    const s = Utils.fract(Utils.easeOut(Utils.fract(syncTime))) * 1 + 1
     level.setWallScale(new Vector2(s, s))
 }
 
 // onRender is called every frame. It works when player is died.
 level.onRender = ft => {
-    level.setSkew(Utils.pingPong(level.getTime()*2)*.1+.8)
+    level.setSkew(Utils.pingPong(level.getTime()*2)*.1+.8);
 }
 
-// onPreIncrement is called immediately when increment time is achieved
-level.onPreIncrement = () => {}
+let rotationSpeed = .25;
+let rotationDir = 1;
+// onPreIncrement is called immediately when inтcrement time is achieved
+level.onPreIncrement = () => {
+    rotationDir = -rotationDir
+    rotationSpeed += .035;
+}
 
 // onIncrement is called every time walls are gone and level speed incremented
 level.onIncrement = () => {}

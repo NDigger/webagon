@@ -9,7 +9,7 @@
     "musicAuthor": "F.O.O.L & Waveshaper",
     "musicAlbum": "",
     "musicPath": "music.ogg",
-    "musicTimestamps": [8],
+    "musicTimestamps": [8, 78, 108, 148],
 
     "scriptPath": "script.js"
 }

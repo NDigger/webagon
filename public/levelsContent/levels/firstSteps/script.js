@@ -56,5 +56,5 @@ level.onIncrement = () => {
 
 level.onRender = ft => {
     time += ft;
-    level.setSkew(Utils.pingPong(time/5)/2)
+    level.setSkew(Utils.pingPong(time*.07)*.5)
 }
