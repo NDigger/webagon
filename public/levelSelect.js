@@ -4,6 +4,13 @@ import { app, setBestScore, audioManager, levelLoader } from './script';
 import { Color } from './utils/structures';
 
 const selectedLevelInfo = document.getElementById('selected-level-info')
+const levelList = document.getElementById('level-list');
+
+levelList.addEventListener('keydown', (e) => {
+  if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+    e.preventDefault();
+  }
+});
 
 levelLoader.onLeave = () => loadMenu();
 
@@ -21,7 +28,6 @@ const levelPreviewUpdate = ft =>{
     background.setDarkenUnevenChunkEnabled(style.backgroundDarkenUnevenChunkEnabled);
     background.setSwapTime(style.backgroundSwapTime);
     document.documentElement.style.setProperty('--main-color', style.mainColor.getRGBAStyle());
-    document.documentElement.style.setProperty('--background-tile-color', style.backgroundTileColors[0].getRGBAStyle());
     background.setSides(style.sides);
     background.draw();
 }
@@ -47,7 +53,6 @@ const loadMenu = () => {
 }
 
 const levelJsons = []
-const levelList = document.getElementById('level-list');
 fetch('./levelPaths.json')
 .then(res => res.json())
 .then(levelPaths => {
@@ -104,6 +109,7 @@ const afterShift = () => {
     selectedLevel.classList.remove('unselected-animation');
     void selectedLevel.offsetWidth;
     selectedLevel.classList.add('selected-animation');
+    selectedLevel.scrollIntoView({ behavior: 'smooth', block: 'start' })
 
     levelPreview.load(levelJsons[levelListSelectedLevel].scriptPath)
 

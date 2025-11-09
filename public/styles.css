@@ -200,6 +200,7 @@ canvas {
     position: absolute;
     left: -200px;
     top: 10px;
+    max-height: 100vh;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -207,6 +208,7 @@ canvas {
     /* for proper overflow hide */
     padding-right: 200px;
     padding-bottom: 50px;
+    overflow-y: scroll;
 }
 
 #level-list, #selected-level-info {
@@ -241,8 +243,8 @@ canvas {
     justify-content: center;
     flex-direction: column;
     width: 700px;
-    height: 70px;
     border: 2px solid var(--main-color);
+    padding: 10px 0;
     padding-right: 20px;
     /* transform: skewX(-20deg); */
 }

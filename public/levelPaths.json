@@ -7,5 +7,6 @@
     "./levelsContent/levels/nullspace",
     "./levelsContent/levels/neon",
     "./levelsContent/levels/happyLevel",
-    "./levelsContent/levels/impulse"
+    "./levelsContent/levels/impulse",
+    "./levelsContent/levels/outerBreath"
 ]

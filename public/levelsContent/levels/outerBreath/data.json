@@ -1,0 +1,15 @@
+{
+    "key": "outerbreath", 
+
+    "name": "Outer Breath",
+    "description": "",
+    "author": "NDagger",
+
+    "musicName": "Outer Breath",
+    "musicAuthor": "Aztec",
+    "musicAlbum": "",
+    "musicPath": "music.ogg",
+    "musicTimestamps": [10],
+
+    "scriptPath": "script.js"
+}
