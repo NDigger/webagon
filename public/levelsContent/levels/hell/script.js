@@ -55,7 +55,7 @@ level.onUpdate = ft => {
 
     level.setWallSpeedMult(Math.min(5 + level.getTime() / 30, 9));
 
-    const s = Utils.pingPong(Utils.ease_out(Utils.fract(level.getTime() * 1.1))) * .4 + 1
+    const s = Utils.pingPong(Utils.easeOut(Utils.fract(level.getTime() * 1.1))) * .4 + 1
     level.setWallScale(new Vector2(s, s))
 
     level.setRadius(100 - Utils.fract(level.getTime() * 3) * 20)

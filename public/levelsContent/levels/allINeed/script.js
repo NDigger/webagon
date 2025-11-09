@@ -48,7 +48,7 @@ level.onUpdate = ft => {
     const v = 225 + Utils.pingPong(time * 1.05) * 30;
     level.setPolygonColor(new Color(v, v, v));
     
-    const s = Utils.pingPong(1-Utils.ease_out(Utils.fract(time * 1.05))) * .9 + 1;
+    const s = Utils.pingPong(1-Utils.easeOut(Utils.fract(time * 1.05))) * .9 + 1;
     level.setWallScale(new Vector2(s, s));
 }
 

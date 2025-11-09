@@ -51,7 +51,7 @@ level.onUpdate = ft => {
     level.setMainColor(Color.hsvToRgb(colorTime, 1, 1))
 
     // Imitating level pulse with pingPong function
-    const s = Utils.pingPong(Utils.ease_out(Utils.pingPong(time * 1.5))) * .3 + 0.8
+    const s = Utils.pingPong(Utils.easeOut(Utils.pingPong(time * 1.5))) * .3 + 0.8
     level.setWallScale(new Vector2(s, s))
 }
 
