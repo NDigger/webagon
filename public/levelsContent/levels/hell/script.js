@@ -1,5 +1,5 @@
 
-import { Vector2, Color, Size, Lerp, level } from '../../common'
+import { Vector2, Color, Size, level } from '../../common'
 import * as Utils from '../../utils'
 import initPatterns from '../../patterns';
 let patterns = initPatterns(level); // Patterns require level object in order to be spawned.
@@ -55,7 +55,7 @@ level.onUpdate = ft => {
 
     level.setWallSpeedMult(Math.min(5 + level.getTime() / 30, 9));
 
-    const s = Utils.pingPong(Lerp.Easing.EASE_OUT(Utils.fract(level.getTime() * 1.1))) * .4 + 1
+    const s = Utils.pingPong(Utils.ease_out(Utils.fract(level.getTime() * 1.1))) * .4 + 1
     level.setWallScale(new Vector2(s, s))
 
     level.setRadius(100 - Utils.fract(level.getTime() * 3) * 20)
@@ -67,7 +67,7 @@ level.onUpdate = ft => {
     level.setShakePower(2+level.getTime()/30)
 
     const t = Utils.pingPong(level.getTime() * (level.getTime() / 50 + 1))
-    level.setMainColor(Lerp.interpolate(Color.RED(), new Color(0, 0, 0), t))
+    level.setMainColor(Utils.interpolate(Color.RED(), new Color(0, 0, 0), t))
 }
 
 // onRender is called every frame. It works when player is died.

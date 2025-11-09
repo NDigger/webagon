@@ -1,5 +1,5 @@
 
-import { Vector2, Color, Size, Lerp, level } from '../../common'
+import { Vector2, Color, Size, level } from '../../common'
 import * as Utils from '../../utils'
 import initPatterns from '../../patterns';
 let patterns = initPatterns(level); // Patterns require level object in order to be spawned.

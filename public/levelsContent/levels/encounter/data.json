@@ -1,0 +1,15 @@
+{
+    "key": "encounter", 
+
+    "name": "Encounter",
+    "description": "three, two, one...",
+    "author": "NDagger",
+
+    "musicName": "Encounter",
+    "musicAuthor": "F.O.O.L & Waveshaper",
+    "musicAlbum": "",
+    "musicPath": "music.ogg",
+    "musicTimestamps": [8],
+
+    "scriptPath": "script.js"
+}

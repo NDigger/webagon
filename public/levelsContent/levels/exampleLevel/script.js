@@ -1,5 +1,5 @@
 
-import { Vector2, Color, Size, Lerp, level } from '../../common'
+import { Vector2, Color, Size, level } from '../../common'
 import * as Utils from '../../utils'
 import initPatterns from '../../patterns';
 let patterns = initPatterns(level); // Patterns require level object in order to be spawned.
@@ -51,7 +51,7 @@ level.onUpdate = ft => {
     level.setMainColor(Color.hsvToRgb(colorTime, 1, 1))
 
     // Imitating level pulse with pingPong function
-    const s = Utils.pingPong(Lerp.Easing.EASE_OUT(Utils.pingPong(time * 1.5))) * .3 + 0.8
+    const s = Utils.pingPong(Utils.ease_out(Utils.pingPong(time * 1.5))) * .3 + 0.8
     level.setWallScale(new Vector2(s, s))
 }
 

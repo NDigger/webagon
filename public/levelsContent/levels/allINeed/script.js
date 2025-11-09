@@ -1,4 +1,4 @@
-import { Vector2, Color, Size, Lerp, level } from '../../common'
+import { Vector2, Color, Size, level } from '../../common'
 import * as Utils from '../../utils'
 import initPatterns from '../../patterns';
 const patterns = initPatterns(level);
@@ -48,7 +48,7 @@ level.onUpdate = ft => {
     const v = 225 + Utils.pingPong(time * 1.05) * 30;
     level.setPolygonColor(new Color(v, v, v));
     
-    const s = Utils.pingPong(1-Lerp.Easing.EASE_OUT(Utils.fract(time * 1.05))) * .9 + 1;
+    const s = Utils.pingPong(1-Utils.ease_out(Utils.fract(time * 1.05))) * .9 + 1;
     level.setWallScale(new Vector2(s, s));
 }
 

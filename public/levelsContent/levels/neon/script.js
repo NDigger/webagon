@@ -1,5 +1,5 @@
 
-import { Vector2, Color, Size, Lerp, level } from '../../common'
+import { Vector2, Color, Size, level } from '../../common'
 import * as Utils from '../../utils'
 import initPatterns from '../../patterns';
 const patterns = initPatterns(level); // Patterns require level object in order to be spawned.
@@ -141,7 +141,7 @@ level.onUpdate = ft => {
     level.setRadius(85 - f * 15);
     level.setRotationSpeed()
 
-    level.setMainColor(Lerp.interpolate(Color.hsvToRgb(Utils.pingPong(syncTime) * .1 + hueShift, 1, 1), Color.hsvToRgb(Utils.pingPong(syncTime) * .1 + hueShift, .2, 1), Utils.pingPong(time * 10)))
+    level.setMainColor(Utils.interpolate(Color.hsvToRgb(Utils.pingPong(syncTime) * .1 + hueShift, 1, 1), Color.hsvToRgb(Utils.pingPong(syncTime) * .1 + hueShift, .2, 1), Utils.pingPong(time * 10)))
 
     const s = 1.2 + Utils.pingPong(syncTime) * .5
     level.setWallScale(new Vector2(s, s))

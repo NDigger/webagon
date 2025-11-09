@@ -5,5 +5,6 @@
     "./levelsContent/levels/jungle",
     "./levelsContent/levels/hell",
     "./levelsContent/levels/neon",
-    "./levelsContent/levels/happyLevel"
+    "./levelsContent/levels/happyLevel",
+    "./levelsContent/levels/encounter"
 ]

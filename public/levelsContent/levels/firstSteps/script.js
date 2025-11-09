@@ -1,5 +1,5 @@
 
-import { Vector2, Color, Size, Lerp, level } from '../../common'
+import { Vector2, Color, Size, level } from '../../common'
 import * as Utils from '../../utils'
 import initPatterns from '../../patterns';
 
@@ -27,12 +27,6 @@ level.onInit = () => {
     level.set3dDistance(5);
     level.setWallSpeedIncrement(0.2);
     level.setRotationSpeedIncrement(0.015);
-    // level.setBackgroundSwapTime(1);
-    // level.setBackgroundDarkenUnevenChunkEnabled(false);
-    // level.set3dColor(new Color(255, 255, 255));
-    // level.set3dFalloffColor(new Color(0, 0, 0));
-    // level.setPlayerSize(new Size(97, 100))
-    // level.setPlayerDistanceMult(.1);
 }
 
 // onStep must be async and use delays in order to work. No delays may cause crash.
