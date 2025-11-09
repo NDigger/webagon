@@ -199,7 +199,7 @@ canvas {
 #level-list {
     position: absolute;
     left: -200px;
-    top: 10px;
+    padding: 10px;
     max-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -207,7 +207,6 @@ canvas {
     gap: 5px;
     /* for proper overflow hide */
     padding-right: 200px;
-    padding-bottom: 50px;
     overflow-y: scroll;
 }
 
@@ -408,6 +407,9 @@ canvas {
     .level {
         position: unset;
         transform: unset;
+
+        width: 100%;
+        padding: 10px;
     }
 
     #selected-level-info {
@@ -421,24 +423,17 @@ canvas {
 
     #level-list {
         position: unset;
-        left: -200px;
-        top: 10px;
         display: flex;
         flex-direction: column;
         justify-content: flex-start;
         gap: 5px;
         width: 100vw;
         height: 100vh;
-        padding: 10px;        
+        padding: 10px;  
     }
 
     #close-selected-level-info {
         display: block;
-    }
-
-    .level {
-        width: 100%;
-        padding: 0 10px;
     }
 
     .level.selected-animation, .level.unselected-animation { animation: unset }

@@ -44,8 +44,6 @@ level.onStep = async () => {
 
 // onUpdate is called every frame.
 level.onUpdate = ft => {
-    console.log(level.getTime())
-    const colorTime = level.getTime() / 4;
     level.setBackgroundTileColors([
         new Color(25, 0, 0),
         new Color(45, 0, 0),
