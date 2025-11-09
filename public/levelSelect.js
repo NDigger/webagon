@@ -95,21 +95,22 @@ fetch('./levelPaths.json')
 })
 
 let levelListSelectedLevel = 0
-const getSelectedLevel = () => document.getElementById(`level-${levelJsons[levelListSelectedLevel]?.key}`);
+const getSelectedLevelElement = () => document.getElementById(`level-${levelJsons[levelListSelectedLevel]?.key}`);
 const beforeShift = () => {
-    const selectedLevel = getSelectedLevel();
-    if (selectedLevel == undefined) return
-    selectedLevel.classList.remove('selected-animation')
-    void selectedLevel.offsetWidth;
-    selectedLevel.classList.add('unselected-animation')
+    const selectedLevelElement = getSelectedLevelElement();
+    if (selectedLevelElement == undefined) return
+    selectedLevelElement.classList.remove('selected-animation')
+    void selectedLevelElement.offsetWidth;
+    selectedLevelElement.classList.add('unselected-animation')
 }
 const afterShift = () => {
-    const selectedLevel = getSelectedLevel();
-    if (selectedLevel == undefined) return
-    selectedLevel.classList.remove('unselected-animation');
-    void selectedLevel.offsetWidth;
-    selectedLevel.classList.add('selected-animation');
-    selectedLevel.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    const selectedLevelElement = getSelectedLevelElement();
+    if (selectedLevelElement == undefined) return
+    selectedLevelElement.classList.remove('unselected-animation');
+    void selectedLevelElement.offsetWidth;
+    selectedLevelElement.classList.add('selected-animation');
+    
+    selectedLevelElement.scrollIntoView({ behavior: 'instant', block: 'nearest' })
 
     levelPreview.load(levelJsons[levelListSelectedLevel].scriptPath)
 
