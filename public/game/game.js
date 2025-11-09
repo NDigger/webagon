@@ -240,10 +240,6 @@ export default class Game extends GameObject {
             this.#rotation += this.#rotationSpeed * frameTime;
             this.#polygon.setRotation(this.#rotation)
         }
-        
-        this.#updatePolygonToBackground();
-        this.#background.draw();
-        this.#polygon.draw();
 
         let hasDiedNextStep = this.#died;
         const steps = Math.max(Math.floor((240/(getFPS()||60))*this.#wallSpeedMult/10), 60)
@@ -309,6 +305,9 @@ export default class Game extends GameObject {
             })
         }
 
+        this.#updatePolygonToBackground();
+        this.#background.draw();
+        this.#polygon.draw();
         if (this.#deathEffect) this.#deathEffect.draw();
         this.#walls.forEach(w => w.draw());
 
