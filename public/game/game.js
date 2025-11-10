@@ -230,6 +230,7 @@ export default class Game extends GameObject {
         const prevRotationOffset = this.#polygon.player.getRotationOffset();
 
         const playerSpeed = frameTime * .6 / steps;
+
         if (this.#playerMovementEnabled) {
             if (this.#leftKeyPressed) this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() - playerSpeed);
             if (this.#rightKeyPressed) this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() + playerSpeed);
@@ -277,8 +278,10 @@ export default class Game extends GameObject {
             this.#background.setRotation(this.#rotation + this.#backgroundRotationOffset);
         }
 
-        const fpsSteps = 300/getFPS();
+        const fps = getFPS();
+        const fpsSteps = Math.floor(300/(fps !== 0 ? fps : 60));
         const steps = Math.min(fpsSteps, 60);
+        console.log(fpsSteps, steps)
 
         for (let i = 0; i < steps; i++) {
             if (this.#died) break
