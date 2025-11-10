@@ -21,7 +21,7 @@ const pseudoRndShake = (power) => {
 export default class Mesh extends GameObject {
     #object;
     _geometry;
-    _positions = [0, 0, 0, 0, 0, 0, 0, 0];
+    #positions = [0, 0, 0, 0, 0, 0, 0, 0];
     #absolutePositions = [new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0)];
     #layer;
     #color = new Color(0, 0, 0);
@@ -30,7 +30,7 @@ export default class Mesh extends GameObject {
         super(app)
 
         this._geometry = new PIXI.MeshGeometry({
-            positions: new Float32Array(this._positions),
+            positions: new Float32Array(this.#positions),
             uvs: new Float32Array([0, 0, 1, 0, 1, 1, 0, 1]),
             indices: new Uint16Array([0, 1, 2, 2, 3, 0])
         });
@@ -59,23 +59,23 @@ export default class Mesh extends GameObject {
 
     setVertexPos(point, {x, y}) {
         const inc = point * 2;
-        this._positions[0 + inc] = x;
-        this._positions[1 + inc] = y;
+        this.#positions[0 + inc] = x;
+        this.#positions[1 + inc] = y;
         this.#updateAbsolutePositions();
     }
 
     getVertexPos(point) {
-        const pos = this._positions;
+        const pos = this.#positions;
         const inc = point * 2;
         return new Vector2(pos[0 + inc], pos[1 + inc])
     }
 
     getVertexPos4() {
         return [
-            new Vector2(this._positions[0], this._positions[1]),
-            new Vector2(this._positions[2], this._positions[3]),
-            new Vector2(this._positions[4], this._positions[5]),
-            new Vector2(this._positions[6], this._positions[7])
+            new Vector2(this.#positions[0], this.#positions[1]),
+            new Vector2(this.#positions[2], this.#positions[3]),
+            new Vector2(this.#positions[4], this.#positions[5]),
+            new Vector2(this.#positions[6], this.#positions[7])
         ]
     }
 
@@ -101,18 +101,18 @@ export default class Mesh extends GameObject {
         const baseHeight = 1080;
         const scale = new Vector2(window.innerWidth / baseWidth, window.innerHeight / baseHeight);
 
-        this.#absolutePositions = this._positions.map((v, i) => i % 2 === 0 ? (v + s.x) * scale.x : (v + s.y) * scale.y);
+        this.#absolutePositions = this.#positions.map((v, i) => i % 2 === 0 ? (v + s.x) * scale.x : (v + s.y) * scale.y);
     }
 
     setVertexPos4(vec1, vec2, vec3, vec4) {
-        this._positions[0] = vec1.x;
-        this._positions[1] = vec1.y;
-        this._positions[2] = vec2.x;
-        this._positions[3] = vec2.y;
-        this._positions[4] = vec3.x;
-        this._positions[5] = vec3.y;
-        this._positions[6] = vec4.x;
-        this._positions[7] = vec4.y;
+        this.#positions[0] = vec1.x;
+        this.#positions[1] = vec1.y;
+        this.#positions[2] = vec2.x;
+        this.#positions[3] = vec2.y;
+        this.#positions[4] = vec3.x;
+        this.#positions[5] = vec3.y;
+        this.#positions[6] = vec4.x;
+        this.#positions[7] = vec4.y;
 
         this.#updateAbsolutePositions()
     }
@@ -141,6 +141,6 @@ export default class Mesh extends GameObject {
     }
 
     getPositions() {
-        return this._positions
+        return this.#positions
     }
 }
