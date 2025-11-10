@@ -16,7 +16,7 @@ export default class Wall extends CustomWall {
     #getWallVertexPos4() {
         const halfSides = this.#sides / 2;
         const firstAngle = this.#side * Math.PI / halfSides + Math.PI / this.#sides;
-        const secondAngle = (firstAngle + 0.5 * Math.PI / halfSides + Math.PI / this.#sides);
+        const secondAngle = firstAngle + 0.5 * Math.PI / halfSides + Math.PI / this.#sides;
         const x1 = (this.#distance * Math.cos(firstAngle));
         const y1 = (this.#distance * Math.sin(firstAngle));
         const x2 = ((this.#thickness + this.#distance + this.#skewLeft) * Math.cos(firstAngle + this.#leftAngleOffset));
@@ -47,7 +47,7 @@ export default class Wall extends CustomWall {
 
     setSide(v) {
         if (typeof(v) !== 'number') return;
-         this.#side = Math.floor(v);
+        this.#side = Math.floor(v);
     }
     getSide() { return this.#side; }
 

@@ -243,13 +243,15 @@ export default class Game extends GameObject {
     #getCollidingWalls() { // Returns a first wall if player collides with it
         const colWalls = this.#walls.filter(wall => {
             // Points are moved from center to avoid noclip.
-            const pos4 = movePointsFromCenter(wall.getVertexAbsolutePos4(), 0);
+            const pos4 = movePointsFromCenter(wall.getVertexAbsolutePos4(), 3);
             return pointInQuad(this.#polygon.player.getPointAbsolutePosition(), pos4)
         })
         return colWalls.length > 0 ? colWalls : undefined;
     }
 
-    #updatePlayer(prevRotationOffset, frameTime, steps) {
+    #updatePlayer(frameTime, steps) {
+        const prevRotationOffset = this.#polygon.player.getRotationOffset();
+
         if (this.#playerMovementEnabled) {
             if (this.#leftKeyPressed) this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() - frameTime * .6 / steps);
             if (this.#rightKeyPressed) this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() + frameTime * .6 / steps);
@@ -300,18 +302,16 @@ export default class Game extends GameObject {
         }
 
         const steps = 60
-        const prevRotationOffset = this.#polygon.player.getRotationOffset();
         for (let i = 0; i < steps; i++) {
             if (this.#died) break
 
             if (this.#distanceDelay > 0) {
                 this.#distanceDelay -= frameTime * this.#wallSpeedMult / 5 / steps;
+                console.log(this.#distanceDelay)
                 if (this.#distanceDelay <= 0 && typeof(this.#distanceSignal) === 'function') this.#distanceSignal()
             }
 
-            this.#updatePlayer(prevRotationOffset, frameTime, steps);
             this.#walls = this.#updateWalls(this.#walls, frameTime, steps);
-
             const collidingWalls = this.#getCollidingWalls();
             if (collidingWalls !== undefined && !this.#died) {
                 collidingWalls.forEach(cwall => {
@@ -319,8 +319,10 @@ export default class Game extends GameObject {
                     if (side === 3) this.kill()
                 })
             };
+           
+            this.#updatePlayer(frameTime, steps);
 
-            if (i % Math.floor(steps/3) === steps - 1) this.draw();
+            if (i % Math.floor(steps/5) === 0) this.#polygon.draw();
         }
 
         this.draw();
@@ -328,7 +330,7 @@ export default class Game extends GameObject {
     }
 
     createWall(side, thickness) {
-        if (this.#died) return; 
+        if (this.#died || this.destroyed) return; 
         const wall = new Wall(this.app);
         wall.setSides(this.#sides)
         wall.setSide(Math.floor(side))

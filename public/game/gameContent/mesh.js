@@ -61,6 +61,7 @@ export default class Mesh extends GameObject {
         const inc = point * 2;
         this._positions[0 + inc] = x;
         this._positions[1 + inc] = y;
+        this.#updateAbsolutePositions();
     }
 
     getVertexPos(point) {
@@ -94,6 +95,15 @@ export default class Mesh extends GameObject {
         ]
     }
 
+    #updateAbsolutePositions() {
+        const s = pseudoRndShake(globalThis.shakePower ?? 0)
+        const baseWidth = 1920;
+        const baseHeight = 1080;
+        const scale = new Vector2(window.innerWidth / baseWidth, window.innerHeight / baseHeight);
+
+        this.#absolutePositions = this._positions.map((v, i) => i % 2 === 0 ? (v + s.x) * scale.x : (v + s.y) * scale.y);
+    }
+
     setVertexPos4(vec1, vec2, vec3, vec4) {
         this._positions[0] = vec1.x;
         this._positions[1] = vec1.y;
@@ -104,12 +114,7 @@ export default class Mesh extends GameObject {
         this._positions[6] = vec4.x;
         this._positions[7] = vec4.y;
 
-        const s = pseudoRndShake(globalThis.shakePower ?? 0)
-        const baseWidth = 1920;
-        const baseHeight = 1080;
-        const scale = new Vector2(window.innerWidth / baseWidth, window.innerHeight / baseHeight);
-
-        this.#absolutePositions = this._positions.map((v, i) => i % 2 === 0 ? (v + s.x) * scale.x : (v + s.y) * scale.y);
+        this.#updateAbsolutePositions()
     }
 
     addStageChild() {
