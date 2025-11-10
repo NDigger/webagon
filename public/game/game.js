@@ -181,7 +181,7 @@ export default class Game extends GameObject {
         if (e.code === 'ArrowRight' || e.code === 'KeyD') this.#rightKeyPressed = true;
 
         if (e.code === 'Space' && this.#swapEnabled && !this.#swapKeyPressed) {
-            this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() + 180);
+            this.#swapPlayer()
             this.#swapKeyPressed = true;
         }
     }
@@ -238,6 +238,7 @@ export default class Game extends GameObject {
     }
 
     draw() {
+        this.#updatePolygonToBackground();
         this.#background.draw();
         this.#polygon.draw();
         if (this.#deathEffect) this.#deathEffect.draw();
@@ -284,6 +285,12 @@ export default class Game extends GameObject {
         })
     }
 
+    #swapPlayer() {
+        this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() + 180);
+        this.#polygon.player.updatePosition();
+        if (this.#isPlayerInWall()) this.kill();
+    }
+
     #update(time) {
         const frameTime = time - this.#lastUpdateTime;
         this.#lastUpdateTime = time;
@@ -307,30 +314,18 @@ export default class Game extends GameObject {
                 if (this.#leftKeyPressed) this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() - frameTime * .6 / steps);
                 if (this.#rightKeyPressed) this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() + frameTime * .6 / steps);
                 this.#polygon.player.updatePosition()
-
-                if (this.#leftKeyPressed || this.#rightKeyPressed) {
-                    for (let i = 0; i < this.#walls.length; i++) {
-                        const wall = this.#walls[i];
-                        const pos4 = wall.getVertexAbsolutePos4();
-                        if (this.#isPlayerInWall()
-                        && !this.#died) {
-                            // const side = closestSide(this.#polygon.player.getPointAbsolutePosition(), pos4)
-                            this.#polygon.player.setRotationOffset(prevRotationOffset)
-                            this.#polygon.player.updatePosition()
-                            break;              
-                        };
-                    }
-                }
             }
+
+            if (this.#isPlayerInWall()) {
+                // const side = closestSide(this.#polygon.player.getPointAbsolutePosition(), pos4)
+                this.#polygon.player.setRotationOffset(prevRotationOffset)
+                this.#polygon.player.updatePosition()
+            };
 
             this.#walls = this.#updateWalls(this.#walls, frameTime, steps);
         }
 
-        this.#updatePolygonToBackground();
-        this.#background.draw();
-        this.#polygon.draw();
-        if (this.#deathEffect) this.#deathEffect.draw();
-        this.#walls.forEach(w => w.draw());
+        this.draw();
 
         this.#updateId = requestAnimationFrame(time => this.#update(time));
     }
