@@ -346,7 +346,6 @@ export default class Game extends GameObject {
         wall.setScale(this.#scale.mul(this.#wallScale))
         wall.setCenterOffset(this.#centerOffset);
         wall.setOffset(this.#offset)
-        wall.redrawEnabled = false;
 
         wall.setSkewLeft(this.#wallSkewLeft)
         wall.setSkewRight(this.#wallSkewRight)

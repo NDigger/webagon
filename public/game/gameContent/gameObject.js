@@ -1,8 +1,6 @@
 export default class GameObject {
     app;
-    needsRedraw = false;
     destroyed = false;
-    redrawEnabled = true;
 
     constructor(app) {
         this.app = app;
