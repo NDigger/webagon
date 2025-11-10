@@ -71,6 +71,53 @@ function movePointsFromCenter(points, distance) {
   return moved;
 }
 
+function pushPointOutsidePolygon(pos4, point) {
+  // Проверка, внутри ли точка многоугольника (алгоритм "ray casting")
+  function isPointInPolygon(polygon, p) {
+    let inside = false;
+    for (let i = 0, j = polygon.length - 1; i < polygon.length; j = i++) {
+      const xi = polygon[i].x, yi = polygon[i].y;
+      const xj = polygon[j].x, yj = polygon[j].y;
+      const intersect = ((yi > p.y) !== (yj > p.y)) &&
+        (p.x < (xj - xi) * (p.y - yi) / (yj - yi) + xi);
+      if (intersect) inside = !inside;
+    }
+    return inside;
+  }
+
+  // Нахождение ближайшей точки на рёбрах
+  function closestPointOnSegment(a, b, p) {
+    const abx = b.x - a.x, aby = b.y - a.y;
+    const apx = p.x - a.x, apy = p.y - a.y;
+    const t = Math.max(0, Math.min(1, (apx * abx + apy * aby) / (abx * abx + aby * aby)));
+    return { x: a.x + abx * t, y: a.y + aby * t };
+  }
+
+  // Основная логика
+  if (!isPointInPolygon(pos4, point)) return point;
+
+  let minDist = Infinity;
+  let closest = point;
+
+  for (let i = 0; i < pos4.length; i++) {
+    const a = pos4[i];
+    const b = pos4[(i + 1) % pos4.length];
+    const c = closestPointOnSegment(a, b, point);
+    const dist = Math.hypot(c.x - point.x, c.y - point.y);
+    if (dist < minDist) {
+      minDist = dist;
+      closest = c;
+    }
+  }
+
+  // Двигаем чуть-чуть наружу
+  const cx = point.x - closest.x;
+  const cy = point.y - closest.y;
+  const len = Math.hypot(cx, cy) || 1;
+  return { x: closest.x - cx / len * 0.001, y: closest.y - cy / len * 0.001 };
+}
+
+
 const degToRad = deg => deg * Math.PI / 180;
 
 const gameArrowLeft = document.getElementById('game-arrow-left');
@@ -250,6 +297,13 @@ export default class Game extends GameObject {
         this.#polygon.setColor(this.#getPolygonColor());
     }
 
+    #getCollidingWall() { // Returns a first wall if player collides with it
+        return this.#walls.find(wall => {
+            const pos4 = movePointsFromCenter(wall.getVertexAbsolutePos4(), 0.1);
+            return pointInQuad(this.#polygon.player.getPointAbsolutePosition(), pos4)
+        })
+    }
+
     #updateWalls(walls, frameTime, steps) {
         return walls.filter(wall => {
             if (wall.getDistance() > 0) {//this.#polygon.getDistance() + this.#polygon.getThickness()) {
@@ -266,29 +320,14 @@ export default class Game extends GameObject {
             wall.setRotation(this.#rotation)
             wall.updatePosition()
 
-            // Collision check
-            // Points are moved from center to avoid clipping through walls
-            const pos4 = movePointsFromCenter(wall.getVertexAbsolutePos4(), 0.1);
-            if (pointInQuad(this.#polygon.player.getPointAbsolutePosition(), pos4)
-            && !this.#died) {
-                const side = closestSide(this.#polygon.player.getPointAbsolutePosition(), pos4)
-                if (side === 3) this.kill()
-            };
             return true
-        })
-    }
-
-    #isPlayerInWall() {
-        return this.#walls.some(wall => {
-            const pos4 = wall.getVertexAbsolutePos4();
-            return pointInQuad(this.#polygon.player.getPointAbsolutePosition(), pos4)
         })
     }
 
     #swapPlayer() {
         this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() + 180);
         this.#polygon.player.updatePosition();
-        if (this.#isPlayerInWall()) this.kill();
+        if (this.#getCollidingWall() !== undefined) this.kill();
     }
 
     #update(time) {
@@ -316,13 +355,19 @@ export default class Game extends GameObject {
                 this.#polygon.player.updatePosition()
             }
 
-            if (this.#isPlayerInWall()) {
+            if (this.#getCollidingWall() !== undefined) {
                 // const side = closestSide(this.#polygon.player.getPointAbsolutePosition(), pos4)
                 this.#polygon.player.setRotationOffset(prevRotationOffset)
                 this.#polygon.player.updatePosition()
             };
 
             this.#walls = this.#updateWalls(this.#walls, frameTime, steps);
+
+            const collidingWall = this.#getCollidingWall();
+            if (collidingWall !== undefined && !this.#died) {
+                const side = closestSide(this.#polygon.player.getPointAbsolutePosition(), collidingWall.getVertexAbsolutePos4())
+                if (side === 3) this.kill()
+            };
         }
 
         this.draw();
