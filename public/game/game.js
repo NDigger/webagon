@@ -255,9 +255,7 @@ export default class Game extends GameObject {
         return colWalls.length > 0 ? colWalls : undefined;
     }
 
-    #updatePlayer(frameTime, steps) {
-        const prevRotationOffset = this.#polygon.player.getRotationOffset();
-
+    #updatePlayer(prevRotationOffset, frameTime, steps) {
         if (this.#playerMovementEnabled) {
             if (this.#leftKeyPressed) this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() - frameTime * .6 / steps);
             if (this.#rightKeyPressed) this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() + frameTime * .6 / steps);
@@ -308,6 +306,8 @@ export default class Game extends GameObject {
         }
 
         const steps = 60
+            const prevRotationOffset = this.#polygon.player.getRotationOffset();
+
         for (let i = 0; i < steps; i++) {
             if (this.#died) break
 
@@ -316,7 +316,7 @@ export default class Game extends GameObject {
                 if (this.#distanceDelay <= 0 && typeof(this.#distanceSignal) === 'function') this.#distanceSignal()
             }
 
-            this.#updatePlayer(frameTime, steps);
+            this.#updatePlayer(prevRotationOffset, frameTime, steps);
             this.#walls = this.#updateWalls(this.#walls, frameTime, steps);
 
             const collidingWalls = this.#getCollidingWalls();
