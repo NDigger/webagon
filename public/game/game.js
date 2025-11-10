@@ -257,6 +257,22 @@ export default class Game extends GameObject {
         })
     }
 
+    #updatePlayer(frameTime, steps) {
+        const prevRotationOffset = this.#polygon.player.getRotationOffset();
+
+        if (this.#playerMovementEnabled) {
+            if (this.#leftKeyPressed) this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() - frameTime * .6 / steps);
+            if (this.#rightKeyPressed) this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() + frameTime * .6 / steps);
+            this.#polygon.player.updatePosition()
+        }
+
+        const collidingWall = this.#getCollidingWall();
+        if (collidingWall !== undefined) {
+            this.#polygon.player.setRotationOffset(prevRotationOffset)
+            this.#polygon.player.updatePosition()
+        };
+    }
+
     #updateWalls(walls, frameTime, steps) {
         return walls.filter(wall => {
             if (wall.getDistance() > 0) {//this.#polygon.getDistance() + this.#polygon.getThickness()) {
@@ -295,30 +311,16 @@ export default class Game extends GameObject {
         const steps = Math.max(Math.floor((240/(getFPS()||60))*this.#wallSpeedMult/10), 60)
         for (let i = 0; i < steps; i++) {
             if (this.#died) break
-            const prevRotationOffset = this.#polygon.player.getRotationOffset();
 
             if (this.#distanceDelay > 0) {
                 this.#distanceDelay -= frameTime * this.#wallSpeedMult / 5 / steps;
                 if (this.#distanceDelay <= 0 && typeof(this.#distanceSignal) === 'function') this.#distanceSignal()
             }
-            
-            if (this.#playerMovementEnabled) {
-                if (this.#leftKeyPressed) this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() - frameTime * .6 / steps);
-                if (this.#rightKeyPressed) this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() + frameTime * .6 / steps);
-                this.#polygon.player.updatePosition()
-            }
 
-            let collidingWall = this.#getCollidingWall();
-            if (collidingWall !== undefined) {
-                // const side = closestSide(this.#polygon.player.getPointAbsolutePosition(), pos4)
-                this.#polygon.player.setRotationOffset(prevRotationOffset)
-                this.#polygon.player.updatePosition()
-            };
-
-
+            this.#updatePlayer(frameTime, steps);
             this.#walls = this.#updateWalls(this.#walls, frameTime, steps);
 
-            collidingWall = this.#getCollidingWall();
+            const collidingWall = this.#getCollidingWall();
             if (collidingWall !== undefined && !this.#died) {
                 const side = closestSide(this.#polygon.player.getPointAbsolutePosition(), collidingWall.getVertexAbsolutePos4())
                 if (side === 3) this.kill()
