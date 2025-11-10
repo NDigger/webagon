@@ -54,25 +54,6 @@ function closestSide(pos, points) {
   return sideIndex;
 }
 
-function movePointsFromCenter(points, distance) {
-  const center = points.reduce((acc, p) => ({
-    x: acc.x + p.x / 4,
-    y: acc.y + p.y / 4
-  }), { x: 0, y: 0 });
-
-  const moved = points.map(p => {
-    const dx = p.x - center.x;
-    const dy = p.y - center.y;
-    const len = Math.hypot(dx, dy) || 1;
-    const scale = (len + distance) / len;
-    return { x: center.x + dx * scale, y: center.y + dy * scale };
-  });
-
-  return moved;
-}
-
-const degToRad = deg => deg * Math.PI / 180;
-
 const gameArrowLeft = document.getElementById('game-arrow-left');
 const gameArrowRight = document.getElementById('game-arrow-right');
 
@@ -307,7 +288,6 @@ export default class Game extends GameObject {
 
             if (this.#distanceDelay > 0) {
                 this.#distanceDelay -= frameTime * this.#wallSpeedMult / 5 / steps;
-                console.log(this.#distanceDelay)
                 if (this.#distanceDelay <= 0 && typeof(this.#distanceSignal) === 'function') this.#distanceSignal()
             }
 
@@ -319,9 +299,9 @@ export default class Game extends GameObject {
                     if (side === 3) this.kill()
                 })
             };
-           
-            this.#updatePlayer(frameTime, steps);
 
+            this.#updatePlayer(frameTime, steps);
+           
             if (i % Math.floor(steps/5) === 0) this.#polygon.draw();
         }
 
