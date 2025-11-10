@@ -276,7 +276,7 @@ export default class Game extends GameObject {
             this.#background.setRotation(this.#rotation + this.#backgroundRotationOffset);
         }
 
-        const fpsSteps = 600/getFPS();
+        const fpsSteps = 300/getFPS();
         const steps = Math.min(fpsSteps, 60);
         const previousPlayerRotationOffset = this.#polygon.player.getRotationOffset();
 
