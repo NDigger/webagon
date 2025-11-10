@@ -38,6 +38,7 @@ class LevelPreviewContent {
     getMainColor() { return this.style.mainColor; }
     setBackgroundTileColors(arr) {
         this.style.backgroundTileColors = arr;
+        document.documentElement.style.setProperty('--background-tile-color', arr[0].getRGBAStyle());
     }
     getBackgroundTileColors() { return this.style.backgroundTileColors; }
     setBackgroundDarkenUnevenChunkEnabled(v) {
