@@ -226,15 +226,16 @@ export default class Game extends GameObject {
         return this.#walls.filter(wall => pointInQuad(this.#polygon.player.getPointAbsolutePosition(), wall.getVertexAbsolutePos4()))
     }
 
-    #updatePlayer(prevRotationOffset, frameTime, steps) {
+    #updatePlayer(frameTime, steps) {
+        const prevRotationOffset = this.#polygon.player.getRotationOffset();
+
+        const playerSpeed = frameTime * .6 / steps;
         if (this.#playerMovementEnabled) {
-            if (this.#leftKeyPressed) this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() - frameTime * .6 / steps);
-            if (this.#rightKeyPressed) this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() + frameTime * .6 / steps);
+            if (this.#leftKeyPressed) this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() - playerSpeed);
+            if (this.#rightKeyPressed) this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() + playerSpeed);
             this.#polygon.player.updatePosition()
         }
-
-        const collidingWalls = this.#getCollidingWalls();
-        if (collidingWalls.length !== 0) {
+        if (this.#getCollidingWalls().length !== 0) {
             this.#polygon.player.setRotationOffset(prevRotationOffset)
             this.#polygon.player.updatePosition()
         };
@@ -278,7 +279,6 @@ export default class Game extends GameObject {
 
         const fpsSteps = 300/getFPS();
         const steps = Math.min(fpsSteps, 60);
-        const previousPlayerRotationOffset = this.#polygon.player.getRotationOffset();
 
         for (let i = 0; i < steps; i++) {
             if (this.#died) break
@@ -288,9 +288,9 @@ export default class Game extends GameObject {
                 if (this.#distanceDelay <= 0 && typeof(this.#distanceSignal) === 'function') this.#distanceSignal()
             }
 
-            this.#updatePlayer(previousPlayerRotationOffset, frameTime, steps);
-
             this.#walls = this.#updateWalls(this.#walls, frameTime, steps);
+            this.#updatePlayer(frameTime, steps);
+
             const collidingWalls = this.#getCollidingWalls();
             if (!this.#died) {
                 collidingWalls.forEach(cwall => {

@@ -25,7 +25,7 @@ level.onInit = () => {
     level.setRotationSpeed(0.04);
     level.setWallSpeedMult(3.2);
     level.setSides(6);
-    level.set3dDepth(150);
+    level.set3dDepth(6);
     level.setWallSpeedIncrement(0.2);
     level.setRotationSpeedIncrement(0.04);
     level.setMainColor(new Color(0, 0, 0, 0));
