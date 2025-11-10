@@ -11,7 +11,7 @@ export default class Background extends PolygonObject {
     #swapTimer = 1000;
 
     #lasttime = performance.now();
-    #updateId
+    #updateId;
 
     constructor(app) {
         super(app)
@@ -72,5 +72,10 @@ export default class Background extends PolygonObject {
         if (typeof(v) !== 'number') return
         this.#swapTime = v*1000;
         // this.#swapTimer = v*1000;
+    }
+
+    destroy() {
+        super.destroy();
+        cancelAnimationFrame(this.#updateId);
     }
 }
