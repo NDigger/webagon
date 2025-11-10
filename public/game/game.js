@@ -290,7 +290,6 @@ export default class Game extends GameObject {
     }
 
     #update(time) {
-        console.log(this.#getCollidingWalls())
         const frameTime = time - this.#lastUpdateTime;
         this.#lastUpdateTime = time;
 
@@ -320,10 +319,11 @@ export default class Game extends GameObject {
                     if (side === 3) this.kill()
                 })
             };
+
+            if (i % Math.floor(steps/3) === steps - 1) this.draw();
         }
 
         this.draw();
-
         this.#updateId = requestAnimationFrame(time => this.#update(time));
     }
 
