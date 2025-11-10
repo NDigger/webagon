@@ -9,6 +9,7 @@ export default class Background extends PolygonObject {
 
     #swapTime = 1000;
     #swapTimer = 1000;
+    #swapEnabled = true;
 
     #lasttime = performance.now();
     #updateId;
@@ -41,18 +42,24 @@ export default class Background extends PolygonObject {
     #update(time) {
         const frameTime = time - this.#lasttime;
         this.#lasttime = time;
+        
+        if (this.#swapEnabled) {
+            this.#swapTimer += frameTime;
+            if (this.#swapTimer > this.#swapTime) {
+                this.#swapTimer = 0;
+                this.#swapped = !this.#swapped;
 
-        this.#swapTimer -= frameTime;
-        if (this.#swapTimer < 0) {
-            this.#swapTimer = this.#swapTime;
-            this.#swapped = !this.#swapped;
-
-            this.#activeTileColors = this.#getActiveTileColors();
+                this.#activeTileColors = this.#getActiveTileColors();
+            }
         }
 
         this.#updateId = requestAnimationFrame(t => this.#update(t));
     }
 
+    setSwapEnabled(v) {
+        if (typeof(v) !== 'boolean') return
+        this.#swapEnabled = v; 
+    }
     getSwapped() { return this.#swapped }
 
     setTileColors(arr) {

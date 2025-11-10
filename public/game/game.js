@@ -206,6 +206,7 @@ export default class Game extends GameObject {
 
         this.#swapEnabled = false;
         this.#playerMovementEnabled = false;
+        this.#background.setSwapEnabled(false);
 
         this.#deathEffect = d;
         this.#died = true;
