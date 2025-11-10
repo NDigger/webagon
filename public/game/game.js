@@ -208,10 +208,6 @@ export default class Game extends GameObject {
 
     kill() {
         if (this.destroyed) return
-        // this.#polygon.player.positionRedrawEnabled = false;
-        // this.#polygon.redrawEnabled = true;
-        // this.#background.redrawEnabled = true;
-        // this.#walls.forEach(w => w.redrawEnabled = true);
 
         const d = new Death(this.app);
         d.setSkew(this.#skew);
@@ -250,12 +246,13 @@ export default class Game extends GameObject {
         this.#polygon.setColor(this.#getPolygonColor());
     }
 
-    #getCollidingWall() { // Returns a first wall if player collides with it
-        return this.#walls.find(wall => {
+    #getCollidingWalls() { // Returns a first wall if player collides with it
+        const colWalls = this.#walls.filter(wall => {
             // Points are moved from center to avoid noclip.
-            const pos4 = movePointsFromCenter(wall.getVertexAbsolutePos4(), 2);
+            const pos4 = movePointsFromCenter(wall.getVertexAbsolutePos4(), 0);
             return pointInQuad(this.#polygon.player.getPointAbsolutePosition(), pos4)
         })
+        return colWalls.length > 0 ? colWalls : undefined;
     }
 
     #updatePlayer(frameTime, steps) {
@@ -267,8 +264,8 @@ export default class Game extends GameObject {
             this.#polygon.player.updatePosition()
         }
 
-        const collidingWall = this.#getCollidingWall();
-        if (collidingWall !== undefined) {
+        const collidingWalls = this.#getCollidingWalls();
+        if (collidingWalls !== undefined) {
             this.#polygon.player.setRotationOffset(prevRotationOffset)
             this.#polygon.player.updatePosition()
         };
@@ -297,10 +294,11 @@ export default class Game extends GameObject {
     #swapPlayer() {
         this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() + 180);
         this.#polygon.player.updatePosition();
-        if (this.#getCollidingWall() !== undefined) this.kill();
+        if (this.#getCollidingWalls() !== undefined) this.kill();
     }
 
     #update(time) {
+        console.log(this.#getCollidingWalls())
         const frameTime = time - this.#lastUpdateTime;
         this.#lastUpdateTime = time;
 
@@ -309,7 +307,7 @@ export default class Game extends GameObject {
             this.#polygon.setRotation(this.#rotation)
         }
 
-        const steps = Math.max(Math.floor((240/(getFPS()||60))*this.#wallSpeedMult/10), 60)
+        const steps = 60
         for (let i = 0; i < steps; i++) {
             if (this.#died) break
 
@@ -321,10 +319,12 @@ export default class Game extends GameObject {
             this.#updatePlayer(frameTime, steps);
             this.#walls = this.#updateWalls(this.#walls, frameTime, steps);
 
-            const collidingWall = this.#getCollidingWall();
-            if (collidingWall !== undefined && !this.#died) {
-                const side = closestSide(this.#polygon.player.getPointAbsolutePosition(), collidingWall.getVertexAbsolutePos4())
-                if (side === 3) this.kill()
+            const collidingWalls = this.#getCollidingWalls();
+            if (collidingWalls !== undefined && !this.#died) {
+                collidingWalls.forEach(cwall => {
+                    const side = closestSide(this.#polygon.player.getPointAbsolutePosition(), cwall.getVertexAbsolutePos4())
+                    if (side === 3) this.kill()
+                })
             };
         }
 

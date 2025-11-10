@@ -138,7 +138,7 @@ level.onUpdate = ft => {
 
     level.setRotationSpeed(((rotationSpeed/2)-Utils.fract(syncTime * .5) * rotationSpeed) * rotationDir);
 
-    level.setRadius(85 - f * 15);
+    // level.setRadius(85 - f * 15);
     level.setRotationSpeed()
 
     level.setMainColor(Utils.interpolate(Color.hsvToRgb(Utils.pingPong(syncTime) * .1 + hueShift, 1, 1), Color.hsvToRgb(Utils.pingPong(syncTime) * .1 + hueShift, .2, 1), Utils.pingPong(time * 10)))
