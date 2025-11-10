@@ -54,6 +54,25 @@ function closestSide(pos, points) {
   return sideIndex;
 }
 
+function movePointsFromCenter(points4, distance) {
+  const points = [points4[0], points4[1], points4[2], points4[3]];
+
+  const center = points.reduce((acc, p) => ({
+    x: acc.x + p.x / 4,
+    y: acc.y + p.y / 4
+  }), { x: 0, y: 0 });
+
+  const moved = points.map(p => {
+    const dx = p.x - center.x;
+    const dy = p.y - center.y;
+    const len = Math.hypot(dx, dy) || 1;
+    const scale = (len + distance) / len;
+    return { x: center.x + dx * scale, y: center.y + dy * scale };
+  });
+
+  return moved;
+}
+
 const degToRad = deg => deg * Math.PI / 180;
 
 const gameArrowLeft = document.getElementById('game-arrow-left');
@@ -292,7 +311,8 @@ export default class Game extends GameObject {
                 wall.updatePosition()
 
                 // Collision check
-                const pos = wall.getVertexAbsolutePos4();
+                // points are moved from center to avoid clipping through walls
+                const pos = movePointsFromCenter(wall.getVertexAbsolutePos4(), 0.1);
                 if (pointInQuad(this.#polygon.player.getPointAbsolutePosition(), pos[0], pos[1], pos[2], pos[3])
                 && !this.#died) {
                     const side = closestSide(this.#polygon.player.getPointAbsolutePosition(), pos)
