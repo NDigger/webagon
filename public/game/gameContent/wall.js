@@ -1,6 +1,8 @@
 import CustomWall from "./customWall";
 import { Vector2 } from "../../utils/structures";
 
+const radToDeg = v => v / Math.PI * 180;
+
 export default class Wall extends CustomWall {
     #side = 0;
     #sides = 0;
@@ -31,6 +33,17 @@ export default class Wall extends CustomWall {
             new Vector2(x2, y2),
             new Vector2(x3, y3),
             new Vector2(x4, y4)
+        ]
+    }
+
+    getVertexAbsolutePos4() {
+        const pos4 = super.getVertexAbsolutePos4()
+        const extra = 0.00001; // Prevents wall clip
+        return [
+            pos4[0].rotate(-radToDeg(extra)),
+            pos4[1].rotate(-radToDeg(extra)),
+            pos4[2].rotate(radToDeg(extra)),
+            pos4[3].rotate(radToDeg(extra))
         ]
     }
 

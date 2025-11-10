@@ -243,7 +243,7 @@ export default class Game extends GameObject {
     #getCollidingWalls() { // Returns a first wall if player collides with it
         const colWalls = this.#walls.filter(wall => {
             // Points are moved from center to avoid noclip.
-            const pos4 = movePointsFromCenter(wall.getVertexAbsolutePos4(), 3);
+            const pos4 = wall.getVertexAbsolutePos4();
             return pointInQuad(this.#polygon.player.getPointAbsolutePosition(), pos4)
         })
         return colWalls.length > 0 ? colWalls : undefined;
