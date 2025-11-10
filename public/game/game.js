@@ -234,16 +234,10 @@ export default class Game extends GameObject {
     }
 
     draw() {
-        this.#updatePolygonToBackground();
         this.#background.draw();
         this.#polygon.draw();
         if (this.#deathEffect) this.#deathEffect.draw();
         this.#walls.forEach(w => w.draw());
-    }
-
-    #updatePolygonToBackground() {
-        this.#background.setRotation(this.#rotation + this.#backgroundRotationOffset);
-        this.#polygon.setColor(this.#getPolygonColor());
     }
 
     #getCollidingWalls() { // Returns a first wall if player collides with it
@@ -303,11 +297,11 @@ export default class Game extends GameObject {
         if (!this.#died) {            
             this.#rotation += this.#rotationSpeed * frameTime;
             this.#polygon.setRotation(this.#rotation)
+            this.#background.setRotation(this.#rotation + this.#backgroundRotationOffset);
         }
 
         const steps = 60
-            const prevRotationOffset = this.#polygon.player.getRotationOffset();
-
+        const prevRotationOffset = this.#polygon.player.getRotationOffset();
         for (let i = 0; i < steps; i++) {
             if (this.#died) break
 
@@ -401,7 +395,7 @@ export default class Game extends GameObject {
     setBackgroundTileColors(arr) {
         this.#backgroundTileColors = arr;
         this.#background.setTileColors(arr);
-        this.#updatePolygonToBackground();
+        this.#polygon.setColor(this.#getPolygonColor());
     }
     getBackgroundTileColors() { return this.#backgroundTileColors; }
     setBackgroundRotationOffset(v) {
