@@ -252,7 +252,8 @@ export default class Game extends GameObject {
 
     #getCollidingWall() { // Returns a first wall if player collides with it
         return this.#walls.find(wall => {
-            const pos4 = movePointsFromCenter(wall.getVertexAbsolutePos4(), 0.1);
+            // Points are moved from center to avoid noclip.
+            const pos4 = movePointsFromCenter(wall.getVertexAbsolutePos4(), 2);
             return pointInQuad(this.#polygon.player.getPointAbsolutePosition(), pos4)
         })
     }

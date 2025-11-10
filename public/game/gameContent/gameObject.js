@@ -1,3 +1,4 @@
+// Every game object can be destroyed and drawn with app methods.
 export default class GameObject {
     app;
     destroyed = false;
@@ -6,6 +7,9 @@ export default class GameObject {
         this.app = app;
     }
 
+    draw() {}
+
+    // -- This shit doesn't work
     // scheduleDraw() {
     //     // -- This shit causes delays I can't fix without crutches
     //     // if (this.#needsRedraw) return;
@@ -25,6 +29,4 @@ export default class GameObject {
     //         // this.draw();
     //     // }, 0);
     // }
-
-    draw() {}
 }
