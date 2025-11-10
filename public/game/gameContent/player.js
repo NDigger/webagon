@@ -6,7 +6,7 @@ const degToRad = deg => deg * Math.PI / 180;
 export default class Player extends CustomWall {
     #size = new Size(24, 10);
     #distance = 0;
-    #rotationOffset = 30;
+    #rotationOffset = 0;
 
     constructor(app) {
         super(app)

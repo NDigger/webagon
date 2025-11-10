@@ -54,9 +54,7 @@ function closestSide(pos, points) {
   return sideIndex;
 }
 
-function movePointsFromCenter(points4, distance) {
-  const points = [points4[0], points4[1], points4[2], points4[3]];
-
+function movePointsFromCenter(points, distance) {
   const center = points.reduce((acc, p) => ({
     x: acc.x + p.x / 4,
     y: acc.y + p.y / 4
@@ -251,6 +249,34 @@ export default class Game extends GameObject {
         this.#polygon.setColor(this.#getPolygonColor());
     }
 
+    #updateWalls(walls, frameTime, steps) {
+        return walls.filter(wall => {
+            if (wall.getDistance() > 0) {//this.#polygon.getDistance() + this.#polygon.getThickness()) {
+                wall.setDistance(wall.getDistance() - frameTime * this.#wallSpeedMult / 5 / steps)
+            } else if (wall.getThickness() > 0) {
+                wall.setThickness(wall.getThickness() - frameTime * this.#wallSpeedMult / 5 / steps)
+            }
+
+            if (wall.getThickness() <= 0 && wall.getDistance() <= 0) {
+                wall.destroy()
+                return false;
+            }
+
+            wall.setRotation(this.#rotation)
+            wall.updatePosition()
+
+            // Collision check
+            // Points are moved from center to avoid clipping through walls
+            const pos = movePointsFromCenter(wall.getVertexAbsolutePos4(), 0.1);
+            if (pointInQuad(this.#polygon.player.getPointAbsolutePosition(), pos[0], pos[1], pos[2], pos[3])
+            && !this.#died) {
+                const side = closestSide(this.#polygon.player.getPointAbsolutePosition(), pos)
+                if (side === 3) this.kill()
+            };
+            return true
+        })
+    }
+
     #update(time) {
         const frameTime = time - this.#lastUpdateTime;
         this.#lastUpdateTime = time;
@@ -260,13 +286,12 @@ export default class Game extends GameObject {
             this.#polygon.setRotation(this.#rotation)
         }
 
-        let hasDiedNextStep = this.#died;
         const steps = Math.max(Math.floor((240/(getFPS()||60))*this.#wallSpeedMult/10), 60)
         const prevRotationOffset = this.#polygon.player.getRotationOffset();
         for (let i = 0; i < steps; i++) {
-            if (hasDiedNextStep) break
+            if (this.#died) break
 
-            if (!this.#died && this.#distanceDelay > 0) {
+            if (this.#distanceDelay > 0) {
                 this.#distanceDelay -= frameTime * this.#wallSpeedMult / 5 / steps;
                 if (this.#distanceDelay <= 0 && typeof(this.#distanceSignal) === 'function') this.#distanceSignal()
             }
@@ -294,35 +319,7 @@ export default class Game extends GameObject {
                 }
             }
 
-            this.#walls = this.#walls.filter(wall => {
-                // if (hasDiedNextStep) return true
-                if (wall.getDistance() > 0) {//this.#polygon.getDistance() + this.#polygon.getThickness()) {
-                    wall.setDistance(wall.getDistance() - frameTime * this.#wallSpeedMult / 5 / steps)
-                } else if (wall.getThickness() > 0) {
-                    wall.setThickness(wall.getThickness() - frameTime * this.#wallSpeedMult / 5 / steps)
-                }
-
-                if (wall.getThickness() <= 0 && wall.getDistance() <= 0) {
-                    wall.destroy()
-                    return false;
-                }
-
-                wall.setRotation(this.#rotation)
-                wall.updatePosition()
-
-                // Collision check
-                // points are moved from center to avoid clipping through walls
-                const pos = movePointsFromCenter(wall.getVertexAbsolutePos4(), 0.1);
-                if (pointInQuad(this.#polygon.player.getPointAbsolutePosition(), pos[0], pos[1], pos[2], pos[3])
-                && !this.#died) {
-                    const side = closestSide(this.#polygon.player.getPointAbsolutePosition(), pos)
-                    if (side === 3) {
-                        this.kill()
-                        hasDiedNextStep = true
-                    }
-                };
-                return true
-            })
+            this.#walls = this.#updateWalls(this.#walls, frameTime, steps);
         }
 
         this.#updatePolygonToBackground();
