@@ -22,7 +22,7 @@ const pointInTriangle = (p, a, b, c) => {
   return Math.abs(A - (A1 + A2 + A3)) < 1e-9;
 }
 
-const pointInQuad = (p, a, b, c, d) => pointInTriangle(p, a, b, c) || pointInTriangle(p, a, c, d);
+const pointInQuad = (p, pos4) => pointInTriangle(p, pos4[0], pos4[1], pos4[2]) || pointInTriangle(p, pos4[0], pos4[2], pos4[3]);
 
 
 function distPointToLine(px, py, x1, y1, x2, y2) {
@@ -267,10 +267,10 @@ export default class Game extends GameObject {
 
             // Collision check
             // Points are moved from center to avoid clipping through walls
-            const pos = movePointsFromCenter(wall.getVertexAbsolutePos4(), 0.1);
-            if (pointInQuad(this.#polygon.player.getPointAbsolutePosition(), pos[0], pos[1], pos[2], pos[3])
+            const pos4 = movePointsFromCenter(wall.getVertexAbsolutePos4(), 0.1);
+            if (pointInQuad(this.#polygon.player.getPointAbsolutePosition(), pos4)
             && !this.#died) {
-                const side = closestSide(this.#polygon.player.getPointAbsolutePosition(), pos)
+                const side = closestSide(this.#polygon.player.getPointAbsolutePosition(), pos4)
                 if (side === 3) this.kill()
             };
             return true
@@ -305,10 +305,10 @@ export default class Game extends GameObject {
                 if (this.#leftKeyPressed || this.#rightKeyPressed) {
                     for (let i = 0; i < this.#walls.length; i++) {
                         const wall = this.#walls[i];
-                        const pos = wall.getVertexAbsolutePos4();
-                        if (pointInQuad(this.#polygon.player.getPointAbsolutePosition(), pos[0], pos[1], pos[2], pos[3])
+                        const pos4 = wall.getVertexAbsolutePos4();
+                        if (pointInQuad(this.#polygon.player.getPointAbsolutePosition(), pos4)
                         && !this.#died) {
-                            const side = closestSide(this.#polygon.player.getPointAbsolutePosition(), pos)
+                            const side = closestSide(this.#polygon.player.getPointAbsolutePosition(), pos4)
                             collided = true;                                    
                         };
                     }
