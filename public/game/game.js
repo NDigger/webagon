@@ -281,15 +281,12 @@ export default class Game extends GameObject {
         const fps = getFPS();
         const fpsSteps = Math.floor(300/(fps !== 0 ? fps : 60));
         const steps = Math.min(fpsSteps, 60);
-        console.log(fpsSteps, steps)
+
+        this.#distanceDelay -= frameTime * this.#wallSpeedMult / 5;
+        if (this.#distanceDelay <= 0 && typeof this.#distanceSignal === 'function') this.#distanceSignal();
 
         for (let i = 0; i < steps; i++) {
             if (this.#died) break
-
-            if (this.#distanceDelay > 0) {
-                this.#distanceDelay -= frameTime * this.#wallSpeedMult / 5 / steps;
-                if (this.#distanceDelay <= 0 && typeof(this.#distanceSignal) === 'function') this.#distanceSignal()
-            }
 
             this.#walls = this.#updateWalls(this.#walls, frameTime, steps);
             this.#updatePlayer(frameTime, steps);
@@ -303,6 +300,11 @@ export default class Game extends GameObject {
             };
            
             if (i % Math.floor(steps/5) === 0) this.#polygon.draw();
+        }
+
+        if (this.#died) {
+            if (this.#deathEffect) this.#deathEffect.setColor(Color.hsvToRgb(time/1000, 1., 1.));
+            this.#polygon.player.setColor(Color.hsvToRgb(time/1000 + .5, 1., 1.));
         }
 
         this.draw();

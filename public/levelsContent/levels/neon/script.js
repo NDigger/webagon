@@ -7,22 +7,24 @@ const getRandomSide = () => Math.floor(Math.random() * level.getSides());
 const getRandomDir = () => Math.random() < .5 ? -1 : 1;
 const barrage = patterns.barrage;
 
-const extraThickness = 15;
+const thickness = 40;
 
 const pSwapper = async (delay, delayEnd, side = getRandomSide()) => {
     barrage(side);
-    level.createWall(side - 2, delay + 40 + extraThickness);
-    level.createWall(side, delay + 40 + extraThickness);
+    level.createWall(side - 2, delay + thickness);
+    level.createWall(side, delay + thickness);
     await level.distanceDelay(delay);
     level.createWall(side - 1, 40);
+    level.createWall(side - 2, 40);
+    level.createWall(side, 40);
     await level.distanceDelay(delayEnd);
 }
 
 const pSwapperInverse = async (delay, delayEnd) => {
     const side = getRandomSide();
     level.createWall(side - 1, 40);
-    level.createWall(side - 2, delay + 40 + extraThickness);
-    level.createWall(side, delay + 40 + extraThickness);
+    level.createWall(side - 2, delay + thickness);
+    level.createWall(side, delay + thickness);
     await level.distanceDelay(delay);
     barrage(side);
     await level.distanceDelay(delayEnd);
@@ -46,8 +48,8 @@ const pSwapTunnel = async (times, delay, delayEnd) => {
         }
         barrage(bSide + 1)
         if (i !== times - 1) {
-            level.createWall(side, delay + extraThickness);
-            level.createWall(side + Math.floor(level.getSides()/2), delay + extraThickness);
+            level.createWall(side, delay + thickness);
+            level.createWall(side + Math.floor(level.getSides()/2), delay + thickness);
             await level.distanceDelay(delay)
         }
     }
@@ -74,8 +76,8 @@ const pSwapSpiral = async (times, delay, delayEnd) => {
 const pSwapTunnel2 = async (times, delay, delayEnd) => {
     const side = getRandomSide();
     for (let i = 0; i < times; i++) {
-        for(let k = 1; k <= level.getSides()/2 - 1; k++) level.createWall(side + k, delay + extraThickness);
-        for(let k = level.getSides()/2 + 1; k <= level.getSides() - 1; k++) level.createWall(side + k, delay + extraThickness);
+        for(let k = 1; k <= level.getSides()/2 - 1; k++) level.createWall(side + k, delay + thickness);
+        for(let k = level.getSides()/2 + 1; k <= level.getSides() - 1; k++) level.createWall(side + k, delay + thickness);
         barrage(side + 1 + (Math.random() > .5 ? level.getSides() / 2 : 0));
         await level.distanceDelay(delay);
     }
