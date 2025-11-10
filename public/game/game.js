@@ -277,6 +277,13 @@ export default class Game extends GameObject {
         })
     }
 
+    #isPlayerInWall() {
+        return this.#walls.some(wall => {
+            const pos4 = wall.getVertexAbsolutePos4();
+            return pointInQuad(this.#polygon.player.getPointAbsolutePosition(), pos4)
+        })
+    }
+
     #update(time) {
         const frameTime = time - this.#lastUpdateTime;
         this.#lastUpdateTime = time;
@@ -301,21 +308,18 @@ export default class Game extends GameObject {
                 if (this.#rightKeyPressed) this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() + frameTime * .6 / steps);
                 this.#polygon.player.updatePosition()
 
-                let collided = false;
                 if (this.#leftKeyPressed || this.#rightKeyPressed) {
                     for (let i = 0; i < this.#walls.length; i++) {
                         const wall = this.#walls[i];
                         const pos4 = wall.getVertexAbsolutePos4();
-                        if (pointInQuad(this.#polygon.player.getPointAbsolutePosition(), pos4)
+                        if (this.#isPlayerInWall()
                         && !this.#died) {
-                            const side = closestSide(this.#polygon.player.getPointAbsolutePosition(), pos4)
-                            collided = true;                                    
+                            // const side = closestSide(this.#polygon.player.getPointAbsolutePosition(), pos4)
+                            this.#polygon.player.setRotationOffset(prevRotationOffset)
+                            this.#polygon.player.updatePosition()
+                            break;              
                         };
                     }
-                }
-                if (collided) {
-                    this.#polygon.player.setRotationOffset(prevRotationOffset)
-                    this.#polygon.player.updatePosition()
                 }
             }
 
