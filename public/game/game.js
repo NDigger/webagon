@@ -313,9 +313,6 @@ export default class Game extends GameObject {
                 // const side = closestSide(this.#polygon.player.getPointAbsolutePosition(), pos4)
                 this.#polygon.player.setRotationOffset(prevRotationOffset)
                 this.#polygon.player.updatePosition()
-
-                const point = pushPointOutsidePolygon(collidingWall.getVertexAbsolutePos4(), this.#polygon.player.getPointAbsolutePosition());
-
             };
 
 
