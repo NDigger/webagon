@@ -38,7 +38,7 @@ export default class Wall extends CustomWall {
 
     getVertexAbsolutePos4() {
         const pos4 = super.getVertexAbsolutePos4()
-        const extra = 0.0001; // Prevents wall clip
+        const extra = 0.1; // Prevents wall clip
         return [
             pos4[0].rotate(-degToRad(extra)),
             pos4[1].rotate(-degToRad(extra)),
