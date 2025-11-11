@@ -81,7 +81,7 @@ export default class Game extends GameObject {
     #centerOffset = new Vector2(0, 0);
     #backgroundTileColors = [];
 
-    #depth3d = 0;
+    #layersCount3d = 0;
     #distance3d = 0;
     #color3d = null;
     #falloffColor3d = null;
@@ -199,7 +199,7 @@ export default class Game extends GameObject {
         d.setScale(this.#scale);
 
         d.set3dColor(this.#get3dColor());
-        d.set3dDepth(this.#depth3d);
+        d.set3dLayersCount(this.#layersCount3d);
         d.set3dDistance(this.#distance3d);
         d.setSides(this.#sides)
         if (this.#falloffColor3d != null) d.set3dFalloffColor(this.#falloffColor3d)
@@ -327,7 +327,7 @@ export default class Game extends GameObject {
         wall.setRightAngleOffset(this.#wallAngleRight)
 
         if (this.#falloffColor3d) wall.set3dFalloffColor(this.#falloffColor3d);
-        wall.set3dDepth(this.#depth3d);
+        wall.set3dLayersCount(this.#layersCount3d);
         wall.set3dDistance(this.#distance3d);
         wall.set3dLayer(this.#get3dLayer());
         wall.set3dColor(this.#get3dColor());
@@ -428,15 +428,15 @@ export default class Game extends GameObject {
         this.#wallSpeedMult = v;
     }
     getWallSpeedMult() { return this.#wallSpeedMult }
-    set3dDepth(v) {
+    set3dLayersCount(v) {
         if (typeof(v) !== 'number') return;
-        const depth = Math.floor(v);
-        this.#depth3d = depth;
-        this.#walls.forEach(wall => wall.set3dDepth(depth));
-        this.#polygon.set3dDepth(depth)
-        if (this.#deathEffect !== undefined) this.#deathEffect.set3dDepth(v);
+        const layersCount = Math.floor(v);
+        this.#layersCount3d = layersCount;
+        this.#walls.forEach(wall => wall.set3dLayersCount(layersCount));
+        this.#polygon.set3dLayersCount(layersCount)
+        if (this.#deathEffect !== undefined) this.#deathEffect.set3dLayersCount(v);
     }
-    get3dDepth() { return this.#depth3d }
+    get3dLayersCount() { return this.#layersCount3d }
     set3dDistance(v) {
         if (typeof(v) !== 'number') return
         this.#distance3d = v;

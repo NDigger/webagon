@@ -139,7 +139,7 @@ export default class Level extends Game {
 
         this.#cws.forEach(cw => {
             cw.setSkew(this.getSkew());
-            cw.set3dDepth(this.get3dDepth());
+            cw.set3dLayersCount(this.get3dLayersCount());
             cw.set3dDistance(this.get3dDistance());
             cw.setRotation(this.getRotation());
             cw.set3dColor(this.get3dColor());

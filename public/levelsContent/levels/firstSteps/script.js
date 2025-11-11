@@ -23,7 +23,7 @@ level.onInit = () => {
     level.setRotationSpeed(0.035);
     level.setWallSpeedMult(2.4);
     level.setSides(5);
-    level.set3dDepth(8);
+    level.set3dLayersCount(8);
     level.set3dDistance(5);
     level.setWallSpeedIncrement(0.2);
     level.setRotationSpeedIncrement(0.015);

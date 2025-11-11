@@ -16,7 +16,7 @@ export default class PolygonObject extends GameObject {
     #centerOffset = new Vector2(0, 0);
     #offset = new Vector2(0, 0);
 
-    #depth3d = 0;
+    #layersCount3d = 0;
     #distance3d = 0;
     #layer3d = 0;
     #color3d = new Color(0, 0, 0);
@@ -73,11 +73,11 @@ export default class PolygonObject extends GameObject {
     }
     getOffset() { return this.#offset }
 
-    set3dDepth(v) {
+    set3dLayersCount(v) {
         if (typeof(v) !== 'number') return 
-        this.#depth3d = v;
+        this.#layersCount3d = v;
     }
-    get3dDepth() { return this.#depth3d; }
+    get3dLayersCount() { return this.#layersCount3d; }
     set3dDistance(v) {
         if (typeof(v) !== 'number') return
         this.#distance3d = v;
@@ -121,7 +121,7 @@ export default class PolygonObject extends GameObject {
             wall.setScale(this.#scale);
 
             wall.set3dDistance(this.#distance3d);
-            wall.set3dDepth(this.#depth3d);
+            wall.set3dLayersCount(this.#layersCount3d);
             wall.set3dLayer(this.#layer3d);
             wall.set3dColor(this.#color3d);
             if (this.#falloffColor3d != null) wall.set3dFalloffColor(this.#falloffColor3d);

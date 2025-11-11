@@ -86,10 +86,9 @@ export default class Polygon extends PolygonObject {
         return this.player.getColor();
     }
 
-    set3dDepth(v) {
-        // super.set3dDepth(v);
-        this.player.set3dDepth(v);
-        this.#border.set3dDepth(v);
+    set3dLayersCount(v) {
+        this.player.set3dLayersCount(v);
+        this.#border.set3dLayersCount(v);
     }
 
     set3dDistance(v) {

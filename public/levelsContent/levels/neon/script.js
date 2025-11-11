@@ -105,7 +105,7 @@ level.onInit = () => {
     level.setSwapEnabled(true);
     level.setWallSpeedMult(3);
     level.setSides(6);
-    level.set3dDepth(5);
+    level.set3dLayersCount(5);
     level.set3dDistance(8);
     level.setWallSpeedIncrement(0.2);
     level.setIncrementTime(12);

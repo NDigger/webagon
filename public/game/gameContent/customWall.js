@@ -25,9 +25,8 @@ export default class CustomWall extends Mesh {
     
     #color3d = new Color(0, 0, 0);
     #falloffColor3d = null;
-    #depth3d = 0;
-    #distance3d = 0;
     #layersCount3d = 0;
+    #distance3d = 0;
 
     #savedUnmodifiedVertexPos4 = [new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0)];
 
@@ -46,6 +45,10 @@ export default class CustomWall extends Mesh {
             const depth = 1 - Math.min(prevPos.y * 0.001, 0);
             pos.x /= depth;
             pos.y /= depth;
+
+            // Camera rotation
+            // const cameraRotation = 60;
+            // pos = rotatePoint(pos, new Vector2(0, 0), -cameraRotation);
 
             // Centering
             pos = pos.add(new Vector2(screenCenter.x + this.#centerOffset.x, screenCenter.y + this.#centerOffset.y));
@@ -104,12 +107,12 @@ export default class CustomWall extends Mesh {
     }
     getScale() { return this.#scale }
 
-    set3dDepth(v) {
+    set3dLayersCount(v) {
         if (typeof(v) !== 'number') return 
-        this.#depth3d = v;
-        this.#layers3d.setDepth(v);
+        this.#layersCount3d = v;
+        this.#layers3d.setLayersCount(v);
     }
-    get3dDepth() { return this.#depth3d; }
+    get3dLayersCount() { return this.#layersCount3d; }
     set3dDistance(v) {
         if (typeof(v) !== 'number') return
         this.#distance3d = v;

@@ -137,10 +137,10 @@ export default class Mesh extends GameObject {
         this.#object.zIndex = v;
     }
     getLayer() {
-        return this.#layer
+        return this.#layer;
     }
 
     getPositions() {
-        return this.#positions
+        return this.#positions;
     }
 }

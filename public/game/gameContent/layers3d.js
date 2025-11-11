@@ -9,7 +9,7 @@ export default class Layers3d extends GameObject {
     #vertexPos4 = [];
     #layer = 0;
 
-    #depth = 0;
+    #layersCount = 0;
     #distance = 10;
     #skew = 0;
     #color = new Color(0, 0, 0);
@@ -18,10 +18,10 @@ export default class Layers3d extends GameObject {
     draw() {
         this.#meshes.forEach(mesh => mesh.destroy())
         this.#meshes = [];
-        for (let i = 1; i <= this.#depth; i++) {
+        for (let i = 1; i <= this.#layersCount; i++) {
             const mesh = new Mesh(this.app)
             if (this.#falloffColor == null) mesh.setColor(this.#color);
-            else mesh.setColor(Lerp.interpolate(this.#color, this.#falloffColor, i/this.#depth))
+            else mesh.setColor(Lerp.interpolate(this.#color, this.#falloffColor, i/this.#layersCount))
             mesh.setLayer(this.#layer - i*0.00001)
             this.#meshes.push(mesh);
         }
@@ -32,9 +32,9 @@ export default class Layers3d extends GameObject {
         }
     }
 
-    setDepth(v) {
+    setLayersCount(v) {
         if (v === this.#meshes.length || typeof(v) !== 'number') return
-        this.#depth = v;
+        this.#layersCount = v;
     }
 
     setDistance(v) {
