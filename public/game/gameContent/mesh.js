@@ -36,7 +36,7 @@ export default class Mesh extends GameObject {
         });
         this.#object = new PIXI.Mesh({geometry: this._geometry});
 
-        this.addStageChild();
+        this.#addStageChild();
         this.setColor(new Color(0, 0, 0));
 
         this.draw = this.draw.bind(this);
@@ -117,7 +117,7 @@ export default class Mesh extends GameObject {
         this.#updateAbsolutePositions()
     }
 
-    addStageChild() {
+    #addStageChild() {
         this.app.stage.addChild(this.#object);
     }
 

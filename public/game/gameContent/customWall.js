@@ -40,6 +40,7 @@ export default class CustomWall extends Mesh {
             newPos = rotatePoint(newPos, new Vector2(0, 0), this.#rotation)
             newPos = newPos.mul(this.#scale);
             newPos.y /= this.#skew + 1;
+
             newPos = newPos.add(new Vector2(screenCenter.x + this.#centerOffset.x, screenCenter.y + this.#centerOffset.y));
             return newPos;
         });
