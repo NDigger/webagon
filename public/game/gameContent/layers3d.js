@@ -2,6 +2,7 @@ import GameObject from "./gameObject";
 import Mesh from "./mesh";
 import Lerp from "../../utils/interpolation";
 import { Vector2, Color } from "../../utils/structures";
+import { getScreenCenter } from "../utils";
 
 export default class Layers3d extends GameObject {
     #meshes = [];
@@ -73,11 +74,22 @@ export default class Layers3d extends GameObject {
         this.#vertexPos4 = [pos1, pos2, pos3, pos4];
         this.#meshes.forEach((mesh, i) => {
             const inc = (i + 1) * this.#distance * this.#skew;
+
+            const newPos = this.#vertexPos4.map(pos => {
+                const screenCenter = getScreenCenter();
+                let np = pos
+                np = np.sub(screenCenter)
+                const depth = 1 - Math.min(np.y * 0.001, 0);
+                np.y += inc / depth;
+                np = np.add(screenCenter);
+                return np;
+            })
+
             mesh.setVertexPos4(
-                new Vector2(pos1.x, pos1.y + inc), 
-                new Vector2(pos2.x, pos2.y + inc), 
-                new Vector2(pos3.x, pos3.y + inc), 
-                new Vector2(pos4.x, pos4.y + inc), 
+                newPos[0],
+                newPos[1],
+                newPos[2],
+                newPos[3],
             )
         })
     }

@@ -1,8 +1,7 @@
 import Mesh from "./mesh";
 import { Vector2, Color } from "../../utils/structures";
 import Layers3d from "./layers3d";
-
-const getScreenCenter = () => new Vector2(1920/2, 1080/2)
+import { getScreenCenter } from "../utils";
 
 const rotatePoint = (point, center, angleDeg) => {
   const angle = angleDeg * Math.PI / 180;
@@ -44,10 +43,11 @@ export default class CustomWall extends Mesh {
             pos.y /= this.#skew + 1;
 
             // Pseudo3d
-            const depth = 1 - Math.min(prevPos.y * 0.002, 0);
+            const depth = 1 - Math.min(prevPos.y * 0.001, 0);
             pos.x /= depth;
             pos.y /= depth;
 
+            // Centering
             pos = pos.add(new Vector2(screenCenter.x + this.#centerOffset.x, screenCenter.y + this.#centerOffset.y));
             return pos;
         });
