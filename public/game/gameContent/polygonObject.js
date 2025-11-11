@@ -20,6 +20,7 @@ export default class PolygonObject extends GameObject {
     #distance3d = 0;
     #layer3d = 0;
     #color3d = new Color(0, 0, 0);
+    #depthMult3d = 0;
     #falloffColor3d = null;
 
     draw() {
@@ -99,6 +100,10 @@ export default class PolygonObject extends GameObject {
     clear3dFalloffColor() {
         this.#falloffColor3d = null;
     }
+    set3dDepthMult(v) {
+        if (typeof(v) !== 'number') return
+        this.#depthMult3d = v;
+    }
     destroy() {
         if (this.destroyed) return
         this.destroyed = true
@@ -124,6 +129,7 @@ export default class PolygonObject extends GameObject {
             wall.set3dLayersCount(this.#layersCount3d);
             wall.set3dLayer(this.#layer3d);
             wall.set3dColor(this.#color3d);
+            wall.set3dDepthMult(this.#depthMult3d);
             if (this.#falloffColor3d != null) wall.set3dFalloffColor(this.#falloffColor3d);
             else wall.clear3dFalloffColor();
             

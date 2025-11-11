@@ -12,6 +12,7 @@ export default class Layers3d extends GameObject {
     #layersCount = 0;
     #distance = 10;
     #skew = 0;
+    #depthMult = 0;
     #color = new Color(0, 0, 0);
     #falloffColor = null;
     
@@ -48,6 +49,7 @@ export default class Layers3d extends GameObject {
     }
 
     setLayer(v) {
+        if (typeof(v) !== 'number') return;
         this.#layer = v;
         this.#meshes.forEach(mesh => mesh.setLayer(v));
     }
@@ -58,6 +60,11 @@ export default class Layers3d extends GameObject {
 
     setFalloffColor({r, g, b, a}) {
         this.#falloffColor = new Color(r, g, b, a);
+    }
+
+    setDepthMult(v) {
+        if (typeof(v) !== 'number') return;
+        this.#depthMult = v;
     }
 
     clearFalloffColor() {
@@ -79,7 +86,8 @@ export default class Layers3d extends GameObject {
                 const screenCenter = getScreenCenter();
                 let np = pos
                 np = np.sub(screenCenter)
-                const depth = 1 - Math.min(np.y * 0.001, 0);
+
+                const depth = 1 - Math.min(np.y * this.#depthMult / 1000, 0);
                 np.y += inc / depth;
                 np = np.add(screenCenter);
                 return np;

@@ -118,6 +118,12 @@ export default class Polygon extends PolygonObject {
         this.#border.clear3dFalloffColor();
     }
 
+    set3dDepthMult(v) {
+        super.set3dDepthMult(v);
+        this.player.set3dDepthMult(v);
+        this.#border.set3dDepthMult(v);
+    }
+
     setOffset({x, y}) {
         const offset = new Vector2(x, y);
         super.setOffset(offset);

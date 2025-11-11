@@ -85,6 +85,7 @@ export default class Game extends GameObject {
     #distance3d = 0;
     #color3d = null;
     #falloffColor3d = null;
+    #depthMult3d = 0;
 
     #mainColor = new Color(0, 0, 0);
     #wallSpawnDistance = 1500;
@@ -201,6 +202,7 @@ export default class Game extends GameObject {
         d.set3dColor(this.#get3dColor());
         d.set3dLayersCount(this.#layersCount3d);
         d.set3dDistance(this.#distance3d);
+        d.set3dDepthMult(this.#depthMult3d);
         d.setSides(this.#sides)
         if (this.#falloffColor3d != null) d.set3dFalloffColor(this.#falloffColor3d)
 
@@ -331,6 +333,7 @@ export default class Game extends GameObject {
         wall.set3dDistance(this.#distance3d);
         wall.set3dLayer(this.#get3dLayer());
         wall.set3dColor(this.#get3dColor());
+        wall.set3dDepthMult(this.#depthMult3d);
 
         wall.draw();
 
@@ -473,6 +476,15 @@ export default class Game extends GameObject {
         this.#falloffColor3d = null;
         this.#polygon.clear3dFalloffColor();
         this.#walls.forEach(w => w.clear3dFalloffColor());
+        if (this.#deathEffect !== undefined) this.#deathEffect.clear3dFalloffColor();
+    }
+    set3dDepthMult(v) {
+        if (typeof(v) !== 'number') return;
+        this.#depthMult3d = v;
+        this.#polygon.set3dDepthMult(v);
+        this.#background.set3dDepthMult(v);
+        this.#walls.forEach(wall => wall.set3dDepthMult(v));
+        if (this.#deathEffect !== undefined) this.#deathEffect.set3dDepthMult(v);
     }
     setSwapEnabled(v) {
         if (typeof(v) !== 'boolean') return;

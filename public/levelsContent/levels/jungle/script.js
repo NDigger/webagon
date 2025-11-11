@@ -27,6 +27,7 @@ level.onInit = () => {
     level.setSkew(.5);
     level.setIncrementSpinPower(.4);
     level.set3dFalloffColor(new Color(0, 0, 0, 0));
+    level.set3dDepthMult(1);
 }
 
 let time = 0;
