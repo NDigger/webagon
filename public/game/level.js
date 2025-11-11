@@ -190,6 +190,7 @@ export default class Level extends Game {
             this.setShakePower(v);
             if (!this.#destroyed) super.draw()
         }).apply(30).run(0, 0.35);
+        new Lerp(v => this.setRotation(v)).apply(this.getRotation()).run(this.getRotation() + this.getRotationSpeed() * 400, 1, Lerp.Easing.EASE_OUT);
         const flashLerp = new Lerp(v => document.getElementById('override-flash-effect').style.backgroundColor = v.getRGBAStyle());
         flashLerp.apply(new Color(255, 255, 255, .6))
         flashLerp.run(new Color(255, 255, 255, 0), 1)

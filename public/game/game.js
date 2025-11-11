@@ -274,9 +274,9 @@ export default class Game extends GameObject {
 
         if (!this.#died) {            
             this.#rotation += this.#rotationSpeed * frameTime;
-            this.#polygon.setRotation(this.#rotation)
-            this.#background.setRotation(this.#rotation + this.#backgroundRotationOffset);
         }
+        this.#polygon.setRotation(this.#rotation)
+        this.#background.setRotation(this.#rotation + this.#backgroundRotationOffset);
 
         const fps = getFPS();
         const fpsSteps = Math.floor(300/(fps !== 0 ? fps : 60));
@@ -299,12 +299,7 @@ export default class Game extends GameObject {
                 })
             };
            
-            if (i % Math.floor(steps/5) === 0) this.#polygon.draw();
-        }
-
-        if (this.#died) {
-            if (this.#deathEffect) this.#deathEffect.setColor(Color.hsvToRgb(time/1000, 1., 1.));
-            this.#polygon.player.setColor(Color.hsvToRgb(time/1000 + .5, 1., 1.));
+            if (i % Math.floor(steps/20) === 0) this.#polygon.player.draw();
         }
 
         this.draw();
@@ -353,7 +348,14 @@ export default class Game extends GameObject {
         })
     }
     getLayer() { return this.#layer }
-    setRotation(v) { if (typeof(v) === 'number') this.#rotation = v; }
+    setRotation(v) { 
+        if (typeof(v) !== 'number') return 
+        this.#rotation = v; 
+        this.#background.setRotation(v);
+        this.#polygon.setRotation(v);
+        this.#walls.forEach(wall => wall.setRotation(v));
+        if (this.#deathEffect) this.#deathEffect.setRotation(v);
+    }
     getRotation() { return this.#rotation }
     setRotationSpeed(v) { if (typeof(v) === 'number') this.#rotationSpeed = v; }
     getRotationSpeed() { return this.#rotationSpeed }
