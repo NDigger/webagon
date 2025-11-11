@@ -35,14 +35,21 @@ export default class CustomWall extends Mesh {
     getAbsoluteVertex4() {
         const screenCenter = getScreenCenter();
         return this.#savedUnmodifiedVertexPos4.map(vec2 => {
-            let newPos = vec2; 
-            newPos = newPos.add(this.#offset)
-            newPos = rotatePoint(newPos, new Vector2(0, 0), this.#rotation)
-            newPos = newPos.mul(this.#scale);
-            newPos.y /= this.#skew + 1;
+            let pos = vec2; 
+            pos = pos.add(this.#offset)
+            pos = rotatePoint(pos, new Vector2(0, 0), this.#rotation)
+            const prevPos = new Vector2(pos.x, pos.y);
 
-            newPos = newPos.add(new Vector2(screenCenter.x + this.#centerOffset.x, screenCenter.y + this.#centerOffset.y));
-            return newPos;
+            pos = pos.mul(this.#scale);
+            pos.y /= this.#skew + 1;
+
+            // Pseudo3d
+            const depth = 1 - Math.min(prevPos.y * 0.002, 0);
+            pos.x /= depth;
+            pos.y /= depth;
+
+            pos = pos.add(new Vector2(screenCenter.x + this.#centerOffset.x, screenCenter.y + this.#centerOffset.y));
+            return pos;
         });
     }
     
