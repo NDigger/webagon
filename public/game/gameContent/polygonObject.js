@@ -41,13 +41,25 @@ export default class PolygonObject extends GameObject {
         }
     }
 
-    setSides(v) { if (typeof v === 'number') { this.#sides = v } }
+    setSides(v) { 
+        if (typeof v !== 'number') return 
+        this.#sides = v
+    }
     getSides() { return this.#sides; }
-    setRotation(v) { if (typeof v === 'number') { this.#rotation = v } }
+    setRotation(v) { 
+        if (typeof v !== 'number') return
+        this.#rotation = v 
+    }
     getRotation() { return this.#rotation; }
-    setSkew(v) { if (typeof v === 'number') { this.#skew = v } }
+    setSkew(v) { 
+        if (typeof v !== 'number') return  
+        this.#skew = v 
+    }
     getSkew() { return this.#skew; }
-    setLayer(v) { if (typeof v === 'number') { this.#layer = v } }
+    setLayer(v) { 
+        if (typeof v !== 'number') return
+        this.#layer = v  
+    }
     getLayer() { return this.#layer; }
     setThickness(v) {
         if (typeof(v) !== 'number') return
