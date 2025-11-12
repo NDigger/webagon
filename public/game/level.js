@@ -13,7 +13,6 @@ export default class Level extends Game {
     onIncrement = () => {};
     onPreIncrement = () => {};
 
-    #destroyed = false;
     #levelInitTime = performance.now();
 
     #timeouts = [];
@@ -151,7 +150,6 @@ export default class Level extends Game {
         this.#renderId = requestAnimationFrame(t => this.#render(t))
     }
     destroy() {
-        this.#destroyed = true;
         this.#games.forEach(game => game.destroy());
         this.#cws.forEach(cw => cw.destroy());
         super.destroy();
@@ -188,7 +186,7 @@ export default class Level extends Game {
         this.setShakePower(10);
         new Lerp(v => {
             this.setShakePower(v);
-            if (!this.#destroyed) super.draw()
+            if (!this.isDestroyed()) super.draw()
         }).apply(30).run(0, 0.35);
         new Lerp(v => this.setRotation(v)).apply(this.getRotation()).run(this.getRotation() + this.getRotationSpeed() * 400, 1.5, Lerp.Easing.EASE_OUT);
         const flashLerp = new Lerp(v => document.getElementById('override-flash-effect').style.backgroundColor = v.getRGBAStyle());

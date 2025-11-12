@@ -71,7 +71,6 @@ export default class Game extends GameObject {
     #walls = [];
 
     #rotationSpeed = 0;
-    #rotationDir = 1;
     #rotation = 0;
     #sides = 6;
     #skew = 0;
@@ -190,7 +189,7 @@ export default class Game extends GameObject {
     #get3dColor() { return this.#color3d ?? this.#getDefault3dColor() }
 
     kill() {
-        if (this.destroyed) return
+        if (this.isDestroyed()) return
 
         const d = new Death(this.app);
         d.setSkew(this.#skew);
@@ -310,7 +309,7 @@ export default class Game extends GameObject {
     }
 
     createWall(side, thickness) {
-        if (this.#died || this.destroyed) return; 
+        if (this.#died || this.isDestroyed()) return; 
         const wall = new Wall(this.app);
         wall.setSides(this.#sides)
         wall.setSide(Math.floor(side))
@@ -586,8 +585,7 @@ export default class Game extends GameObject {
         this.#walls = [];
     }
     destroy() {
-        if (this.destroyed) return
-        this.destroyed = true;
+        super.destroy();
         this.removeEventListeners();
         this.#died = true;
         cancelAnimationFrame(this.#updateId);
