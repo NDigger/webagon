@@ -28,10 +28,11 @@ level.onInit = () => {
     level.setRotationSpeedIncrement(0.03);
     level.setIncrementTime(999999);
     level.setIncrementSpinPower(.7);
-
+    level.set3dDepthMult(.5);
     // level.setWallAngleLeft(-.5);
     level.setWallAngleRight(-.5);
     level.setBackgroundRotationOffset(45);
+    level.setBackgroundRadius(40000);
 }
 
 // onStep must be async and use delays in order to work. No delays may cause crash.

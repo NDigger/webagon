@@ -28,6 +28,7 @@ export default class CustomWall extends Mesh {
     #layersCount3d = 0;
     #distance3d = 0;
     #depthMult3d = 0;
+    #falloffScale3d = new Vector2(1, 1);
 
     #savedUnmodifiedVertexPos4 = [new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0)];
 
@@ -43,7 +44,7 @@ export default class CustomWall extends Mesh {
             pos.y /= this.#skew + 1;
 
             // Pseudo3d
-            const depth = 1 - Math.min(prevPos.y * this.#depthMult3d / 1000, 0);
+            const depth = 1 - Math.min(prevPos.y * this.#depthMult3d / 1000, 0.);
             pos.x /= depth;
             pos.y /= depth;
 
@@ -148,6 +149,12 @@ export default class CustomWall extends Mesh {
         this.#falloffColor3d = null;
         this.#layers3d.clearFalloffColor();
     }
+    set3dFalloffScale({x, y}) {
+        const v = new Vector2(x, y);
+        this.#falloffScale3d = v;
+        this.#layers3d.setFalloffScale(v);
+    }
+    get3dFalloffScale() { return this.#falloffScale3d; }
     // setLayer(v) {
     //     super.setLayer(v)
     //     this.#layers3d.setLayer(v - 0.001);

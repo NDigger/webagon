@@ -21,12 +21,14 @@ level.onInit = () => {
     level.setWallSpeedMult(2.8);
     level.setSides(6);
     level.set3dLayersCount(6);
-    level.set3dDistance(50);
+    level.set3dDistance(25);
     level.setRadius(80);
     level.setWallSpeedIncrement(.1);
     level.setRotationSpeedIncrement(.035);
     level.set3dFalloffColor(new Color(0, 0, 0));
     level.setIncrementSpinPower(.4);
+    level.set3dDepthMult(.5);
+    level.set3dFalloffScale(new Vector2(.85, .85))
 }
 
 // onStep must be async and use delays in order to work. No delays may cause crash.
@@ -41,8 +43,7 @@ let time = 0;
 level.onUpdate = ft => {
     level.setBackgroundTileColors([
             new Color(255, 255, 255),
-            new Color(255, 255, 255),
-            new Color(250, 250, 250),
+            new Color(250, 250, 250)
         ])
     level.setMainColor(new Color(255, 255, 255))
     const v = 225 + Utils.pingPong(time * 1.05) * 30;
@@ -55,7 +56,9 @@ level.onUpdate = ft => {
 // onRender is called every frame. It works when player is died.
 level.onRender = ft => {
     time += ft;
-    level.setSkew(Utils.pingPong(time * 1.05) * .5 - .2)
+    const s = Utils.pingPong(time * 1.05) * .5 - .2;
+    level.setSkew(s);
+    level.set3dDepthMult(s * 3);
 }
 
 // onPreIncrement is called immediately when increment time is achieved

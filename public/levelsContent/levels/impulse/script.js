@@ -38,6 +38,7 @@ level.onInit = () => {
     level.setWallSpeedIncrement(.2);
     level.setWallSpeedMax(6.4);
     level.set3dFalloffColor(new Color(0, 0, 0, 0));
+    level.set3dDepthMult(1);
 }
 
 // onStep must be async and use delays in order to work. No delays may cause crash.

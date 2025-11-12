@@ -22,6 +22,7 @@ export default class PolygonObject extends GameObject {
     #color3d = new Color(0, 0, 0);
     #depthMult3d = 0;
     #falloffColor3d = null;
+    #falloffScale3d = new Vector2(1, 1);
 
     draw() {
         const sidesChanged = (this._walls[0]?.getSides() ?? -1) !== this.#sides;
@@ -100,6 +101,11 @@ export default class PolygonObject extends GameObject {
     clear3dFalloffColor() {
         this.#falloffColor3d = null;
     }
+    set3dFalloffScale({x, y}) {
+        const v = new Vector2(x, y);
+        this.#falloffScale3d = v; 
+    }
+    get3dFalloffScale() { return this.#falloffScale3d }
     set3dDepthMult(v) {
         if (typeof(v) !== 'number') return
         this.#depthMult3d = v;
@@ -125,6 +131,7 @@ export default class PolygonObject extends GameObject {
             wall.setOffset(this.#offset);
             wall.setScale(this.#scale);
 
+            wall.set3dFalloffScale(this.#falloffScale3d);
             wall.set3dDistance(this.#distance3d);
             wall.set3dLayersCount(this.#layersCount3d);
             wall.set3dLayer(this.#layer3d);

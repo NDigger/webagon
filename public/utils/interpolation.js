@@ -1,4 +1,4 @@
-import { Color } from './structures';
+import { Color, Vector2 } from './structures';
 
 const linear = (t) => t;
 const ease_in = (t, _pow = 3) => Math.pow(t, _pow);
@@ -119,6 +119,11 @@ export default class Lerp {
                 a.g + (b.g - a.g) * clamped,
                 a.b + (b.b - a.b) * clamped,
                 a.a + (b.a - a.a) * clamped
+            )
+        } else if (isFromToInstanceOf(a, b, Vector2)) {
+            return new Vector2(
+                a.x + (b.x - a.x) * clamped,
+                a.y + (b.y - a.y) * clamped,
             )
         } else if (isFromToInstanceOf(a, b, Number)) {
             return a + (b - a) * clamped;

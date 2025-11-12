@@ -15,6 +15,7 @@ export default class Layers3d extends GameObject {
     #depthMult = 0;
     #color = new Color(0, 0, 0);
     #falloffColor = null;
+    #falloffScale = new Vector2(1, 1);
     
     draw() {
         this.#meshes.forEach(mesh => mesh.destroy())
@@ -61,6 +62,11 @@ export default class Layers3d extends GameObject {
     setFalloffColor({r, g, b, a}) {
         this.#falloffColor = new Color(r, g, b, a);
     }
+    setFalloffScale({x, y}) {
+        const fs = new Vector2(x, y);
+        this.#falloffScale = fs;
+    }
+    getFalloffScale() { return this.#falloffScale }
 
     setDepthMult(v) {
         if (typeof(v) !== 'number') return;
@@ -74,21 +80,23 @@ export default class Layers3d extends GameObject {
     destroy() {
         this.#meshes.forEach(mesh => mesh.destroy());
         this.#meshes = [];
-        this.redrawEnabled = false;
     }
 
     setVertexPos4(pos1, pos2, pos3, pos4) {
         this.#vertexPos4 = [pos1, pos2, pos3, pos4];
         this.#meshes.forEach((mesh, i) => {
-            const inc = (i + 1) * this.#distance * this.#skew;
-
+            const layerYInc = (i + 1) * this.#distance * this.#skew;
+            const layerScaleMult = Lerp.interpolate(new Vector2(1, 1), this.#falloffScale, (i + 1)/this.#layersCount);
             const newPos = this.#vertexPos4.map(pos => {
                 const screenCenter = getScreenCenter();
                 let np = pos
                 np = np.sub(screenCenter)
 
                 const depth = 1 - Math.min(np.y * this.#depthMult / 1000, 0);
-                np.y += inc / depth;
+
+                np = np.mul(layerScaleMult);
+                np.y += layerYInc / depth;
+
                 np = np.add(screenCenter);
                 return np;
             })

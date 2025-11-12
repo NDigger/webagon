@@ -85,6 +85,7 @@ export default class Game extends GameObject {
     #distance3d = 0;
     #color3d = null;
     #falloffColor3d = null;
+    #falloffScale3d = new Vector2(1, 1);
     #depthMult3d = 0;
 
     #mainColor = new Color(0, 0, 0);
@@ -334,6 +335,7 @@ export default class Game extends GameObject {
         wall.set3dLayer(this.#get3dLayer());
         wall.set3dColor(this.#get3dColor());
         wall.set3dDepthMult(this.#depthMult3d);
+        wall.set3dFalloffScale(this.#falloffScale3d);
 
         wall.draw();
 
@@ -486,6 +488,14 @@ export default class Game extends GameObject {
         this.#walls.forEach(wall => wall.set3dDepthMult(v));
         if (this.#deathEffect !== undefined) this.#deathEffect.set3dDepthMult(v);
     }
+    get3dDepthMult() { return this.#depthMult3d }
+    set3dFalloffScale({x, y}) {
+        const v = new Vector2(x, y);
+        this.#falloffScale3d = v;
+        this.#polygon.set3dFalloffScale(v);
+        this.#walls.forEach(wall => wall.set3dFalloffScale(v));
+    }
+    get3dFalloffScale() { return this.#falloffScale3d }
     setSwapEnabled(v) {
         if (typeof(v) !== 'boolean') return;
         this.#swapEnabled = v;
