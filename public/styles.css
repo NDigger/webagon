@@ -198,9 +198,10 @@ canvas {
 
 #level-list {
     position: absolute;
-    left: -200px;
+    left: -120px;
     padding: 10px;
     max-height: 100vh;
+    width: 700px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -210,25 +211,25 @@ canvas {
     overflow-y: scroll;
 }
 
-#level-list, #selected-level-info {
+#level-list, #selected-level {
     overflow-y: auto;
     scrollbar-width: 100px;    
 }
 
-#level-list::-webkit-scrollbar, #selected-level-info::-webkit-scrollbar {
+#level-list::-webkit-scrollbar, #selected-level::-webkit-scrollbar {
     display: none;
 }
 
-#selected-level-info::-webkit-scrollbar {
+#selected-level::-webkit-scrollbar {
     display: block;
     width: 8px;
 }
 
-#selected-level-info::-webkit-scrollbar-track {
+#selected-level::-webkit-scrollbar-track {
     background: var(--main-color);
 }
 
-#selected-level-info::-webkit-scrollbar-thumb {
+#selected-level::-webkit-scrollbar-thumb {
     background: linear-gradient(to right, var(--main-color) 30%, black 3%, black 100%);
 }
 
@@ -241,11 +242,12 @@ canvas {
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    width: 700px;
+    width: calc(100% + 100px);
     border: 2px solid var(--main-color);
     padding: 10px 0;
     padding-right: 20px;
-    /* transform: skewX(-20deg); */
+    font-size: 16px;
+    font-size: 1rem;
 }
 
 .level.selected-animation {
@@ -258,18 +260,19 @@ canvas {
 @keyframes level-tab-anim {
     from {
         /* transform: skewX(-20deg); */
+        height: 100px;
         transform: none
     } to {
+        font-size: 1.5rem;
         transform: translateX(100px);
+        height: 150px;
     }
 }
 
-.level, #selected-level-info {
+.level, #selected-level {
     display: flex;
     position: relative;
-    box-shadow: 0px 5px 10px var(--background-tile-color);
-    /* background-color: rgba(0, 0, 0, .5); */
-    backdrop-filter: hue-rotate(180deg) brightness(.5);
+    backdrop-filter: hue-rotate(180deg) brightness(.9);
 }
 
 .level:hover {
@@ -283,52 +286,56 @@ canvas {
 }
 
 .level .name {
-    font-size: 2rem;
+    font-size: 2em;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden; 
 }
 
 .level .author {
-    font-size: 1rem;
+    font-size: 1em;
     opacity: .5;    
 }
 
-#selected-level-info {
+#selected-level {
     display: flex;
     justify-content: space-between;
     align-items: start;
     flex-direction: column;
-    backdrop-filter: hue-rotate(180deg) brightness(0.5);
     position: absolute;
-    right: 0px;
-    width: 500px;
+    width: 550px;
     height: 100vh;
     border-left: 2px solid var(--main-color);
+
+    border: none;
+    backdrop-filter: none;
 }
 
-#selected-level-info p, #selected-level-info h1 {
+@media (min-width: 1068px) {
+    #selected-level {
+        right: 10px !important;
+        bottom: 0 !important;
+        top: 0 !important;
+    }
+}
+
+#selected-level p, #selected-level h1 {
     padding: 0px 10px;
 }
 
-#selected-level-info .distance {
-    padding: 10px 0;
-    margin: 10px 0;
-}
-
-#selected-level-info * {
+#selected-level * {
     color: var(--main-color);
 }
 
-#selected-level-info > * {
+#selected-level > * {
     width: 100%;
 }
 
-#selected-level-info.show {
+#selected-level.show {
     animation: selected-level-tab-anim .2s ease-out forwards
 }
 
-#selected-level-info.hide {
+#selected-level.hide {
     animation: selected-level-tab-anim .2s ease-in forwards reverse
 }
 
@@ -340,15 +347,7 @@ canvas {
     }
 }
 
-#selected-level-info .top {
-    display: flex;
-}
-
-#selected-level-info .music {
-    margin-top: 0;
-}
-
-#close-selected-level-info {
+#close-selected-level {
     display: none;
     width: 75px;
     background-color: var(--main-color);
@@ -356,31 +355,40 @@ canvas {
     font-size: 2rem;
 }
 
-#selected-level-info .title-name {
-    font-size: 3rem;
+#selected-level .title-name {
+    font-size: 4rem;
     width: 100%;
+    padding: 10px;
+    margin: 20px 0;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden; 
 }
 
-#selected-level-info .inner-container {
-    border-top: 2px solid var(--main-color);
-    border-bottom: 2px solid var(--main-color);
+#selected-level .tab {
+    border: 2px solid var(--main-color);
+    backdrop-filter: hue-rotate(180deg) brightness(.9);
+    padding: 10px 0;
+    margin: 10px 0;
 }
 
-#selected-level-info .best {
-    font-size: 5rem;
+#selected-level .tab .title {
+    margin-bottom: 10px;
+}
+
+#selected-level .top {
+    position: relative;
+    text-align: center;
+    text-shadow: 5px 5px 0px black;
+    transform: skewY(-2deg);
+    margin-top: 40px;
+    padding: 0 0px;
+}
+
+#selected-level .best {
+    font-size: 8rem;
     text-align: center;
     width: 100%;
-}
-
-#selected-level-info .bottom {
-    border-top: 2px solid var(--main-color);
-}
-
-#selected-level-info .bottom * {
-    text-align: center;
 }
 
 #play-btn {
@@ -389,14 +397,6 @@ canvas {
     background-color: var(--main-color);
     color: black;
     font-size: 4rem;
-}
-
-@media (min-width: 1068px) {
-    #selected-level-info {
-        right: 0 !important;
-        bottom: 0 !important;
-        top: 0 !important;
-    }
 }
 
 @media (max-width: 1068px) {
@@ -412,7 +412,7 @@ canvas {
         padding: 10px;
     }
 
-    #selected-level-info {
+    #selected-level {
         backdrop-filter: unset;
         background-color: rgba(0, 0, 0, .8);
         width: 100vw;

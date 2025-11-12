@@ -34,6 +34,8 @@ level.onInit = () => {
     level.setOffset(new Vector2(10, 0));
     level.setPolygonColor(new Color(0, 0, 0, 0))
     level.setBackgroundSwapTime(9999999);
+    level.setScale(new Vector2(.5, .5))
+    level.set3dFalloffScale(new Vector2(4, 4));
 }
 
 // onStep must be async and use delays in order to work. No delays may cause crash.

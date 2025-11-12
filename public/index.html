@@ -35,29 +35,30 @@
     <section id="level-select">
         <div id="level-list">
         </div>
-        <div id="selected-level-info" class="hide">
+        <div id="selected-level" class="hide">
+            <div id="selected-level-top" class="top">
+                <p class="title-name"></p>
+                <h1>Personal best:</h1>
+                <p id="selected-level-best" class="best"></p>
+                <!-- <button id="play-btn">PLAY</button> -->
+            </div>
+
             <div>
-                <div class="top">
-                    <p class="title-name"></p>
-                    <button id="close-selected-level-info">X</button>
+                <div class="level-info">
+                    <button id="close-selected-level">X</button>
                 </div>
-                <div class="music inner-container distance">                
-                    <h1>Music Info</h1>
+                <div class="tab">                
+                    <h1 class="title">Music Info</h1>
                     <p class="music-name"></p>
                     <p class="music-author"></p>
                     <p class="music-album"></p>
                 </div>
-                <div class="inner-container distance">   
-                <h1>Level Info</h1>
-                <p class="name"></p>
-                <p class="author"></p>
-                <p class="description"></p>
+                <div class="tab">   
+                    <h1 class="title">Level Info</h1>
+                    <p class="name"></p>
+                    <p class="author"></p>
+                    <p class="description"></p>
                 </div>
-            </div>
-            <div class="bottom">
-                <p>Personal best:</p>
-                <p id="selected-level-best" class="best"></p>
-                <button id="play-btn">PLAY</button>
             </div>
         </div>
         <!-- <canvas width="1600" height="1080" id="level-select-background"></canvas> -->

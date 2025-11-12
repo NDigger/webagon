@@ -3,7 +3,7 @@ import Background from './game/gameContent/background';
 import { app, setBestScore, audioManager, levelLoader } from './script';
 import { Color } from './utils/structures';
 
-const selectedLevelInfo = document.getElementById('selected-level-info')
+const selectedLevelInfo = document.getElementById('selected-level')
 const levelList = document.getElementById('level-list');
 
 levelList.addEventListener('keydown', (e) => {
@@ -116,9 +116,9 @@ const afterShift = () => {
 
     const currentJson = levelJsons[levelListSelectedLevel];
     selectedLevelInfo.querySelector('.title-name').textContent = currentJson.name
-    selectedLevelInfo.querySelector('.name').textContent = `Name: ${currentJson.name}`
-    selectedLevelInfo.querySelector('.author').textContent = `Author: ${currentJson.author}`
-    selectedLevelInfo.querySelector('.description').textContent = `Description: ${currentJson.description}`
+    selectedLevelInfo.querySelector('.name').textContent = `Name: ${currentJson.name || 'None'}`
+    selectedLevelInfo.querySelector('.author').textContent = `Author: ${currentJson.author || 'None'}`
+    selectedLevelInfo.querySelector('.description').textContent = `Description: ${currentJson.description || 'None'}`
     selectedLevelInfo.querySelector('.music-name').textContent = `Name: ${currentJson.musicName || 'None'}`
     selectedLevelInfo.querySelector('.music-author').textContent = `Author: ${currentJson.musicAuthor || 'None'}`
     selectedLevelInfo.querySelector('.music-album').textContent = `Album: ${currentJson.musicAlbum || 'None'}`
@@ -155,10 +155,18 @@ const keyDownMenuListener = e => {
     }
 }
 
-document.getElementById('play-btn').addEventListener('click', () => loadLevel(levelJsons[levelListSelectedLevel]))
-document.getElementById('close-selected-level-info').addEventListener('click', () => {
+// document.getElementById('play-btn').addEventListener('click', () => loadLevel(levelJsons[levelListSelectedLevel]))
+document.getElementById('close-selected-level').addEventListener('click', () => {
     selectedLevelInfo.classList.remove('show');
     void selectedLevelInfo.offsetWidth
     selectedLevelInfo.classList.add('hide');
     audioManager.resetPlay('level-select');
 })
+
+const selectedLevelTop = document.getElementById('selected-level-top')
+const update = time => {
+    selectedLevelTop.style.right = `${Math.cos(time * 0.001) * 6 + 6}px`
+    selectedLevelTop.style.bottom = `${Math.sin(time * 0.001) * 6 - 6}px`
+    requestAnimationFrame(time => update(time))
+}
+requestAnimationFrame(time => update(time))

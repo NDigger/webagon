@@ -4,7 +4,7 @@ import LevelLoader from './game/levelLoader';
 import AudioManager from './utils/audioManager';
 import './frameCounter';
 
-const selectedLevelInfo = document.getElementById('selected-level-info')
+const selectedLevelInfo = document.getElementById('selected-level')
 
 const createApp = async () => {
     const app = new PIXI.Application();
@@ -33,9 +33,9 @@ audioManager.setStartTime('level-load', .12)
 
 export function setBestScore(score) {
     let zeros = ''
-    if (parseFloat(score) < 10) zeros = '00';
-    else if (parseFloat(score) < 100) zeros = '0';
-    selectedLevelInfo.querySelector('.best').innerHTML = `<span style="opacity:.5">${zeros}</span>${score.toFixed(3)}`
+    if (parseFloat(score) < 10) zeros = 'OO';
+    else if (parseFloat(score) < 100) zeros = 'O';
+    selectedLevelInfo.querySelector('.best').innerHTML = `<span style="opacity:.5">${zeros}</span>${score.toFixed(3).toString().replaceAll('0', 'O')}`
 }
 
 let level
