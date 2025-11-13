@@ -174,7 +174,7 @@ export default class Level extends Game {
     }
 
     #isNewBest() {
-        const levelStats = getLevelStats(this.#levelData.key);
+        const levelStats = getLevelStats(this.#levelData.key, this.#props.difficulty);
         const previousBest = levelStats?.best ?? 0;
         const newBest = Math.floor(this.#levelTime*1000)/1000;
         return newBest > previousBest
@@ -292,6 +292,9 @@ export default class Level extends Game {
 
     getTime() {
         return this.#levelTime
+    }
+    getDifficulty() {
+        return this.#props.difficulty
     }
     getTimestamp() {
         return this.#audioTimestamp

@@ -11,5 +11,7 @@
     "musicPath": "music.ogg",
     "musicTimestamps": [8, 78, 108, 148, 160],
 
+    "difficulties": [0.6, 1.3],
+
     "scriptPath": "script.js"
 }
