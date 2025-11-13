@@ -92,7 +92,7 @@ fetch('./levelPaths.json')
             else loadLevel(updatedJson)
         })
 
-        requestAnimationFrame(() => setLevelListPosition(parseInt(localStorage.getItem('webagon-selected-level')) ?? 0));
+        requestAnimationFrame(() => setLevelListPosition(parseInt(localStorage.getItem('webagon-selected-level') ?? 0)));
             loadMenu();
         })
     })
@@ -139,14 +139,14 @@ const shiftLevelListPosition = shift => {
     if (levelListSelectedLevel === 0 && shift === -1) levelListSelectedLevel = levelJsons.length - 1;
     else if (levelListSelectedLevel === levelJsons.length - 1 && shift === 1) levelListSelectedLevel = 0;
     else levelListSelectedLevel += shift;
-    localStorage.setItem('webagon-selected-level', levelListSelectedLevel)
+    localStorage.setItem('webagon-selected-level', levelListSelectedLevel ?? 0)
     afterShift()
 }
 
 const setLevelListPosition = position => {
     beforeShift();
     levelListSelectedLevel = position;
-    localStorage.setItem('webagon-selected-level', levelListSelectedLevel)
+    localStorage.setItem('webagon-selected-level', levelListSelectedLevel ?? 0)
     afterShift();
 }
 

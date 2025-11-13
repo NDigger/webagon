@@ -27,6 +27,8 @@ export default class Level extends Game {
     #lastRenderTime = performance.now();
     #levelTime = 0;
 
+    #isNewBestSaved = false;
+
     #audio;
     #levelData;
     #audioTimestamp;
@@ -120,7 +122,7 @@ export default class Level extends Game {
         const frameTime = time - this.#lastUpdateTime;
         const levelTime = time - this.#levelInitTime;
         this.#lastUpdateTime = time;
-        this.#levelTime = time - this.#levelInitTime;
+        this.#levelTime = (time - this.#levelInitTime)/1000;
         this.onUpdate(frameTime/1000);
         
         this.#incrementTimer += frameTime/1000;
@@ -162,22 +164,26 @@ export default class Level extends Game {
         document.removeEventListener('visibilitychange', this.#handleVisibilityChange);
         if (this.#audio) this.#audio.pause()
 
+        if (this.#isNewBest() && !this.#isNewBestSaved) this.#saveBest();
+
         document.getElementById('game-new-personal-best-msg').style.display = 'none'
     }
 
-
-    #saveBest() {
+    #isNewBest() {
         const levelStats = getLevelStats(this.#levelData.key);
         const previousBest = levelStats?.best ?? 0;
+        const newBest = Math.floor(this.#levelTime*1000)/1000;
+        return newBest > previousBest
+    }
+
+    #saveBest() {
+        this.#isNewBestSaved = true
+        const levelStats = getLevelStats(this.#levelData.key);
         const newBest = Math.floor(this.#levelTime)/1000;
+        levelStats.best = newBest;
+        writeLevelStats(this.#levelData.key, levelStats)
 
-        if (newBest > previousBest) {
-            levelStats.best = newBest;
-            writeLevelStats(this.#levelData.key, levelStats)
-            document.getElementById('game-new-personal-best-msg').style.display = 'block'
-
-            setBestScore(newBest)
-        }
+        setBestScore(newBest)
     }
 
     setShakePower(v) {
@@ -228,7 +234,14 @@ export default class Level extends Game {
         flashLerp.apply(new Color(255, 255, 255, .6))
         flashLerp.run(new Color(255, 255, 255, 0), 1)
         
-        this.#saveBest()
+        if (this.#isNewBest()) {
+            document.getElementById('game-new-personal-best-msg').style.display = 'block';
+            this.#saveBest();
+        }
+
+        const levelStats = getLevelStats(this.#levelData.key);
+        levelStats.totalTime = (levelStats.totalTime ?? 0) + this.#levelTime;
+        writeLevelStats(this.#levelData.key, levelStats);
     }
 
     setBackgroundTileColors(arr) {
@@ -264,7 +277,7 @@ export default class Level extends Game {
     getWallSpeedMax() { return this.#wallSpeedMax }
 
     getTime() {
-        return this.#levelTime/1000
+        return this.#levelTime
     }
     getTimestamp() {
         return this.#audioTimestamp
