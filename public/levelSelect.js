@@ -40,7 +40,7 @@ const loadLevel = levelData => {
     levelPreview.drop();
     audioManager.resetPlay('level-load');
     document.getElementById('level-select').style.display = 'none'
-    levelLoader.start(levelData);
+    levelLoader.start(levelData, avaliableDifficulties[selectedDifficultyIndex]);
     document.removeEventListener('keydown', keyDownMenuListener)
 
     levelPreview.onUpdate = () => {}
@@ -107,6 +107,24 @@ const beforeShift = () => {
     void selectedLevelElement.offsetWidth;
     selectedLevelElement.classList.add('unselected-animation')
 }
+
+let avaliableDifficulties = [1];
+let selectedDifficultyIndex = 0;
+
+const selectedLevelDifficultyElement = document.getElementById('selected-level-difficulty');
+const shiftDifficulty = shift => {
+    console.log(selectedDifficultyIndex + shift)
+    selectedDifficultyIndex = (selectedDifficultyIndex + shift + avaliableDifficulties.length) % avaliableDifficulties.length;
+    selectedLevelDifficultyElement.textContent = `${avaliableDifficulties[selectedDifficultyIndex]}x`
+    animateSelectedLevelTop()
+}
+
+const animateSelectedLevelTop = () => {
+    selectedLevelTop.classList.remove('animate')
+    void selectedLevelTop.offsetWidth;
+    selectedLevelTop.classList.add('animate')
+}
+
 const afterShift = () => {
     const selectedLevelElement = getSelectedLevelElement();
     if (selectedLevelElement == undefined) return
@@ -126,12 +144,14 @@ const afterShift = () => {
     selectedLevelInfo.querySelector('.music-name').textContent = `Name: ${currentJson?.musicName || 'None'}`
     selectedLevelInfo.querySelector('.music-author').textContent = `Author: ${currentJson?.musicAuthor || 'None'}`
     selectedLevelInfo.querySelector('.music-album').textContent = `Album: ${currentJson?.musicAlbum || 'None'}`
+
+    avaliableDifficulties = [1, ...currentJson?.difficulties ?? []]
+    selectedDifficultyIndex = 0;
+    
     const levelStats = getLevelStats(currentJson.key);
     setBestScore(levelStats?.best ?? 0)
 
-    selectedLevelTop.classList.remove('animate')
-    void selectedLevelTop.offsetWidth;
-    selectedLevelTop.classList.add('animate')
+    animateSelectedLevelTop();
 }
 
 const shiftLevelListPosition = shift => {
@@ -153,6 +173,9 @@ const setLevelListPosition = position => {
 const keyDownMenuListener = e => {
     if (e.code === 'ArrowUp' || e.code === 'KeyW') shiftLevelListPosition(-1)
     else if (e.code === 'ArrowDown' || e.code === 'KeyS') shiftLevelListPosition(1)
+    else if (e.code === 'ArrowLeft' || e.code === 'KeyA') shiftDifficulty(-1)
+    else if (e.code === 'ArrowRight' || e.code === 'KeyD') shiftDifficulty(1)
+
     else if (e.code === 'Enter') loadLevel(levelJsons[levelListSelectedLevel])
 
     if (e.code === 'ArrowUp' || e.code === 'KeyW' || e.code === 'ArrowDown' || e.code === 'KeyS') {
