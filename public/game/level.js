@@ -179,7 +179,7 @@ export default class Level extends Game {
     #saveBest() {
         this.#isNewBestSaved = true
         const levelStats = getLevelStats(this.#levelData.key);
-        const newBest = Math.floor(this.#levelTime)/1000;
+        const newBest = Math.floor(this.#levelTime*1000)/1000;
         levelStats.best = newBest;
         writeLevelStats(this.#levelData.key, levelStats)
 
@@ -240,7 +240,8 @@ export default class Level extends Game {
         }
 
         const levelStats = getLevelStats(this.#levelData.key);
-        levelStats.totalTime = (levelStats.totalTime ?? 0) + this.#levelTime;
+        const newTotalTime = (levelStats.totalTime ?? 0) + this.#levelTime;
+        levelStats.totalTime = Math.floor(newTotalTime * 1000)/1000;
         writeLevelStats(this.#levelData.key, levelStats);
     }
 

@@ -495,12 +495,17 @@ canvas {
     }
 
     #selected-level {
-        backdrop-filter: unset;
-        background-color: rgba(0, 0, 0, .8);
+        backdrop-filter: blur(10px);
+        background-color: rgba(0, 0, 0, 0);
         width: 100vw;
         height: 100vh;
         right: 0;
         border: 2px solid var(--main-color)
+    }
+
+    #selected-level .tab {
+        background-color: unset;
+        backdrop-filter: unset
     }
 
     #play-btn {
