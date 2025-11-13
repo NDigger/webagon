@@ -261,7 +261,7 @@ canvas {
     justify-content: center;
     flex-direction: column;
     width: calc(100% + 50px);
-    border: 2px solid var(--main-color);
+    border: 3px solid var(--main-color);
     padding: 10px 0;
     padding-right: 20px;
     font-size: 1rem;

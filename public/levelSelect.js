@@ -113,9 +113,10 @@ let selectedDifficultyIndex = 0;
 
 const selectedLevelDifficultyElement = document.getElementById('selected-level-difficulty');
 const shiftDifficulty = shift => {
-    console.log(selectedDifficultyIndex + shift)
     selectedDifficultyIndex = (selectedDifficultyIndex + shift + avaliableDifficulties.length) % avaliableDifficulties.length;
     selectedLevelDifficultyElement.textContent = `${avaliableDifficulties[selectedDifficultyIndex]}x`
+    const levelStats = getLevelStats(levelJsons[levelListSelectedLevel].key, avaliableDifficulties[selectedDifficultyIndex]);
+    setBestScore(levelStats?.best ?? 0);
     animateSelectedLevelTop()
 }
 
@@ -145,10 +146,11 @@ const afterShift = () => {
     selectedLevelInfo.querySelector('.music-author').textContent = `Author: ${currentJson?.musicAuthor || 'None'}`
     selectedLevelInfo.querySelector('.music-album').textContent = `Album: ${currentJson?.musicAlbum || 'None'}`
 
-    avaliableDifficulties = [1, ...currentJson?.difficulties ?? []]
-    selectedDifficultyIndex = 0;
+    selectedLevelDifficultyElement.textContent = '1x';
+    avaliableDifficulties = [1, ...currentJson?.difficulties ?? []].sort((a, b) => a - b)
+    selectedDifficultyIndex = avaliableDifficulties.findIndex(v => v === 1);
     
-    const levelStats = getLevelStats(currentJson.key);
+    const levelStats = getLevelStats(currentJson.key, avaliableDifficulties[selectedDifficultyIndex]);
     setBestScore(levelStats?.best ?? 0)
 
     animateSelectedLevelTop();

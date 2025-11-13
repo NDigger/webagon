@@ -6,7 +6,8 @@ export default class LevelLoader {
     app;
     #level = null;
     
-    #currentLevelData
+    #currentLevelData;
+    #currentLevelDifficulty;
     #attempt = 0;
 
     #keyPressed = false;
@@ -41,8 +42,9 @@ export default class LevelLoader {
         document.getElementById('level-select').style.display = 'flex';
     }
 
-    start(data) {
+    start(data, difficulty) {
         this.#attempt = 1;
+        this.#currentLevelDifficulty = difficulty;
         this.#load(data)
     }
 
@@ -60,14 +62,15 @@ export default class LevelLoader {
         script.src = `${data.scriptPath}?${new Date().getTime()}`
         document.querySelector('body').appendChild(script);
 
-        const levelStats = getLevelStats(data.key);
+        const levelStats = getLevelStats(data.key, this.#currentLevelDifficulty);
         levelStats.attempts = levelStats?.attempts ? levelStats.attempts += 1 : 1
-        writeLevelStats(data.key, levelStats);
+        writeLevelStats(data.key, this.#currentLevelDifficulty, levelStats);
 
         if (this.#level != null) this.#level.destroy();
 
         const level = new Level(this.app, this.#currentLevelData, {
             selectFirstMusicTimestamp: this.#attempt === 1,
+            difficulty: this.#currentLevelDifficulty,
         });
         setLevel(level);
         this.#level = level;

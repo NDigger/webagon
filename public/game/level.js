@@ -15,6 +15,7 @@ export default class Level extends Game {
     onIncrement = () => {};
     onPreIncrement = () => {};
 
+    #initialized = false;
     #levelInitTime = performance.now();
 
     #timeouts = [];
@@ -46,6 +47,7 @@ export default class Level extends Game {
 
     #props = {
         selectFirstMusicTimestamp: false,
+        difficulty: 1,
     }
 
     #games = [];
@@ -78,6 +80,8 @@ export default class Level extends Game {
         this.#updateId = requestAnimationFrame(t => this.#update(t));
         this.#renderId = requestAnimationFrame(t => this.#render(t));
         document.addEventListener('visibilitychange', this.#handleVisibilityChange);
+
+        this.#initialized = true;
     }
     
     async #step() {
@@ -178,14 +182,23 @@ export default class Level extends Game {
 
     #saveBest() {
         this.#isNewBestSaved = true
-        const levelStats = getLevelStats(this.#levelData.key);
+        const levelStats = getLevelStats(this.#levelData.key, this.#props.difficulty);
         const newBest = Math.floor(this.#levelTime*1000)/1000;
         levelStats.best = newBest;
-        writeLevelStats(this.#levelData.key, levelStats)
+        writeLevelStats(this.#levelData.key, this.#props.difficulty, levelStats)
 
         setBestScore(newBest)
     }
 
+
+    setWallSpeedMult(v) {
+        if (!this.#initialized) super.setWallSpeedMult(v * this.#props.difficulty);
+        else super.setWallSpeedMult(v);
+    }
+    setRotationSpeed(v) {
+        if (!this.#initialized) super.setRotationSpeed(v * this.#props.difficulty);
+        else super.setRotationSpeed(v);
+    }
     setShakePower(v) {
         if (typeof(v) !== 'number') return
         globalThis.shakePower = v;
@@ -239,10 +252,10 @@ export default class Level extends Game {
             this.#saveBest();
         }
 
-        const levelStats = getLevelStats(this.#levelData.key);
+        const levelStats = getLevelStats(this.#levelData.key, this.#props.difficulty);
         const newTotalTime = (levelStats.totalTime ?? 0) + this.#levelTime;
         levelStats.totalTime = Math.floor(newTotalTime * 1000)/1000;
-        writeLevelStats(this.#levelData.key, levelStats);
+        writeLevelStats(this.#levelData.key, this.#props.difficulty, levelStats);
     }
 
     setBackgroundTileColors(arr) {

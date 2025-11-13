@@ -3,13 +3,16 @@ export const getLevelsStats = () => {
     return webagonLevelStats ? JSON.parse(webagonLevelStats) : {};
 }
 
-export const getLevelStats = levelKey => {
+export const getLevelStats = (levelKey, levelDiff) => {
     const levelsStats = getLevelsStats();
-    return levelsStats[levelKey] ?? {};
+    const levelStatsAllDiffs = levelsStats[levelKey] ?? {};
+    return levelStatsAllDiffs[levelDiff] ?? {};
 }
 
-export const writeLevelStats = (levelKey, levelStats) => {
+export const writeLevelStats = (levelKey, levelDiff, levelStats) => {
     const levelsStats = getLevelsStats();
-    levelsStats[levelKey] = levelStats;
+    const levelStatsAllDiffs = levelsStats[levelKey] ?? {};
+    levelStatsAllDiffs[levelDiff] = levelStats;
+    levelsStats[levelKey] = levelStatsAllDiffs;
     localStorage.setItem('webagon-level-stats', JSON.stringify(levelsStats));
 }
