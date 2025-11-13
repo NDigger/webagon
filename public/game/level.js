@@ -159,6 +159,8 @@ export default class Level extends Game {
         this.clearEvents();
         document.removeEventListener('visibilitychange', this.#handleVisibilityChange);
         if (this.#audio) this.#audio.pause()
+
+        document.getElementById('game-new-personal-best-msg').style.display = 'none'
     }
 
     #saveScore() {
@@ -169,31 +171,10 @@ export default class Level extends Game {
         if (newScore > previousScore) {
             scores[this.#levelData.key] = newScore;
             localStorage.setItem('webagon-scores', JSON.stringify(scores));
+            document.getElementById('game-new-personal-best-msg').style.display = 'block'
             // document.getElementById(`level-${this.#levelData.key}`).querySelector('.best').textContent = newScore;
             setBestScore(newScore)
         }
-    }
-
-    #onDeath() {
-        document.querySelector('#game-ui .top-right').style.display = 'block'
-
-        document.getElementById('restart-help-msg').style.display = 'block'
-        if (this.#audio) this.#audio.pause()
-        document.removeEventListener('visibilitychange', this.#handleVisibilityChange);
-        this.#gameOver = true
-        cancelAnimationFrame(this.#updateId);
-
-        this.setShakePower(10);
-        new Lerp(v => {
-            this.setShakePower(v);
-            if (!this.isDestroyed()) super.draw()
-        }).apply(30).run(0, 0.35);
-        new Lerp(v => this.setRotation(v)).apply(this.getRotation()).run(this.getRotation() + this.getRotationSpeed() * 400, 1.5, Lerp.Easing.EASE_OUT);
-        const flashLerp = new Lerp(v => document.getElementById('override-flash-effect').style.backgroundColor = v.getRGBAStyle());
-        flashLerp.apply(new Color(255, 255, 255, .6))
-        flashLerp.run(new Color(255, 255, 255, 0), 1)
-        
-        this.#saveScore()
     }
 
     setShakePower(v) {
@@ -225,7 +206,26 @@ export default class Level extends Game {
     kill() {
         super.kill()
         this.#games.forEach(game => game.kill())
-        this.#onDeath()
+        
+        document.querySelector('#game-ui .top-right').style.display = 'block'
+
+        document.getElementById('restart-help-msg').style.display = 'block'
+        if (this.#audio) this.#audio.pause()
+        document.removeEventListener('visibilitychange', this.#handleVisibilityChange);
+        this.#gameOver = true
+        cancelAnimationFrame(this.#updateId);
+
+        this.setShakePower(10);
+        new Lerp(v => {
+            this.setShakePower(v);
+            if (!this.isDestroyed()) super.draw()
+        }).apply(30).run(0, 0.35);
+        new Lerp(v => this.setRotation(v)).apply(this.getRotation()).run(this.getRotation() + this.getRotationSpeed() * 400, 1.5, Lerp.Easing.EASE_OUT);
+        const flashLerp = new Lerp(v => document.getElementById('override-flash-effect').style.backgroundColor = v.getRGBAStyle());
+        flashLerp.apply(new Color(255, 255, 255, .6))
+        flashLerp.run(new Color(255, 255, 255, 0), 1)
+        
+        this.#saveScore()
     }
 
     setBackgroundTileColors(arr) {

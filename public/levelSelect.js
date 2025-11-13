@@ -126,6 +126,10 @@ const afterShift = () => {
     const scores = scoresItem ? JSON.parse(scoresItem) : {}; 
     const safeScore =  scores[currentJson.key] ?? 0.0
     setBestScore(safeScore)
+
+    selectedLevelTop.classList.remove('animate')
+    void selectedLevelTop.offsetWidth;
+    selectedLevelTop.classList.add('animate')
 }
 
 const shiftLevelListPosition = shift => {

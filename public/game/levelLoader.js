@@ -73,6 +73,7 @@ export default class LevelLoader {
 
             document.getElementById('restart-help-msg').style.display = 'none'
             document.getElementById('swap-enabled-msg').style.display = 'none'
+
             this.#level.init()
             document.getElementById('game-content').style.display = 'block'
             document.getElementById('level-select').style.display = 'none'

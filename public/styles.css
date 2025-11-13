@@ -145,13 +145,31 @@ button:focus {
 }
 
 #timer {
-    /* margin-top: 10px */
+    margin-top: 10px;
     font-size: 5rem; 
 }
 
-/* #timer::before { */
-    /* content: 'Time: ' */
-/* } */
+#game-new-personal-best-msg {
+    color: var(--main-color);
+    display: none;
+    position: absolute;
+    bottom: 15%;
+    left: 50%;
+    width: 100vw;
+    text-align: center;
+    transform: translateX(-50%) scaleX(.6);
+    font-size: 4rem;
+    animation: personal-best-anim .5s infinite ease-out alternate;
+}
+
+@keyframes personal-best-anim {
+    from {
+        transform: translateX(-50%) scaleX(.6);
+    }
+    to {
+        transform: translateX(-50%) scaleX(.75) scaleY(1.2);
+    }
+}
 
 html {
     overflow: hidden;
@@ -189,11 +207,43 @@ canvas {
     position: relative;
 }
 
-#level-select-background {
-    width: 1600px;
-    height: 1080px;
+@font-face {
+    font-family: "hexagons";
+    src: url("./fonts/HEXAGON_.TTF") format("truetype");
+}
+
+header {
+    z-index: 1;
+    top: 0;
+    left: 0;
+    position: relative;
+    height: 80px;
+    background-color: black;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header::after {
+    content: '';
+    background-color: black;
     position: absolute;
-    z-index: -1;
+    bottom: -20px;
+    left: -10px;
+    height: 20px;
+    width: 550px;
+    transform: skewX(-40deg);
+}
+
+header .title {
+    position: relative;
+    z-index: 1;
+    transform: translateX(20px) translateY(10px);
+    font-size: 5rem;
+    letter-spacing: 5px;
+    font-family: "hexagons";
+    color: var(--main-color);
 }
 
 #level-list {
@@ -209,6 +259,7 @@ canvas {
     /* for proper overflow hide */
     padding-right: 200px;
     overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 #level-list, #selected-level {
@@ -259,7 +310,6 @@ canvas {
 
 @keyframes level-tab-anim {
     from {
-        /* transform: skewX(-20deg); */
         height: 100px;
         transform: none
     } to {
@@ -303,7 +353,7 @@ canvas {
     align-items: start;
     flex-direction: column;
     position: absolute;
-    width: 550px;
+    width: 600px;
     height: 100vh;
     border-left: 2px solid var(--main-color);
 
@@ -379,10 +429,29 @@ canvas {
 #selected-level .top {
     position: relative;
     text-align: center;
-    text-shadow: 5px 5px 0px black;
+    text-shadow: 1px 1px 0px black,
+    2px 2px 0px black,
+    3px 3px 0px black,
+    4px 4px 0px black,
+    5px 5px 0px black;
     transform: skewY(-2deg);
     margin-top: 40px;
     padding: 0 0px;
+}
+
+#selected-level .top.animate {
+    animation: selected-level-top-anim .3s ease-out;
+}
+
+@keyframes selected-level-top-anim {
+    from {
+        width: 98%;
+        scale: 1.05;
+    }
+    to {
+        width: 100%;
+        scale: 1;
+    }
 }
 
 #selected-level .best {
