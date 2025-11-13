@@ -3,6 +3,8 @@ import Background from './game/gameContent/background';
 import { app, setBestScore, audioManager, levelLoader } from './script';
 import { Color } from './utils/structures';
 
+const selectedLevelTop = document.getElementById('selected-level-top')
+
 const selectedLevelInfo = document.getElementById('selected-level')
 const levelList = document.getElementById('level-list');
 
@@ -159,18 +161,12 @@ const keyDownMenuListener = e => {
     }
 }
 
-// document.getElementById('play-btn').addEventListener('click', () => loadLevel(levelJsons[levelListSelectedLevel]))
-document.getElementById('close-selected-level').addEventListener('click', () => {
+const playBtn = document.getElementById('play-btn')
+playBtn.addEventListener('click', () => loadLevel(levelJsons[levelListSelectedLevel]))
+document.getElementById('selected-level').addEventListener('click', e => {
+    if (e.target === playBtn) return
     selectedLevelInfo.classList.remove('show');
     void selectedLevelInfo.offsetWidth
     selectedLevelInfo.classList.add('hide');
     audioManager.resetPlay('level-select');
 })
-
-const selectedLevelTop = document.getElementById('selected-level-top')
-const update = time => {
-    selectedLevelTop.style.right = `${Math.cos(time * 0.001) * 6 + 6}px`
-    selectedLevelTop.style.bottom = `${Math.sin(time * 0.001) * 6 - 6}px`
-    requestAnimationFrame(time => update(time))
-}
-requestAnimationFrame(time => update(time))
