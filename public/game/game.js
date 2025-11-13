@@ -232,10 +232,25 @@ export default class Game extends GameObject {
         const prevRotationOffset = this.#polygon.player.getRotationOffset();
 
         const playerSpeed = frameTime * .6 / steps;
-
+        const tiltSpeed = 0.0005 * frameTime;
+        const maxTilt = .35;
         if (this.#playerMovementEnabled) {
-            if (this.#leftKeyPressed) this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() - playerSpeed);
-            if (this.#rightKeyPressed) this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() + playerSpeed);
+            if (this.#leftKeyPressed) {
+                this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() - playerSpeed);
+                if (this.#polygon.player.getTilt() > -maxTilt)
+                    this.#polygon.player.setTilt(this.#polygon.player.getTilt() - tiltSpeed)
+            }
+            if (this.#rightKeyPressed) {
+                this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() + playerSpeed);
+                if (this.#polygon.player.getTilt() < maxTilt)
+                    this.#polygon.player.setTilt(this.#polygon.player.getTilt() + tiltSpeed)
+            }
+            if (!this.#leftKeyPressed && !this.#rightKeyPressed) {
+                if (this.#polygon.player.getTilt() > 0) 
+                    this.#polygon.player.setTilt(Math.max(0, this.#polygon.player.getTilt() - tiltSpeed))
+                else if (this.#polygon.player.getTilt() < 0) 
+                    this.#polygon.player.setTilt(Math.min(0, this.#polygon.player.getTilt() + tiltSpeed))
+            }
             this.#polygon.player.updatePosition()
         }
         if (this.#getCollidingWalls().length !== 0) {
