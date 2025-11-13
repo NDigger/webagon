@@ -278,12 +278,11 @@ canvas {
 
 @keyframes level-tab-anim {
     from {
-        height: 100px;
+        height: unset;
         transform: none
     } to {
         font-size: 1.5rem;
         transform: translateX(100px);
-        height: 150px;
     }
 }
 
@@ -373,6 +372,10 @@ canvas {
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden; 
+}
+
+#selected-level .difficulty {
+    font-size: 2rem;
 }
 
 #selected-level .tab {

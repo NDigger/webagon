@@ -119,13 +119,13 @@ const afterShift = () => {
     levelPreview.load(levelJsons[levelListSelectedLevel].scriptPath)
 
     const currentJson = levelJsons[levelListSelectedLevel];
-    selectedLevelInfo.querySelector('.title-name').textContent = currentJson.name
-    selectedLevelInfo.querySelector('.name').textContent = `Name: ${currentJson.name || 'None'}`
-    selectedLevelInfo.querySelector('.author').textContent = `Author: ${currentJson.author || 'None'}`
-    selectedLevelInfo.querySelector('.description').textContent = `Description: ${currentJson.description || 'None'}`
-    selectedLevelInfo.querySelector('.music-name').textContent = `Name: ${currentJson.musicName || 'None'}`
-    selectedLevelInfo.querySelector('.music-author').textContent = `Author: ${currentJson.musicAuthor || 'None'}`
-    selectedLevelInfo.querySelector('.music-album').textContent = `Album: ${currentJson.musicAlbum || 'None'}`
+    selectedLevelInfo.querySelector('.title-name').textContent = currentJson?.name
+    selectedLevelInfo.querySelector('.name').textContent = `Name: ${currentJson?.name || 'Unnamed'}`
+    selectedLevelInfo.querySelector('.author').textContent = `Author: ${currentJson?.author || 'None'}`
+    selectedLevelInfo.querySelector('.description').textContent = `Description: ${currentJson?.description || 'None'}`
+    selectedLevelInfo.querySelector('.music-name').textContent = `Name: ${currentJson?.musicName || 'None'}`
+    selectedLevelInfo.querySelector('.music-author').textContent = `Author: ${currentJson?.musicAuthor || 'None'}`
+    selectedLevelInfo.querySelector('.music-album').textContent = `Album: ${currentJson?.musicAlbum || 'None'}`
     const levelStats = getLevelStats(currentJson.key);
     setBestScore(levelStats?.best ?? 0)
 
