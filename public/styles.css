@@ -214,10 +214,10 @@ canvas {
 
 #level-list {
     position: relative;
-    left: -120px;
+    left: -150px;
     padding: 10px;
     max-height: 100%;
-    width: 700px;
+    width: 730px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -256,15 +256,17 @@ canvas {
 }
 
 .level {
+    position: relative;
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    width: calc(100% + 100px);
+    width: calc(100% + 50px);
     border: 2px solid var(--main-color);
     padding: 10px 0;
     padding-right: 20px;
-    font-size: 16px;
     font-size: 1rem;
+    left: 0;
+    transition: left .15s ease;
 }
 
 .level.selected-animation {
@@ -291,6 +293,7 @@ canvas {
 
 .level:hover {
     filter: hue-rotate(180deg) brightness(2);
+    left: 30px !important;
 }
 
 .level * {
@@ -480,7 +483,7 @@ canvas {
 
 @media (max-width: 1068px) {
     html {
-        font-size: .7rem;
+        font-size: .8rem;
     }
 
     .level {
@@ -537,7 +540,7 @@ canvas {
         display: flex;
         flex-direction: column;
         height: 100%;
-        font-size: 2rem;
+        font-size: 1.5rem;
     }
 
     #selected-level .level-info * {

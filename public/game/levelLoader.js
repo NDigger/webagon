@@ -1,5 +1,6 @@
 import Level from './level';
 import { setLevel } from '../script';
+import { getLevelStats, writeLevelStats } from '../storage';
 
 export default class LevelLoader {
     app;
@@ -53,14 +54,17 @@ export default class LevelLoader {
 
     #load(data) {
         this.#currentLevelData = data;
+
         const script = document.createElement('script');
         script.type = 'module';
         script.src = `${data.scriptPath}?${new Date().getTime()}`
         document.querySelector('body').appendChild(script);
 
-        if (this.#level != null) {
-            this.#level.destroy();
-        }
+        const levelStats = getLevelStats(data.key);
+        levelStats.attempts = levelStats?.attempts ? levelStats.attempts += 1 : 1
+        writeLevelStats(data.key, levelStats);
+
+        if (this.#level != null) this.#level.destroy();
 
         const level = new Level(this.app, this.#currentLevelData, {
             selectFirstMusicTimestamp: this.#attempt === 1,

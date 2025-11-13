@@ -3,6 +3,8 @@ import Background from './game/gameContent/background';
 import { app, setBestScore, audioManager, levelLoader } from './script';
 import { Color } from './utils/structures';
 
+import { getLevelStats, writeLevelStats } from './storage';
+
 const selectedLevelTop = document.getElementById('selected-level-top')
 
 const selectedLevelInfo = document.getElementById('selected-level')
@@ -124,10 +126,8 @@ const afterShift = () => {
     selectedLevelInfo.querySelector('.music-name').textContent = `Name: ${currentJson.musicName || 'None'}`
     selectedLevelInfo.querySelector('.music-author').textContent = `Author: ${currentJson.musicAuthor || 'None'}`
     selectedLevelInfo.querySelector('.music-album').textContent = `Album: ${currentJson.musicAlbum || 'None'}`
-    const scoresItem = localStorage.getItem('webagon-scores');
-    const scores = scoresItem ? JSON.parse(scoresItem) : {}; 
-    const safeScore =  scores[currentJson.key] ?? 0.0
-    setBestScore(safeScore)
+    const levelStats = getLevelStats(currentJson.key);
+    setBestScore(levelStats?.best ?? 0)
 
     selectedLevelTop.classList.remove('animate')
     void selectedLevelTop.offsetWidth;

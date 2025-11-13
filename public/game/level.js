@@ -4,6 +4,8 @@ import Lerp from "../utils/interpolation";
 import { setBestScore } from "../script";
 import CustomWall from "./gameContent/customWall";
 
+import { getLevelStats, writeLevelStats } from "../storage";
+
 export default class Level extends Game { 
     onInit = () => {};
     onUpdate = () => {};
@@ -163,17 +165,18 @@ export default class Level extends Game {
         document.getElementById('game-new-personal-best-msg').style.display = 'none'
     }
 
-    #saveScore() {
-        const webagonScoresItem = localStorage.getItem('webagon-scores');
-        const scores = webagonScoresItem ? JSON.parse(webagonScoresItem) : {};
-        const previousScore = scores[this.#levelData.key] ?? 0;
-        const newScore = Math.floor(this.#levelTime)/1000;
-        if (newScore > previousScore) {
-            scores[this.#levelData.key] = newScore;
-            localStorage.setItem('webagon-scores', JSON.stringify(scores));
+
+    #saveBest() {
+        const levelStats = getLevelStats(this.#levelData.key);
+        const previousBest = levelStats?.best ?? 0;
+        const newBest = Math.floor(this.#levelTime)/1000;
+
+        if (newBest > previousBest) {
+            levelStats.best = newBest;
+            writeLevelStats(this.#levelData.key, levelStats)
             document.getElementById('game-new-personal-best-msg').style.display = 'block'
-            // document.getElementById(`level-${this.#levelData.key}`).querySelector('.best').textContent = newScore;
-            setBestScore(newScore)
+
+            setBestScore(newBest)
         }
     }
 
@@ -225,7 +228,7 @@ export default class Level extends Game {
         flashLerp.apply(new Color(255, 255, 255, .6))
         flashLerp.run(new Color(255, 255, 255, 0), 1)
         
-        this.#saveScore()
+        this.#saveBest()
     }
 
     setBackgroundTileColors(arr) {
