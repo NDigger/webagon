@@ -83,13 +83,13 @@ fetch('./levelPaths.json')
 
         levelList.lastElementChild.addEventListener('click', e => {
             if (getSelectedLevelElement() !== e.currentTarget || (window.innerWidth < 1068 && !selectedLevelInfo.classList.contains('show'))) {
-                audioManager.resetPlay('level-select')
-                setLevelListPosition(i)
+                audioManager.resetPlay('level-select');
+                setLevelListPosition(i);
                 selectedLevelInfo.classList.remove('hide');
-                void selectedLevelInfo.offsetWidth
+                void selectedLevelInfo.offsetWidth;
                 selectedLevelInfo.classList.add('show');
             }
-            else loadLevel(updatedJson)
+            else loadLevel(updatedJson);
         })
 
         requestAnimationFrame(() => setLevelListPosition(parseInt(localStorage.getItem('webagon-selected-level') ?? 0)));
@@ -103,9 +103,9 @@ const getSelectedLevelElement = () => document.getElementById(`level-${levelJson
 const beforeShift = () => {
     const selectedLevelElement = getSelectedLevelElement();
     if (selectedLevelElement == undefined) return
-    selectedLevelElement.classList.remove('selected-animation')
+    selectedLevelElement.classList.remove('selected-animation');
     void selectedLevelElement.offsetWidth;
-    selectedLevelElement.classList.add('unselected-animation')
+    selectedLevelElement.classList.add('unselected-animation');
 }
 
 let avaliableDifficulties = [1];
@@ -117,14 +117,14 @@ const shiftDifficulty = shift => {
     selectedLevelDifficultyElement.textContent = `${avaliableDifficulties[selectedDifficultyIndex]}x`
     const levelStats = getLevelStats(levelJsons[levelListSelectedLevel].key, avaliableDifficulties[selectedDifficultyIndex]);
     setBestScore(levelStats?.best ?? 0);
-    animateSelectedLevelTop()
-    audioManager.resetPlay('level-select')
+    animateSelectedLevelTop();
+    audioManager.resetPlay('level-select');
 }
 
 const animateSelectedLevelTop = () => {
-    selectedLevelTop.classList.remove('animate')
+    selectedLevelTop.classList.remove('animate');
     void selectedLevelTop.offsetWidth;
-    selectedLevelTop.classList.add('animate')
+    selectedLevelTop.classList.add('animate');
 }
 
 const afterShift = () => {

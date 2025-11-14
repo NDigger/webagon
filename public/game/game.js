@@ -296,6 +296,7 @@ export default class Game extends GameObject {
     }
 
     #updatePlayerSwapParticleEmitters() {
+        console.log(this.#playerSwapParticleEmitters)
         this.#playerSwapParticleEmitters.forEach(pe => {
             const particles = pe.getParticles();
             particles.forEach(p => {
@@ -315,7 +316,7 @@ export default class Game extends GameObject {
         })
     }
 
-    #swapPlayer() {
+    #createPlayerSwapParticle() {
         const particleEmitter = new ParticleEmitter(this.app);
         particleEmitter.angle = this.#polygon.player.getRotationOffset()/180*Math.PI-Math.PI/4;
         particleEmitter.angleVariation = 2;
@@ -325,7 +326,10 @@ export default class Game extends GameObject {
         particleEmitter.sizeEnd = 0;
         particleEmitter.speed = 120;
         particleEmitter.speedVariation = 200;
-        particleEmitter.onFinished = () => this.#playerSwapParticleEmitters.splice(this.#playerSwapParticleEmitters.findIndex(pe => pe === particleEmitter), 1)
+        particleEmitter.onFinished = () => {
+            this.particleEmitter.destroy();
+            this.#playerSwapParticleEmitters.splice(this.#playerSwapParticleEmitters.findIndex(pe => pe === particleEmitter), 1)
+        }
         particleEmitter.emit();
         const particles = particleEmitter.getParticles()
         particles.forEach(p => {
@@ -333,6 +337,10 @@ export default class Game extends GameObject {
             p.setLayer(this.#getPolygonLayer());
         })
         this.#playerSwapParticleEmitters.push(particleEmitter);
+    }
+
+    #swapPlayer() {
+        this.#createPlayerSwapParticle();
         levelSwapAudio.currentTime = 0;
         levelSwapAudio.play();
         this.#currentSwapReloadTime = this.#swapReloadTime;

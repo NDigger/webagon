@@ -111,7 +111,7 @@ level.onInit = () => {
     level.setIncrementTime(12);
     level.set3dColor(new Color(0, 0, 0));
     level.set3dDepthMult(0.3);
-    level.setPlayerSwapReloadTime(.5);
+    level.setPlayerSwapReloadTime(0.5);
 }
 
 // onStep must be async and use delays in order to work. No delays may cause crash.
@@ -143,7 +143,6 @@ level.onUpdate = ft => {
     level.setRotationSpeed(((rotationSpeed/2)-Utils.fract(syncTime * .5) * rotationSpeed) * rotationDir);
 
     level.setRadius(85 - f * 15);
-    level.setRotationSpeed()
 
     level.setMainColor(Utils.interpolate(Color.hsvToRgb(Utils.pingPong(syncTime) * .1 + hueShift, 1, 1), Color.hsvToRgb(Utils.pingPong(syncTime) * .1 + hueShift, .2, 1), Utils.pingPong(time * 10)))
 
