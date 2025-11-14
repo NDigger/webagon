@@ -3,6 +3,7 @@ import * as PIXI from 'pixi.js'
 import LevelLoader from './game/levelLoader';
 import AudioManager from './utils/audioManager';
 import './frameCounter';
+import './settings'
 
 const selectedLevelInfo = document.getElementById('selected-level')
 

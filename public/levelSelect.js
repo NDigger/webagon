@@ -40,7 +40,7 @@ const loadLevel = levelData => {
     levelPreview.drop();
     audioManager.resetPlay('level-load');
     document.getElementById('level-select').style.display = 'none'
-    levelLoader.start(levelData, avaliableDifficulties[selectedDifficultyIndex]);
+    levelLoader.start(levelData, getSelectedDifficultyMult());
     document.removeEventListener('keydown', keyDownMenuListener)
 
     levelPreview.onUpdate = () => {}
@@ -51,55 +51,59 @@ const loadLevel = levelData => {
 const loadMenu = () => {
     levelPreview.onUpdate = ft => levelPreviewUpdate(ft);
     document.addEventListener('keydown', keyDownMenuListener)
-    const path = levelJsons[levelListSelectedLevel]?.scriptPath ?? undefined
+    const path = levelJsons[selectedLevelIndex]?.scriptPath ?? undefined
     if (path != undefined) levelPreview.load(path)
     backgroundTime = 0;
 }
 
 const levelJsons = []
-fetch('./levelPaths.json')
-.then(res => res.json())
-.then(levelPaths => {
-    levelPaths.forEach((levelPath, i) => {
-    fetch(`${levelPath}/data.json`)
+const loadLevels = () => {
+    fetch('./levelPaths.json')
     .then(res => res.json())
-    .then(d => {
-        const updateJSONPath = jsonLevelObject => {
-            const levelJson = structuredClone(jsonLevelObject);
-            levelJson.scriptPath = `${levelPath}/${levelJson.scriptPath}`
-            levelJson.musicPath = `${levelPath}/${levelJson.musicPath}`
-            return levelJson
-        }
-
-        const updatedJson = updateJSONPath(d)
-        levelJsons.push(updatedJson);
-
-        levelList.insertAdjacentHTML('beforeend', `
-            <div class="level" id="level-${d.key}">
-                <p class="name">${d.name}</p>
-                <p class="author">${d.author}</p>
-            </div>
-        `)
-
-        levelList.lastElementChild.addEventListener('click', e => {
-            if (getSelectedLevelElement() !== e.currentTarget || (window.innerWidth < 1068 && !selectedLevelInfo.classList.contains('show'))) {
-                audioManager.resetPlay('level-select');
-                setLevelListPosition(i);
-                selectedLevelInfo.classList.remove('hide');
-                void selectedLevelInfo.offsetWidth;
-                selectedLevelInfo.classList.add('show');
+    .then(levelPaths => {
+        levelPaths.forEach((levelPath, i) => {
+        fetch(`${levelPath}/data.json`)
+        .then(res => res.json())
+        .then(d => {
+            const updateJSONPath = jsonLevelObject => {
+                const levelJson = structuredClone(jsonLevelObject);
+                levelJson.scriptPath = `${levelPath}/${levelJson.scriptPath}`
+                levelJson.musicPath = `${levelPath}/${levelJson.musicPath}`
+                return levelJson
             }
-            else loadLevel(updatedJson);
-        })
 
-        requestAnimationFrame(() => setLevelListPosition(parseInt(localStorage.getItem('webagon-selected-level') ?? 0)));
-            loadMenu();
+            const updatedJson = updateJSONPath(d)
+            levelJsons.push(updatedJson);
+
+            levelList.insertAdjacentHTML('beforeend', `
+                <div class="level" id="level-${d.key}">
+                    <p class="name">${d.name}</p>
+                    <p class="author">${d.author}</p>
+                </div>
+            `)
+
+            levelList.lastElementChild.addEventListener('click', e => {
+                if (getSelectedLevelElement() !== e.currentTarget || (window.innerWidth < 1068 && !selectedLevelInfo.classList.contains('show'))) {
+                    audioManager.resetPlay('level-select');
+                    setLevelListPosition(i);
+                    selectedLevelInfo.classList.remove('hide');
+                    void selectedLevelInfo.offsetWidth;
+                    selectedLevelInfo.classList.add('show');
+                }
+                else loadLevel(updatedJson);
+            })
+
+            requestAnimationFrame(() => setLevelListPosition(parseInt(localStorage.getItem('webagon-selected-level') ?? 0)));
+                loadMenu();
+            })
         })
     })
-})
+}
 
-let levelListSelectedLevel = 0
-const getSelectedLevelElement = () => document.getElementById(`level-${levelJsons[levelListSelectedLevel]?.key}`);
+loadLevels();
+
+let selectedLevelIndex = 0
+const getSelectedLevelElement = () => document.getElementById(`level-${levelJsons[selectedLevelIndex]?.key}`);
 const beforeShift = () => {
     const selectedLevelElement = getSelectedLevelElement();
     if (selectedLevelElement == undefined) return
@@ -111,11 +115,13 @@ const beforeShift = () => {
 let avaliableDifficulties = [1];
 let selectedDifficultyIndex = 0;
 
+const getSelectedDifficultyMult = () => avaliableDifficulties[selectedDifficultyIndex]
+
 const selectedLevelDifficultyElement = document.getElementById('selected-level-difficulty');
 const shiftDifficulty = shift => {
     selectedDifficultyIndex = (selectedDifficultyIndex + shift + avaliableDifficulties.length) % avaliableDifficulties.length;
-    selectedLevelDifficultyElement.textContent = `${avaliableDifficulties[selectedDifficultyIndex]}x`
-    const levelStats = getLevelStats(levelJsons[levelListSelectedLevel].key, avaliableDifficulties[selectedDifficultyIndex]);
+    selectedLevelDifficultyElement.textContent = `${getSelectedDifficultyMult()}x`
+    const levelStats = getLevelStats(levelJsons[selectedLevelIndex].key, getSelectedDifficultyMult());
     setBestScore(levelStats?.best ?? 0);
     animateSelectedLevelTop();
     audioManager.resetPlay('level-select');
@@ -136,9 +142,9 @@ const afterShift = () => {
     
     selectedLevelElement.scrollIntoView({ behavior: 'instant', block: 'nearest' })
 
-    levelPreview.load(levelJsons[levelListSelectedLevel].scriptPath)
+    levelPreview.load(levelJsons[selectedLevelIndex].scriptPath)
 
-    const currentJson = levelJsons[levelListSelectedLevel];
+    const currentJson = levelJsons[selectedLevelIndex];
     selectedLevelInfo.querySelector('.title-name').textContent = currentJson?.name
     selectedLevelInfo.querySelector('.name').textContent = `Name: ${currentJson?.name || 'Unnamed'}`
     selectedLevelInfo.querySelector('.author').textContent = `Author: ${currentJson?.author || 'None'}`
@@ -151,7 +157,7 @@ const afterShift = () => {
     avaliableDifficulties = [1, ...currentJson?.difficulties ?? []].sort((a, b) => a - b)
     selectedDifficultyIndex = avaliableDifficulties.findIndex(v => v === 1);
     
-    const levelStats = getLevelStats(currentJson.key, avaliableDifficulties[selectedDifficultyIndex]);
+    const levelStats = getLevelStats(currentJson.key, getSelectedDifficultyMult());
     setBestScore(levelStats?.best ?? 0)
 
     animateSelectedLevelTop();
@@ -159,17 +165,17 @@ const afterShift = () => {
 
 const shiftLevelListPosition = shift => {
     beforeShift()
-    if (levelListSelectedLevel === 0 && shift === -1) levelListSelectedLevel = levelJsons.length - 1;
-    else if (levelListSelectedLevel === levelJsons.length - 1 && shift === 1) levelListSelectedLevel = 0;
-    else levelListSelectedLevel += shift;
-    localStorage.setItem('webagon-selected-level', levelListSelectedLevel ?? 0)
+    if (selectedLevelIndex === 0 && shift === -1) selectedLevelIndex = levelJsons.length - 1;
+    else if (selectedLevelIndex === levelJsons.length - 1 && shift === 1) selectedLevelIndex = 0;
+    else selectedLevelIndex += shift;
+    localStorage.setItem('webagon-selected-level', selectedLevelIndex ?? 0)
     afterShift()
 }
 
 const setLevelListPosition = position => {
     beforeShift();
-    levelListSelectedLevel = position;
-    localStorage.setItem('webagon-selected-level', levelListSelectedLevel ?? 0)
+    selectedLevelIndex = position;
+    localStorage.setItem('webagon-selected-level', selectedLevelIndex ?? 0)
     afterShift();
 }
 
@@ -179,7 +185,7 @@ const keyDownMenuListener = e => {
     else if (e.code === 'ArrowLeft' || e.code === 'KeyA') shiftDifficulty(-1)
     else if (e.code === 'ArrowRight' || e.code === 'KeyD') shiftDifficulty(1)
 
-    else if (e.code === 'Enter') loadLevel(levelJsons[levelListSelectedLevel])
+    else if (e.code === 'Enter') loadLevel(levelJsons[selectedLevelIndex])
 
     if (e.code === 'ArrowUp' || e.code === 'KeyW' || e.code === 'ArrowDown' || e.code === 'KeyS') {
         audioManager.resetPlay('level-select')
@@ -188,7 +194,7 @@ const keyDownMenuListener = e => {
 }
 
 const playBtn = document.getElementById('play-btn')
-playBtn.addEventListener('click', () => loadLevel(levelJsons[levelListSelectedLevel]))
+playBtn.addEventListener('click', () => loadLevel(levelJsons[selectedLevelIndex]))
 document.getElementById('selected-level').addEventListener('click', e => {
     if (e.target === playBtn) return
     selectedLevelInfo.classList.remove('show');

@@ -484,6 +484,24 @@ canvas {
     margin-top: 20px;
 }
 
+#settings {
+    font-size: 2rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-50%);
+    background-color: rgba(0, 0, 0, .5);
+    color: white;
+    padding: 20px;
+}
+
+#settings p {
+    padding: 10px;
+}
+#settings * {
+    margin: 10px 0;
+}
+
 @media (max-width: 1068px) {
     html {
         font-size: .8rem;

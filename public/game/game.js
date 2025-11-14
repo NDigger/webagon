@@ -68,6 +68,8 @@ export default class Game extends GameObject {
     #died = false;
     #layer = 0;
 
+    #playerSwapParticleEmitters = [];
+
     #polygonColor = null;
     #polygon;
     #deathEffect;
@@ -90,8 +92,6 @@ export default class Game extends GameObject {
     #falloffColor3d = null;
     #falloffScale3d = new Vector2(1, 1);
     #depthMult3d = 0;
-
-    #playerSwapParticleEmitters = [];
 
     #mainColor = new Color(0, 0, 0);
     #wallSpawnDistance = 1500;
@@ -124,12 +124,7 @@ export default class Game extends GameObject {
         this.#polygon = new Polygon(app);
         this.#polygon.setLayer(this.#getPolygonLayer());
         this.#polygon.set3dLayer(this.#get3dLayer());
-
         
-        // replacing schedule draw with normal draw
-        this.#polygon.redrawEnabled = false;
-        this.#background.redrawEnabled = false;
-
         this.setMainColor(new Color(40, 40, 0))
         this.setBackgroundTileColors([
             new Color(245, 245, 245),
@@ -269,6 +264,7 @@ export default class Game extends GameObject {
             }
             this.#polygon.player.updatePosition()
         }
+        console.log(this.#getCollidingWalls().length)
         if (this.#getCollidingWalls().length !== 0) {
             this.#polygon.player.setRotationOffset(prevRotationOffset)
             this.#polygon.player.updatePosition()
@@ -296,7 +292,6 @@ export default class Game extends GameObject {
     }
 
     #updatePlayerSwapParticleEmitters() {
-        console.log(this.#playerSwapParticleEmitters)
         this.#playerSwapParticleEmitters.forEach(pe => {
             const particles = pe.getParticles();
             particles.forEach(p => {
@@ -327,7 +322,7 @@ export default class Game extends GameObject {
         particleEmitter.speed = 120;
         particleEmitter.speedVariation = 200;
         particleEmitter.onFinished = () => {
-            this.particleEmitter.destroy();
+            particleEmitter.destroy();
             this.#playerSwapParticleEmitters.splice(this.#playerSwapParticleEmitters.findIndex(pe => pe === particleEmitter), 1)
         }
         particleEmitter.emit();
@@ -350,6 +345,7 @@ export default class Game extends GameObject {
     }
 
     #update(time) {
+        console.log(this.#polygon.player.getRotationOffset())
         const frameTime = time - this.#lastUpdateTime;
         this.#lastUpdateTime = time;
 
