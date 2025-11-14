@@ -91,7 +91,7 @@ export default class Game extends GameObject {
     #falloffScale3d = new Vector2(1, 1);
     #depthMult3d = 0;
 
-    #particleEmitters = [];
+    #playerSwapParticleEmitters = [];
 
     #mainColor = new Color(0, 0, 0);
     #wallSpawnDistance = 1500;
@@ -295,9 +295,8 @@ export default class Game extends GameObject {
         })
     }
 
-    #updateParticleEmitters() {
-        console.log(this.#particleEmitters.length)
-        this.#particleEmitters.forEach(pe => {
+    #updatePlayerSwapParticleEmitters() {
+        this.#playerSwapParticleEmitters.forEach(pe => {
             const particles = pe.getParticles();
             particles.forEach(p => {
                 p.setColor(this.#getSwapColor());
@@ -326,14 +325,14 @@ export default class Game extends GameObject {
         particleEmitter.sizeEnd = 0;
         particleEmitter.speed = 120;
         particleEmitter.speedVariation = 200;
-        particleEmitter.onFinished = () => this.#particleEmitters.splice(this.#particleEmitters.findIndex(pe => pe === particleEmitter), 1)
+        particleEmitter.onFinished = () => this.#playerSwapParticleEmitters.splice(this.#playerSwapParticleEmitters.findIndex(pe => pe === particleEmitter), 1)
         particleEmitter.emit();
         const particles = particleEmitter.getParticles()
         particles.forEach(p => {
             p.setOffset(this.#polygon.player.getVertexPos(0))
             p.setLayer(this.#getPolygonLayer());
         })
-        this.#particleEmitters.push(particleEmitter);
+        this.#playerSwapParticleEmitters.push(particleEmitter);
         levelSwapAudio.currentTime = 0;
         levelSwapAudio.play();
         this.#currentSwapReloadTime = this.#swapReloadTime;
@@ -381,7 +380,7 @@ export default class Game extends GameObject {
             this.#polygon.player.setColor(Color.hsvToRgb(time/500 + .5, 1., 1.));
         }
 
-        this.#updateParticleEmitters();
+        this.#updatePlayerSwapParticleEmitters();
 
         this.draw();
         this.#updateId = requestAnimationFrame(time => this.#update(time));
