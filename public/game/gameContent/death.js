@@ -16,10 +16,8 @@ export default class Death extends PolygonObject {
     }
 
     #update(time) {
-        const frameTime = time - this.#lasttime;
         this.#lasttime = time
         const t = time / 1000
-        this.setColor(Color.hsvToRgb(time/1000, 1., 1.));
         this.setDistance((t * 2 - Math.floor(t * 2)) * 50);
         this.setThickness((t * 2 - Math.floor(t * 2)) * 20);
         this.#updateId = requestAnimationFrame(t => this.#update(t)) 

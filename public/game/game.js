@@ -6,6 +6,7 @@ import GameObject from "./gameContent/gameObject";
 import Death from "./gameContent/death";
 import { getFPS } from "../frameCounter";
 import Lerp, { pingPong } from "../utils/interpolation";
+import ParticleEmitter from "./gameContent/particleEmitter";
 
 const levelSwapAudio = new Audio('./../audio/playerSwap.ogg');
 
@@ -89,6 +90,8 @@ export default class Game extends GameObject {
     #falloffColor3d = null;
     #falloffScale3d = new Vector2(1, 1);
     #depthMult3d = 0;
+
+    #particleEmitters = [];
 
     #mainColor = new Color(0, 0, 0);
     #wallSpawnDistance = 1500;
@@ -289,7 +292,31 @@ export default class Game extends GameObject {
         })
     }
 
+    #updateParticleEmitters() {
+        this.#particleEmitters.forEach(pe => {
+            const particles = pe.getParticles();
+            particles.forEach(p => {
+                p.setColor(this.#getPlayerColor());
+                p.setSkew(this.#skew);
+                p.setRotation(this.#rotation);
+                p.set3dColor(this.#color3d)
+                p.set3dDepthMult(this.#depthMult3d);
+                p.set3dDistance(this.#distance3d);
+                p.set3dFalloffColor(this.#getDefault3dColor());
+                p.set3dFalloffScale(this.#falloffScale3d);
+                p.set3dLayer(this.#get3dLayer);
+                p.set3dLayersCount(this.#layersCount3d);
+                p.setScale(this.#scale);
+                p.setCenterOffset(this.#centerOffset);
+                p.setOffset(this.#polygon.player.getPointPosition());
+                p.draw();
+            })
+        })
+    }
+
     #swapPlayer() {
+        const particleEmitter = new ParticleEmitter(this.app);
+        this.#particleEmitters.push(particleEmitter);
         levelSwapAudio.currentTime = 0;
         levelSwapAudio.play();
         this.#currentSwapReloadTime = this.#swapReloadTime;
@@ -336,6 +363,8 @@ export default class Game extends GameObject {
             if (this.#deathEffect) this.#deathEffect.setColor(Color.hsvToRgb(time/500, 1., 1.));
             this.#polygon.player.setColor(Color.hsvToRgb(time/500 + .5, 1., 1.));
         }
+
+        this.#updateParticleEmitters();
 
         this.draw();
         this.#updateId = requestAnimationFrame(time => this.#update(time));
