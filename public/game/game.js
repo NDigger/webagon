@@ -241,7 +241,7 @@ export default class Game extends GameObject {
 
         const playerSpeed = frameTime * .6 / steps;
         const tiltSpeed = 0.0006 * frameTime;
-        const maxTilt = .35;
+        const maxTilt = .4;
         if (this.#playerMovementEnabled) {
             if (this.#leftKeyPressed) {
                 this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() - playerSpeed);
