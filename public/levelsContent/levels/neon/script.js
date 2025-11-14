@@ -111,6 +111,7 @@ level.onInit = () => {
     level.setIncrementTime(12);
     level.set3dColor(new Color(0, 0, 0));
     level.set3dDepthMult(0.3);
+    level.setPlayerSwapReloadTime(.5);
 }
 
 // onStep must be async and use delays in order to work. No delays may cause crash.

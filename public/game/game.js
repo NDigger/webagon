@@ -165,7 +165,7 @@ export default class Game extends GameObject {
         if (e.code === 'ArrowLeft' || e.code === 'KeyA') this.#leftKeyPressed = true;
         if (e.code === 'ArrowRight' || e.code === 'KeyD') this.#rightKeyPressed = true;
 
-        if (e.code === 'Space' && this.#swapEnabled && !this.#swapKeyPressed) {
+        if (e.code === 'Space' && this.#swapEnabled && !this.#swapKeyPressed && this.#currentSwapReloadTime < 0) {
             this.#swapPlayer()
             this.#swapKeyPressed = true;
         }
@@ -190,7 +190,7 @@ export default class Game extends GameObject {
         return this.#polygonColor ?? this.#backgroundTileColors[this.#background.getSwapped() || this.#backgroundTileColors.length === 1 ? 0 : 1]
     }
     #getPlayerColor() {
-        return !this.#swapEnabled ? this.#mainColor : Lerp.interpolate(new Color(255, 0, 0), new Color(255, 255, 0), pingPong(this.#lastUpdateTime*0.01))
+        return this.#swapEnabled && this.#currentSwapReloadTime < 0 ? Lerp.interpolate(new Color(255, 0, 0), new Color(255, 255, 0), pingPong(this.#lastUpdateTime*0.01)) : this.#mainColor;
     }
     #get3dColor() { return this.#color3d ?? this.#getDefault3dColor() }
 
@@ -236,7 +236,7 @@ export default class Game extends GameObject {
 
     #updatePlayer(frameTime, steps) {
         this.#polygon.player.setColor(this.#getPlayerColor())
-
+        this.#currentSwapReloadTime -= frameTime/1000;
         const prevRotationOffset = this.#polygon.player.getRotationOffset();
 
         const playerSpeed = frameTime * .6 / steps;
@@ -288,6 +288,7 @@ export default class Game extends GameObject {
     }
 
     #swapPlayer() {
+        this.#currentSwapReloadTime = this.#swapReloadTime;
         this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() + 180);
         this.#polygon.player.updatePosition();
         if (this.#getCollidingWalls().length !== 0) this.kill();
@@ -524,7 +525,7 @@ export default class Game extends GameObject {
     }
     getSwapEnabled() { return this.#polygon.player.getSwapEnabled(); }
     setPlayerSwapReloadTime(v) {
-        if (typeof(v) !== 'boolean') return;
+        if (typeof(v) !== 'number') return;
         this.#swapReloadTime = v;
     }
     getPlayerSwapReloadTime() { return this.#swapReloadTime }
