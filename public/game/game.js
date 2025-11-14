@@ -100,6 +100,8 @@ export default class Game extends GameObject {
     #rightKeyPressed = false;
     #swapKeyPressed = false;
     #swapEnabled = false;
+    #swapReloadTime = 0;
+    #currentSwapReloadTime = 0;
     #playerMovementEnabled = true;
 
     #updateId;
@@ -521,6 +523,11 @@ export default class Game extends GameObject {
         this.#swapEnabled = v;
     }
     getSwapEnabled() { return this.#polygon.player.getSwapEnabled(); }
+    setPlayerSwapReloadTime(v) {
+        if (typeof(v) !== 'boolean') return;
+        this.#swapReloadTime = v;
+    }
+    getPlayerSwapReloadTime() { return this.#swapReloadTime }
     #updateWallScale() {
         this.#walls.forEach(wall => wall.setScale(this.#scale.mul(this.#wallScale)))
     }
