@@ -78,14 +78,6 @@ export default class Polygon extends PolygonObject {
         return this.#border.getColor();
     }
 
-    setPlayerColor({r, g, b, a}) {
-        this.player.setColor(new Color(r, g, b, a))
-    }
-
-    getPlayerColor() {
-        return this.player.getColor();
-    }
-
     set3dLayersCount(v) {
         this.player.set3dLayersCount(v);
         this.#border.set3dLayersCount(v);

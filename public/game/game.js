@@ -232,7 +232,7 @@ export default class Game extends GameObject {
         const prevRotationOffset = this.#polygon.player.getRotationOffset();
 
         const playerSpeed = frameTime * .6 / steps;
-        const tiltSpeed = 0.0005 * frameTime;
+        const tiltSpeed = 0.0006 * frameTime;
         const maxTilt = .35;
         if (this.#playerMovementEnabled) {
             if (this.#leftKeyPressed) {
@@ -418,7 +418,7 @@ export default class Game extends GameObject {
         const color = new Color(r, g, b, a)
         this.#mainColor = color;
         this.#polygon.setBorderColor(color);
-        this.#polygon.setPlayerColor(color);
+        this.#polygon.player.setColor(color);
 
         this.#walls.forEach(w => {
             w.setColor(color)
