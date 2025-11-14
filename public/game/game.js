@@ -7,6 +7,8 @@ import Death from "./gameContent/death";
 import { getFPS } from "../frameCounter";
 import Lerp, { pingPong } from "../utils/interpolation";
 
+const levelSwapAudio = new Audio('./../audio/playerSwap.ogg');
+
 const area = (a, b, c) => {
   return Math.abs(
     (a.x * (b.y - c.y) +
@@ -288,6 +290,8 @@ export default class Game extends GameObject {
     }
 
     #swapPlayer() {
+        levelSwapAudio.currentTime = 0;
+        levelSwapAudio.play();
         this.#currentSwapReloadTime = this.#swapReloadTime;
         this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() + 180);
         this.#polygon.player.updatePosition();
@@ -326,6 +330,11 @@ export default class Game extends GameObject {
             };
            
             if (i % Math.floor(steps/20) === 0) this.#polygon.player.draw();
+        }
+        
+        if (this.#died) {
+            if (this.#deathEffect) this.#deathEffect.setColor(Color.hsvToRgb(time/500, 1., 1.));
+            this.#polygon.player.setColor(Color.hsvToRgb(time/500 + .5, 1., 1.));
         }
 
         this.draw();
