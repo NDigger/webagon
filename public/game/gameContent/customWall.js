@@ -83,9 +83,9 @@ export default class CustomWall extends Mesh {
         this.#savedUnmodifiedVertexPos4[point] = pos;
     }
 
-    getVertexPos4() {
-        return this.#savedUnmodifiedVertexPos4;
-    }
+    getVertexPos4() { return this.#savedUnmodifiedVertexPos4; }
+
+    getVertexPos(v) { return this.#savedUnmodifiedVertexPos4[v] }
 
     setRotation(v) {
         if (typeof(v) !== 'number') return 

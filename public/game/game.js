@@ -194,8 +194,11 @@ export default class Game extends GameObject {
     #getPolygonColor() {
         return this.#polygonColor ?? this.#backgroundTileColors[this.#background.getSwapped() || this.#backgroundTileColors.length === 1 ? 0 : 1]
     }
+    #getSwapColor() {
+        return Lerp.interpolate(new Color(255, 0, 0), new Color(255, 255, 0), pingPong(this.#lastUpdateTime*0.01))
+    }
     #getPlayerColor() {
-        return this.#swapEnabled && this.#currentSwapReloadTime < 0 ? Lerp.interpolate(new Color(255, 0, 0), new Color(255, 255, 0), pingPong(this.#lastUpdateTime*0.01)) : this.#mainColor;
+        return this.#currentSwapReloadTime < 0 && this.#swapEnabled ? this.#getSwapColor() : this.#mainColor;
     }
     #get3dColor() { return this.#color3d ?? this.#getDefault3dColor() }
 
@@ -293,10 +296,11 @@ export default class Game extends GameObject {
     }
 
     #updateParticleEmitters() {
+        console.log(this.#particleEmitters.length)
         this.#particleEmitters.forEach(pe => {
             const particles = pe.getParticles();
             particles.forEach(p => {
-                p.setColor(this.#getPlayerColor());
+                p.setColor(this.#getSwapColor());
                 p.setSkew(this.#skew);
                 p.setRotation(this.#rotation);
                 p.set3dColor(this.#color3d)
@@ -308,14 +312,27 @@ export default class Game extends GameObject {
                 p.set3dLayersCount(this.#layersCount3d);
                 p.setScale(this.#scale);
                 p.setCenterOffset(this.#centerOffset);
-                p.setOffset(this.#polygon.player.getPointPosition());
-                p.draw();
             })
         })
     }
 
     #swapPlayer() {
         const particleEmitter = new ParticleEmitter(this.app);
+        particleEmitter.angle = this.#polygon.player.getRotationOffset()/180*Math.PI-Math.PI/4;
+        particleEmitter.angleVariation = 2;
+        particleEmitter.lifetime = .3;
+        particleEmitter.lifetimeVariation = .1;
+        particleEmitter.sizeStart = 10;
+        particleEmitter.sizeEnd = 0;
+        particleEmitter.speed = 120;
+        particleEmitter.speedVariation = 200;
+        particleEmitter.onFinished = () => this.#particleEmitters.splice(this.#particleEmitters.findIndex(pe => pe === particleEmitter), 1)
+        particleEmitter.emit();
+        const particles = particleEmitter.getParticles()
+        particles.forEach(p => {
+            p.setOffset(this.#polygon.player.getVertexPos(0))
+            p.setLayer(this.#getPolygonLayer());
+        })
         this.#particleEmitters.push(particleEmitter);
         levelSwapAudio.currentTime = 0;
         levelSwapAudio.play();

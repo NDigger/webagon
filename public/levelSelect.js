@@ -118,6 +118,7 @@ const shiftDifficulty = shift => {
     const levelStats = getLevelStats(levelJsons[levelListSelectedLevel].key, avaliableDifficulties[selectedDifficultyIndex]);
     setBestScore(levelStats?.best ?? 0);
     animateSelectedLevelTop()
+    audioManager.resetPlay('level-select')
 }
 
 const animateSelectedLevelTop = () => {
