@@ -485,21 +485,37 @@ canvas {
 }
 
 #settings {
+    display: none;
+    border-right: 5px solid var(--main-color);
     font-size: 2rem;
     position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translateX(-50%) translateY(-50%);
-    background-color: rgba(0, 0, 0, .5);
-    color: white;
+    top: 0;
+    left: 0px;
+    background-color: rgba(1, 1, 1, 0.9);
+    opacity: .9;
+    z-index: 99;
+    backdrop-filter: blur(1px);
+    color: var(--main-color);
     padding: 20px;
+    height: 100vh;
+    min-width: 50vw;
+    overflow-y: auto;
 }
 
 #settings p {
+    margin: 20px 0;
     padding: 10px;
 }
-#settings * {
-    margin: 10px 0;
+
+#settings p {
+    font-size: .9em;
+    display: flex;
+}
+
+#settings p .value {
+    font-size: inherit;
+    text-align: right;
+    flex: 1;
 }
 
 @media (max-width: 1068px) {

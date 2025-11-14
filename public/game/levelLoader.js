@@ -1,6 +1,7 @@
 import Level from './level';
 import { setLevel } from '../script';
 import { getLevelStats, writeLevelStats } from '../storage';
+import { getConfig } from '../storage';
 
 export default class LevelLoader {
     app;
@@ -75,11 +76,15 @@ export default class LevelLoader {
         setLevel(level);
         this.#level = level;
 
+        const config = getConfig();
         script.onload = () => {
+            document.getElementById('game-ui').style.display = config.displayUiEnabled ? 'block' : 'none'
             document.querySelector('#game-ui .top-right').style.display = 'none'
 
-            document.getElementById('restart-help-msg').style.display = 'none'
-            document.getElementById('swap-enabled-msg').style.display = 'none'
+            document.getElementById('restart-help-msg').style.display = 'none';
+            document.getElementById('swap-enabled-msg').style.display = 'none';
+            console.log(config)
+            document.getElementById('fps-counter').style.display = config.displayFpsEnabled ? 'block' : 'none';
 
             this.#level.init()
             document.getElementById('game-content').style.display = 'block'

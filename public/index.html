@@ -80,8 +80,14 @@
     </section>
     <section id="settings">
         <h1>Settings</h1>
-        <p id="config-player-tilt-mult" class="setting number">Player tilt mult: 1.5</p>
-        <p id="config-swap-highlight" class="setting bool">Swap Highlight: Enabled</p>
+        <h2>Gameplay</h2>
+        <p class="setting" id="config-player-tilt-mult" data-prop="playerTiltMult" data-type="number" data-shift='.1' data-min='0' data-max='1.5'>Player tilt mult: <span class="value"></span></p>
+        <p class="setting" id="config-swap-highlight-enabled" data-prop="swapHighlightEnabled" data-type="boolean">Swap Highlight: <span class="value"></span></p>
+        <p class="setting" id="config-display-fps-enabled" data-prop="displayFpsEnabled" data-type="boolean">Display FPS: <span class="value"></span></p>
+        <p class="setting" id="config-display-ui-enabled" data-prop="displayUiEnabled" data-type="boolean">Display UI: <span class="value"></span></p>
+        <h2>Audio</h2>
+        <p class="setting" id="config-music-volume" data-prop="musicVolume" data-type="number" data-shift='0.1' data-min='0' data-max='1'>Music Volume: <span class="value"></span></p>
+        <p class="setting" id="config-sounds-volume" data-prop="soundsVolume" data-type="number" data-shift='0.1' data-min='0' data-max='1'>Sounds Volume: <span class="value"></span></p>
     </section>
     <script type="module" src="./script.js"></script>
 </body>

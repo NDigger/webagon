@@ -3,17 +3,20 @@ import Background from './game/gameContent/background';
 import { app, setBestScore, audioManager, levelLoader } from './script';
 import { Color } from './utils/structures';
 
-import { getLevelStats, writeLevelStats } from './storage';
+import { showSettings } from './settings'
+
+import { getLevelStats } from './storage';
+
+let keydownEventsEnabled = true;
 
 const selectedLevelTop = document.getElementById('selected-level-top')
 
 const selectedLevelInfo = document.getElementById('selected-level')
 const levelList = document.getElementById('level-list');
 
-levelList.addEventListener('keydown', (e) => {
-  if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
-    e.preventDefault();
-  }
+levelList.addEventListener('keydown', e => {
+    if (!keydownEventsEnabled) return
+    if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) e.preventDefault();
 });
 
 levelLoader.onLeave = () => loadMenu();
@@ -186,12 +189,18 @@ const setLevelListPosition = position => {
 }
 
 const keyDownMenuListener = e => {
+    if (!keydownEventsEnabled) return
     if (e.code === 'ArrowUp' || e.code === 'KeyW') shiftLevelListPosition(-1)
     else if (e.code === 'ArrowDown' || e.code === 'KeyS') shiftLevelListPosition(1)
     else if (e.code === 'ArrowLeft' || e.code === 'KeyA') shiftDifficulty(-1)
     else if (e.code === 'ArrowRight' || e.code === 'KeyD') shiftDifficulty(1)
 
     else if (e.code === 'Enter') loadLevel(getSelectedLevelJSON())
+
+    else if (e.code === 'Escape') {
+        keydownEventsEnabled = false;
+        showSettings();
+    }
 
     if (e.code === 'ArrowUp' || e.code === 'KeyW' || e.code === 'ArrowDown' || e.code === 'KeyS') {
         audioManager.resetPlay('level-select')

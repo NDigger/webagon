@@ -1,6 +1,6 @@
 export const getLevelsStats = () => {
-    const webagonLevelStats = localStorage.getItem('webagon-level-stats');
-    return webagonLevelStats ? JSON.parse(webagonLevelStats) : {};
+    const item = localStorage.getItem('webagon-level-stats');
+    return item ? JSON.parse(item) : {};
 }
 
 export const getLevelStats = (levelKey, levelDiff) => {
@@ -16,3 +16,17 @@ export const writeLevelStats = (levelKey, levelDiff, levelStats) => {
     levelsStats[levelKey] = levelStatsAllDiffs;
     localStorage.setItem('webagon-level-stats', JSON.stringify(levelsStats));
 }
+
+export const getConfig = () => {
+    const item = localStorage.getItem('webagon-config');
+    return item ? JSON.parse(item) : {
+        playerTiltMult: 0.4,
+        swapHightlightEnabled: true,
+        displayFpsEnabled: true,
+        displayUiEnabled: true,
+        musicVolume: 0.8,
+        soundsVolume: 0.8,
+    };
+}
+
+export const writeConfig = config => localStorage.setItem('webagon-config', JSON.stringify(config));

@@ -7,6 +7,7 @@ import Death from "./gameContent/death";
 import { getFPS } from "../frameCounter";
 import Lerp, { pingPong } from "../utils/interpolation";
 import ParticleEmitter from "./gameContent/particleEmitter";
+import { getConfig } from "../storage";
 
 const levelSwapAudio = new Audio('./../audio/playerSwap.ogg');
 
@@ -64,6 +65,8 @@ const gameArrowRight = document.getElementById('game-arrow-right');
 export default class Game extends GameObject {
     #background;
     #backgroundRotationOffset = 0;
+
+    #config = getConfig();
 
     #died = false;
     #layer = 0;
@@ -190,7 +193,7 @@ export default class Game extends GameObject {
         return this.#polygonColor ?? this.#backgroundTileColors[this.#background.getSwapped() || this.#backgroundTileColors.length === 1 ? 0 : 1]
     }
     #getSwapColor() {
-        return Lerp.interpolate(new Color(255, 0, 0), new Color(255, 255, 0), pingPong(this.#lastUpdateTime*0.01))
+        return this.#config.swapHighlightEnabled ? Lerp.interpolate(new Color(255, 0, 0), new Color(255, 255, 0), pingPong(this.#lastUpdateTime*0.01)) : this.#mainColor;
     }
     #getPlayerColor() {
         return this.#currentSwapReloadTime < 0 && this.#swapEnabled ? this.#getSwapColor() : this.#mainColor;
@@ -243,8 +246,8 @@ export default class Game extends GameObject {
         const prevRotationOffset = this.#polygon.player.getRotationOffset();
 
         const playerSpeed = frameTime * .6 / steps;
-        const tiltSpeed = 0.0006 * frameTime;
-        const maxTilt = .4;
+        const tiltSpeed = 0.0014 * frameTime * this.#config.playerTiltMult;
+        const maxTilt = this.#config.playerTiltMult;
         if (this.#playerMovementEnabled) {
             if (this.#leftKeyPressed) {
                 this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() - playerSpeed);
@@ -264,7 +267,6 @@ export default class Game extends GameObject {
             }
             this.#polygon.player.updatePosition()
         }
-        console.log(this.#getCollidingWalls().length)
         if (this.#getCollidingWalls().length !== 0) {
             this.#polygon.player.setRotationOffset(prevRotationOffset)
             this.#polygon.player.updatePosition()
@@ -345,7 +347,6 @@ export default class Game extends GameObject {
     }
 
     #update(time) {
-        console.log(this.#polygon.player.getRotationOffset())
         const frameTime = time - this.#lastUpdateTime;
         this.#lastUpdateTime = time;
 
