@@ -135,17 +135,7 @@ const animateSelectedLevelTop = () => {
     selectedLevelTop.classList.add('animate');
 }
 
-const afterShift = () => {
-    const selectedLevelElement = getSelectedLevelElement();
-    if (selectedLevelElement == undefined) return
-    selectedLevelElement.classList.remove('unselected-animation');
-    void selectedLevelElement.offsetWidth;
-    selectedLevelElement.classList.add('selected-animation');
-    
-    selectedLevelElement.scrollIntoView({ behavior: 'instant', block: 'nearest' })
-
-    levelPreview.load(getSelectedLevelJSON().scriptPath)
-
+const updateSelectedLevelInfo = () => {
     const currentJson = getSelectedLevelJSON();
     selectedLevelInfo.querySelector('.title-name').textContent = currentJson?.name
     selectedLevelInfo.querySelector('.name').textContent = `Name: ${currentJson?.name || 'Unnamed'}`
@@ -154,6 +144,20 @@ const afterShift = () => {
     selectedLevelInfo.querySelector('.music-name').textContent = `Name: ${currentJson?.musicName || 'None'}`
     selectedLevelInfo.querySelector('.music-author').textContent = `Author: ${currentJson?.musicAuthor || 'None'}`
     selectedLevelInfo.querySelector('.music-album').textContent = `Album: ${currentJson?.musicAlbum || 'None'}`
+}
+
+const afterShift = () => {
+    const selectedLevelElement = getSelectedLevelElement();
+    if (selectedLevelElement == undefined) return
+    selectedLevelElement.classList.remove('unselected-animation');
+    void selectedLevelElement.offsetWidth;
+    selectedLevelElement.classList.add('selected-animation');
+    selectedLevelElement.scrollIntoView({ behavior: 'instant', block: 'nearest' })
+    
+    const currentJson = getSelectedLevelJSON();
+    levelPreview.load(currentJson.scriptPath)
+
+    updateSelectedLevelInfo()
 
     selectedLevelDifficultyElement.textContent = '1x';
     avaliableDifficulties = [1, ...currentJson?.difficulties ?? []].sort((a, b) => a - b)
