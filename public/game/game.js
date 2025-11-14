@@ -5,6 +5,7 @@ import Background from "./gameContent/background";
 import GameObject from "./gameContent/gameObject";
 import Death from "./gameContent/death";
 import { getFPS } from "../frameCounter";
+import Lerp, { pingPong } from "../utils/interpolation";
 
 const area = (a, b, c) => {
   return Math.abs(
@@ -186,6 +187,9 @@ export default class Game extends GameObject {
     #getPolygonColor() {
         return this.#polygonColor ?? this.#backgroundTileColors[this.#background.getSwapped() || this.#backgroundTileColors.length === 1 ? 0 : 1]
     }
+    #getPlayerColor() {
+        return !this.#swapEnabled ? this.#mainColor : Lerp.interpolate(new Color(255, 0, 0), new Color(255, 255, 0), pingPong(this.#lastUpdateTime*0.01))
+    }
     #get3dColor() { return this.#color3d ?? this.#getDefault3dColor() }
 
     kill() {
@@ -229,6 +233,8 @@ export default class Game extends GameObject {
     }
 
     #updatePlayer(frameTime, steps) {
+        this.#polygon.player.setColor(this.#getPlayerColor())
+
         const prevRotationOffset = this.#polygon.player.getRotationOffset();
 
         const playerSpeed = frameTime * .6 / steps;
@@ -418,7 +424,7 @@ export default class Game extends GameObject {
         const color = new Color(r, g, b, a)
         this.#mainColor = color;
         this.#polygon.setBorderColor(color);
-        this.#polygon.player.setColor(color);
+        this.#polygon.player.setColor(this.#getPlayerColor());
 
         this.#walls.forEach(w => {
             w.setColor(color)
