@@ -15,7 +15,7 @@ const newPBMessages = [
     'what could be worse than this...',
     'breathe in, breathe out',
     'new personal damage!',
-    'sense overload',
+    'you died!',
     'look at that!',
     'how is it possible?',
     'infinity achieved!',
@@ -27,7 +27,8 @@ const newPBMessages = [
     'breaking boundaries!',
     'lmao',
     'that best looks cute.',
-    'bliss that bee!'
+    'bliss that bee!',
+    'how unlucky!',
 ];
 
 const getRandomNewPBMessage = () => newPBMessages[Math.floor(Math.random() * newPBMessages.length)]

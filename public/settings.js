@@ -78,7 +78,9 @@ settings.forEach((setting, i) => {
 const shiftSetting = shift => {
     getSelectedSetting().classList.remove('selected');
     selectedSettingIndex = (shift + selectedSettingIndex + settings.length) % settings.length;
-    getSelectedSetting().classList.add('selected');
+    const newSetting = getSelectedSetting();
+    newSetting.classList.add('selected');
+    newSetting.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
 }
 shiftSetting(0); // highlight selected setting
 
