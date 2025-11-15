@@ -1,8 +1,8 @@
 import { getConfig, writeConfig } from "./storage";
 
-export const showSettings = () => {
-    keydownEventsEnabled = true;
-    document.getElementById('settings').style.display = 'block'
+export const setSettingsVisible = v => {
+    keydownEventsEnabled = v;
+    document.getElementById('settings').style.display = v ? 'block' : 'none'
 }
 let keydownEventsEnabled = false;
 

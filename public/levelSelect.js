@@ -3,7 +3,7 @@ import Background from './game/gameContent/background';
 import { app, setBestScore, audioManager, levelLoader } from './script';
 import { Color } from './utils/structures';
 
-import { showSettings } from './settings'
+import { setSettingsVisible } from './settings'
 
 import { getLevelStats } from './storage';
 
@@ -189,6 +189,17 @@ const setLevelListPosition = position => {
 }
 
 const keyDownMenuListener = e => {
+    if (e.code === 'Escape') {
+        if (keydownEventsEnabled === true) {
+            keydownEventsEnabled = false;
+            setSettingsVisible(true);
+        }
+        else {
+            keydownEventsEnabled = true;
+            setSettingsVisible(false);
+        }
+    }
+    
     if (!keydownEventsEnabled) return
     if (e.code === 'ArrowUp' || e.code === 'KeyW') shiftLevelListPosition(-1)
     else if (e.code === 'ArrowDown' || e.code === 'KeyS') shiftLevelListPosition(1)
@@ -196,11 +207,6 @@ const keyDownMenuListener = e => {
     else if (e.code === 'ArrowRight' || e.code === 'KeyD') shiftDifficulty(1)
 
     else if (e.code === 'Enter') loadLevel(getSelectedLevelJSON())
-
-    else if (e.code === 'Escape') {
-        keydownEventsEnabled = false;
-        showSettings();
-    }
 
     if (e.code === 'ArrowUp' || e.code === 'KeyW' || e.code === 'ArrowDown' || e.code === 'KeyS') {
         audioManager.resetPlay('level-select')
