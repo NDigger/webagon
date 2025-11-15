@@ -3,6 +3,7 @@ import { Color } from "../utils/structures";
 import Lerp from "../utils/interpolation";
 import { setBestScore } from "../script";
 import CustomWall from "./gameContent/customWall";
+import { getConfig } from "../storage";
 
 import { getLevelStats, writeLevelStats } from "../storage";
 
@@ -14,6 +15,8 @@ export default class Level extends Game {
     onStep = async () => {};
     onIncrement = () => {};
     onPreIncrement = () => {};
+
+    #config = getConfig();
 
     #initialized = false;
     #levelInitTime = performance.now();
@@ -62,6 +65,7 @@ export default class Level extends Game {
     
     init() {
         const audio = new Audio(this.#levelData.musicPath);
+        audio.volume = this.#config.musicVolume;
         audio.loop = true;
         audio.oncanplay = () => {
             this.#audio = audio;

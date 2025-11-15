@@ -3,7 +3,7 @@ import * as PIXI from 'pixi.js'
 import LevelLoader from './game/levelLoader';
 import AudioManager from './utils/audioManager';
 import './frameCounter';
-import './settings'
+import GameSound from './game/gameSound';
 
 const selectedLevelInfo = document.getElementById('selected-level')
 
@@ -26,11 +26,11 @@ const createApp = async () => {
     return app;
 }
 
-export const audioManager = new AudioManager();
-audioManager.add('level-select', new Audio('audio/levelSelect.mp3'))
-audioManager.setStartTime('level-select', .12)
-audioManager.add('level-load', new Audio('audio/levelLoad.ogg'))
-audioManager.setStartTime('level-load', .12)
+export const soundManager = new AudioManager();
+soundManager.add('level-select', new Audio('audio/levelSelect.mp3'))
+soundManager.setStartTime('level-select', .12)
+soundManager.add('level-load', new Audio('audio/levelLoad.ogg'))
+soundManager.setStartTime('level-load', .12)
 
 export function setBestScore(score) {
     let zeros = ''
@@ -61,3 +61,4 @@ export { levelLoader }
     levelLoader = new LevelLoader(a);
     loadScript('./levelSelect.js')
 })()
+

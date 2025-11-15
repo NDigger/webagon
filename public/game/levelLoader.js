@@ -83,7 +83,7 @@ export default class LevelLoader {
 
             document.getElementById('restart-help-msg').style.display = 'none';
             document.getElementById('swap-enabled-msg').style.display = 'none';
-            console.log(config)
+
             document.getElementById('fps-counter').style.display = config.displayFpsEnabled ? 'block' : 'none';
 
             this.#level.init()

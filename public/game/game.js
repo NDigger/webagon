@@ -8,8 +8,9 @@ import { getFPS } from "../frameCounter";
 import Lerp, { pingPong } from "../utils/interpolation";
 import ParticleEmitter from "./gameContent/particleEmitter";
 import { getConfig } from "../storage";
+import GameSound from "./gameSound";
 
-const levelSwapAudio = new Audio('./../audio/playerSwap.ogg');
+const levelSwapSound = new GameSound('./../audio/playerSwap.ogg');
 
 const area = (a, b, c) => {
   return Math.abs(
@@ -338,8 +339,7 @@ export default class Game extends GameObject {
 
     #swapPlayer() {
         this.#createPlayerSwapParticle();
-        levelSwapAudio.currentTime = 0;
-        levelSwapAudio.play();
+        levelSwapSound.play();
         this.#currentSwapReloadTime = this.#swapReloadTime;
         this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() + 180);
         this.#polygon.player.updatePosition();

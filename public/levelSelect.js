@@ -1,6 +1,6 @@
 import LevelPreview from './game/levelPreview';
 import Background from './game/gameContent/background';
-import { app, setBestScore, audioManager, levelLoader } from './script';
+import { app, setBestScore, soundManager, levelLoader } from './script';
 import { Color } from './utils/structures';
 
 import { setSettingsVisible } from './settings'
@@ -41,7 +41,7 @@ const levelPreviewUpdate = ft =>{
 
 const loadLevel = levelData => {
     levelPreview.drop();
-    audioManager.resetPlay('level-load');
+    soundManager.resetPlay('level-load');
     document.getElementById('level-select').style.display = 'none'
     levelLoader.start(levelData, getSelectedDifficultyMult());
     document.removeEventListener('keydown', keyDownMenuListener)
@@ -89,7 +89,7 @@ const loadLevels = () => {
 
             levelList.lastElementChild.addEventListener('click', e => {
                 if (getSelectedLevelElement() !== e.currentTarget || (window.innerWidth < 1068 && !selectedLevelInfo.classList.contains('show'))) {
-                    audioManager.resetPlay('level-select');
+                    soundManager.resetPlay('level-select');
                     setLevelListPosition(i);
                     selectedLevelInfo.classList.remove('hide');
                     void selectedLevelInfo.offsetWidth;
@@ -129,7 +129,7 @@ const shiftDifficulty = shift => {
     const levelStats = getLevelStats(getSelectedLevelJSON().key, getSelectedDifficultyMult());
     setBestScore(levelStats?.best ?? 0);
     animateSelectedLevelTop();
-    audioManager.resetPlay('level-select');
+    soundManager.resetPlay('level-select');
 }
 
 const animateSelectedLevelTop = () => {
@@ -191,15 +191,21 @@ const setLevelListPosition = position => {
 const keyDownMenuListener = e => {
     if (e.code === 'Escape') {
         if (keydownEventsEnabled === true) {
+            document.getElementById('level-list').style.visibility = 'hidden'
             keydownEventsEnabled = false;
             setSettingsVisible(true);
         }
         else {
+            const levelList = document.getElementById('level-list');
+            levelList.style.visibility = 'visible';
             keydownEventsEnabled = true;
             setSettingsVisible(false);
+            levelList.style.display = 'none';
+            void levelList.offsetWidth;
+            levelList.style.display = 'flex';
         }
     }
-    
+
     if (!keydownEventsEnabled) return
     if (e.code === 'ArrowUp' || e.code === 'KeyW') shiftLevelListPosition(-1)
     else if (e.code === 'ArrowDown' || e.code === 'KeyS') shiftLevelListPosition(1)
@@ -209,7 +215,7 @@ const keyDownMenuListener = e => {
     else if (e.code === 'Enter') loadLevel(getSelectedLevelJSON())
 
     if (e.code === 'ArrowUp' || e.code === 'KeyW' || e.code === 'ArrowDown' || e.code === 'KeyS') {
-        audioManager.resetPlay('level-select')
+        soundManager.resetPlay('level-select')
         backgroundTime = 0;
     }
 }
@@ -221,5 +227,5 @@ document.getElementById('selected-level').addEventListener('click', e => {
     selectedLevelInfo.classList.remove('show');
     void selectedLevelInfo.offsetWidth
     selectedLevelInfo.classList.add('hide');
-    audioManager.resetPlay('level-select');
+    soundManager.resetPlay('level-select');
 })

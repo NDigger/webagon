@@ -226,6 +226,15 @@ canvas {
     padding-right: 200px;
     overflow-y: scroll;
     overflow-x: hidden;
+    animation: show-level-list .5s ease-out forwards;
+}
+
+@keyframes show-level-list {
+    from {
+        gap: 50px;
+    } to {
+        gap: 5px;
+    }
 }
 
 #level-list, #selected-level {
@@ -486,24 +495,99 @@ canvas {
 
 #settings {
     display: none;
-    border-right: 5px solid var(--main-color);
+    border-right: 3px solid var(--main-color);
     font-size: 2rem;
     position: absolute;
     top: 0;
     left: 0px;
-    background-color: rgba(1, 1, 1, 0.9);
+    /* background-color: rgba(1, 1, 1, 0.9); */
     opacity: .9;
     z-index: 99;
-    backdrop-filter: blur(1px);
     color: var(--main-color);
-    padding: 20px;
+    /* padding: 20px; */
+    padding-left: 0px;
     height: 100vh;
-    min-width: 50vw;
+    min-width: 40vw;
+    background: linear-gradient(to right, black, var(--background-tile-color));
     overflow-y: auto;
+    /* transform: skewX(-1deg); */
+    text-shadow: 1.5px 0 var(--background-tile-color), -1.5px 0 var(--background-tile-color), 0 1.5px var(--background-tile-color), 0 1.5px var(--background-tile-color),
+               1.5px 1.5px var(--background-tile-color), -1.5px -1.5px var(--background-tile-color), 1.5px -1.5px var(--background-tile-color), -1.5px 1.5px var(--background-tile-color);
+    box-shadow: 0px 3px 0px black;
+    animation: show-settings .3s ease-out forwards;
+}
+
+@keyframes show-settings {
+    from {
+        left: -40vw;
+        opacity: 0;
+        transform: skewX(-50deg);
+    } to {
+        left: 0;
+        opacity: 1;
+        transform: skewX(0deg);
+    }
+}
+
+#settings .category {
+    padding: 0 10px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 20px;
+} 
+
+#settings .category span {
+    flex: 1;
+    display: block;
+    background-color: var(--main-color);
+    margin-top: 20px;
+    height: 3px;
+}
+
+#settings .category span:first-child {
+    flex: 0.2;
+}
+
+
+#settings h1, #settings h2, #settings p {
+    text-shadow: inherit;
+}
+
+#settings h1 {
+    margin-bottom: 40px;
+    padding-bottom: 10px;
+    border-bottom: 3px solid var(--main-color);
+}
+
+#settings h2 {
+    opacity: .8;
+    text-align: center;
+    margin: 20px 0;
+    padding-bottom: 5px;
+}
+
+.setting.selected {
+    position: relative;
+    border: 2px solid var(--main-color);
+    filter: hue-rotate(180deg);
+    background: rgba(0, 0, 0, .1);
+    backdrop-filter: hue-rotate(180deg);
+    box-shadow: 0px 3px 0px var(--background-tile-color);
+    /* color: rgba(0, 0, 0, .8); */
+    animation: selected-animation .1s forwards;
+}
+
+@keyframes selected-animation {
+    from {
+        border: 0px dashed var(--main-color);
+    } to {
+        border: 5px solid var(--main-color);
+    }
 }
 
 #settings p {
-    margin: 20px 0;
+    margin: 10px;
     padding: 10px;
 }
 

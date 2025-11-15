@@ -1,4 +1,5 @@
 import { getConfig, writeConfig } from "./storage";
+import { soundManager } from "./script"; 
 
 export const setSettingsVisible = v => {
     keydownEventsEnabled = v;
@@ -17,9 +18,9 @@ const getSelectedSetting = () => settings[selectedSettingIndex]
 
 settings.forEach((setting, i) => {
     setting.addEventListener('mouseover', e => {
-        getSelectedSetting().style.backgroundColor = 'transparent';
+        getSelectedSetting().classList.remove('selected');
         selectedSettingIndex = i
-        e.currentTarget.style.backgroundColor = 'black';
+        e.currentTarget.classList.add('selected');
     })
 
     const settingType = setting.getAttribute('data-type');
@@ -29,7 +30,7 @@ settings.forEach((setting, i) => {
     if (settingType === 'boolean') {
         document.addEventListener('keydown', e => {
             if (selectedSettingIndex !== i || !keydownEventsEnabled) return
-            if (e.code === 'ArrowLeft' || e.code === 'ArrowRight') {
+            if (e.code === 'ArrowLeft' || e.code === 'ArrowRight' || e.code === 'Enter') {
                 config[settingProp] = !config[settingProp];
                 settingValue.textContent = config[settingProp] ? 'Enabled' : 'Disabled'
                 writeConfig(config)
@@ -57,9 +58,9 @@ settings.forEach((setting, i) => {
 })
 
 const shiftSetting = shift => {
-    getSelectedSetting().style.backgroundColor = 'transparent';
+    getSelectedSetting().classList.remove('selected');
     selectedSettingIndex = (shift + selectedSettingIndex + settings.length) % settings.length;
-    getSelectedSetting().style.backgroundColor = 'black';
+    getSelectedSetting().classList.add('selected');
 }
 
 document.addEventListener('keydown', e => {
@@ -70,6 +71,13 @@ document.addEventListener('keydown', e => {
         keydownEventsEnabled = false;
         document.getElementById('settings').style.display = 'none'
     }
+    if (
+        e.code === 'ArrowDown' || 
+        e.code === 'ArrowUp' || 
+        e.code === 'Escape' || 
+        e.code === 'ArrowLeft' ||
+        e.code === 'ArrowRight'
+    ) soundManager.resetPlay('level-select')
 })
 
 shiftSetting(0);
