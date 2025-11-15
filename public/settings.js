@@ -1,5 +1,5 @@
 import { getConfig, writeConfig } from "./storage";
-import { soundManager } from "./script"; 
+import { sounds } from "./script"; 
 
 export const setSettingsVisible = v => {
     keydownEventsEnabled = v;
@@ -77,7 +77,7 @@ document.addEventListener('keydown', e => {
         e.code === 'Escape' || 
         e.code === 'ArrowLeft' ||
         e.code === 'ArrowRight'
-    ) soundManager.resetPlay('level-select')
+    ) sounds.levelSelect.play()
 })
 
 shiftSetting(0);

@@ -1,6 +1,6 @@
 import LevelPreview from './game/levelPreview';
 import Background from './game/gameContent/background';
-import { app, setBestScore, soundManager, levelLoader } from './script';
+import { app, setBestScore, sounds, levelLoader } from './script';
 import { Color } from './utils/structures';
 
 import { setSettingsVisible } from './settings'
@@ -41,7 +41,7 @@ const levelPreviewUpdate = ft =>{
 
 const loadLevel = levelData => {
     levelPreview.drop();
-    soundManager.resetPlay('level-load');
+    sounds.levelLoad.play();
     document.getElementById('level-select').style.display = 'none'
     levelLoader.start(levelData, getSelectedDifficultyMult());
     document.removeEventListener('keydown', keyDownMenuListener)
@@ -89,7 +89,7 @@ const loadLevels = () => {
 
             levelList.lastElementChild.addEventListener('click', e => {
                 if (getSelectedLevelElement() !== e.currentTarget || (window.innerWidth < 1068 && !selectedLevelInfo.classList.contains('show'))) {
-                    soundManager.resetPlay('level-select');
+                    sounds.levelSelect.play();
                     setLevelListPosition(i);
                     selectedLevelInfo.classList.remove('hide');
                     void selectedLevelInfo.offsetWidth;
@@ -129,7 +129,7 @@ const shiftDifficulty = shift => {
     const levelStats = getLevelStats(getSelectedLevelJSON().key, getSelectedDifficultyMult());
     setBestScore(levelStats?.best ?? 0);
     animateSelectedLevelTop();
-    soundManager.resetPlay('level-select');
+    sounds.levelSelect.play();
 }
 
 const animateSelectedLevelTop = () => {
@@ -215,7 +215,7 @@ const keyDownMenuListener = e => {
     else if (e.code === 'Enter') loadLevel(getSelectedLevelJSON())
 
     if (e.code === 'ArrowUp' || e.code === 'KeyW' || e.code === 'ArrowDown' || e.code === 'KeyS') {
-        soundManager.resetPlay('level-select')
+        sounds.levelSelect.play()
         backgroundTime = 0;
     }
 }
@@ -227,5 +227,5 @@ document.getElementById('selected-level').addEventListener('click', e => {
     selectedLevelInfo.classList.remove('show');
     void selectedLevelInfo.offsetWidth
     selectedLevelInfo.classList.add('hide');
-    soundManager.resetPlay('level-select');
+    sounds.levelSelect.play();
 })

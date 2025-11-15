@@ -3,6 +3,7 @@ import { getConfig } from "../storage"
 export default class GameSound {
     #audio;
     volume = 1;
+    startTime = 0;
 
     constructor(src) {
         this.#audio = new Audio(src);
@@ -10,7 +11,7 @@ export default class GameSound {
 
     play(time) {
         this.#audio.volume = getConfig().soundsVolume * this.volume;
-        this.#audio.currentTime = time ?? 0;
+        this.#audio.currentTime = this.startTime;
         this.#audio.play()
     }
 }
