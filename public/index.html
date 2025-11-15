@@ -42,7 +42,11 @@
                     <p class="title-name"></p>
                     <h1>Personal best:</h1>
                     <p id="selected-level-best" class="best"></p>
-                    <p id="selected-level-difficulty" class="difficulty">1x</p>
+                    <div class="difficulty-container">
+                        <button id="difficulty-change-arrow-left"><</button>
+                        <p id="selected-level-difficulty" class="difficulty">1x</p>
+                        <button id="difficulty-change-arrow-right">></button>
+                    </div>
                 </div>
                 <div>
                     <button id="play-btn">PLAY</button>
@@ -64,8 +68,8 @@
                 </div>
             </div>
         </div>
-        <!-- <canvas width="1600" height="1080" id="level-select-background"></canvas> -->
     </section>
+
     <section id="info-popup">
         <h1>Important!</h1>
         <p>The game is heavily inspired by Super Hexagon and Open Hexagon. Consider trying out these games too! They're avaliable on Steam.</p>
@@ -78,6 +82,7 @@
             </a>
         </div>
     </section>
+
     <section id="settings">
         <!-- <h1>Settings</h1> -->
         <div class="category">

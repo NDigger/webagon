@@ -237,27 +237,13 @@ canvas {
     }
 }
 
-#level-list, #selected-level {
+#level-list {
     overflow-y: auto;
-    scrollbar-width: 100px;    
 }
 
 #level-list::-webkit-scrollbar, #selected-level::-webkit-scrollbar {
     display: none;
 }
-
-/* #selected-level::-webkit-scrollbar {
-    display: block;
-    width: 8px;
-}
-
-#selected-level::-webkit-scrollbar-track {
-    background: var(--main-color);
-}
-
-#selected-level::-webkit-scrollbar-thumb {
-    background: linear-gradient(to right, var(--main-color) 30%, black 3%, black 100%);
-} */
 
 .container {
   scrollbar-width: thin;
@@ -383,8 +369,20 @@ canvas {
     overflow: hidden; 
 }
 
-#selected-level .difficulty {
+#selected-level .difficulty-container {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+#selected-level .difficulty-container * {
     font-size: 2rem;
+}
+
+#selected-level .difficulty-container button {
+    background-color: transparent;
+    text-shadow: inherit;
+    flex: 1;
 }
 
 #selected-level .tab {
@@ -519,6 +517,23 @@ canvas {
                1.5px 1.5px var(--background-tile-color), -1.5px -1.5px var(--background-tile-color), 1.5px -1.5px var(--background-tile-color), -1.5px 1.5px var(--background-tile-color);
     box-shadow: 0px 3px 0px black;
     animation: show-settings .3s ease-out forwards;
+}
+
+#settings::-webkit-scrollbar {
+    display: none;
+}
+
+#settings::-webkit-scrollbar {
+    display: block;
+    width: 4px;
+}
+
+#settings::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, .1);
+}
+
+#settings::-webkit-scrollbar-thumb {
+    background: var(--main-color);
 }
 
 @keyframes show-settings {

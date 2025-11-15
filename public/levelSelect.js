@@ -132,6 +132,9 @@ const shiftDifficulty = shift => {
     sounds.levelSelect.play();
 }
 
+document.getElementById('difficulty-change-arrow-left').addEventListener('click', () => shiftDifficulty(-1));
+document.getElementById('difficulty-change-arrow-right').addEventListener('click', () => shiftDifficulty(1));
+
 const animateSelectedLevelTop = () => {
     selectedLevelTop.classList.remove('animate');
     void selectedLevelTop.offsetWidth;
