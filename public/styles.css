@@ -226,12 +226,12 @@ canvas {
     padding-right: 200px;
     overflow-y: scroll;
     overflow-x: hidden;
-    animation: show-level-list .5s ease-out forwards;
+    animation: show-level-list .3s ease-out forwards;
 }
 
 @keyframes show-level-list {
     from {
-        gap: 50px;
+        gap: 25px;
     } to {
         gap: 5px;
     }
@@ -494,6 +494,10 @@ canvas {
 }
 
 #settings {
+    display: flex;
+    gap: 100px;
+    flex-direction: column;
+
     display: none;
     border-right: 3px solid var(--main-color);
     font-size: 2rem;
@@ -519,13 +523,13 @@ canvas {
 
 @keyframes show-settings {
     from {
+        gap: 100px;
         left: -40vw;
         opacity: 0;
-        transform: skewX(-50deg);
     } to {
+        gap: 0px;
         left: 0;
         opacity: 1;
-        transform: skewX(0deg);
     }
 }
 
@@ -548,7 +552,6 @@ canvas {
 #settings .category span:first-child {
     flex: 0.2;
 }
-
 
 #settings h1, #settings h2, #settings p {
     text-shadow: inherit;
@@ -576,6 +579,10 @@ canvas {
     box-shadow: 0px 3px 0px var(--background-tile-color);
     /* color: rgba(0, 0, 0, .8); */
     animation: selected-animation .1s forwards;
+}
+
+.setting.edited {
+    background: linear-gradient(to right, var(--main-color), transparent);
 }
 
 @keyframes selected-animation {

@@ -1,9 +1,10 @@
 import { getConfig, writeConfig } from "./storage";
 import { sounds } from "./script"; 
+import { defaultConfig } from "./storage";
 
 export const setSettingsVisible = v => {
     keydownEventsEnabled = v;
-    document.getElementById('settings').style.display = v ? 'block' : 'none'
+    document.getElementById('settings').style.display = v ? 'flex' : 'none'
 }
 let keydownEventsEnabled = false;
 
@@ -15,6 +16,13 @@ const settings = Array.from(document.querySelectorAll('.setting'));
 let selectedSettingIndex = 0;
 
 const getSelectedSetting = () => settings[selectedSettingIndex]
+
+const compareAndUpdateSetting = (setting, settingProp) => {
+    config[settingProp] === defaultConfig[settingProp]
+    ? setting.classList.remove('edited')
+    : setting.classList.add('edited');
+    console.log(config[settingProp], defaultConfig[settingProp])
+}
 
 settings.forEach((setting, i) => {
     setting.addEventListener('mouseover', e => {
@@ -33,6 +41,8 @@ settings.forEach((setting, i) => {
             if (e.code === 'ArrowLeft' || e.code === 'ArrowRight' || e.code === 'Enter') {
                 config[settingProp] = !config[settingProp];
                 settingValue.textContent = config[settingProp] ? 'Enabled' : 'Disabled'
+
+                compareAndUpdateSetting(setting, settingProp)
                 writeConfig(config)
             }
         })
@@ -52,6 +62,7 @@ settings.forEach((setting, i) => {
 
                 settingValue.textContent = config[settingProp].toString();
                 writeConfig(config)
+                compareAndUpdateSetting(setting, settingProp)
             }
         })
     }
@@ -83,6 +94,7 @@ document.addEventListener('keydown', e => {
 shiftSetting(0);
 
 const applyToSettingValue = (settingId, v) => document.getElementById(settingId).querySelector('.value').textContent = v;
+
 applyToSettingValue('config-player-tilt-mult', config.playerTiltMult)
 applyToSettingValue('config-swap-highlight-enabled', config.swapHighlightEnabled ? 'Enabled' : 'Disabled')
 applyToSettingValue('config-display-fps-enabled', config.displayFpsEnabled ? 'Enabled' : 'Disabled')
