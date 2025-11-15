@@ -9,10 +9,12 @@ class LevelPreviewContent {
     #updateId;
     #lastTime;
 
+    #rotationSpeed = 0;
+
     style = {
         mainColor: new Color(255, 255, 255),
         backgroundTileColors: [new Color(0, 0, 0)],
-        rotationSpeed: 0,
+        rotation: 0,
         sides: 6,
         backgroundDarkenUnevenChunkEnabled: true,
         backgroundSwapTime: 1,
@@ -27,6 +29,9 @@ class LevelPreviewContent {
     #update(time) {
         const frameTime = time - this.#lastTime;
         this.#lastTime = time;
+
+        this.style.rotation += this.#rotationSpeed * frameTime;
+
         this.onRender(frameTime/1000);
         this.onUpdate(frameTime/1000);
         this.#updateId = requestAnimationFrame(t => this.#update(t));
@@ -46,13 +51,17 @@ class LevelPreviewContent {
     }
     getBackgroundDarkenUnevenChunkEnabled() { return this.style.backgroundDarkenUnevenChunkEnabled }
     setBackgroundSwapTime(v) {
-        this.style.backgroundSwapTime = v/1000;
+        this.style.backgroundSwapTime = v*1000;
     }
     getBackgroundSwapTime() { return this.style.backgroundSwapTime }
-    setRotationSpeed(v) {
-        this.style.rotationSpeed = v;
+    setRotation(v) {
+        this.rotation = v;
     }
-    getRotationSpeed() { return this.style.rotationSpeed }
+    getRotation() { return this.rotation }
+    setRotationSpeed(v) {
+        this.#rotationSpeed = v;
+    }
+    getRotationSpeed() { return this.#rotationSpeed }
 
     setSides(v) { this.style.sides = v; }
     getSides() { return this.style.sides; }

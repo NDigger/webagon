@@ -31,7 +31,7 @@ const levelPreviewUpdate = ft =>{
     backgroundTime += ft;
     const style = levelPreview.getStyle()
     background.setTileColors(style.backgroundTileColors);
-    background.setRotation(backgroundTime * style.rotationSpeed * 1000);
+    background.setRotation(style.rotation);
     background.setDarkenUnevenChunkEnabled(style.backgroundDarkenUnevenChunkEnabled);
     background.setSwapTime(style.backgroundSwapTime);
     document.documentElement.style.setProperty('--main-color', style.mainColor.getRGBAStyle());

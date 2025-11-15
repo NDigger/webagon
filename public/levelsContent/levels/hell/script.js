@@ -20,7 +20,7 @@ let activeKeys = [];
 // onInit is called on the first frame when level is created.
 level.onInit = () => {
     level.setRadius(90);
-    level.setRotationSpeed(0.2);
+    level.setRotationSpeed(0);
     level.setSides(4);
     level.set3dLayersCount(5);
     level.set3dDistance(5);
