@@ -516,6 +516,8 @@ canvas {
     text-shadow: 1.5px 0 var(--background-tile-color), -1.5px 0 var(--background-tile-color), 0 1.5px var(--background-tile-color), 0 1.5px var(--background-tile-color),
                1.5px 1.5px var(--background-tile-color), -1.5px -1.5px var(--background-tile-color), 1.5px -1.5px var(--background-tile-color), -1.5px 1.5px var(--background-tile-color);
     box-shadow: 0px 3px 0px black;
+
+    --left-start-animation: -40vw;
     animation: show-settings .3s ease-out forwards;
 }
 
@@ -539,7 +541,7 @@ canvas {
 @keyframes show-settings {
     from {
         gap: 100px;
-        left: -40vw;
+        left: var(--left-start-animation);
         opacity: 0;
     } to {
         gap: 0px;
@@ -586,13 +588,22 @@ canvas {
 }
 
 .setting.selected {
-    border: 2px solid var(--main-color);
+    position: relative;
+    border: 5px solid var(--main-color);
     filter: hue-rotate(180deg);
     background: rgba(0, 0, 0, .1);
     backdrop-filter: hue-rotate(180deg);
     box-shadow: 0px 3px 0px var(--background-tile-color);
     /* color: rgba(0, 0, 0, .8); */
-    animation: selected-animation .1s forwards;
+    animation: selected-animation .3s forwards;
+}
+
+@keyframes selected-animation {
+    from {
+        left: 10px;
+    } to {
+        left: 0px;
+    }
 }
 
 .setting.edited {
@@ -605,14 +616,6 @@ canvas {
     inset: 0;
     background: linear-gradient(to right, var(--main-color), transparent);
     opacity: .3;
-}
-
-@keyframes selected-animation {
-    from {
-        border: 0px dashed var(--main-color);
-    } to {
-        border: 5px solid var(--main-color);
-    }
 }
 
 #settings p {
@@ -707,6 +710,12 @@ canvas {
     .level.selected-animation {
         filter: hue-rotate(180deg);
         background-color: rgba(255, 255, 255, .2);
+    }
+
+    #settings {
+        width: 100vw;
+        border: none;
+        --left-start-animation: 0px;
     }
 
     .screen-only {
