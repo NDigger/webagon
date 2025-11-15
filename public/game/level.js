@@ -42,6 +42,7 @@ export default class Level extends Game {
     onIncrement = () => {};
     onPreIncrement = () => {};
 
+    #fontColor = undefined;
     #config = getConfig();
 
     #initialized = false;
@@ -85,7 +86,13 @@ export default class Level extends Game {
     constructor(app, levelData, props) {
         super(app)
         this.#props = props
-        this.setBackgroundTileColors([Color.BLACK()]);
+
+        this.setMainColor(new Color(40, 40, 0))
+        this.setBackgroundTileColors([
+            new Color(245, 245, 245),
+            new Color(235, 235, 235),
+        ])
+        
         this.#levelData = levelData
     }
     
@@ -298,18 +305,23 @@ export default class Level extends Game {
         super.setBackgroundTileColors(arr);
         document.documentElement.style.setProperty('--background-tile-color', arr[0].getRGBAStyle());
     }
-    setMainColor({r, g, b, a}) {
-        const color = new Color(r, g, b, a);
-        super.setMainColor(color)
-        document.documentElement.style.setProperty('--main-color', color.getRGBAStyle());
-        // const gameUi = document.getElementById('game-ui')
-        // gameUi.style.color = this.getMainColor().getRGBStyle();
+    #updateDocumentMainColor() {
+        document.documentElement.style.setProperty('--main-color', this.#fontColor ? this.#fontColor.getRGBAStyle() : this.getMainColor().getRGBAStyle());
     }
-    // setBackgroundTileColors(arr) {
-    //     super.setBackgroundTileColors(arr)
-    //     const gameUi = document.getElementById('game-ui')
-    //     gameUi.style.color = this.getMainColor().getRGBStyle();
-    // }
+    setFontColor({r, g, b, a}) {
+        const v = new Color(r, g, b, a)
+        this.#fontColor = v;
+        this.#updateDocumentMainColor();
+    }
+    clearFontColor() {
+        this.#fontColor = undefined;
+        this.#updateDocumentMainColor();
+    }
+    setMainColor({r, g, b, a}) {
+        const v = new Color(r, g, b, a);
+        super.setMainColor(v);
+        this.#updateDocumentMainColor();
+    }
     setSwapEnabled(v) {
         super.setSwapEnabled(v);
         document.getElementById('swap-enabled-msg').style.display = v ? 'block' : 'none';

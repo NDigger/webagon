@@ -24,17 +24,15 @@ levelLoader.onLeave = () => loadMenu();
 // Menu background
 const background = new Background(app);
 background.setLayer(-999);
-let backgroundTime;
 
 const levelPreview = new LevelPreview()
 const levelPreviewUpdate = ft =>{
-    backgroundTime += ft;
     const style = levelPreview.getStyle()
     background.setTileColors(style.backgroundTileColors);
     background.setRotation(style.rotation);
     background.setDarkenUnevenChunkEnabled(style.backgroundDarkenUnevenChunkEnabled);
     background.setSwapTime(style.backgroundSwapTime);
-    document.documentElement.style.setProperty('--main-color', style.mainColor.getRGBAStyle());
+    document.documentElement.style.setProperty('--main-color', style.fontColor ? style.fontColor.getRGBAStyle() : style.mainColor.getRGBAStyle());
     background.setSides(style.sides);
     background.draw();
 }
@@ -56,7 +54,6 @@ const loadMenu = () => {
     document.addEventListener('keydown', keyDownMenuListener)
     const path = getSelectedLevelJSON()?.scriptPath ?? undefined
     if (path != undefined) levelPreview.load(path)
-    backgroundTime = 0;
 }
 
 const levelJsons = []
@@ -219,7 +216,6 @@ const keyDownMenuListener = e => {
 
     if (e.code === 'ArrowUp' || e.code === 'KeyW' || e.code === 'ArrowDown' || e.code === 'KeyS') {
         sounds.levelSelect.play()
-        backgroundTime = 0;
     }
 }
 

@@ -18,6 +18,7 @@ class LevelPreviewContent {
         sides: 6,
         backgroundDarkenUnevenChunkEnabled: true,
         backgroundSwapTime: 1,
+        fontColor: undefined,
     }
 
     init() {
@@ -62,6 +63,14 @@ class LevelPreviewContent {
         this.#rotationSpeed = v;
     }
     getRotationSpeed() { return this.#rotationSpeed }
+    setFontColor({r, g, b, a}) {
+        const v = new Color(r, g, b, a);
+        this.style.fontColor = v
+    }
+    getFontColor() { return this.style.fontColor }
+    clearFontColor() {
+        this.style.fontColor = undefined
+    }
 
     setSides(v) { this.style.sides = v; }
     getSides() { return this.style.sides; }

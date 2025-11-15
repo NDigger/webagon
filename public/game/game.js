@@ -128,12 +128,6 @@ export default class Game extends GameObject {
         this.#polygon = new Polygon(app);
         this.#polygon.setLayer(this.#getPolygonLayer());
         this.#polygon.set3dLayer(this.#get3dLayer());
-        
-        this.setMainColor(new Color(40, 40, 0))
-        this.setBackgroundTileColors([
-            new Color(245, 245, 245),
-            new Color(235, 235, 235),
-        ])
 
         this.addEventListeners();
 

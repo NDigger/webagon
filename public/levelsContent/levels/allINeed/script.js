@@ -51,6 +51,9 @@ level.onUpdate = ft => {
     
     const s = Utils.pingPong(1-Utils.easeOut(Utils.fract(time * 1.05))) * .9 + 1;
     level.setWallScale(new Vector2(s, s));
+
+    const value = Utils.pingPong(level.getTime()) * 100 + 50
+    level.setFontColor(new Color(value, value, value));
 }
 
 // onRender is called every frame. It works when player is died.
