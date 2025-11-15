@@ -21,7 +21,6 @@ const compareAndUpdateSetting = (setting, settingProp) => {
     config[settingProp] === defaultConfig[settingProp]
     ? setting.classList.remove('edited')
     : setting.classList.add('edited');
-    console.log(config[settingProp], defaultConfig[settingProp])
 }
 
 settings.forEach((setting, i) => {
@@ -81,6 +80,7 @@ const shiftSetting = shift => {
     selectedSettingIndex = (shift + selectedSettingIndex + settings.length) % settings.length;
     getSelectedSetting().classList.add('selected');
 }
+shiftSetting(0); // highlight selected setting
 
 document.addEventListener('keydown', e => {
     if (!keydownEventsEnabled) return
@@ -98,7 +98,3 @@ document.addEventListener('keydown', e => {
         e.code === 'ArrowRight'
     ) sounds.levelSelect.play()
 })
-
-shiftSetting(0);
-
-const applyToSettingValue = (settingId, v) => document.getElementById(settingId).querySelector('.value').textContent = v;

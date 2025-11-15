@@ -24,6 +24,8 @@ export const defaultConfig = {
     displayUiEnabled: true,
     musicVolume: 0.8,
     soundsVolume: 0.8,
+    flashOnDeathEnabled: true,
+    funModeEnabled: false,
 }
 
 export const getConfig = () => {

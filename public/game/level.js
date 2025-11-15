@@ -7,6 +7,31 @@ import { getConfig } from "../storage";
 
 import { getLevelStats, writeLevelStats } from "../storage";
 
+const newPersonalBestMessage = document.getElementById('game-new-personal-best-msg');
+const newPBMessages = [
+    'not impressive, at all.',
+    'significant improvement!!!',
+    'jokes on you.',
+    'what could be worse than this...',
+    'breathe in, breathe out',
+    'new personal damage!',
+    'sense overload',
+    'look at that!',
+    'how is it possible?',
+    'infinity achieved!',
+    'w',
+    'another death, another best...',
+    'hands are shaking!',
+    'boss.',
+    'fantastic score! fascinating!',
+    'breaking boundaries!',
+    'lmao',
+    'that best looks cute.',
+    'bliss that bee!'
+];
+
+const getRandomNewPBMessage = () => newPBMessages[newPBMessages.length-1]//newPBMessages[Math.floor(Math.random() * newPBMessages.length)]
+
 export default class Level extends Game { 
     onInit = () => {};
     onUpdate = () => {};
@@ -174,7 +199,7 @@ export default class Level extends Game {
 
         if (this.#isNewBest() && !this.#isNewBestSaved) this.#saveBest();
 
-        document.getElementById('game-new-personal-best-msg').style.display = 'none'
+        newPersonalBestMessage.style.display = 'none'
     }
 
     #isNewBest() {
@@ -246,13 +271,19 @@ export default class Level extends Game {
             this.setShakePower(v);
             if (!this.isDestroyed()) super.draw()
         }).apply(30).run(0, 0.35);
+
         new Lerp(v => this.setRotation(v)).apply(this.getRotation()).run(this.getRotation() + this.getRotationSpeed() * 400, 1.5, Lerp.Easing.EASE_OUT);
-        const flashLerp = new Lerp(v => document.getElementById('override-flash-effect').style.backgroundColor = v.getRGBAStyle());
-        flashLerp.apply(new Color(255, 255, 255, .6))
-        flashLerp.run(new Color(255, 255, 255, 0), 1)
+
+        if (this.#config.flashOnDeathEnabled) {
+            const flashLerp = new Lerp(v => document.getElementById('override-flash-effect').style.backgroundColor = v.getRGBAStyle());
+            flashLerp.apply(new Color(255, 255, 255, .6))
+            flashLerp.run(new Color(255, 255, 255, 0), 1)
+        }
         
         if (this.#isNewBest()) {
-            document.getElementById('game-new-personal-best-msg').style.display = 'block';
+            console.log(getRandomNewPBMessage() )
+            newPersonalBestMessage.style.display = 'block';
+            newPersonalBestMessage.textContent = this.#config.funModeEnabled ? getRandomNewPBMessage() : 'new personal best'
             this.#saveBest();
         }
 

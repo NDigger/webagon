@@ -512,7 +512,7 @@ canvas {
     padding-left: 0px;
     height: 100vh;
     min-width: 40vw;
-    background: linear-gradient(to right, black, var(--background-tile-color));
+    background: var(--background-tile-color);
     overflow-y: auto;
     /* transform: skewX(-1deg); */
     text-shadow: 1.5px 0 var(--background-tile-color), -1.5px 0 var(--background-tile-color), 0 1.5px var(--background-tile-color), 0 1.5px var(--background-tile-color),
@@ -571,7 +571,6 @@ canvas {
 }
 
 .setting.selected {
-    position: relative;
     border: 2px solid var(--main-color);
     filter: hue-rotate(180deg);
     background: rgba(0, 0, 0, .1);
@@ -582,7 +581,15 @@ canvas {
 }
 
 .setting.edited {
+    position: relative;
+}
+
+.setting.edited::before {
+    content: '';
+    position: absolute;
+    inset: 0;
     background: linear-gradient(to right, var(--main-color), transparent);
+    opacity: .3;
 }
 
 @keyframes selected-animation {
