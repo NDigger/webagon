@@ -3,6 +3,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Stalinist+One&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Tektur:wght@400..900&display=swap');
 
+@import url('./styles/settings.css');
+@import url('./styles/game.css');
+@import url('./styles/selectedLevel.css');
+
 @font-face {
     font-family: "uasquare";
     src: url("./fonts/UASQUARE.TTF") format("truetype");
@@ -12,6 +16,12 @@
     font-family: "metro";
     src: url("./fonts/Metro.otf") format("truetype");
 }
+
+@font-face {
+    font-family: "hexagons";
+    src: url("./fonts/HEXAGON_.TTF") format("truetype");
+}
+
 
 *,
 *::before,
@@ -23,6 +33,7 @@
 
 * {
     user-select: none;
+
     font-family: "uasquare", sans-serif; /*"Tektur"*/
     font-optical-sizing: auto;
     font-weight: 800;
@@ -36,21 +47,11 @@
     --background-tile-color: rgba(0, 0, 0, 255);
 }
 
-button {
-    border: none;
-}
+button { border: none; }
+button:hover { cursor: pointer; }
+button:focus { outline: none; }
 
-button:hover {
-    cursor: pointer;
-}
-
-button:focus {
-    outline: none;
-}
-
-.screen-only {
-    visibility: hidden;
-}
+.screen-only { visibility: hidden; }
 
 .override {
     position: absolute;
@@ -59,123 +60,11 @@ button:focus {
     pointer-events: none;
 }
 
-#game {
-    z-index: -2;
-}
-
-#game-content {
-    display: none;
-}
-
-#game-content * {
-    font-family: "metro", sans-serif; /*"Stalinist One"*/
-    font-weight: 400;
-    font-style: normal;
-}
-
-#game-ui {
-    width: 100vw;
-    height: 100vh;
-    text-align: left;
-    position: absolute; 
-    font-size: 1.5rem;
-    text-shadow: 2.5px 0 var(--background-tile-color), -2.5px 0 var(--background-tile-color), 0 2.5px var(--background-tile-color), 0 2.5px var(--background-tile-color),
-               2.5px 2.5px var(--background-tile-color), -2.5px -2.5px var(--background-tile-color), 2.5px -2.5px var(--background-tile-color), -2.5px 2.5px var(--background-tile-color)
-               /* , 0px 2px 10px rgba(0, 0, 0, .5); */
-    /* display: none; */
-}
-
-#game-ui .top-left {
-    z-index: 9997; 
-    position: absolute;
-    left: 10px; 
-    top: -10px;
-    width: calc(100vw - 10px);
-    height: calc(100vh + 10px);
-}
-
-#game-ui .top-left * {
-    color: var(--main-color);
-    transform: scaleX(.6);
-    width: 150%;
-    transform-origin: left;
-    
-    flex-direction: column;
-    margin-bottom: -10px;
-}
-
-#game-controls {
-    position: absolute;
-    display: flex;
-    z-index: 9998;
-    width: 100vw;
-    height: 100vh;
-    inset: 0;
-    opacity: 0;
-}
-
-#game-controls * {
-    flex: 1
-}
-
-#game-controls *:hover {
-    cursor: unset;
-}
-
-#game-ui .top-right {
-    z-index: 9999;
-    position: absolute;
-    display: none;
-    right: 5px;
-    top: 3px;
-}
-
-#game-ui .top-right button {
-    color: var(--main-color);
-    font-weight: 900;
-    background-color: transparent;
-    right: 10px;
-    top: 3px;
-    width: 80px;
-    height: 80px;
-    font-size: 4rem;
-    text-shadow: 1.5px 0 var(--background-tile-color), -1.5px 0 var(--background-tile-color), 0 1.5px var(--background-tile-color), 0 1.5px var(--background-tile-color),
-               1.5px 1.5px var(--background-tile-color), -1.5px -1.5px var(--background-tile-color), 1.5px -1.5px var(--background-tile-color), -1.5px 1.5px var(--background-tile-color)
-               /* , 0px 2px 10px rgba(0, 0, 0, .5); */
-}
-
-#timer {
-    margin-top: 10px;
-    font-size: 5rem; 
-}
-
-#game-new-personal-best-msg {
-    color: var(--main-color);
-    display: none;
-    position: absolute;
-    bottom: 15%;
-    left: 50%;
-    width: 130vw;
-    text-align: center;
-    transform: translateX(-50%) scaleX(.6);
-    font-size: 4rem;
-    animation: personal-best-anim .5s infinite ease-out alternate;
-}
-
-@keyframes personal-best-anim {
-    from {
-        transform: translateX(-50%) scaleX(.6);
-    }
-    to {
-        transform: translateX(-50%) scaleX(.75) scaleY(1.2);
-    }
-}
-
 html {
     overflow: hidden;
 }
 
-body {
+body, canvas {
     max-width: 100vw;
     max-height: 100vh;
     min-width: 100vw;
@@ -184,13 +73,8 @@ body {
     height: 100vh;
 }
 
+/* Game canvas */
 canvas {
-    max-width: 100vw;
-    max-height: 100vh;
-    min-width: 100vw;
-    min-height: 100vh;
-    width: 100vw;
-    height: 100vh;
     position: absolute;
     inset: 0;
 }
@@ -205,11 +89,6 @@ canvas {
 
 #level-select > * {
     position: relative;
-}
-
-@font-face {
-    font-family: "hexagons";
-    src: url("./fonts/HEXAGON_.TTF") format("truetype");
 }
 
 #level-list {
@@ -237,18 +116,8 @@ canvas {
     }
 }
 
-#level-list {
-    overflow-y: auto;
-}
-
-#level-list::-webkit-scrollbar, #selected-level::-webkit-scrollbar {
-    display: none;
-}
-
-.container {
-  scrollbar-width: thin;
-  scrollbar-color: linear-gradient(to right, var(--main-color) 30%, black 3%, black 100%) var(--main-color); /* thumb, track */
-}
+#level-list { overflow-y: auto; }
+#level-list::-webkit-scrollbar { display: none; }
 
 .level {
     position: relative;
@@ -262,6 +131,7 @@ canvas {
     font-size: 1rem;
     left: 0;
     transition: left .15s ease;
+    backdrop-filter: hue-rotate(180deg) brightness(.9);
 }
 
 .level.selected-animation {
@@ -279,10 +149,6 @@ canvas {
         font-size: 1.5rem;
         transform: translateX(100px);
     }
-}
-
-.level, #selected-level {
-    backdrop-filter: hue-rotate(180deg) brightness(.9);
 }
 
 .level:hover {
@@ -306,136 +172,6 @@ canvas {
 .level .author {
     font-size: 1em;
     opacity: .5;    
-}
-
-#selected-level {
-    display: flex;
-    justify-content: space-between;
-    align-items: start;
-    flex-direction: column;
-    position: relative;
-    width: 600px;
-    height: 100%;
-    border-left: 2px solid var(--main-color);
-
-    border: none;
-    backdrop-filter: none;
-}
-
-@media (min-width: 1068px) {
-    #selected-level {
-        right: 10px !important;
-        bottom: 0 !important;
-        top: 0 !important;
-    }
-}
-
-#selected-level p, #selected-level h1 {
-    padding: 0px 10px;
-}
-
-#selected-level * {
-    color: var(--main-color);
-}
-
-#selected-level > * {
-    width: 100%;
-}
-
-#selected-level.show {
-    animation: selected-level-tab-anim .2s ease-out forwards
-}
-
-#selected-level.hide {
-    animation: selected-level-tab-anim .2s ease-in forwards reverse
-}
-
-@keyframes selected-level-tab-anim {
-    from {
-        top: -100vh;
-    } to {
-        top: 0;
-    }
-}
-
-#selected-level .title-name {
-    font-size: 5rem;
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 20px;
-    text-decoration: underline;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden; 
-}
-
-#selected-level .difficulty-container {
-    display: flex;
-    width: 100%;
-    justify-content: center;
-}
-
-#selected-level .difficulty-container * {
-    font-size: 2rem;
-}
-
-#selected-level .difficulty-container button {
-    background-color: transparent;
-    text-shadow: inherit;
-    flex: 1;
-}
-
-#selected-level .tab {
-    border: 2px solid var(--main-color);
-    backdrop-filter: hue-rotate(180deg) brightness(.9);
-    padding: 10px 0;
-    margin: 10px 0;
-}
-
-#selected-level .tab .title {
-    margin-bottom: 10px;
-}
-
-#selected-level .top {
-    position: relative;
-    text-align: center;
-    text-shadow: 1px 1px 0px black,
-    2px 2px 0px black,
-    3px 3px 0px black,
-    4px 4px 0px black,
-    5px 5px 0px black;
-    transform: skewY(-2deg);
-    padding: 0 0px;
-    flex: 1;
-}
-
-#selected-level .top.animate {
-    animation: selected-level-top-anim .15s ease-out;
-}
-
-@keyframes selected-level-top-anim {
-    from {
-        width: 97%;
-        scale: 1.04;
-    }
-    to {
-        width: 100%;
-        scale: 1;
-    }
-}
-
-#selected-level .centered {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    height: 100%;
-}
-
-#selected-level .best {
-    font-size: 8rem;
-    text-align: center;
-    width: 100%;
 }
 
 #play-btn {
@@ -491,153 +227,6 @@ canvas {
     margin-top: 20px;
 }
 
-#settings {
-    display: flex;
-    gap: 100px;
-    flex-direction: column;
-
-    display: none;
-    border-right: 3px solid var(--main-color);
-    font-size: 2rem;
-    position: absolute;
-    top: 0;
-    left: 0px;
-    /* background-color: rgba(1, 1, 1, 0.9); */
-    opacity: .9;
-    z-index: 99;
-    color: var(--main-color);
-    /* padding: 20px; */
-    padding-left: 0px;
-    height: 100vh;
-    min-width: 40vw;
-    background: var(--background-tile-color);
-    overflow-y: auto;
-    /* transform: skewX(-1deg); */
-    text-shadow: 1.5px 0 var(--background-tile-color), -1.5px 0 var(--background-tile-color), 0 1.5px var(--background-tile-color), 0 1.5px var(--background-tile-color),
-               1.5px 1.5px var(--background-tile-color), -1.5px -1.5px var(--background-tile-color), 1.5px -1.5px var(--background-tile-color), -1.5px 1.5px var(--background-tile-color);
-    box-shadow: 0px 3px 0px black;
-
-    --left-start-animation: -40vw;
-    animation: show-settings .3s ease-out forwards;
-}
-
-#settings::-webkit-scrollbar {
-    display: none;
-}
-
-#settings::-webkit-scrollbar {
-    display: block;
-    width: 4px;
-}
-
-#settings::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, .1);
-}
-
-#settings::-webkit-scrollbar-thumb {
-    background: var(--main-color);
-}
-
-@keyframes show-settings {
-    from {
-        gap: 100px;
-        left: var(--left-start-animation);
-        opacity: 0;
-    } to {
-        gap: 0px;
-        left: 0;
-        opacity: 1;
-    }
-}
-
-#settings .category {
-    padding: 0 10px;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    gap: 20px;
-} 
-
-#settings .category span {
-    flex: 1;
-    display: block;
-    background-color: var(--main-color);
-    margin-top: 20px;
-    height: 3px;
-}
-
-#settings .category span:first-child {
-    flex: 0.2;
-}
-
-#settings h1, #settings h2, #settings p {
-    text-shadow: inherit;
-}
-
-#settings h1 {
-    margin-bottom: 40px;
-    padding-bottom: 10px;
-    border-bottom: 3px solid var(--main-color);
-}
-
-#settings h2 {
-    opacity: .8;
-    text-align: center;
-    margin: 20px 0;
-    padding-bottom: 5px;
-}
-
-.setting:hover {
-    border: 2px solid var(--main-color)
-}
-
-.setting.selected {
-    position: relative;
-    border: 5px solid var(--main-color);
-    filter: hue-rotate(180deg);
-    background: rgba(0, 0, 0, .1);
-    backdrop-filter: hue-rotate(180deg);
-    box-shadow: 0px 3px 0px var(--background-tile-color);
-    /* color: rgba(0, 0, 0, .8); */
-    animation: selected-animation .3s forwards;
-}
-
-@keyframes selected-animation {
-    from {
-        left: 10px;
-    } to {
-        left: 0px;
-    }
-}
-
-.setting.edited {
-    position: relative;
-}
-
-.setting.edited::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(to right, var(--main-color), transparent);
-    opacity: .3;
-}
-
-#settings p {
-    margin: 10px;
-    padding: 10px;
-}
-
-#settings p {
-    font-size: .9em;
-    display: flex;
-}
-
-#settings p .value {
-    font-size: inherit;
-    text-align: right;
-    flex: 1;
-}
-
 @media (max-width: 1068px) {
     html {
         font-size: .8rem;
@@ -649,20 +238,6 @@ canvas {
 
         width: 100%;
         padding: 10px;
-    }
-
-    #selected-level {
-        backdrop-filter: blur(10px);
-        background-color: rgba(0, 0, 0, 0);
-        width: 100vw;
-        height: 100vh;
-        right: 0;
-        border: 2px solid var(--main-color)
-    }
-
-    #selected-level .tab {
-        background-color: unset;
-        backdrop-filter: unset
     }
 
     #play-btn {
@@ -682,44 +257,10 @@ canvas {
         padding: 10px;  
     }
 
-    #selected-level {
-        background: radial-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, 1));
-        flex-direction: row-reverse;
-        align-items: center;
-    }
-
-    #selected-level .top {
-        border-left: 3px solid var(--main-color);
-        transform: unset;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        height: 100%;
-        min-width: 45vw;
-    }
-
-    #selected-level .level-info {
-        display: flex;
-        flex-direction: column;
-        height: 100%;
-        font-size: 1.5rem;
-    }
-
-    #selected-level .level-info * {
-        margin: 0px;
-        flex: 1;
-    }
-
     .level.selected-animation, .level.unselected-animation { animation: unset }
     .level.selected-animation {
         filter: hue-rotate(180deg);
         background-color: rgba(255, 255, 255, .2);
-    }
-
-    #settings {
-        width: 100vw;
-        border: none;
-        --left-start-animation: 0px;
     }
 
     .screen-only {

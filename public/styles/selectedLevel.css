@@ -1,0 +1,172 @@
+#selected-level {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    flex-direction: column;
+    position: relative;
+    width: 600px;
+    height: 100%;
+    border-left: 2px solid var(--main-color);
+    overflow: hidden;
+
+    border: none;
+    backdrop-filter: none;
+}
+
+@media (min-width: 1068px) {
+    #selected-level {
+        right: 10px !important;
+        bottom: 0 !important;
+        top: 0 !important;
+    }
+}
+
+#selected-level p, #selected-level h1 {
+    padding: 0px 10px;
+}
+
+#selected-level * {
+    color: var(--main-color);
+}
+
+#selected-level > * {
+    width: 100%;
+}
+
+#selected-level.show {
+    animation: selected-level-tab-anim .2s ease-out forwards
+}
+
+#selected-level.hide {
+    animation: selected-level-tab-anim .2s ease-in forwards reverse
+}
+
+@keyframes selected-level-tab-anim {
+    from {
+        top: -100vh;
+    } to {
+        top: 0;
+    }
+}
+
+#selected-level .title-name {
+    font-size: 5rem;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    text-decoration: underline;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden; 
+}
+
+#selected-level .difficulty-container {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+}
+
+#selected-level .difficulty-container * {
+    font-size: 2rem;
+}
+
+#selected-level .difficulty-container button {
+    background-color: transparent;
+    text-shadow: inherit;
+    flex: 1;
+}
+
+#selected-level .tab {
+    border: 2px solid var(--main-color);
+    backdrop-filter: hue-rotate(180deg) brightness(.9);
+    padding: 10px 0;
+    margin: 10px 0;
+}
+
+#selected-level .tab .title {
+    margin-bottom: 10px;
+}
+
+#selected-level .top {
+    position: relative;
+    text-align: center;
+    text-shadow: 1px 1px 0px black,
+    2px 2px 0px black,
+    3px 3px 0px black,
+    4px 4px 0px black,
+    5px 5px 0px black;
+    transform: skewY(-2deg);
+    padding: 0 0px;
+    flex: 1;
+}
+
+#selected-level .top.animate {
+    animation: selected-level-top-anim .15s ease-out;
+}
+
+@keyframes selected-level-top-anim {
+    from {
+        width: 97%;
+        scale: 1.04;
+    }
+    to {
+        width: 100%;
+        scale: 1;
+    }
+}
+
+#selected-level .centered {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100%;
+}
+
+#selected-level .best {
+    font-size: 8rem;
+    text-align: center;
+    width: 100%;
+}
+
+@media (max-width: 1068px) {
+    #selected-level .tab {
+        background-color: unset;
+        backdrop-filter: unset
+    }
+
+    #selected-level {
+        backdrop-filter: blur(10px);
+        background-color: rgba(0, 0, 0, 0);
+        width: 100vw;
+        height: 100vh;
+        right: 0;
+        border: 2px solid var(--main-color);
+
+        background: radial-gradient(rgba(0, 0, 0, .5), rgba(0, 0, 0, 1));
+        flex-direction: row-reverse;
+        align-items: center;
+    }
+
+    #selected-level .top {
+        border-left: 3px solid var(--main-color);
+        transform: unset;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+        min-width: 45vw;
+    }
+
+    #selected-level .level-info {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        font-size: 1.5rem;
+    }
+
+    #selected-level .level-info * {
+        margin: 0px;
+        flex: 1;
+    }
+}

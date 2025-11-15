@@ -1,0 +1,111 @@
+#game {
+    z-index: -2;
+}
+
+#game-content {
+    display: none;
+}
+
+#game-content * {
+    font-family: "metro", sans-serif; /*"Stalinist One"*/
+    font-weight: 400;
+    font-style: normal;
+}
+
+#game-ui {
+    width: 100vw;
+    height: 100vh;
+    text-align: left;
+    position: absolute; 
+    font-size: 1.5rem;
+    text-shadow: 2.5px 0 var(--background-tile-color), -2.5px 0 var(--background-tile-color), 0 2.5px var(--background-tile-color), 0 2.5px var(--background-tile-color),
+               2.5px 2.5px var(--background-tile-color), -2.5px -2.5px var(--background-tile-color), 2.5px -2.5px var(--background-tile-color), -2.5px 2.5px var(--background-tile-color)
+               /* , 0px 2px 10px rgba(0, 0, 0, .5); */
+    /* display: none; */
+}
+
+#game-ui .top-left {
+    z-index: 9997; 
+    position: absolute;
+    left: 10px; 
+    top: -10px;
+    width: calc(100vw - 10px);
+    height: calc(100vh + 10px);
+}
+
+#game-ui .top-left * {
+    color: var(--main-color);
+    transform: scaleX(.6);
+    width: 150%;
+    transform-origin: left;
+    
+    flex-direction: column;
+    margin-bottom: -10px;
+}
+
+#game-controls {
+    position: absolute;
+    display: flex;
+    z-index: 9998;
+    width: 100vw;
+    height: 100vh;
+    inset: 0;
+    opacity: 0;
+}
+
+#game-controls * {
+    flex: 1
+}
+
+#game-controls *:hover {
+    cursor: unset;
+}
+
+#game-ui .top-right {
+    z-index: 9999;
+    position: absolute;
+    display: none;
+    right: 5px;
+    top: 3px;
+}
+
+#game-ui .top-right button {
+    color: var(--main-color);
+    font-weight: 900;
+    background-color: transparent;
+    right: 10px;
+    top: 3px;
+    width: 80px;
+    height: 80px;
+    font-size: 4rem;
+    text-shadow: 1.5px 0 var(--background-tile-color), -1.5px 0 var(--background-tile-color), 0 1.5px var(--background-tile-color), 0 1.5px var(--background-tile-color),
+               1.5px 1.5px var(--background-tile-color), -1.5px -1.5px var(--background-tile-color), 1.5px -1.5px var(--background-tile-color), -1.5px 1.5px var(--background-tile-color)
+               /* , 0px 2px 10px rgba(0, 0, 0, .5); */
+}
+
+#timer {
+    margin-top: 10px;
+    font-size: 5rem; 
+}
+
+#game-new-personal-best-msg {
+    color: var(--main-color);
+    display: none;
+    position: absolute;
+    bottom: 15%;
+    left: 50%;
+    width: 130vw;
+    text-align: center;
+    transform: translateX(-50%) scaleX(.6);
+    font-size: 4rem;
+    animation: personal-best-anim .5s infinite ease-out alternate;
+}
+
+@keyframes personal-best-anim {
+    from {
+        transform: translateX(-50%) scaleX(.6);
+    }
+    to {
+        transform: translateX(-50%) scaleX(.75) scaleY(1.2);
+    }
+}
