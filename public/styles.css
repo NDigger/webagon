@@ -5,6 +5,7 @@
 
 @import url('./styles/settings.css');
 @import url('./styles/game.css');
+@import url('./styles/levels.css');
 @import url('./styles/selectedLevel.css');
 
 @font-face {
@@ -79,101 +80,6 @@ canvas {
     inset: 0;
 }
 
-#level-select {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 100vw;
-    height: 100vh;
-}
-
-#level-select > * {
-    position: relative;
-}
-
-#level-list {
-    position: relative;
-    left: -150px;
-    padding: 10px;
-    max-height: 100%;
-    width: 730px;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    gap: 5px;
-    /* for proper overflow hide */
-    padding-right: 200px;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    animation: show-level-list .3s ease-out forwards;
-}
-
-@keyframes show-level-list {
-    from {
-        gap: 25px;
-    } to {
-        gap: 5px;
-    }
-}
-
-#level-list { overflow-y: auto; }
-#level-list::-webkit-scrollbar { display: none; }
-
-.level {
-    position: relative;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    width: calc(100% + 50px);
-    border: 3px solid var(--main-color);
-    padding: 10px 0;
-    padding-right: 20px;
-    font-size: 1rem;
-    left: 0;
-    transition: left .15s ease;
-    backdrop-filter: hue-rotate(180deg) brightness(.9);
-}
-
-.level.selected-animation {
-    animation: level-tab-anim .2s ease-out forwards;
-}
-.level.unselected-animation {
-    animation: level-tab-anim .2s ease-in forwards reverse;
-}
-
-@keyframes level-tab-anim {
-    from {
-        height: unset;
-        transform: none
-    } to {
-        font-size: 1.5rem;
-        transform: translateX(100px);
-    }
-}
-
-.level:hover {
-    filter: hue-rotate(180deg) brightness(2);
-    left: 30px !important;
-}
-
-.level * {
-    text-align: right;
-    width: 100%;
-    color: var(--main-color);
-}
-
-.level .name {
-    font-size: 2em;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden; 
-}
-
-.level .author {
-    font-size: 1em;
-    opacity: .5;    
-}
-
 #play-btn {
     display: none;
     z-index: 1;
@@ -232,35 +138,8 @@ canvas {
         font-size: .8rem;
     }
 
-    .level {
-        position: unset;
-        transform: unset;
-
-        width: 100%;
-        padding: 10px;
-    }
-
     #play-btn {
         display: block;
-    }
-
-    #level-list {
-        position: absolute;
-        left: 0;
-        top: 0;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-        gap: 5px;
-        width: 100vw;
-        height: 100vh;
-        padding: 10px;  
-    }
-
-    .level.selected-animation, .level.unselected-animation { animation: unset }
-    .level.selected-animation {
-        filter: hue-rotate(180deg);
-        background-color: rgba(255, 255, 255, .2);
     }
 
     .screen-only {
