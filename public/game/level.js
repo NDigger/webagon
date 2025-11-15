@@ -92,7 +92,7 @@ export default class Level extends Game {
             new Color(245, 245, 245),
             new Color(235, 235, 235),
         ])
-        
+
         this.#levelData = levelData
     }
     
@@ -200,8 +200,6 @@ export default class Level extends Game {
         super.destroy();
         cancelAnimationFrame(this.#updateId)
         cancelAnimationFrame(this.#renderId)
-        this.clearIntervals();
-        this.clearEvents();
         document.removeEventListener('visibilitychange', this.#handleVisibilityChange);
         if (this.#audio) this.#audio.pause()
 
@@ -265,6 +263,9 @@ export default class Level extends Game {
     kill() {
         super.kill()
         this.#games.forEach(game => game.kill())
+        
+        this.clearIntervals();
+        this.clearEvents();
         
         document.querySelector('#game-ui .top-right').style.display = 'block'
 
@@ -348,7 +349,7 @@ export default class Level extends Game {
         return this.#audioTimestamp
     }
 
-    createEvent(event, timeSeconds) {
+    createEvent(timeSeconds, event) {
         const time = timeSeconds*1000;
         const timeout = setTimeout(() => event(), time);
         this.#timeouts.push(timeout);

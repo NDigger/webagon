@@ -1,0 +1,15 @@
+{
+    "key": "trueHexagon", 
+
+    "name": "True Hexagon",
+    "description": "",
+    "author": "NDagger",
+
+    "musicName": "Hexagon And On",
+    "musicAuthor": "Zanzlanz",
+    "musicAlbum": "",
+    "musicPath": "music.ogg",
+    "musicTimestamps": [1.5],
+
+    "scriptPath": "script.js"
+}

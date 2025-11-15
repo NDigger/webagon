@@ -14,7 +14,6 @@ export default class Wall extends CustomWall {
     #skewLeft = 0;
     #skewRight = 0;
 
-
     #getWallVertexPos4() {
         const halfSides = this.#sides / 2;
         const firstAngle = this.#side * Math.PI / halfSides + Math.PI / this.#sides;
