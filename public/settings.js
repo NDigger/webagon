@@ -24,7 +24,7 @@ const compareAndUpdateSetting = (setting, settingProp) => {
 }
 
 settings.forEach((setting, i) => {
-    setting.addEventListener('mouseover', e => {
+    setting.addEventListener('click', e => {
         getSelectedSetting().classList.remove('selected');
         selectedSettingIndex = i
         e.currentTarget.classList.add('selected');

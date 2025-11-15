@@ -587,6 +587,10 @@ canvas {
     padding-bottom: 5px;
 }
 
+.setting:hover {
+    border: 2px solid var(--main-color)
+}
+
 .setting.selected {
     position: relative;
     border: 5px solid var(--main-color);
