@@ -66,6 +66,14 @@ settings.forEach((setting, i) => {
             }
         })
     }
+
+    // When page first time loaded
+    if (settingType === 'number') {
+        setting.querySelector('.value').textContent = config[settingProp]
+    } else if (settingType === 'boolean') {
+        setting.querySelector('.value').textContent = config[settingProp] ? 'Enabled' : 'Disabled'
+    }
+    compareAndUpdateSetting(setting, settingProp)
 })
 
 const shiftSetting = shift => {
@@ -94,10 +102,3 @@ document.addEventListener('keydown', e => {
 shiftSetting(0);
 
 const applyToSettingValue = (settingId, v) => document.getElementById(settingId).querySelector('.value').textContent = v;
-
-applyToSettingValue('config-player-tilt-mult', config.playerTiltMult)
-applyToSettingValue('config-swap-highlight-enabled', config.swapHighlightEnabled ? 'Enabled' : 'Disabled')
-applyToSettingValue('config-display-fps-enabled', config.displayFpsEnabled ? 'Enabled' : 'Disabled')
-applyToSettingValue('config-display-ui-enabled', config.displayUiEnabled ? 'Enabled' : 'Disabled')
-applyToSettingValue('config-music-volume', config.musicVolume)
-applyToSettingValue('config-sounds-volume', config.soundsVolume)
