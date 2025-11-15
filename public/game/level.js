@@ -30,7 +30,7 @@ const newPBMessages = [
     'bliss that bee!'
 ];
 
-const getRandomNewPBMessage = () => newPBMessages[newPBMessages.length-1]//newPBMessages[Math.floor(Math.random() * newPBMessages.length)]
+const getRandomNewPBMessage = () => newPBMessages[Math.floor(Math.random() * newPBMessages.length)]
 
 export default class Level extends Game { 
     onInit = () => {};
