@@ -7,16 +7,18 @@ let patterns = initPatterns(level); // Patterns require level object in order to
 // Pattern spawn conditions, uses level.onStep
 const addPattern = async pKey => {
     const d = Math.max(level.getWallSpeedMult(), 7) * (45 - level.getWallSpeedMult());
-    if (pKey === 0) await patterns.pRandomBarrage(Utils.mathRandom(3, 4), d * 1.1, d * 2.2);
-    else if (pKey === 1) await patterns.pAltBarrage(Utils.mathRandom(3, 4), d, d * 2.2);
-    else if (pKey === 2) await patterns.pTunnel(Utils.mathRandom(4, 5), d * 2.8, d * 2.2);
-    else if (pKey === 3) await patterns.pLRBarrage(Utils.mathRandom(4, 5), d, d * 2.2);
+    if (pKey === 0) await patterns.pRandomBarrage(Utils.mathRandom(5, 9), d * 1.1, d * 2.2);
+    else if (pKey === 1) await patterns.pAltBarrage(Utils.mathRandom(3, 6), d, d * 2.2);
+    else if (pKey === 2) await patterns.pTunnel(Utils.mathRandom(3, 5), d * 2.8, d * 2.2);
+    else if (pKey === 3) await patterns.pLRBarrage(4, d, d * 2.2);
     else if (pKey === 4) await patterns.pLeftRight(Utils.mathRandom(4, 5), d, d * 2.2);
-    else if (pKey === 5) await patterns.pSpiralBarrage(Utils.mathRandom(4, 5), d, d * 2.2);
-    else if (pKey === 6) await patterns.pDoubleSpiral(Utils.mathRandom(4, 5), d, d * 2.2);
+    else if (pKey === 5) await patterns.pSpiralBarrage(Utils.mathRandom(3, 6), d, d * 2.2);
+    else if (pKey === 6) await patterns.pDoubleSpiral(Utils.mathRandom(5, 7), d * 0.8, d * 2.2);
+    else if (pKey === 7) await patterns.pAltSpam(Utils.mathRandom(3, 4), 60, d * 2.2);
+    else if (pKey === 8) await patterns.pWallExSpam(Utils.mathRandom(3, 4), 60, d * 2.2);
 }
 
-const pKeys = [0, 1, 2, 3, 4, 5, 6];
+const pKeys = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 let activeKeys = [];
 
 // onInit is called on the first frame when level is created.
