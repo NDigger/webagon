@@ -63,7 +63,8 @@ export default class Background extends PolygonObject {
     getSwapped() { return this.#swapped }
 
     setTileColors(arr) {
-        this.#tileColors = arr;
+        const v = arr.map(c => new Color(c.r, c.g, c.b, c.a));
+        this.#tileColors = v;
         this.#activeTileColors = this.#getActiveTileColors();
     }
     getTileColors() { return this.#tileColors }

@@ -461,8 +461,9 @@ export default class Game extends GameObject {
     }
     getSides() { return this.#sides; }
     setBackgroundTileColors(arr) {
-        this.#backgroundTileColors = arr;
-        this.#background.setTileColors(arr);
+        const v = arr.map(c => new Color(c.r, c.g, c.b, c.a));
+        this.#backgroundTileColors = v;
+        this.#background.setTileColors(v);
         this.#polygon.setColor(this.#getPolygonColor());
     }
     getBackgroundTileColors() { return this.#backgroundTileColors; }
