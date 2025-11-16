@@ -7,6 +7,7 @@ import { getConfig } from "../storage";
 
 import { getLevelStats, writeLevelStats } from "../storage";
 
+const timerElement = document.getElementById('timer');
 const newPersonalBestMessage = document.getElementById('game-new-personal-best-msg');
 const newPBMessages = [
     'not impressive, at all.',
@@ -87,11 +88,11 @@ export default class Level extends Game {
         super(app)
         this.#props = props
 
-        this.setMainColor(new Color(40, 40, 0))
-        this.setBackgroundTileColors([
-            new Color(245, 245, 245),
-            new Color(235, 235, 235),
-        ])
+        // this.setMainColor(new Color(40, 40, 0))
+        // this.setBackgroundTileColors([
+        //     new Color(245, 245, 245),
+        //     new Color(235, 235, 235),
+        // ])
 
         this.#levelData = levelData
     }
@@ -172,8 +173,8 @@ export default class Level extends Game {
         }
         if (this.#isIncrementing && this.getWallCount() === 0) this.#increment();
 
-        const timer = document.getElementById('timer');
-        timer.textContent = Math.floor(levelTime)/1000;
+        const timerContent = String(Math.floor(levelTime)/1000);
+        timerElement.textContent = this.#config.funModeEnabled ? timerContent.split("").reverse().join("") : timerContent;
         
         this.#updateId = requestAnimationFrame(t => this.#update(t));
     }
@@ -198,6 +199,10 @@ export default class Level extends Game {
         this.#games.forEach(game => game.destroy());
         this.#cws.forEach(cw => cw.destroy());
         super.destroy();
+
+        this.clearIntervals();
+        this.clearEvents();
+        
         cancelAnimationFrame(this.#updateId)
         cancelAnimationFrame(this.#renderId)
         document.removeEventListener('visibilitychange', this.#handleVisibilityChange);
@@ -266,7 +271,7 @@ export default class Level extends Game {
         
         this.clearIntervals();
         this.clearEvents();
-        
+
         document.querySelector('#game-ui .top-right').style.display = 'block'
 
         document.getElementById('restart-help-msg').style.display = 'block'
