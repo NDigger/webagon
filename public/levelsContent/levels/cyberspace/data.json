@@ -1,0 +1,15 @@
+{
+    "key": "cyberspace", 
+
+    "name": "Cyberspace",
+    "description": "",
+    "author": "NDagger",
+
+    "musicName": "Team Fortress 2 - Ride Behind You (Alex Giudici Remix)",
+    "musicAuthor": "",
+    "musicAlbum": "Alex Giudici",
+    "musicPath": "music.ogg",
+    "musicTimestamps": [120],
+
+    "scriptPath": "script.js"
+}

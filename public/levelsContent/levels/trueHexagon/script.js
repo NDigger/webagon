@@ -42,7 +42,7 @@ level.onInit = () => {
     level.setBackgroundSwapTime(9999999);
     level.setScale(new Vector2(1.5, 1.5));
 
-    const offset = 60.5;
+    const offset = 1.5;
     createEvents(offset)
 }
 

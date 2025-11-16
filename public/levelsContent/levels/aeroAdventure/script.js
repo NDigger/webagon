@@ -6,16 +6,17 @@ let patterns = initPatterns(level); // Patterns require level object in order to
 
 // Pattern spawn conditions, uses level.onStep
 const addPattern = async pKey => {
-    const d = Math.max(level.getWallSpeedMult(), 5) * (50 - level.getWallSpeedMult());
-    if (pKey === 0) await patterns.pRandomBarrage(Utils.mathRandom(3, 4), d, d * 1.5);
-    else if (pKey === 1) await patterns.pAltBarrage(Utils.mathRandom(3, 4), d, d * 1.5);
-    else if (pKey === 2) await patterns.pTunnel(Utils.mathRandom(4, 5), d * 2, d * 1.5);
-    else if (pKey === 3) await patterns.pLRBarrage(Utils.mathRandom(4, 5), d, d * 1.5);
-    else if (pKey === 4) await patterns.pLeftRight(Utils.mathRandom(4, 5), d, d * 1.5);
-    else if (pKey === 5) await patterns.pSpiralBarrage(Utils.mathRandom(4, 5), d, d * 1.5);
+    const d = Math.max(level.getWallSpeedMult(), 7) * (45 - level.getWallSpeedMult());
+    if (pKey === 0) await patterns.pRandomBarrage(Utils.mathRandom(3, 4), d * 1.1, d * 2.2);
+    else if (pKey === 1) await patterns.pAltBarrage(Utils.mathRandom(3, 4), d, d * 2.2);
+    else if (pKey === 2) await patterns.pTunnel(Utils.mathRandom(4, 5), d * 2.8, d * 2.2);
+    else if (pKey === 3) await patterns.pLRBarrage(Utils.mathRandom(4, 5), d, d * 2.2);
+    else if (pKey === 4) await patterns.pLeftRight(Utils.mathRandom(4, 5), d, d * 2.2);
+    else if (pKey === 5) await patterns.pSpiralBarrage(Utils.mathRandom(4, 5), d, d * 2.2);
+    else if (pKey === 6) await patterns.pDoubleSpiral(Utils.mathRandom(4, 5), d, d * 2.2);
 }
 
-const pKeys = [0, 1, 2, 3, 4, 5];
+const pKeys = [0, 1, 2, 3, 4, 5, 6];
 let activeKeys = [];
 
 // onInit is called on the first frame when level is created.
@@ -33,20 +34,21 @@ level.onInit = () => {
     level.setRadius(70);
     level.setRotationSpeed(0.15);
     level.setWallSpeedMult(5);
-    level.setSides(5);
+    level.setSides(7);
     level.set3dLayersCount(4);
     level.setIncrementTime(12);
     level.setWallSpeedIncrement(0.3);
-    level.setRotationSpeedIncrement(0.04);
-    level.set3dColor(new Color(255, 155, 155, 55));
+    level.setRotationSpeedIncrement(0.015);
+    level.set3dColor(new Color(255, 255, 255, 35));
     level.set3dFalloffColor(new Color(255, 255, 255, 0));
     // level.setPolygonColor(level.getMainColor())
     level.setBackgroundSwapTime(9999999);
     level.setScale(new Vector2(1, 1))
     level.setBackgroundDarkenUnevenChunkEnabled(false);
-    level.set3dDistance(50);
+    level.set3dDistance(20);
     
     level.set3dDepthMult(level.getWallSpeedMult() / 10);
+    level.set3dFalloffScale(new Vector2(1.2, .5))
 }
 
 // onStep must be async and use delays in order to work. No delays may cause crash.
@@ -62,11 +64,11 @@ level.onStep = async () => {
 level.onUpdate = ft => {
     const p = Utils.pingPong(level.getTime() * 2.5) * 20;
     level.setBackgroundTileColors([
-        new Color(55, 5, 235 + p),
-        new Color(50, 0, 225 + p),
-        new Color(55, 15, 215 + p),
-        new Color(50, 10, 205 + p),
-        new Color(55, 15, 215 + p),
+        new Color(105, 105, 235 + p),
+        new Color(100, 100, 225 + p),
+        new Color(105, 105, 215 + p),
+        new Color(100, 100, 205 + p),
+        new Color(105, 105, 215 + p),
     ])
 
     const t = level.getTime();
@@ -74,8 +76,8 @@ level.onUpdate = ft => {
 
     level.setRadius(70 + sync*10);
 
-    const s = Utils.pingPong(level.getTime() * 2.5) * .5 - 1
-    level.set3dFalloffScale(new Vector2(s, s));
+    // const s = Utils.pingPong(level.getTime() * 2.5) * .5 - 1
+    // level.set3dFalloffScale(new Vector2(s, s));
     const wallScale = new Vector2(Math.sin(t * 20) * .04 + 1, Math.cos(t * 20) * .04 + 1);
     level.setWallScale(wallScale.mul(new Vector2(1 + sync * .2, 1 + sync * .2)))
 }
