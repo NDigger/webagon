@@ -1,0 +1,17 @@
+{
+    "key": "aeroAdventure", 
+
+    "name": "Aero Adventure",
+    "description": "",
+    "author": "NDagger",
+
+    "musicName": "Lepton Head (Deedrah Remix)",
+    "musicAuthor": "Shakta",
+    "musicAlbum": "Distance To Goa 5, no. 5",
+    "musicPath": "music.ogg",
+    "musicTimestamps": [52, 360, 240, 300],
+
+    "difficulties": [0.5, 1.5, 1.85],
+
+    "scriptPath": "script.js"
+}

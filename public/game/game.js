@@ -356,7 +356,10 @@ export default class Game extends GameObject {
         const steps = Math.min(fpsSteps, 60);
 
         this.#distanceDelay -= frameTime * this.#wallSpeedMult / 5;
-        if (this.#distanceDelay <= 0 && typeof this.#distanceSignal === 'function') this.#distanceSignal();
+        if (this.#distanceDelay <= 0 && typeof this.#distanceSignal === 'function') {
+            this.#distanceSignal();
+            // this.#distanceSignal = null;
+        }
 
         for (let i = 0; i < steps; i++) {
             if (this.#died) break

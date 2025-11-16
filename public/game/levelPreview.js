@@ -43,8 +43,9 @@ class LevelPreviewContent {
     }
     getMainColor() { return this.style.mainColor; }
     setBackgroundTileColors(arr) {
-        this.style.backgroundTileColors = arr;
-        document.documentElement.style.setProperty('--background-tile-color', arr[0].getRGBAStyle());
+        const v = arr.map(c => new Color(c.r, c.g, c.b, c.a));
+        this.style.backgroundTileColors = v;
+        document.documentElement.style.setProperty('--background-tile-color', v[0].getRGBAStyle());
     }
     getBackgroundTileColors() { return this.style.backgroundTileColors; }
     setBackgroundDarkenUnevenChunkEnabled(v) {

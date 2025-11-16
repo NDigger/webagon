@@ -35,6 +35,7 @@ level.onInit = () => {
 level.onStep = async () => {
     if (activeKeys.length === 0) activeKeys = pKeys.slice();
     const rndIndex = Math.floor(Math.random() * activeKeys.length)
+    await level.distanceDelay(0) // To prevent crush if no active keys avaliable
     await addPattern(activeKeys.splice(rndIndex, 1)[0])
 }
 
