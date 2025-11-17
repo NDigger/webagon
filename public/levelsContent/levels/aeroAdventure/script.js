@@ -6,7 +6,7 @@ let patterns = initPatterns(level); // Patterns require level object in order to
 
 // Pattern spawn conditions, uses level.onStep
 const addPattern = async pKey => {
-    const d = Math.max(level.getWallSpeedMult(), 7) * (45 - level.getWallSpeedMult());
+    const d = Math.max(level.getWallSpeedMult(), 7) * (50 - level.getWallSpeedMult() / 1.5);
     if (pKey === 0) await patterns.pRandomBarrage(Utils.mathRandom(5, 9), d * 1.1, d * 2.2);
     else if (pKey === 1) await patterns.pAltBarrage(Utils.mathRandom(3, 6), d, d * 2.2);
     else if (pKey === 2) await patterns.pTunnel(Utils.mathRandom(3, 5), d * 2.8, d * 2.2);
