@@ -106,6 +106,31 @@
     animation: personal-best-anim .5s infinite ease-out alternate;
 }
 
+#completable-level-progress-bar {
+    background-color: rgba(0, 0, 0, .5);
+    box-shadow: 2.5px 0 var(--background-tile-color), -2.5px 0 var(--background-tile-color), 0 2.5px var(--background-tile-color), 0 2.5px var(--background-tile-color),
+                2.5px 2.5px var(--background-tile-color), -2.5px -2.5px var(--background-tile-color), 2.5px -2.5px var(--background-tile-color), -2.5px 2.5px var(--background-tile-color)
+}
+
+#completable-level-progress-bar {
+    border: 2px solid var(--main-color);
+    position: relative;
+    width: 50vw;
+    height: 20px;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+#completable-level-progress {
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: var(--main-color);
+    height: 100%;
+    width: 50%;
+}
+
 @keyframes personal-best-anim {
     from {
         transform: translateX(-50%) scaleX(.6);

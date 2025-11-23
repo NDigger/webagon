@@ -34,6 +34,9 @@ level.onInit = () => {
     level.setIncrementTime(999999);
     level.setPlayerSize(new Size(15, 10))
 
+    level.setCompletionTime(30);
+    console.log(level.getCompletionTime());
+
     level.setBackgroundTileColors([
         Color.hsvToRgb(.4, 1., .13),
         Color.hsvToRgb(.4, 1., .18)
@@ -51,7 +54,6 @@ level.onInit = () => {
 level.onStep = async () => {
     if (activeKeys.length === 0) activeKeys = pKeys.slice();
     const rndIndex = Math.floor(Math.random() * activeKeys.length)
-    console.log(activeKeys)
     await level.distanceDelay(0)
     await addPattern(activeKeys.splice(rndIndex, 1)[0])
 }

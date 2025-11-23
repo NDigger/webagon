@@ -46,6 +46,7 @@ export default class LevelLoader {
         document.getElementById('game-content').style.display = 'none';
         document.getElementById('level-select').style.display = 'flex';
         timerElement.style.display = 'none';
+        document.getElementById('completable-level-progress-bar').style.display = 'none';
     }
 
     start(data, difficulty) {
