@@ -18,8 +18,8 @@
     text-align: left;
     position: absolute; 
     font-size: 1.5rem;
-    text-shadow: 2.5px 0 var(--background-tile-color), -2.5px 0 var(--background-tile-color), 0 2.5px var(--background-tile-color), 0 2.5px var(--background-tile-color),
-               2.5px 2.5px var(--background-tile-color), -2.5px -2.5px var(--background-tile-color), 2.5px -2.5px var(--background-tile-color), -2.5px 2.5px var(--background-tile-color)
+    text-shadow: 1.5px 0 var(--background-tile-color), -1.5px 0 var(--background-tile-color), 0 1.5px var(--background-tile-color), 0 1.5px var(--background-tile-color),
+               1.5px 1.5px var(--background-tile-color), -1.5px -1.5px var(--background-tile-color), 1.5px -1.5px var(--background-tile-color), -1.5px 1.5px var(--background-tile-color)
                /* , 0px 2px 10px rgba(0, 0, 0, .5); */
     /* display: none; */
 }
@@ -27,13 +27,13 @@
 #game-ui .top-left {
     z-index: 9997; 
     position: absolute;
-    left: 10px; 
-    top: -10px;
-    width: calc(100vw - 10px);
-    height: calc(100vh + 10px);
+    left: 7px; 
+    top: -12px;
+    width: calc(100vw - 12px);
+    height: calc(100vh + 7px);
 }
 
-#game-ui .top-left * {
+#game-ui .top-left p {
     color: var(--main-color);
     transform: scaleX(.6);
     width: 150%;
@@ -69,6 +69,11 @@
     top: 3px;
 }
 
+#trackers {
+    margin-top: -15px;
+    font-size: inherit;
+}
+
 #game-ui .top-right button {
     color: var(--main-color);
     font-weight: 900;
@@ -84,7 +89,6 @@
 }
 
 #timer {
-    margin-top: 10px;
     font-size: 5rem; 
 }
 
