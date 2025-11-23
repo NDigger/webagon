@@ -54,8 +54,8 @@ export default class ParticleEmitter extends GameObject {
         cancelAnimationFrame(this.#updateId);
     }
 
-    emit() {
-        for (let i = 0; i < 10; i++) {
+    emit(count = 1) {
+        for (let i = 0; i < count; i++) {
             const p = new Particle(this.app);
             p.setColor(new Color(255, 0, 0));
 

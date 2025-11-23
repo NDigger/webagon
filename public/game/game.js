@@ -302,7 +302,7 @@ export default class Game extends GameObject {
                 p.set3dFalloffColor(this.#getDefault3dColor());
                 p.set3dFalloffScale(this.#falloffScale3d);
                 p.set3dLayer(this.#get3dLayer);
-                p.set3dLayersCount(this.#layersCount3d);
+                // p.set3dLayersCount(this.#layersCount3d);
                 p.setScale(this.#scale);
                 p.setCenterOffset(this.#centerOffset);
             })
@@ -323,7 +323,7 @@ export default class Game extends GameObject {
             particleEmitter.destroy();
             this.#playerSwapParticleEmitters.splice(this.#playerSwapParticleEmitters.findIndex(pe => pe === particleEmitter), 1)
         }
-        particleEmitter.emit();
+        particleEmitter.emit(10);
         const particles = particleEmitter.getParticles()
         particles.forEach(p => {
             p.setOffset(this.#polygon.player.getVertexPos(0))
