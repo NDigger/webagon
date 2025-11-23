@@ -24,7 +24,6 @@ const backgroundSecondColorLerp = new GameLerp()
 
 // onInit is called on the first frame when level is created.
 level.onInit = () => {
-    level.setMainColor(new Color(255, 0, 0));
     level.setRadius(50);
     level.setWallSpeedMult(2);
     level.setRotationSpeed(-0.01);
@@ -34,13 +33,8 @@ level.onInit = () => {
     level.setIncrementTime(999999);
     level.setPlayerSize(new Size(15, 10))
 
-    level.setCompletionTime(30);
+    level.setCompletionTime(480);
     console.log(level.getCompletionTime());
-
-    level.setBackgroundTileColors([
-        Color.hsvToRgb(.4, 1., .13),
-        Color.hsvToRgb(.4, 1., .18)
-    ])
 
     level.setBackgroundSwapTime(9999999);
     level.setScale(new Vector2(1.5, 1.5));

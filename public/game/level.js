@@ -227,7 +227,6 @@ export default class Level extends Game {
         setBestScore(newBest)
     }
 
-
     setWallSpeedMult(v) {
         if (!this.#initialized) super.setWallSpeedMult(v * this.#props.difficulty);
         else super.setWallSpeedMult(v);
@@ -292,7 +291,7 @@ export default class Level extends Game {
         }
         
         if (this.#isNewBest()) {
-            console.log(getRandomNewPBMessage() )
+            console.log(getRandomNewPBMessage())
             newPersonalBestMessage.style.display = 'block';
             newPersonalBestMessage.textContent = this.#config.funModeEnabled ? getRandomNewPBMessage() : 'new personal best'
             this.#saveBest();

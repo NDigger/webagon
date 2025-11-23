@@ -28,9 +28,9 @@
     z-index: 9997; 
     position: absolute;
     left: 7px; 
-    top: -12px;
-    width: calc(100vw - 12px);
-    height: calc(100vh + 7px);
+    top: 0px;
+    width: calc(100vw - 7px);
+    height: calc(100vh);
 }
 
 #game-ui .top-left p {
@@ -70,7 +70,7 @@
 }
 
 #trackers {
-    margin-top: -15px;
+    /* margin-top: -15px; */
     font-size: inherit;
 }
 
@@ -89,6 +89,7 @@
 }
 
 #timer {
+    margin-top: -12px;
     display: none;
     font-size: 5rem; 
 }
@@ -107,19 +108,34 @@
 }
 
 #completable-level-progress-bar {
-    background-color: rgba(0, 0, 0, .5);
-    box-shadow: 2.5px 0 var(--background-tile-color), -2.5px 0 var(--background-tile-color), 0 2.5px var(--background-tile-color), 0 2.5px var(--background-tile-color),
-                2.5px 2.5px var(--background-tile-color), -2.5px -2.5px var(--background-tile-color), 2.5px -2.5px var(--background-tile-color), -2.5px 2.5px var(--background-tile-color)
-}
-
-#completable-level-progress-bar {
-    border: 2px solid var(--main-color);
+    display: none;
+    border: 1px solid var(--main-color);
     position: relative;
-    width: 50vw;
-    height: 20px;
+    width: min(800px, 98vw);
+    height: min(15px, 2vh);
     top: 10px;
     left: 50%;
     transform: translateX(-50%);
+    box-shadow: 1px 0 var(--background-tile-color), -1px 0 var(--background-tile-color), 0 1px var(--background-tile-color), 0 1px var(--background-tile-color),
+                1px 1px var(--background-tile-color), -1px -1px var(--background-tile-color), 1px -1px var(--background-tile-color), -1px 1px var(--background-tile-color);
+}
+
+#completable-level-progress-bar::after, #completable-level-progress-bar::before {
+    content: '';
+    position: absolute;
+    opacity: .5;
+    inset: 0;
+}
+
+#completable-level-progress-bar::after {
+    opacity: .5;
+    background-color: var(--background-tile-color);
+    z-index: -1;
+}
+
+#completable-level-progress-bar::before {
+    z-index: -2;
+    background-color: black;
 }
 
 #completable-level-progress {
@@ -128,7 +144,7 @@
     top: 0;
     background-color: var(--main-color);
     height: 100%;
-    width: 50%;
+    width: 0%;
 }
 
 @keyframes personal-best-anim {

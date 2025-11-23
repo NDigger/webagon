@@ -1,6 +1,8 @@
 import Level from "./level";
 
+const progressBarElement = document.getElementById('completable-level-progress-bar')
 const progressElement = document.getElementById('completable-level-progress')
+
 export default class CompletableLevel extends Level {
     #completionTime = 60;
     #updateId = undefined;
@@ -9,6 +11,7 @@ export default class CompletableLevel extends Level {
     constructor(app, levelData, props) {
         super(app, levelData, props);
         this.#updateId = requestAnimationFrame(() => this.#update());
+        progressBarElement.style.display = 'block'
     }
 
     #update() {
