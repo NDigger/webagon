@@ -354,7 +354,6 @@ export default class Game extends GameObject {
         const fps = getFPS();
         const fpsSteps = Math.floor(2400/(fps !== 0 ? fps : 60));
         const steps = Math.max(fpsSteps, 60);
-        console.log(steps)
 
         this.#distanceDelay -= frameTime * this.#wallSpeedMult / 5;
         if (this.#distanceDelay <= 0 && typeof this.#distanceSignal === 'function') {

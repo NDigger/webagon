@@ -7,7 +7,6 @@ import { getConfig } from "../storage";
 
 import { getLevelStats, writeLevelStats } from "../storage";
 
-const timerElement = document.getElementById('timer');
 const newPersonalBestMessage = document.getElementById('game-new-personal-best-msg');
 const newPBMessages = [
     'not impressive, at all.',
@@ -98,6 +97,7 @@ export default class Level extends Game {
     }
     
     init() {
+        if (this.#initialized) return;
         const audio = new Audio(this.#levelData.musicPath);
         audio.volume = this.#config.musicVolume;
         audio.loop = true;
@@ -172,9 +172,6 @@ export default class Level extends Game {
             this.callIncrement();
         }
         if (this.#isIncrementing && this.getWallCount() === 0) this.#increment();
-
-        const timerContent = String(Math.floor(levelTime)/1000);
-        timerElement.textContent = this.#config.funModeEnabled ? timerContent.split("").reverse().join("") : timerContent;
         
         this.#updateId = requestAnimationFrame(t => this.#update(t));
     }

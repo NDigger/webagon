@@ -1,4 +1,4 @@
-import Level from './level';
+import TimeLevel from './timeLevel';
 import { setLevel } from '../script';
 import { getLevelStats, writeLevelStats } from '../storage';
 import { getConfig } from '../storage';
@@ -69,7 +69,7 @@ export default class LevelLoader {
 
         if (this.#level != null) this.#level.destroy();
 
-        const level = new Level(this.app, this.#currentLevelData, {
+        const level = new TimeLevel(this.app, this.#currentLevelData, {
             selectFirstMusicTimestamp: this.#attempt === 1,
             difficulty: this.#currentLevelDifficulty,
         });
