@@ -5,7 +5,19 @@ import { setLevel } from '../script';
 import { getLevelStats, writeLevelStats } from '../storage';
 import { getConfig } from '../storage';
 
+const gameContentElement = document.getElementById('game-content');
+const levelSelectElement = document.getElementById('level-select');
+const gameUIElement = document.getElementById('game-ui');
+const progressBarElement = document.getElementById('completable-level-progress-bar');
+
+const fpsCounterElement = document.getElementById('fps-counter');
+const restartHelpMsg = document.getElementById('restart-help-msg');
+const swapEnabledMsg = document.getElementById('swap-enabled-msg');
+
 const timerElement = document.getElementById('timer');
+
+const levelRestartBtn = document.getElementById('level-restart-btn');
+const levelLeaveBtn = document.getElementById('level-leave-btn');
 
 export default class LevelLoader {
     app;
@@ -22,8 +34,8 @@ export default class LevelLoader {
     constructor(app) {
         this.app = app
 
-        document.getElementById('level-restart-btn').addEventListener('click', () => this.reload())
-        document.getElementById('level-leave-btn').addEventListener('click', () => this.leave())
+        levelRestartBtn.addEventListener('click', () => this.reload())
+        levelLeaveBtn.addEventListener('click', () => this.leave())
     }
 
     #handleKeyup = () => this.#keyPressed = false
@@ -46,7 +58,7 @@ export default class LevelLoader {
         document.getElementById('game-content').style.display = 'none';
         document.getElementById('level-select').style.display = 'flex';
         timerElement.style.display = 'none';
-        document.getElementById('completable-level-progress-bar').style.display = 'none';
+        progressBarElement.style.display = 'none';
     }
 
     start(data, difficulty) {
@@ -90,16 +102,15 @@ export default class LevelLoader {
         const config = getConfig();
         script.onload = () => {
             document.getElementById('game-ui').style.display = config.displayUiEnabled ? 'block' : 'none'
-            document.querySelector('#game-ui .top-right').style.display = 'none'
 
-            document.getElementById('restart-help-msg').style.display = 'none';
-            document.getElementById('swap-enabled-msg').style.display = 'none';
+            restartHelpMsg.style.display = 'none';
+            swapEnabledMsg.style.display = 'none';
 
-            document.getElementById('fps-counter').style.display = config.displayFpsEnabled ? 'block' : 'none';
+            fpsCounterElement.style.display = config.displayFpsEnabled ? 'block' : 'none';
 
             this.#level.init()
-            document.getElementById('game-content').style.display = 'block'
-            document.getElementById('level-select').style.display = 'none'
+            gameContentElement.style.display = 'block'
+            levelSelectElement.style.display = 'none'
             
             window.addEventListener('keydown', this.#handleKeydown);
             window.addEventListener('keyup', this.#handleKeyup)
