@@ -26,6 +26,7 @@ export const defaultConfig = {
     soundsVolume: 0.8,
     flashOnDeathEnabled: true,
     funModeEnabled: false,
+    swapParticlesEnabled: true,
 }
 
 export const getConfig = () => {

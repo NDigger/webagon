@@ -333,7 +333,7 @@ export default class Game extends GameObject {
     }
 
     #swapPlayer() {
-        this.#createPlayerSwapParticle();
+        if (this.#config.swapParticlesEnabled) this.#createPlayerSwapParticle();
         levelSwapSound.play();
         this.#currentSwapReloadTime = this.#swapReloadTime;
         this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() + 180);
