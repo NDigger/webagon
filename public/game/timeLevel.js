@@ -9,6 +9,7 @@ export default class TimeLevel extends Level {
     constructor(app, levelData, props) {
         super(app, levelData, props);
         this.#updateId = requestAnimationFrame(() => this.#update());
+        timerElement.style.display = 'block';
     }
 
     #update() {

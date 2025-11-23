@@ -10,6 +10,7 @@
     "musicAlbum": "",
     "musicPath": "music.ogg",
     "musicTimestamps": [1.5],
+    "completable": true,
 
     "scriptPath": "script.js"
 }

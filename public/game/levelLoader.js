@@ -1,7 +1,11 @@
 import TimeLevel from './timeLevel';
+import CompletableLevel from './completableLevel';
+
 import { setLevel } from '../script';
 import { getLevelStats, writeLevelStats } from '../storage';
 import { getConfig } from '../storage';
+
+const timerElement = document.getElementById('timer');
 
 export default class LevelLoader {
     app;
@@ -41,6 +45,7 @@ export default class LevelLoader {
 
         document.getElementById('game-content').style.display = 'none';
         document.getElementById('level-select').style.display = 'flex';
+        timerElement.style.display = 'none';
     }
 
     start(data, difficulty) {
@@ -69,10 +74,15 @@ export default class LevelLoader {
 
         if (this.#level != null) this.#level.destroy();
 
-        const level = new TimeLevel(this.app, this.#currentLevelData, {
+        const levelProps = {
             selectFirstMusicTimestamp: this.#attempt === 1,
             difficulty: this.#currentLevelDifficulty,
-        });
+        }
+        const createLevel = () => {
+            if (data?.completable) return new CompletableLevel(this.app, this.#currentLevelData, levelProps)
+            else return new TimeLevel(this.app, this.#currentLevelData, levelProps);
+        }
+        const level = createLevel();
         setLevel(level);
         this.#level = level;
 

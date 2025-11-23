@@ -89,6 +89,7 @@
 }
 
 #timer {
+    display: none;
     font-size: 5rem; 
 }
 
