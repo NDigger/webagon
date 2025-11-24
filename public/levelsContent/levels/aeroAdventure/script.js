@@ -18,7 +18,8 @@ const addPattern = async pKey => {
     else if (pKey === 8) await patterns.pWallExSpam(Utils.mathRandom(3, 4), 60, d * 2.2);
 }
 
-const pKeys = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+// const pKeys = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+const pKeys = [6]
 let activeKeys = [];
 
 // onInit is called on the first frame when level is created.

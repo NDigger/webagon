@@ -128,7 +128,6 @@ export default class Mesh extends GameObject {
         this.#object?.geometry.destroy();
         this.#object.destroy();
         this.#object = null;
-        this.redrawEnabled = false;
     }
 
     setLayer(v) {

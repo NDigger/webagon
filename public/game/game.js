@@ -109,6 +109,7 @@ export default class Game extends GameObject {
     #rightKeyPressed = false;
     #swapKeyPressed = false;
     #swapEnabled = false;
+    #swapRequested = false;
     #swapReloadTime = 0;
     #currentSwapReloadTime = 0;
     #playerMovementEnabled = true;
@@ -164,7 +165,7 @@ export default class Game extends GameObject {
         if (e.code === 'ArrowRight' || e.code === 'KeyD') this.#rightKeyPressed = true;
 
         if (e.code === 'Space' && this.#swapEnabled && !this.#swapKeyPressed && this.#currentSwapReloadTime < 0) {
-            this.#swapPlayer()
+            this.#swapRequested = true;
             this.#swapKeyPressed = true;
         }
     }
@@ -231,59 +232,20 @@ export default class Game extends GameObject {
         this.#walls.forEach(w => w.draw());
     }
 
-    #getCollidingWalls() { // Returns a first wall if player collides with it
-        return this.#walls.filter(wall => pointInQuad(this.#polygon.player.getPointAbsolutePosition(), wall.getVertexAbsolutePos4()))
-    }
-
-    #updatePlayer(frameTime, steps) {
-        this.#polygon.player.setColor(this.#getPlayerColor())
-        this.#currentSwapReloadTime -= frameTime/1000;
-        const prevRotationOffset = this.#polygon.player.getRotationOffset();
-
-        const playerSpeed = frameTime * .6 / steps;
-        const tiltSpeed = 0.0014 * frameTime * this.#config.playerTiltMult / steps * 5;
-        const maxTilt = this.#config.playerTiltMult;
-        
-        if (this.#playerMovementEnabled) {
-            if (this.#leftKeyPressed) {
-                this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() - playerSpeed);
-                if (this.#polygon.player.getTilt() > -maxTilt)
-                    this.#polygon.player.setTilt(this.#polygon.player.getTilt() - tiltSpeed)
-            }
-            if (this.#rightKeyPressed) {
-                this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() + playerSpeed);
-                if (this.#polygon.player.getTilt() < maxTilt)
-                    this.#polygon.player.setTilt(this.#polygon.player.getTilt() + tiltSpeed)
-            }
-            if (!this.#leftKeyPressed && !this.#rightKeyPressed) {
-                if (this.#polygon.player.getTilt() > 0) 
-                    this.#polygon.player.setTilt(Math.max(0, this.#polygon.player.getTilt() - tiltSpeed))
-                else if (this.#polygon.player.getTilt() < 0) 
-                    this.#polygon.player.setTilt(Math.min(0, this.#polygon.player.getTilt() + tiltSpeed))
-            }
-            this.#polygon.player.updatePosition()
-        }
-        if (this.#getCollidingWalls().length !== 0) {
-            this.#polygon.player.setRotationOffset(prevRotationOffset)
-            this.#polygon.player.updatePosition()
-        };
-    }
-
     #updateWalls(walls, frameTime, steps) {
+        const minDistance = 30;
+        const minThickness = 0;
         return walls.filter(wall => {
-            if (wall.getDistance() > 0) {//this.#polygon.getDistance() + this.#polygon.getThickness()) {
-                wall.setDistance(wall.getDistance() - frameTime * this.#wallSpeedMult / 5 / steps)
-            } else if (wall.getThickness() > 0) {
-                wall.setThickness(wall.getThickness() - frameTime * this.#wallSpeedMult / 5 / steps)
-            }
+            const decrease = value => value - frameTime * this.#wallSpeedMult / 5 / steps
+            if (wall.getDistance() > minDistance) wall.setDistance(Math.max(minDistance, decrease(wall.getDistance())));
+            else if (wall.getThickness() > minThickness) wall.setThickness(Math.max(minThickness, decrease(wall.getThickness())));
 
-            if (wall.getThickness() <= 0 && wall.getDistance() <= 0) {
+            if (wall.getThickness() <= minThickness && wall.getDistance() <= minDistance) {
                 wall.destroy()
                 return false;
             }
 
-            wall.setRotation(this.#rotation)
-            wall.updatePosition()
+            // wall.updatePosition()
 
             return true
         })
@@ -341,6 +303,50 @@ export default class Game extends GameObject {
         if (this.#getCollidingWalls().length !== 0) this.kill();
     }
 
+    #getCollidingWalls() { // Returns a first wall if player collides with it
+        return this.#walls.filter(wall => pointInQuad(this.#polygon.player.getPointAbsolutePosition(), wall.getVertexAbsolutePos4()))
+    }
+
+    #updatePlayer(frameTime, steps) {
+        this.#polygon.player.setColor(this.#getPlayerColor())
+        this.#currentSwapReloadTime -= frameTime/1000/steps;
+        let prevRotationOffset = this.#polygon.player.getRotationOffset();
+
+        const playerSpeed = frameTime * .6 / steps;
+        const tiltSpeed = 0.0014 * frameTime * this.#config.playerTiltMult / steps * 5;
+        const maxTilt = this.#config.playerTiltMult;
+        
+        if (this.#playerMovementEnabled) {
+            if (this.#swapRequested) {
+                this.#swapPlayer();
+                prevRotationOffset += 180;
+                this.#swapRequested = false;
+            }
+            if (this.#leftKeyPressed) {
+                this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() - playerSpeed);
+                if (this.#polygon.player.getTilt() > -maxTilt)
+                    this.#polygon.player.setTilt(this.#polygon.player.getTilt() - tiltSpeed)
+            }
+            if (this.#rightKeyPressed) {
+                this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() + playerSpeed);
+                if (this.#polygon.player.getTilt() < maxTilt)
+                    this.#polygon.player.setTilt(this.#polygon.player.getTilt() + tiltSpeed)
+            }
+            if (!this.#leftKeyPressed && !this.#rightKeyPressed) {
+                if (this.#polygon.player.getTilt() > 0) 
+                    this.#polygon.player.setTilt(Math.max(0, this.#polygon.player.getTilt() - tiltSpeed))
+                else if (this.#polygon.player.getTilt() < 0) 
+                    this.#polygon.player.setTilt(Math.min(0, this.#polygon.player.getTilt() + tiltSpeed))
+            }
+        }
+        this.#polygon.player.updatePosition()
+        if (this.#getCollidingWalls().length !== 0) {
+            this.#polygon.player.setRotationOffset(prevRotationOffset)
+            this.#polygon.player.updatePosition()
+        }
+        console.log(this.#polygon.player.getRotationOffset());
+    }
+
     #update(time) {
         const frameTime = time - this.#lastUpdateTime;
         this.#lastUpdateTime = time;
@@ -352,29 +358,30 @@ export default class Game extends GameObject {
         this.#background.setRotation(this.#rotation + this.#backgroundRotationOffset);
 
         const fps = getFPS();
-        const fpsSteps = Math.floor(2400/(fps !== 0 ? fps : 60));
-        const steps = Math.max(fpsSteps, 60);
-
-        this.#distanceDelay -= frameTime * this.#wallSpeedMult / 5;
-        if (this.#distanceDelay <= 0 && typeof this.#distanceSignal === 'function') {
-            this.#distanceSignal();
-            this.#distanceSignal = null;
-        }
+        const fpsSteps = Math.floor(400/(fps !== 0 ? fps : 10));
+        const steps = Math.max(fpsSteps, 10);
 
         for (let i = 0; i < steps; i++) {
             if (this.#died) break
-
             this.#walls = this.#updateWalls(this.#walls, frameTime, steps);
-            this.#updatePlayer(frameTime, steps);
+            if (!this.#died && this.#getCollidingWalls().length !== 0) this.kill();
+        }
+        this.#polygon.player.updatePosition();
 
-            const collidingWalls = this.#getCollidingWalls();
-            if (!this.#died) {
-                collidingWalls.forEach(cwall => {
-                    const side = closestSide(this.#polygon.player.getPointAbsolutePosition(), cwall.getVertexAbsolutePos4())
-                    if (side === 3) this.kill()
-                })
-            };
-           
+        this.#walls.forEach(wall => {
+            wall.setRotation(this.#rotation);
+            wall.updatePosition();
+        });
+    
+        for (let i = 0; i < steps; i++) {
+            if (this.#died) break
+            this.#distanceDelay -= frameTime * this.#wallSpeedMult / 5 / steps;
+            if (this.#distanceDelay <= 0 && typeof this.#distanceSignal === 'function') {
+                this.#distanceSignal();
+                this.#distanceSignal = null;
+            }
+
+            this.#updatePlayer(frameTime, steps);
             if (i % Math.floor(steps/20) === 0) this.#polygon.player.draw();
         }
         
@@ -492,6 +499,7 @@ export default class Game extends GameObject {
             if (this.#color3d === null) w.set3dColor(this.#getDefault3dColor());
         });
         if (this.#color3d === null) this.#polygon.set3dColor(this.#getDefault3dColor());
+        this.draw();
     }
     getMainColor() { return this.#mainColor }
     setPolygonColor({r, g, b, a}) {

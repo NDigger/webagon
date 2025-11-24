@@ -9,11 +9,11 @@ const addPattern = async pKey => {
     if (pKey === 0) await patterns.pInverseBarrage(Utils.mathRandom(2, 3), 500, 700);
     else if (pKey === 1) await patterns.pSpiralBarrage(Utils.mathRandom(4, 6), 300, 600);
     else if (pKey === 2) await patterns.pSpiral(Utils.mathRandom(7, 9), 100, 400, 1);
-    else if (pKey === 3) await patterns.pTunnel(Utils.mathRandom(2, 3), 700, 600);
+    else if (pKey === 3) await patterns.pTunnel(Utils.mathRandom(2, 3), 1500, 600);
 }
 
-const pKeys = [0, 1, 2, 3];
-// const pKeys = [3];
+// const pKeys = [0, 1, 2, 3];
+const pKeys = [3];
 let activeKeys = [];
 
 level.onInit = () => {

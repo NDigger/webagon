@@ -291,7 +291,6 @@ export default class Level extends Game {
         }
         
         if (this.#isNewBest()) {
-            console.log(getRandomNewPBMessage())
             newPersonalBestMessage.style.display = 'block';
             newPersonalBestMessage.textContent = this.#config.funModeEnabled ? getRandomNewPBMessage() : 'new personal best'
             this.#saveBest();

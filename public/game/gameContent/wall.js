@@ -34,18 +34,7 @@ export default class Wall extends CustomWall {
             new Vector2(x4, y4)
         ]
     }
-
-    getVertexAbsolutePos4() {
-        const pos4 = super.getVertexAbsolutePos4()
-        const extra = 0.1; // Prevents wall clip
-        return [
-            pos4[0].rotate(-degToRad(extra/2)),
-            pos4[1].rotate(-degToRad(extra/2)),
-            pos4[2].rotate(degToRad(extra)),
-            pos4[3].rotate(degToRad(extra))
-        ]
-    }
-
+    
     draw() {
         this.updatePosition();
         super.draw();
