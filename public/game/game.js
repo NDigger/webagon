@@ -120,7 +120,7 @@ export default class Game extends GameObject {
     #distanceSignal;
     #distanceDelay = -1;
 
-    onDeath = () => {}
+    onDeath = () => {};
 
     constructor(app) {
         super(app)
@@ -304,7 +304,7 @@ export default class Game extends GameObject {
     }
 
     #getCollidingWalls() { // Returns a first wall if player collides with it
-        return this.#walls.filter(wall => pointInQuad(this.#polygon.player.getPointAbsolutePosition(), wall.getVertexAbsolutePos4()))
+        return this.#walls.filter(wall => pointInQuad(this.#polygon.player.getPointPosition(), wall.getVertexPos4()))
     }
 
     #updatePlayer(frameTime, steps) {
@@ -344,16 +344,13 @@ export default class Game extends GameObject {
             this.#polygon.player.setRotationOffset(prevRotationOffset)
             this.#polygon.player.updatePosition()
         }
-        console.log(this.#polygon.player.getRotationOffset());
     }
 
     #update(time) {
         const frameTime = time - this.#lastUpdateTime;
         this.#lastUpdateTime = time;
 
-        if (!this.#died) {            
-            this.#rotation += this.#rotationSpeed * frameTime;
-        }
+        if (!this.#died) this.#rotation += this.#rotationSpeed * frameTime;
         this.#polygon.setRotation(this.#rotation)
         this.#background.setRotation(this.#rotation + this.#backgroundRotationOffset);
 
@@ -361,17 +358,20 @@ export default class Game extends GameObject {
         const fpsSteps = Math.floor(400/(fps !== 0 ? fps : 10));
         const steps = Math.max(fpsSteps, 10);
 
-        for (let i = 0; i < steps; i++) {
-            if (this.#died) break
-            this.#walls = this.#updateWalls(this.#walls, frameTime, steps);
-            if (!this.#died && this.#getCollidingWalls().length !== 0) this.kill();
-        }
+    
         this.#polygon.player.updatePosition();
-
         this.#walls.forEach(wall => {
             wall.setRotation(this.#rotation);
             wall.updatePosition();
         });
+        for (let i = 0; i < steps; i++) {
+            if (this.#died) break
+            this.#walls = this.#updateWalls(this.#walls, frameTime, steps);
+            if (!this.#died && this.#getCollidingWalls().length !== 0) {
+                this.kill();
+                console.log("Step: ", i, "Penis: ", this.#polygon.player.getRotationOffset())
+            }
+        }
     
         for (let i = 0; i < steps; i++) {
             if (this.#died) break
@@ -384,6 +384,7 @@ export default class Game extends GameObject {
             this.#updatePlayer(frameTime, steps);
             if (i % Math.floor(steps/20) === 0) this.#polygon.player.draw();
         }
+        console.log(this.#polygon.player.getRotationOffset());
         
         if (this.#died) {
             if (this.#deathEffect) this.#deathEffect.setColor(Color.hsvToRgb(time/500, 1., 1.));
@@ -596,7 +597,7 @@ export default class Game extends GameObject {
     }
     getPlayerSwapReloadTime() { return this.#swapReloadTime }
     #updateWallScale() {
-        this.#walls.forEach(wall => wall.setScale(this.#scale.mul(this.#wallScale)))
+        this.#walls.forEach(wall => wall.setScale(this.#scale.mul(this.#wallScale)));
     }
     setScale({x, y}) {
         const scale = new Vector2(x, y);

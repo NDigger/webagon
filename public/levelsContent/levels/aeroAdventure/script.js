@@ -82,7 +82,8 @@ level.onUpdate = ft => {
     // const s = Utils.pingPong(level.getTime() * 2.5) * .5 - 1
     // level.set3dFalloffScale(new Vector2(s, s));
     const wallScale = new Vector2(Math.sin(t * 20) * .04 + 1, Math.cos(t * 20) * .04 + 1);
-    level.setWallScale(wallScale.mul(new Vector2(1 + sync * .2, 1 + sync * .2)))
+    level.setWallScale(wallScale.mul(new Vector2(1 - sync * .05, 1 - sync * .05)))
+    // level.setWallScale(new Vector2(2, 2))
 }
 
 // onRender is called every frame. It works when player is died.

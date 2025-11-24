@@ -33,7 +33,7 @@ export default class Wall extends CustomWall {
             new Vector2(x3, y3),
             new Vector2(x4, y4)
         ]
-    }
+    }    
     
     draw() {
         this.updatePosition();

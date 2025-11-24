@@ -32,7 +32,7 @@ export default class CustomWall extends Mesh {
 
     #savedUnmodifiedVertexPos4 = [new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0), new Vector2(0, 0)];
 
-    #getAbsoluteVertex4() {
+    #getTransformedVertexPos4() {
         const screenCenter = getScreenCenter();
         return this.#savedUnmodifiedVertexPos4.map(vec2 => {
             let pos = vec2; 
@@ -67,7 +67,7 @@ export default class CustomWall extends Mesh {
     }
 
     updatePosition() {
-        const pos = this.#getAbsoluteVertex4();
+        const pos = this.#getTransformedVertexPos4();
         super.setVertexPos4(pos[0], pos[1], pos[2], pos[3]);
         this.#layers3d.setVertexPos4(pos[0], pos[1], pos[2], pos[3]);
     }
