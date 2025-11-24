@@ -87,6 +87,13 @@ export default class CustomWall extends Mesh {
 
     getVertexPos(v) { return this.#savedUnmodifiedVertexPos4[v] }
 
+    getCollisions() {
+        return this.#savedUnmodifiedVertexPos4.map(vec2 => {
+            vec2 = vec2.mul(this.#scale);
+            return vec2;
+        })
+    }
+
     setRotation(v) {
         if (typeof(v) !== 'number') return 
         this.#rotation = v;

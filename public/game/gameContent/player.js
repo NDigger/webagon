@@ -15,7 +15,7 @@ export default class Player extends CustomWall {
     }
 
     getPointPosition() { 
-        return new Vector2(this.#distance + this.#size.height, 0).rotate(degToRad(this.#rotationOffset)).add(this.getOffset());
+        return this.getVertexPos4()[0];
     } 
 
     getPointAbsolutePosition() { // Used for collisions

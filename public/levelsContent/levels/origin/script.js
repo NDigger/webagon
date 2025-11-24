@@ -27,6 +27,8 @@ level.onInit = () => {
     level.set3dDistance(5);
     level.setWallSpeedIncrement(0.2);
     level.setRotationSpeedIncrement(0.015);
+
+    // level.createWall(0, 400);
 }
 
 // onStep must be async and use delays in order to work. No delays may cause crash.
