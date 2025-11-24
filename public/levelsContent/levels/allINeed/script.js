@@ -5,11 +5,11 @@ const patterns = initPatterns(level);
 
 // Pattern spawn conditions, uses level.onStep
 const addPattern = async pKey => {
-    if (pKey === 0) await patterns.pInverseBarrage(Utils.mathRandom(2, 3), 350, 400);
-    else if (pKey === 1) await patterns.pRandomBarrage(Utils.mathRandom(4, 6), 170, 400);
-    else if (pKey === 2) await patterns.pAltBarrage(Utils.mathRandom(4, 5), 250, 400, 1);
-    else if (pKey === 3) await patterns.pDoubleSpiral(Utils.mathRandom(5, 9), 100, 400);
-    else if (pKey === 4) await patterns.pWallExTunnel(Utils.mathRandom(4, 5), 270, 400);
+    if (pKey === 0) await patterns.pInverseBarrage(Utils.mathRandom(2, 3), 420, 420);
+    else if (pKey === 1) await patterns.pRandomBarrage(Utils.mathRandom(4, 6), 230, 420);
+    else if (pKey === 2) await patterns.pAltBarrage(Utils.mathRandom(4, 5), 310, 420, 1);
+    else if (pKey === 3) await patterns.pDoubleSpiral(Utils.mathRandom(5, 9), 110, 420);
+    else if (pKey === 4) await patterns.pWallExTunnel(Utils.mathRandom(4, 5), 310, 420);
 }
 
 const pKeys = [0, 1, 1, 1, 2, 3, 4];
@@ -17,14 +17,14 @@ let activeKeys = [];
 
 // onInit is called on the first frame when level is created.
 level.onInit = () => {
-    level.setRotationSpeed(0.335);
+    level.setRotationSpeed(0.22);
     level.setWallSpeedMult(2.8);
     level.setSides(6);
     level.set3dLayersCount(6);
     level.set3dDistance(25);
     level.setRadius(80);
     level.setWallSpeedIncrement(.1);
-    level.setRotationSpeedIncrement(.035);
+    level.setRotationSpeedIncrement(.02);
     level.set3dFalloffColor(new Color(0, 0, 0));
     level.setIncrementSpinPower(.4);
     level.set3dDepthMult(.5);
