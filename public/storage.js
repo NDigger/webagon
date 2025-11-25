@@ -27,6 +27,7 @@ export const defaultConfig = {
     flashOnDeathEnabled: true,
     funModeEnabled: false,
     swapParticlesEnabled: true,
+    invincibleModeEnabled: false,
 }
 
 export const getConfig = () => {

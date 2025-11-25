@@ -262,6 +262,8 @@ export default class Level extends Game {
     getIncrementSpinPower() { return this.#incrementSpinPower }
 
     kill() {
+        if (this.#config.invincibleModeEnabled) return
+        
         super.kill()
         this.#games.forEach(game => game.kill())
         

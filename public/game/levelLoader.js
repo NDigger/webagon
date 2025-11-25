@@ -13,6 +13,7 @@ const progressBarElement = document.getElementById('completable-level-progress-b
 const fpsCounterElement = document.getElementById('fps-counter');
 const restartHelpMsg = document.getElementById('restart-help-msg');
 const swapEnabledMsg = document.getElementById('swap-enabled-msg');
+const gamemodeMsg = document.getElementById('gamemode-msg');
 
 const timerElement = document.getElementById('timer');
 
@@ -105,6 +106,7 @@ export default class LevelLoader {
 
             restartHelpMsg.style.display = 'none';
             swapEnabledMsg.style.display = 'none';
+            gamemodeMsg.textContent = config.invincibleModeEnabled ? 'invincible mode' : 'official mode'
 
             fpsCounterElement.style.display = config.displayFpsEnabled ? 'block' : 'none';
 

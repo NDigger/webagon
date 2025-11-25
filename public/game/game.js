@@ -130,10 +130,9 @@ function quadArea2D(q) {
   return triArea2D(a, b, c) + triArea2D(a, c, d);
 }
 
-
 // чат жипити спасибо что делаешь рабочий рейкастинг за меня дай бог тебе здоровья
 function closestOutsidePointOnRadius(quad, p, radius) {
-    const offset = 1;
+    const offset = 0.01;
     function dot(a,b){return a.x*b.x+a.y*b.y;}
     function sub(a,b){return {x:a.x-b.x,y:a.y-b.y};}
     function add(a,b){return {x:a.x+b.x,y:a.y+b.y};}
@@ -344,7 +343,7 @@ export default class Game extends GameObject {
     #get3dColor() { return this.#color3d ?? this.#getDefault3dColor() }
 
     kill() {
-        if (this.isDestroyed()) return
+        if (this.isDestroyed() || this.#config.invincibleModeEnabled) return
 
         const d = new Death(this.app);
         d.setSkew(this.#skew);
@@ -534,11 +533,11 @@ export default class Game extends GameObject {
             }
             this.#walls = this.#updateWalls(this.#walls, stepFrameTime);
             if (!this.#died && this.#getCollidingWalls().length !== 0) this.kill();
-            // if (i % Math.floor(steps/20) === 0) this.#polygon.player.draw();
         }
         for (let i = 0; i < steps; i++) {
             if (this.#died) break
             const stepFrameTime = frameTime / steps
+            if (i % Math.floor(steps/20) === 0) this.#polygon.player.draw();
             this.#updatePlayer(stepFrameTime)
         }
 
