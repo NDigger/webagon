@@ -12,19 +12,26 @@ const addPattern = async pKey => {
     else if (pKey === 3) await patterns.pTunnel(Utils.mathRandom(2, 3), 700, 600);
 }
 
-const pKeys = [0, 1, 2, 3];
+// const pKeys = [0, 1, 2, 3];
+const pKeys = [];
 let activeKeys = [];
 
 level.onInit = () => {
     level.setMainColor(new Color(255, 0, 0));
     level.setRadius(70);
-    level.setRotationSpeed(0.035);
+    level.setWallSpawnDistance(200);
+    // level.setRotationSpeed(0.035);
+    level.setRotationSpeed(0.01);
     level.setWallSpeedMult(2.4);
     level.setSides(5);
-    level.set3dLayersCount(8);
-    level.set3dDistance(5);
+    level.createWall(-1, 100);
+    level.createWall(-3, 100);
+    level.createWall(1, 100);
+    // level.set3dLayersCount(8);
+    // level.set3dDistance(5);
     level.setWallSpeedIncrement(0.2);
     level.setRotationSpeedIncrement(0.015);
+    level.setSkew(0);
 }
 
 // onStep must be async and use delays in order to work. No delays may cause crash.
@@ -32,6 +39,7 @@ level.onStep = async () => {
     if (activeKeys.length === 0) activeKeys = pKeys.slice();
     const rndIndex = Math.floor(Math.random() * activeKeys.length)
     await addPattern(activeKeys.splice(rndIndex, 1)[0])
+    await level.distanceDelay(0);
 }
 
 // onUpdate is called every frame.
@@ -53,5 +61,5 @@ level.onIncrement = () => {
 }
 
 level.onRender = ft => {
-    level.setSkew(Utils.pingPong(level.getTime()*.07)*.5)
+    // level.setSkew(Utils.pingPong(level.getTime()*.07)*.5)
 }

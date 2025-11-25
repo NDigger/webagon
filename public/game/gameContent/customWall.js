@@ -1,19 +1,7 @@
 import Mesh from "./mesh";
 import { Vector2, Color } from "../../utils/structures";
 import Layers3d from "./layers3d";
-import { getScreenCenter } from "../utils";
-
-const rotatePoint = (point, center, angleDeg) => {
-  const angle = angleDeg * Math.PI / 180;
-
-  const dx = point.x - center.x;
-  const dy = point.y - center.y;
-
-  const xRot = dx * Math.cos(angle) - dy * Math.sin(angle);
-  const yRot = dx * Math.sin(angle) + dy * Math.cos(angle);
-
-  return new Vector2(xRot + center.x, yRot + center.y);
-}
+import { getScreenCenter, rotatePoint } from "../utils";
 
 export default class CustomWall extends Mesh {
     #layers3d = new Layers3d(this.app);

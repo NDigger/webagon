@@ -11,7 +11,7 @@
     "musicPath": "hybridSong.ogg",
     "musicTimestamps": [3, 25, 50],
 
-    "difficulties": [0.5, 1.8, 3],
+    "difficulties": [0.1, 0.5, 1.8, 3],
 
     "scriptPath": "script.js"
 }

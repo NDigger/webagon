@@ -23,14 +23,6 @@ let activeKeys = [];
 
 // onInit is called on the first frame when level is created.
 level.onInit = () => {
-    level.setBackgroundTileColors([
-        new Color(175, 205, 225),
-        new Color(170, 200, 230),
-        new Color(175, 195, 230),
-        new Color(170, 190, 230),
-        new Color(175, 195, 230),
-    ])
-
     level.setWallSpawnDistance(2000);
     level.setMainColor(new Color(255, 255, 255));
     level.setRadius(70);
@@ -43,13 +35,14 @@ level.onInit = () => {
     level.setRotationSpeedIncrement(0.015);
     level.set3dColor(new Color(255, 255, 255, 35));
     level.set3dFalloffColor(new Color(255, 255, 255, 0));
-    level.setBackgroundSwapTime(9999999);
+    level.setBackgroundSwapTime(.25);
     level.setScale(new Vector2(1, 1))
     level.setBackgroundDarkenUnevenChunkEnabled(false);
     level.set3dDistance(20);
     
     level.set3dDepthMult(level.getWallSpeedMult() / 10);
-    level.set3dFalloffScale(new Vector2(1.2, 2))
+    level.set3dFalloffScale(new Vector2(.8, 2.1))
+    // level.setWallSkewLeft(40);
 }
 
 // onStep must be async and use delays in order to work. No delays may cause crash.
@@ -65,11 +58,13 @@ level.onStep = async () => {
 level.onUpdate = ft => {
     const p = Utils.pingPong(level.getTime() * 2.5) * 20;
     level.setBackgroundTileColors([
-        new Color(105, 105, 235 + p),
-        new Color(100, 100, 225 + p),
-        new Color(105, 105, 215 + p),
-        new Color(100, 100, 205 + p),
-        new Color(105, 105, 215 + p),
+        new Color(105, 105 - p, 235 + p),
+        new Color(90, 100 - p, 225 + p),
+        new Color(80, 95 - p, 215 + p),
+        new Color(70, 70 - p, 205 + p),
+        new Color(80, 85 - p, 215 + p),
+        new Color(90, 105 - p, 225 + p),
+        new Color(105, 125 - p, 235 + p),
     ])
 
     const t = level.getTime();
@@ -77,17 +72,13 @@ level.onUpdate = ft => {
 
     level.setRadius(70 + sync*10);
 
-    // const s = Utils.pingPong(level.getTime() * 2.5) * .5 - 1
-    // level.set3dFalloffScale(new Vector2(s, s));
     const wallScale = new Vector2(Math.sin(t * 20) * .04 + 1, Math.cos(t * 20) * .04 + 1);
     level.setWallScale(wallScale.mul(new Vector2(1 - sync * .05, 1 - sync * .05)))
-    // level.setWallScale(new Vector2(2, 2))
 }
 
 // onRender is called every frame. It works when player is died.
 level.onRender = ft => {
     level.setSkew(Utils.pingPong(level.getTime()) * .5 + .5)
-    // level.set3dDepthMult(Utils.pingPong(level.getTime()) * .3 + .3)
 }
 
 // onPreIncrement is called immediately when increment time is achieved

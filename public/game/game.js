@@ -63,6 +63,153 @@ function closestSide(pos, points) {
 const gameArrowLeft = document.getElementById('game-arrow-left');
 const gameArrowRight = document.getElementById('game-arrow-right');
 
+function closestOutsidePoint(quad, p) {
+  const offset = 0.1;
+  function dot(a,b){return a.x*b.x+a.y*b.y;}
+  function sub(a,b){return {x:a.x-b.x,y:a.y-b.y};}
+  function add(a,b){return {x:a.x+b.x,y:a.y+b.y};}
+  function mul(a,s){return {x:a.x*s,y:a.y*s};}
+
+  function isInside(q,p){
+    let sign = null;
+    for (let i=0;i<4;i++){
+      let a=q[i], b=q[(i+1)%4];
+      let ap=sub(p,a), ab=sub(b,a);
+      let cross = ab.x*ap.y - ab.y*ap.x;
+      if(sign===null) sign = cross>0;
+      else if((cross>0)!==sign) return false;
+    }
+    return true;
+  }
+
+  function closestPointOnSegment(a,b,p){
+    let ab=sub(b,a);
+    let t=dot(sub(p,a),ab)/dot(ab,ab);
+    t=Math.max(0,Math.min(1,t));
+    return add(a, mul(ab,t));
+  }
+
+  if(!isInside(quad,p)) return p;
+
+  let best=null, bestDist=Infinity, bestNormal=null;
+
+  for(let i=0;i<4;i++){
+    let a=quad[i], b=quad[(i+1)%4];
+    let cp=closestPointOnSegment(a,b,p);
+
+    let d=(cp.x-p.x)**2 + (cp.y-p.y)**2;
+    if(d<bestDist){
+      bestDist=d;
+      best=cp;
+
+      let ab=sub(b,a);
+      let n={x:-ab.y, y:ab.x};
+      let ln=Math.hypot(n.x,n.y);
+      n.x/=ln; n.y/=ln;
+
+      let toP=sub(p,cp);
+      if(dot(n,toP)>0) { n.x=-n.x; n.y=-n.y; }
+
+      bestNormal=n;
+    }
+  }
+  return add(best, mul(bestNormal, offset));
+}
+
+
+function triArea2D(p1, p2, p3) {
+  return Math.abs(
+    (p1.x * (p2.y - p3.y) +
+     p2.x * (p3.y - p1.y) +
+     p3.x * (p1.y - p2.y)) * 0.5
+  );
+}
+
+function quadArea2D(q) {
+  const [a, b, c, d] = q;
+  return triArea2D(a, b, c) + triArea2D(a, c, d);
+}
+
+
+// чат жипити спасибо что делаешь рабочий рейкастинг за меня дай бог тебе здоровья
+function closestOutsidePointOnRadius(quad, p, radius) {
+    const offset = 5;
+    function dot(a,b){return a.x*b.x+a.y*b.y;}
+    function sub(a,b){return {x:a.x-b.x,y:a.y-b.y};}
+    function add(a,b){return {x:a.x+b.x,y:a.y+b.y};}
+    function mul(a,s){return {x:a.x*s,y:a.y*s};}
+
+    function isInside(q,p){
+        let sign = null;
+        for (let i=0;i<4;i++){
+        let a=q[i], b=q[(i+1)%4];
+        let ap=sub(p,a), ab=sub(b,a);
+        let cross = ab.x*ap.y - ab.y*ap.x;
+        if(sign===null) sign = cross>0;
+        else if((cross>0)!==sign) return false;
+        }
+        return true;
+    }
+
+    function closestPointOnSegment(a,b,p){
+        let ab=sub(b,a);
+        let t=dot(sub(p,a),ab)/dot(ab,ab);
+        t=Math.max(0,Math.min(1,t));
+        return add(a, mul(ab,t));
+    }
+
+    // Если уже снаружи — просто отдаём точку на окружности
+    if (!isInside(quad, p)) {
+        const len = Math.hypot(p.x, p.y);
+        return { x: (p.x/len) * radius, y: (p.y/len) * radius };
+    }
+
+    // Ищем ближайшую точку на грани
+    let best = null;
+    let bestDist = Infinity;
+    let bestNormal = null;
+
+    for (let i = 0; i < 4; i++) {
+        let a = quad[i];
+        let b = quad[(i+1)%4];
+        let cp = closestPointOnSegment(a, b, p);
+
+        let d = (cp.x - p.x)**2 + (cp.y - p.y)**2;
+        if (d < bestDist) {
+        bestDist = d;
+        best = cp;
+
+        // Нормаль наружу (левая)
+        let ab = sub(b, a);
+        let n = { x: -ab.y, y: ab.x };
+        let ln = Math.hypot(n.x, n.y);
+        n.x /= ln; 
+        n.y /= ln;
+
+        // Проверяем правильность направления
+        let toP = sub(p, cp);
+        if (dot(n, toP) > 0) { 
+            n.x = -n.x;
+            n.y = -n.y;
+        }
+
+        bestNormal = n;
+        }
+    }
+
+    // Смещаем точку наружу на offset
+    const pushed = add(best, mul(bestNormal, offset));
+
+    // И теперь возвращаем только координату на окружности
+    const angle = Math.atan2(pushed.y, pushed.x);
+
+    return {
+        x: Math.cos(angle) * radius,
+        y: Math.sin(angle) * radius
+    };
+    }
+
+
 export default class Game extends GameObject {
     #background;
     #backgroundRotationOffset = 0;
@@ -310,8 +457,8 @@ export default class Game extends GameObject {
     #updatePlayer(frameTime, steps) {
         this.#polygon.player.setColor(this.#getPlayerColor())
         this.#currentSwapReloadTime -= frameTime/1000/steps;
-        let prevRotationOffset = this.#polygon.player.getRotationOffset();
 
+        const prevRotationOffset = this.#polygon.player.getRotationOffset();
         const playerSpeed = frameTime * .6 / steps;
         const tiltSpeed = 0.0014 * frameTime * this.#config.playerTiltMult / steps * 5;
         const maxTilt = this.#config.playerTiltMult;
@@ -340,10 +487,20 @@ export default class Game extends GameObject {
             }
             this.#polygon.player.updatePosition()
         }
-        if (this.#getCollidingWalls().length !== 0) {
-            if (this.#leftKeyPressed) this.#polygon.player.setRotationOffset(prevRotationOffset + playerSpeed)
-            if (this.#rightKeyPressed) this.#polygon.player.setRotationOffset(prevRotationOffset - playerSpeed)
+        const collidingWalls = this.#getCollidingWalls();
+        if (collidingWalls.length !== 0) {
+            const wall = collidingWalls.sort((w1, w2) => quadArea2D(w2.getVertexPos4()) - quadArea2D(w1.getVertexPos4()))[0];
+            const vertexPos4 = wall.getVertexPos4().map(pos => pos.mul(wall.getScale()));
+            const point = this.#polygon.player.getPointPosition();
+            const safePoint = closestOutsidePointOnRadius(vertexPos4, point, Math.hypot(point.y, point.x));
+            const safeAngle = Math.atan2(safePoint.y, safePoint.x);
+            const degrees = safeAngle * 180 / Math.PI;
+            this.#polygon.player.setRotationOffset(degrees);
             this.#polygon.player.updatePosition()
+            if (this.#getCollidingWalls().length !== 0) {
+                this.#polygon.player.setRotationOffset(prevRotationOffset);
+                this.#polygon.player.updatePosition()
+            }
         }
     }
 
@@ -355,25 +512,17 @@ export default class Game extends GameObject {
         this.#polygon.setRotation(this.#rotation)
         this.#background.setRotation(this.#rotation + this.#backgroundRotationOffset);
 
-        const fps = getFPS();
-        const fpsSteps = Math.floor(1200/(fps !== 0 ? fps : 30));
-        const steps = Math.max(fpsSteps, 30);
-
-    
         this.#polygon.player.updatePosition();
         this.#walls.forEach(wall => {
             wall.setRotation(this.#rotation);
             wall.updatePosition();
         });
+        
 
-        for (let i = 0; i < steps; i++) {
-            if (this.#died) break
-            this.#walls = this.#updateWalls(this.#walls, frameTime, steps);
-            if (!this.#died && this.#getCollidingWalls().length !== 0) {
-                this.kill();
-                console.log("Step: ", i, "Penis: ", this.#polygon.player.getRotationOffset())
-            }
-        }
+        const fps = getFPS();
+        const fpsSteps = Math.floor(1200/(fps !== 0 ? fps : 30));
+        // const steps = Math.max(fpsSteps, 30);
+        const steps = 1;
 
         for (let i = 0; i < steps; i++) {
             if (this.#died) break
@@ -382,11 +531,15 @@ export default class Game extends GameObject {
                 this.#distanceSignal();
                 this.#distanceSignal = null;
             }
-
-            this.#updatePlayer(frameTime, steps);
-            if (i % Math.floor(steps/20) === 0) this.#polygon.player.draw();
+            this.#walls = this.#updateWalls(this.#walls, frameTime, steps);
+            if (!this.#died && this.#getCollidingWalls().length !== 0) this.kill();
+            // if (i % Math.floor(steps/20) === 0) this.#polygon.player.draw();
         }
-            
+        for (let i = 0; i < steps; i++) {
+            if (this.#died) break
+            this.#updatePlayer(frameTime, steps)
+        }
+
         if (this.#died) {
             if (this.#deathEffect) this.#deathEffect.setColor(Color.hsvToRgb(time/500, 1., 1.));
             this.#polygon.player.setColor(Color.hsvToRgb(time/500 + .5, 1., 1.));

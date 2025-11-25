@@ -60,8 +60,8 @@ level.onUpdate = ft => {
     const syncTime = t * 1.9;
 
     level.setRadius(90 - Utils.fract(syncTime) * 20)
-    level.setWallSkewLeft(-Utils.fract(syncTime) * 40)
-    level.setWallSkewRight(-Utils.fract(syncTime) * 40)
+    level.setWallSkewLeft(20+-Utils.fract(syncTime) * 80)
+    level.setWallSkewRight(20+-Utils.fract(syncTime) * 80)
     const rs = rotationSpeed;
     level.setRotationSpeed((rs - Utils.fract(syncTime) * rs + rs * .3) * rotationDir)
 
