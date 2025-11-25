@@ -92,12 +92,11 @@ const addPattern = async pKey => {
     else if (pKey === 2) await pSwapTunnel(Utils.mathRandom(3, 4), 320, 320);
     else if (pKey === 3) await patterns.pInverseBarrage(Utils.mathRandom(4, 6), 240, 320);
     else if (pKey === 4) await pSwapSpiral(Utils.mathRandom(3, 4), 200, 320);
-    else if (pKey === 5) await pSwapTunnel2(Utils.mathRandom(2, 34), 250, 320);
+    else if (pKey === 5) await pSwapTunnel2(Utils.mathRandom(3, 4), 250, 320);
     else if (pKey === 6) await pSwapperInverse(250, 320);
 }
 
-// const pKeys = [0, 1, 2, 3, 4, 5, 6];
-const pKeys = [5];
+const pKeys = [0, 1, 2, 3, 4, 5, 6];
 let activeKeys = [];
 
 // onInit is called on the first frame when level is created.

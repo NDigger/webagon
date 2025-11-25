@@ -18,8 +18,7 @@ const addPattern = async pKey => {
     else if (pKey === 8) await patterns.pWallExSpam(Utils.mathRandom(3, 4), 60, d * 2.2);
 }
 
-// const pKeys = [0, 1, 2, 3, 4, 5, 6, 7, 8];
-const pKeys = [6]
+const pKeys = [0, 1, 2, 3, 4, 5, 6, 7, 8];
 let activeKeys = [];
 
 // onInit is called on the first frame when level is created.
@@ -44,14 +43,13 @@ level.onInit = () => {
     level.setRotationSpeedIncrement(0.015);
     level.set3dColor(new Color(255, 255, 255, 35));
     level.set3dFalloffColor(new Color(255, 255, 255, 0));
-    // level.setPolygonColor(level.getMainColor())
     level.setBackgroundSwapTime(9999999);
     level.setScale(new Vector2(1, 1))
     level.setBackgroundDarkenUnevenChunkEnabled(false);
     level.set3dDistance(20);
     
     level.set3dDepthMult(level.getWallSpeedMult() / 10);
-    level.set3dFalloffScale(new Vector2(1.2, .5))
+    level.set3dFalloffScale(new Vector2(1.2, 2))
 }
 
 // onStep must be async and use delays in order to work. No delays may cause crash.

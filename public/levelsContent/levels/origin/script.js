@@ -9,15 +9,13 @@ const addPattern = async pKey => {
     if (pKey === 0) await patterns.pInverseBarrage(Utils.mathRandom(2, 3), 500, 700);
     else if (pKey === 1) await patterns.pSpiralBarrage(Utils.mathRandom(4, 6), 300, 600);
     else if (pKey === 2) await patterns.pSpiral(Utils.mathRandom(7, 9), 100, 400, 1);
-    else if (pKey === 3) await patterns.pTunnel(Utils.mathRandom(2, 3), 1500, 600);
+    else if (pKey === 3) await patterns.pTunnel(Utils.mathRandom(2, 3), 700, 600);
 }
 
-// const pKeys = [0, 1, 2, 3];
-const pKeys = [3];
+const pKeys = [0, 1, 2, 3];
 let activeKeys = [];
 
 level.onInit = () => {
-    // g.setBackgroundRadius(500);
     level.setMainColor(new Color(255, 0, 0));
     level.setRadius(70);
     level.setRotationSpeed(0.035);
@@ -27,8 +25,6 @@ level.onInit = () => {
     level.set3dDistance(5);
     level.setWallSpeedIncrement(0.2);
     level.setRotationSpeedIncrement(0.015);
-
-    // level.createWall(0, 400);
 }
 
 // onStep must be async and use delays in order to work. No delays may cause crash.

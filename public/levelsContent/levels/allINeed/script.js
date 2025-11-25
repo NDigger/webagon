@@ -12,8 +12,7 @@ const addPattern = async pKey => {
     else if (pKey === 4) await patterns.pWallExTunnel(Utils.mathRandom(4, 5), 310, 420);
 }
 
-// const pKeys = [0, 1, 1, 1, 2, 3, 4];
-const pKeys = [4];
+const pKeys = [0, 1, 1, 1, 2, 3, 4];
 let activeKeys = [];
 
 // onInit is called on the first frame when level is created.

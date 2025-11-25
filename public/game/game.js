@@ -356,8 +356,8 @@ export default class Game extends GameObject {
         this.#background.setRotation(this.#rotation + this.#backgroundRotationOffset);
 
         const fps = getFPS();
-        const fpsSteps = Math.floor(400/(fps !== 0 ? fps : 10));
-        const steps = Math.max(fpsSteps, 10);
+        const fpsSteps = Math.floor(1200/(fps !== 0 ? fps : 30));
+        const steps = Math.max(fpsSteps, 30);
 
     
         this.#polygon.player.updatePosition();
@@ -365,6 +365,16 @@ export default class Game extends GameObject {
             wall.setRotation(this.#rotation);
             wall.updatePosition();
         });
+
+        for (let i = 0; i < steps; i++) {
+            if (this.#died) break
+            this.#walls = this.#updateWalls(this.#walls, frameTime, steps);
+            if (!this.#died && this.#getCollidingWalls().length !== 0) {
+                this.kill();
+                console.log("Step: ", i, "Penis: ", this.#polygon.player.getRotationOffset())
+            }
+        }
+
         for (let i = 0; i < steps; i++) {
             if (this.#died) break
             this.#distanceDelay -= frameTime * this.#wallSpeedMult / 5 / steps;
@@ -376,18 +386,7 @@ export default class Game extends GameObject {
             this.#updatePlayer(frameTime, steps);
             if (i % Math.floor(steps/20) === 0) this.#polygon.player.draw();
         }
-
-        for (let i = 0; i < steps; i++) {
-            if (this.#died) break
-            this.#walls = this.#updateWalls(this.#walls, frameTime, steps);
-            if (!this.#died && this.#getCollidingWalls().length !== 0) {
-                this.kill();
-                console.log("Step: ", i, "Penis: ", this.#polygon.player.getRotationOffset())
-            }
-        }
-    
-        console.log(this.#polygon.player.getRotationOffset());
-        
+            
         if (this.#died) {
             if (this.#deathEffect) this.#deathEffect.setColor(Color.hsvToRgb(time/500, 1., 1.));
             this.#polygon.player.setColor(Color.hsvToRgb(time/500 + .5, 1., 1.));
