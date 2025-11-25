@@ -12,23 +12,17 @@ const addPattern = async pKey => {
     else if (pKey === 3) await patterns.pTunnel(Utils.mathRandom(2, 3), 700, 600);
 }
 
-// const pKeys = [0, 1, 2, 3];
-const pKeys = [];
+const pKeys = [0, 1, 2, 3];
 let activeKeys = [];
 
 level.onInit = () => {
     level.setMainColor(new Color(255, 0, 0));
     level.setRadius(70);
-    level.setWallSpawnDistance(200);
-    // level.setRotationSpeed(0.035);
-    level.setRotationSpeed(0.01);
+    level.setRotationSpeed(0.035);
     level.setWallSpeedMult(2.4);
     level.setSides(5);
-    level.createWall(-1, 100);
-    level.createWall(-3, 100);
-    level.createWall(1, 100);
-    // level.set3dLayersCount(8);
-    // level.set3dDistance(5);
+    level.set3dLayersCount(8);
+    level.set3dDistance(5);
     level.setWallSpeedIncrement(0.2);
     level.setRotationSpeedIncrement(0.015);
     level.setSkew(0);
@@ -61,5 +55,5 @@ level.onIncrement = () => {
 }
 
 level.onRender = ft => {
-    // level.setSkew(Utils.pingPong(level.getTime()*.07)*.5)
+    level.setSkew(Utils.pingPong(level.getTime()*.07)*.5)
 }

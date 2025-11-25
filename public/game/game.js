@@ -133,7 +133,7 @@ function quadArea2D(q) {
 
 // чат жипити спасибо что делаешь рабочий рейкастинг за меня дай бог тебе здоровья
 function closestOutsidePointOnRadius(quad, p, radius) {
-    const offset = 5;
+    const offset = 1;
     function dot(a,b){return a.x*b.x+a.y*b.y;}
     function sub(a,b){return {x:a.x-b.x,y:a.y-b.y};}
     function add(a,b){return {x:a.x+b.x,y:a.y+b.y};}
@@ -379,11 +379,11 @@ export default class Game extends GameObject {
         this.#walls.forEach(w => w.draw());
     }
 
-    #updateWalls(walls, frameTime, steps) {
+    #updateWalls(walls, frameTime) {
         const minDistance = 30;
         const minThickness = 0;
         return walls.filter(wall => {
-            const decrease = value => value - frameTime * this.#wallSpeedMult / 5 / steps
+            const decrease = value => value - frameTime * this.#wallSpeedMult / 5
             if (wall.getDistance() > minDistance) wall.setDistance(Math.max(minDistance, decrease(wall.getDistance())));
             else if (wall.getThickness() > minThickness) wall.setThickness(Math.max(minThickness, decrease(wall.getThickness())));
 
@@ -454,13 +454,13 @@ export default class Game extends GameObject {
         return this.#walls.filter(wall => pointInQuad(this.#polygon.player.getPointAbsolutePosition(), wall.getVertexAbsolutePos4()))
     }
 
-    #updatePlayer(frameTime, steps) {
+    #updatePlayer(frameTime) {
         this.#polygon.player.setColor(this.#getPlayerColor())
-        this.#currentSwapReloadTime -= frameTime/1000/steps;
+        this.#currentSwapReloadTime -= frameTime/1000;
 
-        const prevRotationOffset = this.#polygon.player.getRotationOffset();
-        const playerSpeed = frameTime * .6 / steps;
-        const tiltSpeed = 0.0014 * frameTime * this.#config.playerTiltMult / steps * 5;
+        let prevRotationOffset = this.#polygon.player.getRotationOffset();
+        const playerSpeed = frameTime * .6;
+        const tiltSpeed = 0.0014 * frameTime * this.#config.playerTiltMult * 5;
         const maxTilt = this.#config.playerTiltMult;
         
         if (this.#playerMovementEnabled) {
@@ -515,29 +515,31 @@ export default class Game extends GameObject {
         this.#polygon.player.updatePosition();
         this.#walls.forEach(wall => {
             wall.setRotation(this.#rotation);
+            // wall.setRotation(this.#rotation + Math.pow(wall.getDistance() / 50, 1.5));
             wall.updatePosition();
         });
-        
 
         const fps = getFPS();
         const fpsSteps = Math.floor(1200/(fps !== 0 ? fps : 30));
-        // const steps = Math.max(fpsSteps, 30);
-        const steps = 1;
+        const steps = Math.max(fpsSteps, 30);
+        // const steps = 1;
 
         for (let i = 0; i < steps; i++) {
             if (this.#died) break
-            this.#distanceDelay -= frameTime * this.#wallSpeedMult / 5 / steps;
+            const stepFrameTime = frameTime / steps
+            this.#distanceDelay -= stepFrameTime * this.#wallSpeedMult / 5;
             if (this.#distanceDelay <= 0 && typeof this.#distanceSignal === 'function') {
                 this.#distanceSignal();
                 this.#distanceSignal = null;
             }
-            this.#walls = this.#updateWalls(this.#walls, frameTime, steps);
+            this.#walls = this.#updateWalls(this.#walls, stepFrameTime);
             if (!this.#died && this.#getCollidingWalls().length !== 0) this.kill();
             // if (i % Math.floor(steps/20) === 0) this.#polygon.player.draw();
         }
         for (let i = 0; i < steps; i++) {
             if (this.#died) break
-            this.#updatePlayer(frameTime, steps)
+            const stepFrameTime = frameTime / steps
+            this.#updatePlayer(stepFrameTime)
         }
 
         if (this.#died) {
