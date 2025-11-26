@@ -205,7 +205,7 @@ export default class Level extends Game {
         document.removeEventListener('visibilitychange', this.#handleVisibilityChange);
         if (this.#audio) this.#audio.pause()
 
-        if (this.#isNewBest() && !this.#isNewBestSaved) this.#saveBest();
+        if (this.#isNewBest() && !this.#isNewBestSaved && !this.#config.invincibleModeEnabled) this.#saveBest();
 
         newPersonalBestMessage.style.display = 'none'
     }
