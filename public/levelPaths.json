@@ -1,11 +1,11 @@
 [
+    "./levelsContent/levels/tutorial",
     "./levelsContent/levels/origin",
     "./levelsContent/levels/tranquility",
     "./levelsContent/levels/allINeed",
     "./levelsContent/levels/aeroAdventure",
     "./levelsContent/levels/jungle",
     "./levelsContent/levels/cyberspace",
-    "./levelsContent/levels/hell",
     "./levelsContent/levels/neon",
     "./levelsContent/levels/happyLevel",
     "./levelsContent/levels/impulse",

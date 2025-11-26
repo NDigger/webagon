@@ -1,0 +1,18 @@
+{
+    "key": "tutorial", 
+
+    "name": "Tutorial",
+    "description": "",
+    "author": "NDagger",
+
+    "musicName": "Leaving Leafwood Forest",
+    "musicAuthor": "Bossfight",
+    "musicAlbum": "Caps On, Hats Off",
+    "musicPath": "music.ogg",
+    "musicTimestamps": [0],
+
+    "difficulties": [2.5, 5],
+    "completable": true,
+
+    "scriptPath": "script.js"
+}
