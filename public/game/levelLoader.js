@@ -13,6 +13,7 @@ const progressBarElement = document.getElementById('completable-level-progress-b
 const fpsCounterElement = document.getElementById('fps-counter');
 const restartHelpMsg = document.getElementById('restart-help-msg');
 const swapEnabledMsg = document.getElementById('swap-enabled-msg');
+const gamePulsingMsg = document.getElementById('game-pulsing-msg');
 const gamemodeMsg = document.getElementById('gamemode-msg');
 
 const timerElement = document.getElementById('timer');
@@ -56,8 +57,10 @@ export default class LevelLoader {
 
         this.onLeave();
 
-        document.getElementById('game-content').style.display = 'none';
-        document.getElementById('level-select').style.display = 'flex';
+        gamePulsingMsg.style.display = 'none'
+        gameContentElement.style.display = 'none';
+        levelSelectElement.style.display = 'flex';
+
         timerElement.style.display = 'none';
         progressBarElement.style.display = 'none';
     }
@@ -117,6 +120,7 @@ export default class LevelLoader {
             window.addEventListener('keydown', this.#handleKeydown);
             window.addEventListener('keyup', this.#handleKeyup)
             // this.level.onLoad();
+            
         }
     }
 }

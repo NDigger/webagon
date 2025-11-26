@@ -13,3 +13,27 @@ export const rotatePoint = (point, center, angleDeg) => {
 
   return new Vector2(xRot + center.x, yRot + center.y);
 }
+
+export const secure = obj => {
+  return new Proxy(obj, {
+    get(target, prop, receiver) {
+      if (String(prop).startsWith("_")) return undefined;
+      const value = Reflect.get(target, prop, receiver);
+      if (typeof value === "function") {
+        return new Proxy(value, {
+          apply(t, thisArg, args) {
+            if (t.name.startsWith("_")) {
+              throw new Error("Access denied");
+            }
+            return Reflect.apply(t, thisArg, args);
+          }
+        });
+      }
+      return value;
+    },
+
+    has(_, prop) {
+      return !String(prop).startsWith("_");
+    }
+  });
+}

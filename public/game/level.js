@@ -1,43 +1,15 @@
 import Game from "./game";
 import { Color } from "../utils/structures";
 import Lerp from "../utils/interpolation";
-import { setBestScore } from "../script";
 import CustomWall from "./gameContent/customWall";
 import { getConfig } from "../storage";
 
 import { getLevelStats, writeLevelStats } from "../storage";
 
-const newPersonalBestMessage = document.getElementById('game-pulsing-msg');
-const newPBMessages = [
-    'not impressive, at all.',
-    'significant improvement!!!',
-    'jokes on you.',
-    'what could be worse than this...',
-    'breathe in, breathe out',
-    'new personal damage!',
-    'you died!',
-    'look at that!',
-    'how is it possible?',
-    'infinity achieved!',
-    'w',
-    'another death, another best...',
-    'hands are shaking!',
-    'boss.',
-    'fantastic score! fascinating!',
-    'breaking boundaries!',
-    'lmao',
-    'that best looks cute.',
-    'bliss that bee!',
-    'how unlucky!',
-];
-
-const getRandomNewPBMessage = () => newPBMessages[Math.floor(Math.random() * newPBMessages.length)]
-
 export default class Level extends Game { 
     onInit = () => {};
     onUpdate = () => {};
     onRender = () => {};
-    // onLoad = () => {};
     onStep = async () => {};
     onIncrement = () => {};
     onPreIncrement = () => {};
@@ -56,9 +28,7 @@ export default class Level extends Game {
     #updateId = null;
     #lastUpdateTime = performance.now();
     #lastRenderTime = performance.now();
-    #levelTime = 0;
-
-    #isNewBestSaved = false;
+    _levelTime = 0;
 
     #audio;
     #levelData;
@@ -164,7 +134,7 @@ export default class Level extends Game {
         const frameTime = time - this.#lastUpdateTime;
         const levelTime = time - this.#levelInitTime;
         this.#lastUpdateTime = time;
-        this.#levelTime = (time - this.#levelInitTime)/1000;
+        this._levelTime = (time - this.#levelInitTime)/1000;
         this.onUpdate(frameTime/1000);
         
         this.#incrementTimer += frameTime/1000;
@@ -204,29 +174,8 @@ export default class Level extends Game {
         cancelAnimationFrame(this.#renderId)
         document.removeEventListener('visibilitychange', this.#handleVisibilityChange);
         if (this.#audio) this.#audio.pause()
-
-        if (this.#isNewBest() && !this.#isNewBestSaved && !this.#config.invincibleModeEnabled) this.#saveBest();
-
-        newPersonalBestMessage.style.display = 'none'
     }
-
-    #isNewBest() {
-        const levelStats = getLevelStats(this.#levelData.key, this.#props.difficulty);
-        const previousBest = levelStats?.best ?? 0;
-        const newBest = Math.floor(this.#levelTime*1000)/1000;
-        return newBest > previousBest
-    }
-
-    #saveBest() {
-        this.#isNewBestSaved = true
-        const levelStats = getLevelStats(this.#levelData.key, this.#props.difficulty);
-        const newBest = Math.floor(this.#levelTime*1000)/1000;
-        levelStats.best = newBest;
-        writeLevelStats(this.#levelData.key, this.#props.difficulty, levelStats)
-
-        setBestScore(newBest)
-    }
-
+    
     setWallSpeedMult(v) {
         if (!this.#initialized) super.setWallSpeedMult(v * this.#props.difficulty);
         else super.setWallSpeedMult(v);
@@ -291,15 +240,9 @@ export default class Level extends Game {
             flashLerp.apply(new Color(255, 255, 255, .6))
             flashLerp.run(new Color(255, 255, 255, 0), 1)
         }
-        
-        if (this.#isNewBest()) {
-            newPersonalBestMessage.style.display = 'block';
-            newPersonalBestMessage.textContent = this.#config.funModeEnabled ? getRandomNewPBMessage() : 'new personal best'
-            this.#saveBest();
-        }
 
         const levelStats = getLevelStats(this.#levelData.key, this.#props.difficulty);
-        const newTotalTime = (levelStats.totalTime ?? 0) + this.#levelTime;
+        const newTotalTime = (levelStats.totalTime ?? 0) + this._levelTime;
         levelStats.totalTime = Math.floor(newTotalTime * 1000)/1000;
         writeLevelStats(this.#levelData.key, this.#props.difficulty, levelStats);
     }
@@ -343,7 +286,7 @@ export default class Level extends Game {
     getWallSpeedMax() { return this.#wallSpeedMax }
 
     getTime() {
-        return this.#levelTime
+        return this._levelTime
     }
     getDifficulty() {
         return this.#props.difficulty

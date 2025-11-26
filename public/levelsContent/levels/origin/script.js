@@ -26,6 +26,7 @@ level.onInit = () => {
     level.setWallSpeedIncrement(0.2);
     level.setRotationSpeedIncrement(0.015);
     level.setSkew(0);
+    // console.log(level._levelTime)
 }
 
 // onStep must be async and use delays in order to work. No delays may cause crash.
