@@ -70,7 +70,7 @@
 }
 
 #trackers {
-    /* margin-top: -15px; */
+    margin-top: 10px;
     font-size: inherit;
 }
 
@@ -94,7 +94,7 @@
     font-size: 5rem; 
 }
 
-#game-new-personal-best-msg {
+#game-pulsing-msg {
     color: var(--main-color);
     display: none;
     position: absolute;
@@ -109,33 +109,24 @@
 
 #completable-level-progress-bar {
     display: none;
-    border: 1px solid var(--main-color);
+    /* border: 1px solid var(--main-color); */
     position: relative;
-    width: min(800px, 98vw);
-    height: min(15px, 2vh);
-    top: 10px;
+    width: 100vw;
+    height: 10px;
+    top: 0px;
     left: 50%;
     transform: translateX(-50%);
-    box-shadow: 1px 0 var(--background-tile-color), -1px 0 var(--background-tile-color), 0 1px var(--background-tile-color), 0 1px var(--background-tile-color),
-                1px 1px var(--background-tile-color), -1px -1px var(--background-tile-color), 1px -1px var(--background-tile-color), -1px 1px var(--background-tile-color);
-}
-
-#completable-level-progress-bar::after, #completable-level-progress-bar::before {
-    content: '';
-    position: absolute;
-    opacity: .5;
-    inset: 0;
+    /* box-shadow: 1px 0 var(--background-tile-color), -1px 0 var(--background-tile-color), 0 1px var(--background-tile-color), 0 1px var(--background-tile-color), */
+                /* 1px 1px var(--background-tile-color), -1px -1px var(--background-tile-color), 1px -1px var(--background-tile-color), -1px 1px var(--background-tile-color); */
 }
 
 #completable-level-progress-bar::after {
-    opacity: .5;
-    background-color: var(--background-tile-color);
+    content: '';
+    position: absolute;
+    inset: 0;    
+    backdrop-filter: blur(100px);
     z-index: -1;
-}
-
-#completable-level-progress-bar::before {
-    z-index: -2;
-    background-color: black;
+    /* opacity: 0; */
 }
 
 #completable-level-progress {

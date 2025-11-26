@@ -7,7 +7,7 @@ import { getConfig } from "../storage";
 
 import { getLevelStats, writeLevelStats } from "../storage";
 
-const newPersonalBestMessage = document.getElementById('game-new-personal-best-msg');
+const newPersonalBestMessage = document.getElementById('game-pulsing-msg');
 const newPBMessages = [
     'not impressive, at all.',
     'significant improvement!!!',
@@ -293,7 +293,6 @@ export default class Level extends Game {
         }
         
         if (this.#isNewBest()) {
-            console.log(getRandomNewPBMessage())
             newPersonalBestMessage.style.display = 'block';
             newPersonalBestMessage.textContent = this.#config.funModeEnabled ? getRandomNewPBMessage() : 'new personal best'
             this.#saveBest();
