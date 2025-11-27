@@ -28,7 +28,7 @@ export default class LevelLoader {
     
     #currentLevelData;
     #currentLevelDifficulty;
-    #attempt = 0;
+    #attempt = 1;
 
     #keyPressed = false;
 
@@ -73,9 +73,8 @@ export default class LevelLoader {
     }
 
     reload() {
-        const savedAttempt = this.#attempt;
+        this.#attempt += 1;
         this.#load(this.#currentLevelData);
-        this.#attempt = savedAttempt + 1;
     }
 
     #load(data) {
@@ -93,8 +92,8 @@ export default class LevelLoader {
         if (this.#level != null) this.#level.destroy();
 
         const levelProps = {
-            selectFirstMusicTimestamp: this.#attempt === 1,
             difficulty: this.#currentLevelDifficulty,
+            attempt: this.#attempt,
         }
         const createLevel = () => {
             if (data?.completable) return new CompletableLevel(this.app, this.#currentLevelData, levelProps)
@@ -112,7 +111,7 @@ export default class LevelLoader {
             restartHelpMsg.style.display = 'none';
             swapEnabledMsg.style.display = 'none';
             gamemodeMsg.textContent = config.invincibleModeEnabled ? 'invincible mode' : 'official mode'
-
+            gamePulsingMsg.style.display = 'none';            
             fpsCounterElement.style.display = config.displayFpsEnabled ? 'block' : 'none';
 
             this.#level.init()

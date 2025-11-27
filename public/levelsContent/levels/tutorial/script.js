@@ -39,20 +39,26 @@ level.onInit = () => {
     level.setMainColor(new Color(0, 0, 55));
     level.setCompletionTime(88);
 
-    if (level.getDifficultyMult() === 1) {
-        level.showMessage('Welcome!', 2)
+    console.log(level.getAttempt())
+    if (level.getDifficultyMult() === 1 && level.getAttempt() === 1) {
+        level.showMessage('Welcome!', 2);
 
-        level.createEvent(2, () => level.showMessage('To move use left and right arrows.', 3))
-        level.createEvent(5, () => level.showMessage('Try it out.', 2))
-        level.createEvent(10, () => level.showMessage('Avoid walls!', 3))
+        level.createEvent(2, () => level.showMessage('To move use left and right arrows.', 3));
+        level.createEvent(5, () => level.showMessage('Try it out.', 2));
+        level.createEvent(10, () => level.showMessage('Avoid walls!', 3));
+        
+        level.createEvent(30, () => level.showMessage('Get 60 seconds to complete the tutorial.', 4));
+        level.createEvent(60, () => extraIncMsg = true);
 
         level.createEvent(12, () => pKeys = [0, 1, 2, 3]);
-        level.createEvent(30, () => level.showMessage('Get 60 seconds to complete the tutorial.', 4))
-
-        level.createEvent(60, () => extraIncMsg = true)
+    } else if (level.getDifficultyMult() === 1 && level.getAttempt() !== 1) {
+        level.createEvent(0, () => level.showMessage('Get 60 seconds to complete the tutorial.', 4));
+        level.createEvent(60, () => extraIncMsg = true);
+        pKeys = [0, 1, 2, 3];
     } else {
-        pKeys = [0, 1, 2, 3]
+        pKeys = [0, 1, 2, 3];
     }
+
 }
 
 // onStep must be async and use delays in order to work. No delays may cause crash.
@@ -88,7 +94,9 @@ level.onIncrement = () => {
         level.showMessage('Before it\'s over, try to swap using "Space"!', 3);
         level.setSwapEnabled(true);
     })
-    level.createEvent(t + 8, () => level.showMessage('You will find swap useful in future', 2))
+    level.createEvent(t + 8, () => level.showMessage('You will find swap useful in future levels.', 3))
+
+    level.createEvent(t + 11, () => level.showMessage('Levels have various difficulties. \nTry to change tutorial level difficulty in level select when tutorial is over!', 8))
 }
 
 // onDeath is called when main player of level object touches deadly wall side

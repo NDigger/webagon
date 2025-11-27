@@ -49,7 +49,6 @@ export default class Level extends Game {
     #messageHideTime = 0;
 
     #props = {
-        selectFirstMusicTimestamp: false,
         difficulty: 1,
     }
 
@@ -59,14 +58,9 @@ export default class Level extends Game {
     constructor(app, levelData, props) {
         super(app)
         this.#props = props
-
-        // this.setMainColor(new Color(40, 40, 0))
-        // this.setBackgroundTileColors([
-        //     new Color(245, 245, 245),
-        //     new Color(235, 235, 235),
-        // ])
-
         this.#levelData = levelData
+
+        this.setBackgroundSwapTime(1);
     }
     
     init() {
@@ -78,7 +72,7 @@ export default class Level extends Game {
             this.#audio = audio;
         }
         const musicTimestamps = this.#levelData.musicTimestamps
-        const timestamp = musicTimestamps[this.#props.selectFirstMusicTimestamp ? 0 : Math.floor(Math.random() * musicTimestamps.length)] ?? 0
+        const timestamp = musicTimestamps[this.#props.attempt === 1 ? 0 : Math.floor(Math.random() * musicTimestamps.length)] ?? 0
         this.#audioTimestamp = timestamp;
         audio.currentTime = timestamp
         audio.play();
@@ -183,6 +177,10 @@ export default class Level extends Game {
         if (this.#audio) this.#audio.pause()
     }
     
+    setBackgroundSwapTime(v) {
+        if (!this.#initialized) super.setBackgroundSwapTime(v / this.#props.difficulty);
+        else super.setBackgroundSwapTime(v);
+    }
     setWallSpeedMult(v) {
         if (!this.#initialized) super.setWallSpeedMult(v * this.#props.difficulty);
         else super.setWallSpeedMult(v);
@@ -326,6 +324,7 @@ export default class Level extends Game {
         gameMessage.textContent = text;
         this.#messageHideTime = time;
     }
+    getAttempt() { return this.#props.attempt }
 
     createGame() {
         const game = new Game(app);
