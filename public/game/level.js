@@ -303,7 +303,7 @@ export default class Level extends Game {
     }
 
     createEvent(timeSeconds, event) {
-        const time = timeSeconds*1000-this._levelTime;
+        const time = (timeSeconds-this._levelTime)*1000;
         const timeout = setTimeout(() => event(), time);
         this.#timeouts.push(timeout);
         return timeout;

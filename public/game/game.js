@@ -404,7 +404,7 @@ export default class Game extends GameObject {
                 p.setColor(this.#getSwapColor());
                 p.setSkew(this.#skew);
                 p.setRotation(this.#rotation);
-                p.set3dColor(this.#color3d)
+                p.set3dColor(this.#get3dColor())
                 p.set3dDepthMult(this.#depthMult3d);
                 p.set3dDistance(this.#distance3d);
                 p.set3dFalloffColor(this.#getDefault3dColor());
