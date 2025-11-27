@@ -38,6 +38,7 @@ level.onInit = () => {
     level.setBackgroundRadius(40000);
     level.setMainColor(new Color(0, 0, 55));
     level.setCompletionTime(88);
+    level.setPlayerSwapReloadTime(0.4);
 
     console.log(level.getAttempt())
     if (level.getDifficultyMult() === 1 && level.getAttempt() === 1) {
@@ -54,11 +55,15 @@ level.onInit = () => {
     } else if (level.getDifficultyMult() === 1 && level.getAttempt() !== 1) {
         level.createEvent(0, () => level.showMessage('Get 60 seconds to complete the tutorial.', 4));
         level.createEvent(60, () => extraIncMsg = true);
-        pKeys = [0, 1, 2, 3];
-    } else {
-        pKeys = [0, 1, 2, 3];
+    } else if (level.getDifficultyMult() === 2.5) {
+        level.showMessage('This is harder version of tutorial!', 2);
+        level.createEvent(2, () => level.showMessage('Get 88 seconds to complete!', 2));
+    } else if (level.getDifficultyMult() === 5) {
+        level.setSwapEnabled(true);
+        level.createEvent(15, () => level.showMessage('Good luck!', 2))
     }
 
+    if (level.getDifficultyMult() !== 1 || level.getAttempt() !== 1) pKeys = [0, 1, 2, 3];
 }
 
 // onStep must be async and use delays in order to work. No delays may cause crash.
@@ -85,6 +90,7 @@ level.onPreIncrement = () => {}
 // onIncrement is called every time walls are gone and level speed incremented
 level.onIncrement = () => {
     if (!extraIncMsg) return
+    level.setIncrementTime(99999);
     extraIncMsg = false;
     pKeys = [];
     activeKeys = [];
@@ -96,7 +102,7 @@ level.onIncrement = () => {
     })
     level.createEvent(t + 8, () => level.showMessage('You will find swap useful in future levels.', 3))
 
-    level.createEvent(t + 11, () => level.showMessage('Levels have various difficulties. \nTry to change tutorial level difficulty in level select when tutorial is over!', 8))
+    level.createEvent(t + 11, () => level.showMessage('Levels have various difficulties. \nTry to change tutorial level difficulty in level select when tutorial is over!', 80))
 }
 
 // onDeath is called when main player of level object touches deadly wall side

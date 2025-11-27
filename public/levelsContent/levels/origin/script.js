@@ -6,14 +6,17 @@ import initPatterns from '../../patterns';
 let patterns = initPatterns(level);
 
 const addPattern = async pKey => {
-    if (pKey === 0) await patterns.pInverseBarrage(Utils.mathRandom(2, 3), 500, 700);
-    else if (pKey === 1) await patterns.pSpiralBarrage(Utils.mathRandom(4, 6), 300, 600);
-    else if (pKey === 2) await patterns.pSpiral(Utils.mathRandom(7, 9), 100, 400, 1);
-    else if (pKey === 3) await patterns.pTunnel(Utils.mathRandom(2, 3), 700, 600);
+    const d = 500 * Math.max(1, level.getWallSpeedMult() / 8);
+    if (pKey === 0) await patterns.pInverseBarrage(Utils.mathRandom(2, 3), d, d * 1.4);
+    else if (pKey === 1) await patterns.pSpiralBarrage(Utils.mathRandom(4, 6), d * .6, d);
+    else if (pKey === 2) await patterns.pSpiral(Utils.mathRandom(7, 9), d * .2, d * .8, 1);
+    else if (pKey === 3) await patterns.pTunnel(Utils.mathRandom(2, 3), d * 1.4, d * 1.2);
 }
 
 const pKeys = [0, 1, 2, 3];
 let activeKeys = [];
+
+const enableSwapOnHighSpeed = () => level.getWallSpeedMult() > 7 && level.setSwapEnabled(true);
 
 level.onInit = () => {
     level.setMainColor(new Color(255, 0, 0));
@@ -26,7 +29,7 @@ level.onInit = () => {
     level.setWallSpeedIncrement(0.2);
     level.setRotationSpeedIncrement(0.015);
     level.setSkew(0);
-    // console.log(level._levelTime)
+    enableSwapOnHighSpeed();
 }
 
 // onStep must be async and use delays in order to work. No delays may cause crash.
@@ -52,6 +55,7 @@ level.onUpdate = ft => {
 }
 
 level.onIncrement = () => {
+    enableSwapOnHighSpeed();
     level.setSides(Utils.mathRandom(5, 6))
 }
 

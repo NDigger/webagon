@@ -3,21 +3,39 @@ import * as Utils from '../../utils'
 import initPatterns from '../../patterns';
 const patterns = initPatterns(level);
 
-// Pattern spawn conditions, uses level.onStep
-const addPattern = async pKey => {
-    if (pKey === 0) await patterns.pInverseBarrage(Utils.mathRandom(2, 3), 420, 420);
-    else if (pKey === 1) await patterns.pRandomBarrage(Utils.mathRandom(4, 6), 230, 420);
-    else if (pKey === 2) await patterns.pAltBarrage(Utils.mathRandom(4, 5), 310, 420, 1);
-    else if (pKey === 3) await patterns.pDoubleSpiral(Utils.mathRandom(5, 9), 110, 420);
-    else if (pKey === 4) await patterns.pWallExTunnel(Utils.mathRandom(4, 5), 310, 420);
+
+const longBarrage = async (delay, delayEnd) => {
+    for(let i = 0; i < level.getSides() - 1; i++) level.createWall(i, delay);
+    await level.distanceDelay(delay);
+    await level.distanceDelay(delayEnd);
 }
 
-const pKeys = [0, 1, 1, 1, 2, 3, 4];
+
+const longAlt = async (delay, delayEnd) => {
+    for(let i = 0; i < level.getSides() - 1; i += 2) level.createWall(i, delay);
+    await level.distanceDelay(delay);
+    await level.distanceDelay(delayEnd);
+}
+
+// Pattern spawn conditions, uses level.onStep
+const addPattern = async pKey => {
+    const d = 420 * Math.max(1, level.getWallSpeedMult() / 6);
+    if (pKey === 0) await patterns.pInverseBarrage(Utils.mathRandom(2, 3), d, d);
+    else if (pKey === 1) await patterns.pRandomBarrage(Utils.mathRandom(4, 6), d * .7, d);
+    else if (pKey === 2) await patterns.pAltBarrage(Utils.mathRandom(4, 5), d * .75, d, 1);
+    else if (pKey === 3) await patterns.pDoubleSpiral(Utils.mathRandom(5, 9), d * .5, d);
+    else if (pKey === 4) await patterns.pWallExTunnel(Utils.mathRandom(4, 5), d * .75, d);
+    else if (pKey === 5) await longBarrage(d * .5, d);
+    else if (pKey === 6) await longAlt(d * .5, d);
+}
+
+const pKeys = [0, 1, 1, 1, 2, 3, 4, 5, 6];
 let activeKeys = [];
 
 // onInit is called on the first frame when level is created.
 level.onInit = () => {
-    level.setRotationSpeed(0.22);
+    level.setRotationSpeed(0.2);
+    level.setRotationSpeedMax(.5);
     level.setWallSpeedMult(2.8);
     level.setSides(6);
     level.set3dLayersCount(6);
@@ -45,12 +63,14 @@ level.onUpdate = ft => {
             new Color(255, 255, 255),
             new Color(250, 250, 250)
         ])
-    level.setMainColor(new Color(255, 255, 255))
+    const s = Utils.pingPong(level.getTime() * 6) * 15;
+    level.setMainColor(new Color(255 - s, 255 - s, 255 - s))
+    
     const v = 225 + Utils.pingPong(time * 1.05) * 30;
     level.setPolygonColor(new Color(v, v, v));
     
-    const s = Utils.pingPong(1-Utils.easeOut(Utils.fract(time * 1.05))) * .9 + 1;
-    level.setWallScale(new Vector2(s, s));
+    const ws = Utils.pingPong(1-Utils.easeOut(Utils.fract(time * 1.05))) * .9 + 1;
+    level.setWallScale(new Vector2(ws, ws));
 
     const value = Utils.pingPong(level.getTime()) * 100 + 50
     level.setFontColor(new Color(value, value, value));

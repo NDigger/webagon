@@ -5,9 +5,10 @@ const patterns = initPatterns(level);
 
 // Pattern spawn conditions, uses level.onStep
 const addPattern = async pKey => {
-    if (pKey === 0) await patterns.pRandomBarrage(Utils.mathRandom(6, 9), 250, 400);
-    else if (pKey === 1) await patterns.pTunnel(Utils.mathRandom(3, 4), 350, 400, 1);
-    else if (pKey === 2) await patterns.pSpiral(Utils.mathRandom(4, 5), 350, 400, 1);
+    const d = 350 * Math.max(1, level.getWallSpeedMult() / 10);
+    if (pKey === 0) await patterns.pRandomBarrage(Utils.mathRandom(6, 9), d * .8, d);
+    else if (pKey === 1) await patterns.pTunnel(Utils.mathRandom(3, 4), d, d, 1);
+    else if (pKey === 2) await patterns.pSpiral(Utils.mathRandom(4, 5), d, d, 1);
 }
 
 const pKeys = [0, 0, 0, 0, 0, 1, 2];

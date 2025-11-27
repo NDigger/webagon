@@ -28,6 +28,7 @@ export const defaultConfig = {
     funModeEnabled: false,
     swapParticlesEnabled: true,
     invincibleModeEnabled: false,
+    swapOnHold: false,
 }
 
 export const getConfig = () => {

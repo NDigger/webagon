@@ -267,6 +267,7 @@ export default class Game extends GameObject {
     #distanceDelay = -1;
 
     onDeath = () => {};
+    onSwap = () => {};
 
     constructor(app) {
         super(app)
@@ -275,6 +276,8 @@ export default class Game extends GameObject {
         this.#polygon = new Polygon(app);
         this.#polygon.setLayer(this.#getPolygonLayer());
         this.#polygon.set3dLayer(this.#get3dLayer());
+
+        this.#swapReloadTime = 0.3;
 
         this.addEventListeners();
 
@@ -446,6 +449,7 @@ export default class Game extends GameObject {
         this.#currentSwapReloadTime = this.#swapReloadTime;
         this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() + 180);
         this.#polygon.player.updatePosition();
+        this.onSwap();
         if (this.#getCollidingWalls().length !== 0) this.kill();
     }
 
@@ -463,7 +467,7 @@ export default class Game extends GameObject {
         const maxTilt = this.#config.playerTiltMult;
         
         if (this.#playerMovementEnabled) {
-            if (this.#swapRequested) {
+            if (!this.#config.swapOnHold ? this.#swapRequested : (this.#currentSwapReloadTime <= 0 && this.#swapKeyPressed)) {
                 this.#swapPlayer();
                 prevRotationOffset += 180;
                 this.#swapRequested = false;

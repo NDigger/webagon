@@ -87,13 +87,14 @@ const pSwapTunnel2 = async (times, delay, delayEnd) => {
 
 // Pattern spawn conditions, uses level.onStep
 const addPattern = async pKey => {
+    const d = 320 * Math.max(1, level.getWallSpeedMult()/6);
     if (pKey === 0) await pSwapper(250, 320);
-    else if (pKey === 1) await pSwappers(Utils.mathRandom(3, 4), 320, 320);
-    else if (pKey === 2) await pSwapTunnel(Utils.mathRandom(3, 4), 320, 320);
-    else if (pKey === 3) await patterns.pInverseBarrage(Utils.mathRandom(4, 6), 240, 320);
-    else if (pKey === 4) await pSwapSpiral(Utils.mathRandom(3, 4), 200, 320);
-    else if (pKey === 5) await pSwapTunnel2(Utils.mathRandom(3, 4), 250, 320);
-    else if (pKey === 6) await pSwapperInverse(250, 320);
+    else if (pKey === 1) await pSwappers(Utils.mathRandom(3, 4), d, d);
+    else if (pKey === 2) await pSwapTunnel(Utils.mathRandom(3, 4), d, d);
+    else if (pKey === 3) await patterns.pInverseBarrage(Utils.mathRandom(4, 6), d*0.8, d);
+    else if (pKey === 4) await pSwapSpiral(Utils.mathRandom(3, 4), d*0.7, d);
+    else if (pKey === 5) await pSwapTunnel2(Utils.mathRandom(3, 4), d*0.8, d);
+    else if (pKey === 6) await pSwapperInverse(d*0.8, d);
 }
 
 const pKeys = [0, 1, 2, 3, 4, 5, 6];
@@ -122,24 +123,26 @@ level.onStep = async () => {
 }
 
 let time = 0;
+let b = 0;
 
 const getValue = shift => Math.sin(level.getTime() * 10 + shift) * .1 + .1
 // onUpdate is called every frame.
 level.onUpdate = ft => {
-    const hueShift = Utils.fract(.5 + level.getTime() / 200)
     const t = level.getTime();
+
+    const hueShift = Utils.fract(.5 + t / 200)
     level.setBackgroundTileColors([
-        Color.hsvToRgb(Utils.pingPong(level.getTime() * 5.) * .1 + hueShift, 1, getValue(1/Math.PI*2)),
-        Color.hsvToRgb(Utils.pingPong(level.getTime() * 5.) * .1 + hueShift, 1, getValue(2/Math.PI*2)),
-        Color.hsvToRgb(Utils.pingPong(level.getTime() * 5.) * .1 + hueShift, 1, getValue(3/Math.PI*2)),
-        Color.hsvToRgb(Utils.pingPong(level.getTime() * 5.) * .1 + hueShift, 1, getValue(4/Math.PI*2)),
-        Color.hsvToRgb(Utils.pingPong(level.getTime() * 5.) * .1 + hueShift, 1, getValue(3/Math.PI*2)),
-        Color.hsvToRgb(Utils.pingPong(level.getTime() * 5.) * .1 + hueShift, 1, getValue(2/Math.PI*2)),
+        Color.hsvToRgb(Utils.pingPong(t * 5.) * .1 + hueShift, 1, getValue(1/Math.PI*2)),
+        Color.hsvToRgb(Utils.pingPong(t * 5.) * .1 + hueShift, 1, getValue(2/Math.PI*2)),
+        Color.hsvToRgb(Utils.pingPong(t * 5.) * .1 + hueShift, 1, getValue(3/Math.PI*2)),
+        Color.hsvToRgb(Utils.pingPong(t * 5.) * .1 + hueShift, 1, getValue(4/Math.PI*2)),
+        Color.hsvToRgb(Utils.pingPong(t * 5.) * .1 + hueShift, 1, getValue(3/Math.PI*2)),
+        Color.hsvToRgb(Utils.pingPong(t * 5.) * .1 + hueShift, 1, getValue(2/Math.PI*2)),
     ])
-    const syncTime = level.getTime() * 2.5 + .2;
+    const syncTime = t * 2.5 + .2;
     const f = Utils.fract(syncTime)
 
-    level.setRotationSpeed(((rotationSpeed/2)-Utils.fract(syncTime * .5) * rotationSpeed) * rotationDir);
+    level.setRotationSpeed(((rotationSpeed/2)-Utils.fract(syncTime * .5 - b) * rotationSpeed) * rotationDir);
 
     level.setRadius(85 - f * 15);
 
@@ -156,11 +159,16 @@ level.onRender = ft => {
 }
 
 let rotationDir = 1;
-let rotationSpeed = .35;
+let rotationSpeed = level.getDifficultyMult()*.3;
 // onPreIncrement is called immediately when increment time is achieved
 level.onPreIncrement = () => {
     rotationDir *= -1;
-    rotationSpeed += .06;
+    rotationSpeed += .04;
+}
+
+level.onSwap = () => {
+    b = (level.getTime() * 2.5 + .2) * .5;
+    rotationDir = Math.random() > .5 ? -1 : 1;
 }
 
 // onIncrement is called every time walls are gone and level speed incremented

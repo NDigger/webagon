@@ -6,16 +6,16 @@ let patterns = initPatterns(level); // Patterns require level object in order to
 
 // Pattern spawn conditions, uses level.onStep
 const addPattern = async pKey => {
-    const d = Math.max(level.getWallSpeedMult(), 7) * (50 - level.getWallSpeedMult() / 1.5);
-    if (pKey === 0) await patterns.pRandomBarrage(Utils.mathRandom(5, 9), d * 1.1, d * 2.2);
-    else if (pKey === 1) await patterns.pAltBarrage(Utils.mathRandom(3, 6), d, d * 2.2);
-    else if (pKey === 2) await patterns.pTunnel(Utils.mathRandom(3, 5), d * 2.8, d * 2.2);
-    else if (pKey === 3) await patterns.pLRBarrage(4, d, d * 2.2);
-    else if (pKey === 4) await patterns.pLeftRight(Utils.mathRandom(4, 5), d, d * 2.2);
-    else if (pKey === 5) await patterns.pSpiralBarrage(Utils.mathRandom(3, 6), d, d * 2.2);
-    else if (pKey === 6) await patterns.pDoubleSpiral(Utils.mathRandom(5, 7), d * 0.8, d * 2.2);
-    else if (pKey === 7) await patterns.pAltSpam(Utils.mathRandom(3, 4), 60, d * 2.2);
-    else if (pKey === 8) await patterns.pWallExSpam(Utils.mathRandom(3, 4), 60, d * 2.2);
+    const d = Math.max(level.getWallSpeedMult(), 7) * (45 - level.getWallSpeedMult() / 1.5);
+    if (pKey === 0) await patterns.pRandomBarrage(Utils.mathRandom(5, 9), d * 1.1, d * 1.7);
+    else if (pKey === 1) await patterns.pAltBarrage(Utils.mathRandom(3, 6), d, d * 1.7);
+    else if (pKey === 2) await patterns.pTunnel(Utils.mathRandom(3, 5), d * 2.5, d * 1.7);
+    else if (pKey === 3) await patterns.pLRBarrage(4, d, d * 1.7);
+    else if (pKey === 4) await patterns.pLeftRight(Utils.mathRandom(4, 5), d, d * 1.7);
+    else if (pKey === 5) await patterns.pSpiralBarrage(Utils.mathRandom(3, 6), d, d * 1.7);
+    else if (pKey === 6) await patterns.pDoubleSpiral(Utils.mathRandom(5, 7), d * 0.8, d * 1.7);
+    else if (pKey === 7) await patterns.pAltSpam(Utils.mathRandom(3, 4), 60, d * 1.7);
+    else if (pKey === 8) await patterns.pWallExSpam(Utils.mathRandom(3, 4), 60, d * 1.7);
 }
 
 const pKeys = [0, 1, 2, 3, 4, 5, 6, 7, 8];
@@ -40,7 +40,7 @@ level.onInit = () => {
     level.setBackgroundDarkenUnevenChunkEnabled(false);
     level.set3dDistance(20);
     
-    level.set3dDepthMult(level.getWallSpeedMult() / 10);
+    level.set3dDepthMult(0.5);
     level.set3dFalloffScale(new Vector2(.8, 2.1))
     level.setWallSkewLeft(40);
 }
@@ -85,9 +85,7 @@ level.onRender = ft => {
 level.onPreIncrement = () => {}
 
 // onIncrement is called every time walls are gone and level speed incremented
-level.onIncrement = () => {
-    level.set3dDepthMult(level.getWallSpeedMult() / 10);
-}
+level.onIncrement = () => {}
 
 // onDeath is called when main player of level object touches deadly wall side
 level.onDeath = () => {}
