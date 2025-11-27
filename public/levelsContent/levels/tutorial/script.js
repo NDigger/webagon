@@ -16,6 +16,7 @@ const addPattern = async pKey => {
 let pKeys = [];
 let activeKeys = [];
 
+let extraIncMsg = false;
 // onInit is called on the first frame when level is created.
 level.onInit = () => {
     level.setBackgroundTileColors([
@@ -45,7 +46,9 @@ level.onInit = () => {
     level.createEvent(10, () => level.showMessage('Avoid walls!', 3))
 
     level.createEvent(12, () => pKeys = [0, 1, 2, 3]);
-    level.createEvent(30, () => level.showMessage('Get 88 seconds to complete the tutorial.', 4))
+    level.createEvent(30, () => level.showMessage('Get 60 seconds to complete the tutorial.', 4))
+
+    level.createEvent(60, () => extraIncMsg = true)
 }
 
 // onStep must be async and use delays in order to work. No delays may cause crash.
@@ -70,7 +73,17 @@ level.onRender = ft => {
 level.onPreIncrement = () => {}
 
 // onIncrement is called every time walls are gone and level speed incremented
-level.onIncrement = () => {}
+level.onIncrement = () => {
+    if (!extraIncMsg) return
+    extraIncMsg = false;
+    level.showMessage('Tutorial complete!', 2)
+    const t = level.getTime();
+    level.createEvent(t + 2, () => {
+        level.showMessage('Before it\'s over, try to swap using "Space"!', 3);
+        level.setSwapEnabled(true);
+    })
+    level.createEvent(t + 8, () => level.showMessage('You will find swap useful in future'))
+}
 
 // onDeath is called when main player of level object touches deadly wall side
 level.onDeath = () => {}
