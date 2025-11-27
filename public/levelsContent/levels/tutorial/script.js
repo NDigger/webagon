@@ -27,19 +27,17 @@ level.onInit = () => {
     ])
 
     level.setRadius(70);
-    level.setRotationSpeed(0.02);
+    level.setRotationSpeed(0.01);
     level.setSides(6);
     level.set3dLayersCount(5);
     level.set3dDistance(10);
-    level.setWallSpeedMult(1.5);
-    level.setWallSpeedIncrement(0.2);
-    level.setRotationSpeedIncrement(0.01);
-    // level.setWallAngleLeft(-.5);
+    level.setWallSpeedMult(1.2);
+    level.setWallSpeedIncrement(0.1);
+    level.setRotationSpeedIncrement(0.006);
+    level.setWallSkewLeft(10);
     level.setBackgroundRadius(40000);
     level.setMainColor(new Color(0, 0, 55));
     level.setCompletionTime(88);
-
-    level.setSwapEnabled(true);
 
     if (level.getDifficultyMult() === 1) {
         level.showMessage('Welcome!', 2)
@@ -51,7 +49,7 @@ level.onInit = () => {
         level.createEvent(12, () => pKeys = [0, 1, 2, 3]);
         level.createEvent(30, () => level.showMessage('Get 60 seconds to complete the tutorial.', 4))
 
-        level.createEvent(1, () => extraIncMsg = true)
+        level.createEvent(60, () => extraIncMsg = true)
     } else {
         pKeys = [0, 1, 2, 3]
     }
@@ -83,7 +81,7 @@ level.onIncrement = () => {
     if (!extraIncMsg) return
     extraIncMsg = false;
     pKeys = [];
-    console.log(pKeys)
+    activeKeys = [];
     level.showMessage('Tutorial complete!', 2)
     const t = level.getTime();
     level.createEvent(t + 2, () => {
