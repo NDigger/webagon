@@ -295,7 +295,7 @@ export default class Level extends Game {
     getTime() {
         return this._levelTime
     }
-    getDifficulty() {
+    getDifficultyMult() {
         return this.#props.difficulty
     }
     getTimestamp() {

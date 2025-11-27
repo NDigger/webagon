@@ -76,6 +76,7 @@ level.onPreIncrement = () => {}
 level.onIncrement = () => {
     if (!extraIncMsg) return
     extraIncMsg = false;
+    pKeys = [];
     level.showMessage('Tutorial complete!', 2)
     const t = level.getTime();
     level.createEvent(t + 2, () => {
