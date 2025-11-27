@@ -94,6 +94,17 @@
     font-size: 5rem; 
 }
 
+#game-message {
+    position: absolute;
+    top: 20vh;
+    left: 50vw;
+    width: 166vw;
+    transform-origin: left;
+    transform: scaleX(.6) translateX(-50%);
+    font-size: 2rem;
+    text-align: center;
+}
+
 #game-pulsing-msg {
     color: var(--main-color);
     display: none;

@@ -15,6 +15,7 @@ const restartHelpMsg = document.getElementById('restart-help-msg');
 const swapEnabledMsg = document.getElementById('swap-enabled-msg');
 const gamePulsingMsg = document.getElementById('game-pulsing-msg');
 const gamemodeMsg = document.getElementById('gamemode-msg');
+const gameMessage = document.getElementById('game-message');
 
 const timerElement = document.getElementById('timer');
 
@@ -105,8 +106,9 @@ export default class LevelLoader {
 
         const config = getConfig();
         script.onload = () => {
-            document.getElementById('game-ui').style.display = config.displayUiEnabled ? 'block' : 'none'
+            gameUIElement.style.display = config.displayUiEnabled ? 'block' : 'none'
 
+            gameMessage.textContent = '';
             restartHelpMsg.style.display = 'none';
             swapEnabledMsg.style.display = 'none';
             gamemodeMsg.textContent = config.invincibleModeEnabled ? 'invincible mode' : 'official mode'

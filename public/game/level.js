@@ -3,8 +3,9 @@ import { Color } from "../utils/structures";
 import Lerp from "../utils/interpolation";
 import CustomWall from "./gameContent/customWall";
 import { getConfig } from "../storage";
-
 import { getLevelStats, writeLevelStats } from "../storage";
+
+const gameMessage = document.getElementById('game-message');
 
 export default class Level extends Game { 
     onInit = () => {};
@@ -44,6 +45,8 @@ export default class Level extends Game {
     #wallSpeedIncrement = 0;
 
     #incrementSpinPower = 0;
+
+    #messageHideTime = 0;
 
     #props = {
         selectFirstMusicTimestamp: false,
@@ -132,10 +135,13 @@ export default class Level extends Game {
     #update(time) {
         if (this.#gameOver) return
         const frameTime = time - this.#lastUpdateTime;
-        const levelTime = time - this.#levelInitTime;
-        this.#lastUpdateTime = time;
         this._levelTime = (time - this.#levelInitTime)/1000;
+
+        this.#lastUpdateTime = time;
         this.onUpdate(frameTime/1000);
+
+        this.#messageHideTime -= frameTime/1000;
+        if (this.#messageHideTime <= -0.01) gameMessage.textContent = ''
         
         this.#incrementTimer += frameTime/1000;
         if (this.#incrementTimer > this.#incrementTime) {
@@ -145,6 +151,7 @@ export default class Level extends Game {
         
         this.#updateId = requestAnimationFrame(t => this.#update(t));
     }
+
     #render(time) {
         const frameTime = time - this.#lastRenderTime;
         this.#lastRenderTime = time;
@@ -314,6 +321,10 @@ export default class Level extends Game {
     clearIntervals() {
         this.#intervals.forEach(interval => clearInterval(interval));
         this.#intervals = []
+    }
+    showMessage(text, time) {
+        gameMessage.textContent = text;
+        this.#messageHideTime = time;
     }
 
     createGame() {

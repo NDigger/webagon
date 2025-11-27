@@ -13,7 +13,7 @@ const addPattern = async pKey => {
     else if (pKey === 3) await patterns.pAltBarrage(Utils.mathRandom(3, 5), d, d*1.5)
 }
 
-const pKeys = [0, 1, 2, 3];
+let pKeys = [];
 let activeKeys = [];
 
 // onInit is called on the first frame when level is created.
@@ -37,6 +37,15 @@ level.onInit = () => {
     level.setBackgroundRadius(40000);
     level.setMainColor(new Color(0, 0, 55));
     level.setCompletionTime(88);
+
+    level.showMessage('Welcome!', 2)
+
+    level.createEvent(2, () => level.showMessage('To move use left and right arrows.', 3))
+    level.createEvent(5, () => level.showMessage('Try it out.', 2))
+    level.createEvent(10, () => level.showMessage('Avoid walls!', 3))
+
+    level.createEvent(12, () => pKeys = [0, 1, 2, 3]);
+    level.createEvent(30, () => level.showMessage('Get 88 seconds to complete the tutorial.', 4))
 }
 
 // onStep must be async and use delays in order to work. No delays may cause crash.
