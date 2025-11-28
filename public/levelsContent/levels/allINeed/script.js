@@ -22,14 +22,15 @@ const addPattern = async pKey => {
     const d = 420 * Math.max(1, level.getWallSpeedMult() / 6);
     if (pKey === 0) await patterns.pInverseBarrage(Utils.mathRandom(2, 3), d, d);
     else if (pKey === 1) await patterns.pRandomBarrage(Utils.mathRandom(4, 6), d * .7, d);
-    else if (pKey === 2) await patterns.pAltBarrage(Utils.mathRandom(4, 5), d * .75, d, 1);
+    else if (pKey === 2) await patterns.pAltBarrage(Utils.mathRandom(4, 5), d * .75, d);
     else if (pKey === 3) await patterns.pDoubleSpiral(Utils.mathRandom(5, 9), d * .5, d);
     else if (pKey === 4) await patterns.pWallExTunnel(Utils.mathRandom(4, 5), d * .75, d);
     else if (pKey === 5) await longBarrage(d * .5, d);
     else if (pKey === 6) await longAlt(d * .5, d);
+    else if (pKey === 7) await patterns.pTunnel(Utils.mathRandom(3, 4), d * 1.4, d);
 }
 
-const pKeys = [0, 1, 1, 1, 2, 3, 4, 5, 6];
+const pKeys = [0, 1, 1, 2, 3, 4, 5, 6, 7];
 let activeKeys = [];
 
 // onInit is called on the first frame when level is created.
@@ -63,7 +64,7 @@ level.onUpdate = ft => {
             new Color(255, 255, 255),
             new Color(250, 250, 250)
         ])
-    const s = Utils.pingPong(level.getTime() * 6) * 15;
+    const s = Utils.pingPong(level.getTime() * 6) * 25;
     level.setMainColor(new Color(255 - s, 255 - s, 255 - s))
     
     const v = 225 + Utils.pingPong(time * 1.05) * 30;
