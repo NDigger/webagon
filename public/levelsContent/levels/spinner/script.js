@@ -51,8 +51,8 @@ level.onUpdate = ft => {
         Color.hsvToRgb(colorTime + 4/12, .4, .7),
         Color.hsvToRgb(colorTime + 2/12, .5, .6),
     ])
-    level.setOffset(new Vector2(Math.sin(time * 3) * 10, 0));
-    level.setCenterOffset(new Vector2(0, Math.sin(time * 3) * 10));
+    level.setOffset(new Vector2(Math.sin(time * 3) * 100, 0));
+    level.setCenterOffset(new Vector2(0, Math.sin(time * 3) * 100));
 
     level.setMainColor(Color.hsvToRgb(colorTime, 0, 1))
 

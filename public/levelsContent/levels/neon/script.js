@@ -85,6 +85,25 @@ const pSwapTunnel2 = async (times, delay, delayEnd) => {
     await level.distanceDelay(delayEnd);
 }
 
+const pSwapSpiral2 = async(times, delay, delayEnd) => {
+    let side = getRandomSide();
+    const dir = getRandomDir();
+    const sides = level.getSides();
+
+    const spiralWalls = (side) => {
+        level.createWall(side, delay + 20);
+        level.createWall(side+sides/2, delay + 20);
+    }
+
+    barrage(side + (dir === 1 ? 0 : -1));
+    for (let i = 0; i < times; i++) {
+        spiralWalls(side+=dir);
+        await level.distanceDelay(delay);
+    }
+    barrage(side + (dir === 1 ? 3 : 20) + (Math.random() > .5 ? sides/2 : 0));
+    await level.distanceDelay(delayEnd);
+}
+
 // Pattern spawn conditions, uses level.onStep
 const addPattern = async pKey => {
     const d = 320 * Math.max(1, level.getWallSpeedMult()/6);
@@ -95,11 +114,12 @@ const addPattern = async pKey => {
     else if (pKey === 4) await pSwapSpiral(Utils.mathRandom(3, 4), d*0.7, d);
     else if (pKey === 5) await pSwapTunnel2(Utils.mathRandom(3, 4), d*0.8, d);
     else if (pKey === 6) await pSwapperInverse(d*0.8, d);
+    else if (pKey === 7) await pSwapSpiral2(Utils.mathRandom(4, 6), d * .5, d);
 }
 
-const pKeys = [0, 1, 2, 3, 4, 5, 6];
+const pKeys = [0, 1, 2, 3, 4, 5, 6, 7];
 let activeKeys = [];
-
+let hueShift;
 // onInit is called on the first frame when level is created.
 level.onInit = () => {
     level.setSwapEnabled(true);
@@ -112,6 +132,13 @@ level.onInit = () => {
     level.set3dColor(new Color(0, 0, 0));
     level.set3dDepthMult(0.3);
     level.setPlayerSwapReloadTime(0.1);
+
+    hueShift = (() => {
+        const diff = level.getDifficultyMult();
+        if (diff === .75) return .4
+        if (diff === 1) return .6
+        if (diff === 1.5) return 0
+    })()
 }
 
 // onStep must be async and use delays in order to work. No delays may cause crash.
@@ -126,11 +153,10 @@ let time = 0;
 let b = 0;
 
 const getValue = shift => Math.sin(level.getTime() * 10 + shift) * .1 + .1
+
 // onUpdate is called every frame.
 level.onUpdate = ft => {
     const t = level.getTime();
-
-    const hueShift = Utils.fract(.5 + t / 200)
     level.setBackgroundTileColors([
         Color.hsvToRgb(Utils.pingPong(t * 5.) * .1 + hueShift, 1, getValue(1/Math.PI*2)),
         Color.hsvToRgb(Utils.pingPong(t * 5.) * .1 + hueShift, 1, getValue(2/Math.PI*2)),

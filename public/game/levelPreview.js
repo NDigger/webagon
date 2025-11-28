@@ -78,6 +78,7 @@ class LevelPreviewContent {
     getTime() {
         return this.#lastTime/1000
     }
+    getDifficultyMult() { return 1 }
     destroy() {
         cancelAnimationFrame(this.#updateId);
     }
