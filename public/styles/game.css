@@ -57,7 +57,7 @@
 }
 
 #game-controls *:hover {
-    cursor: unset;
+    cursor: none;
 }
 
 #game-ui .top-right {

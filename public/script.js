@@ -65,6 +65,7 @@ export { levelLoader }
     app = a;
     levelLoader = new LevelLoader(a);
     loadScript('./levelSelect.js')
+    loadScript('./settings.js');
 })()
 
 const settingsElement = document.getElementById('settings');
@@ -75,15 +76,15 @@ const headerButtonsAll = Array.from(document.querySelectorAll('header .buttons >
 const menuElements = Array.from(document.getElementById('menu-window').children);
 headerButtons.querySelector('.level-select').classList.add('selected');
 
-headerButtons.querySelector('.settings').addEventListener('click', e => {
-    levelSelectElement.style.display = 'none';
-    settingsElement.style.display = 'flex';
+headerButtonsAll.forEach(btn => btn.addEventListener('click', () => {
+    menuElements.forEach(el => {
+        el.style.display = 'none'
+        el.setAttribute('data-events-enabled', 'false');
+    })
     headerButtonsAll.forEach(b => b.classList.remove('selected'))
-    e.currentTarget.classList.add('selected');
-})
-headerButtons.querySelector('.level-select').addEventListener('click', e => {
-    levelSelectElement.style.display = 'flex';
-    settingsElement.style.display = 'none';
-    headerButtonsAll.forEach(b => b.classList.remove('selected'))
-    e.currentTarget.classList.add('selected');
-})
+
+    const menuWindow = document.getElementById(btn.getAttribute('data-window'));
+    menuWindow.style.display = 'flex';
+    menuWindow.setAttribute('data-events-enabled', 'true');
+    btn.classList.add('selected');
+}))

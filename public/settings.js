@@ -19,6 +19,11 @@ const compareAndUpdateSetting = (setting, settingProp) => {
     : setting.classList.add('edited');
 }
 
+document.getElementById('settings').addEventListener('keydown', e => {
+    if (!getKeydownEventsEnabled()) return
+    if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) e.preventDefault();
+});
+
 settings.forEach((setting, i) => {
     setting.addEventListener('click', e => {
         getSelectedSetting().classList.remove('selected');

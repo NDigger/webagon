@@ -39,8 +39,6 @@ level.onInit = () => {
     level.setMainColor(new Color(0, 0, 55));
     level.setCompletionTime(88);
     level.setPlayerSwapReloadTime(0.4);
-
-    console.log(level.getAttempt())
     if (level.getDifficultyMult() === 1 && level.getAttempt() === 1) {
         level.showMessage('Welcome!', 2);
 

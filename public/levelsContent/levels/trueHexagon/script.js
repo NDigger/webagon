@@ -34,7 +34,6 @@ level.onInit = () => {
     level.setPlayerSize(new Size(15, 10))
 
     level.setCompletionTime(480);
-    console.log(level.getCompletionTime());
 
     level.setBackgroundSwapTime(9999999);
     level.setScale(new Vector2(1.5, 1.5));

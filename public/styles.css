@@ -79,6 +79,11 @@ canvas {
     inset: 0;
 }
 
+canvas:hover {
+    cursor:alias;
+
+}
+
 #menu {
     height: 100vh;
     width: 100vw;
@@ -157,7 +162,7 @@ header {
     z-index: 0;
     background-color: var(--background-tile-color);
     color: var(--main-color);
-    border-bottom: 2px solid var(--main-color);
+    border-bottom: 3px solid var(--main-color);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -199,7 +204,7 @@ header .buttons > button::after {
     content: '';
     position: absolute;
     background-color: var(--main-color);
-    opacity: .4;
+    opacity: .3;
     z-index: -1;
     width: 100%;
     bottom: 0;
