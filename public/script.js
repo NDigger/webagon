@@ -67,3 +67,23 @@ export { levelLoader }
     loadScript('./levelSelect.js')
 })()
 
+const settingsElement = document.getElementById('settings');
+const levelSelectElement = document.getElementById('level-select');
+
+const headerButtons = document.querySelector('header .buttons');
+const headerButtonsAll = Array.from(document.querySelectorAll('header .buttons > button'))
+const menuElements = Array.from(document.getElementById('menu-window').children);
+headerButtons.querySelector('.level-select').classList.add('selected');
+
+headerButtons.querySelector('.settings').addEventListener('click', e => {
+    levelSelectElement.style.display = 'none';
+    settingsElement.style.display = 'flex';
+    headerButtonsAll.forEach(b => b.classList.remove('selected'))
+    e.currentTarget.classList.add('selected');
+})
+headerButtons.querySelector('.level-select').addEventListener('click', e => {
+    levelSelectElement.style.display = 'flex';
+    settingsElement.style.display = 'none';
+    headerButtonsAll.forEach(b => b.classList.remove('selected'))
+    e.currentTarget.classList.add('selected');
+})

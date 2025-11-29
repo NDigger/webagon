@@ -2,15 +2,11 @@ import { getConfig, writeConfig } from "./storage";
 import { sounds } from "./script"; 
 import { defaultConfig } from "./storage";
 
-export const setSettingsVisible = v => {
-    keydownEventsEnabled = v;
-    document.getElementById('settings').style.display = v ? 'flex' : 'none'
-}
-let keydownEventsEnabled = false;
-
 const config = getConfig()
 
 const round = v => Math.round(v * 100) / 100;
+
+const getKeydownEventsEnabled = () => document.getElementById('settings').getAttribute('data-events-enabled') === 'true';
 
 const settings = Array.from(document.querySelectorAll('.setting'));
 let selectedSettingIndex = 0;
@@ -36,7 +32,7 @@ settings.forEach((setting, i) => {
 
     if (settingType === 'boolean') {
         document.addEventListener('keydown', e => {
-            if (selectedSettingIndex !== i || !keydownEventsEnabled) return
+            if (selectedSettingIndex !== i || !getKeydownEventsEnabled()) return
             if (e.code === 'ArrowLeft' || e.code === 'ArrowRight' || e.code === 'Enter') {
                 config[settingProp] = !config[settingProp];
                 settingValue.textContent = config[settingProp] ? 'Enabled' : 'Disabled'
@@ -51,7 +47,7 @@ settings.forEach((setting, i) => {
         const settingMaxValue = +setting.getAttribute('data-max');
         const settingShift = +setting.getAttribute('data-shift');
         document.addEventListener('keydown', e => {
-            if (selectedSettingIndex !== i || !keydownEventsEnabled) return
+            if (selectedSettingIndex !== i || !getKeydownEventsEnabled()) return
             if (e.code === 'ArrowLeft' || e.code === 'ArrowRight') {
                 let result
                 if (e.code === 'ArrowLeft') result = round(config[settingProp] - settingShift);
@@ -85,11 +81,11 @@ const shiftSetting = shift => {
 shiftSetting(0); // highlight selected setting
 
 document.addEventListener('keydown', e => {
-    if (!keydownEventsEnabled) return
+    if (!getKeydownEventsEnabled()) return
     if (e.code === 'ArrowDown') shiftSetting(1)
     else if (e.code === 'ArrowUp') shiftSetting(-1)
     else if (e.code === 'Escape') {
-        keydownEventsEnabled = false;
+        getKeydownEventsEnabled() = false;
         document.getElementById('settings').style.display = 'none'
     }
     if (

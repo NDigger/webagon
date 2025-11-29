@@ -3,11 +3,9 @@ import Background from './game/gameContent/background';
 import { app, setBestScore, sounds, levelLoader } from './script';
 import { Color } from './utils/structures';
 
-import { setSettingsVisible } from './settings'
-
 import { getLevelStats } from './storage';
 
-let keydownEventsEnabled = true;
+const getKeydownEventsEnabled = () => document.getElementById('level-select').getAttribute('data-events-enabled') === 'true';
 
 const selectedLevelTop = document.getElementById('selected-level-top')
 
@@ -15,7 +13,7 @@ const selectedLevelInfo = document.getElementById('selected-level')
 const levelList = document.getElementById('level-list');
 
 levelList.addEventListener('keydown', e => {
-    if (!keydownEventsEnabled) return
+    if (!getKeydownEventsEnabled()) return
     if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) e.preventDefault();
 });
 
@@ -190,25 +188,23 @@ const setLevelListPosition = position => {
     afterShift();
 }
 
+const levelSelectElement = document.getElementById('level-select');
 const keyDownMenuListener = e => {
-    if (e.code === 'Escape') {
-        if (keydownEventsEnabled === true) {
-            document.getElementById('level-list').style.visibility = 'hidden'
-            keydownEventsEnabled = false;
-            setSettingsVisible(true);
-        }
-        else {
-            const levelList = document.getElementById('level-list');
-            levelList.style.visibility = 'visible';
-            keydownEventsEnabled = true;
-            setSettingsVisible(false);
-            levelList.style.display = 'none';
-            void levelList.offsetWidth;
-            levelList.style.display = 'flex';
-        }
-    }
+    // if (e.code === 'Escape') {
+    //     if (keydownEventsEnabled === true) {
+    //         levelSelectElement.style.display = 'none';
+    //         keydownEventsEnabled = false;
+    //         setSettingsVisible(true);
+    //     }
+    //     else {
+    //         keydownEventsEnabled = true;
+    //         setSettingsVisible(false);
+    //         void levelList.offsetWidth;
+    //         levelSelectElement.style.display = 'flex';
+    //     }
+    // }
 
-    if (!keydownEventsEnabled) return
+    if (!getKeydownEventsEnabled()) return
     if (e.code === 'ArrowUp' || e.code === 'KeyW') shiftLevelListPosition(-1)
     else if (e.code === 'ArrowDown' || e.code === 'KeyS') shiftLevelListPosition(1)
     else if (e.code === 'ArrowLeft' || e.code === 'KeyA') shiftDifficulty(-1)

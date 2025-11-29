@@ -6,9 +6,6 @@
     display: none;
     border-right: 3px solid var(--main-color);
     font-size: 2rem;
-    position: absolute;
-    top: 0;
-    left: 0px;
     /* background-color: rgba(1, 1, 1, 0.9); */
     opacity: .9;
     z-index: 99;

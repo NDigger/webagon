@@ -43,7 +43,7 @@
 
 @keyframes selected-level-tab-anim {
     from {
-        top: -100vh;
+        top: 100vh;
     } to {
         top: 0;
     }
@@ -139,6 +139,9 @@
     }
 
     #selected-level {
+        position: absolute;
+        z-index: 1;
+
         backdrop-filter: blur(10px);
         background-color: rgba(0, 0, 0, 0);
         width: 100vw;

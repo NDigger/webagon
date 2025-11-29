@@ -42,6 +42,8 @@
 :root {
     --main-color: rgba(255, 0, 0, 255);
     --background-tile-color: rgba(0, 0, 0, 255);
+
+    --header-height: 50px;
 }
 
 button { border: none; }
@@ -80,8 +82,17 @@ canvas {
 #menu {
     height: 100vh;
     width: 100vw;
+    max-width: 100vw;
+    max-height: 100vh;
     display: flex;
     flex-direction: column;
+}
+
+#menu-window {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    height: calc(100px - var(--header-height));
 }
 
 #play-btn {
@@ -142,14 +153,19 @@ header {
     /* top: 0; */
     /* left: 0; */
     width: 100vw;
-    height: 50px;
-    z-index: 999;
+    height: var(--header-height);
+    z-index: 0;
     background-color: var(--background-tile-color);
     color: var(--main-color);
     border-bottom: 2px solid var(--main-color);
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+header .title {
+    text-decoration: none;
+    color: var(--main-color);
 }
 
 header > div {
@@ -159,25 +175,57 @@ header > div {
     justify-content: space-between;
     align-items: center;
     font-size: 3rem;
-    padding: 5px;
+    height: 100%;
 }
 
 header .buttons {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 30px;
+    /* gap: 30px; */
+    height: 100%;
 }
 
 header .buttons > button {
+    position: relative;
     background-color: transparent;
     color: var(--main-color);
     font-size: .5em;
+    height: 100%;
+    padding: 0 20px;
+}
+
+header .buttons > button::after {
+    content: '';
+    position: absolute;
+    background-color: var(--main-color);
+    opacity: .4;
+    z-index: -1;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+}
+
+header .buttons > button:hover::after {
+    animation: header-button-animation .15s ease-out forwards;
+}
+
+@keyframes header-button-animation {
+    from {
+        height: 0;
+    } to {
+        height: 100%;
+    }
+}
+
+header .buttons > button.selected {
+    background-color: var(--main-color);
+    color: var(--background-tile-color);
 }
 
 @media (max-width: 1068px) {
     html {
-        font-size: .8rem;
+        font-size: .5rem;
     }
 
     #play-btn {
