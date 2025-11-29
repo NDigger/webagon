@@ -10,11 +10,11 @@
 
 @font-face {
     font-family: "uasquare";
-    src: url("./fonts/UASQUARE.TTF") format("truetype");
+    src: url("./fonts/Robot\ Heroes.ttf") format("truetype");
 }
 @font-face {
     font-family: "metro";
-    src: url("./fonts/bitwise.ttf") format("truetype");
+    src: url("./fonts/Pointless.ttf") format("truetype");
 }
 @font-face {
     font-family: "hexagons";
@@ -58,6 +58,7 @@ button:focus { outline: none; }
 }
 
 html {
+    font-size: .8rem;
     overflow: hidden;
 }
 
@@ -74,6 +75,13 @@ body, canvas {
 canvas {
     position: absolute;
     inset: 0;
+}
+
+#menu {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    flex-direction: column;
 }
 
 #play-btn {
@@ -127,6 +135,44 @@ canvas {
     justify-content: center;
     gap: 10px;
     margin-top: 20px;
+}
+
+header {
+    /* position: absolute; */
+    /* top: 0; */
+    /* left: 0; */
+    width: 100vw;
+    height: 50px;
+    z-index: 999;
+    background-color: var(--background-tile-color);
+    color: var(--main-color);
+    border-bottom: 2px solid var(--main-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header > div {
+    width: 100%;
+    margin: 0 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 3rem;
+    padding: 5px;
+}
+
+header .buttons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 30px;
+}
+
+header .buttons > button {
+    background-color: transparent;
+    color: var(--main-color);
+    font-size: .5em;
 }
 
 @media (max-width: 1068px) {

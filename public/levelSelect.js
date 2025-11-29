@@ -40,7 +40,6 @@ const levelPreviewUpdate = ft =>{
 const loadLevel = levelData => {
     levelPreview.drop();
     sounds.levelLoad.play();
-    document.getElementById('level-select').style.display = 'none'
     levelLoader.start(levelData, getSelectedDifficultyMult());
     document.removeEventListener('keydown', keyDownMenuListener)
 

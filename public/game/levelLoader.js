@@ -6,7 +6,7 @@ import { getLevelStats, writeLevelStats } from '../storage';
 import { getConfig } from '../storage';
 
 const gameContentElement = document.getElementById('game-content');
-const levelSelectElement = document.getElementById('level-select');
+const menuElement = document.getElementById('menu');
 const gameUIElement = document.getElementById('game-ui');
 const progressBarElement = document.getElementById('completable-level-progress-bar');
 
@@ -58,7 +58,7 @@ export default class LevelLoader {
 
         gamePulsingMsg.style.display = 'none'
         gameContentElement.style.display = 'none';
-        levelSelectElement.style.display = 'flex';
+        menuElement.style.display = 'flex';
 
         progressBarElement.style.display = 'none';
     }
@@ -113,7 +113,7 @@ export default class LevelLoader {
 
             this.#level.init()
             gameContentElement.style.display = 'block'
-            levelSelectElement.style.display = 'none'
+            menuElement.style.display = 'none'
             
             window.addEventListener('keydown', this.#handleKeydown);
             window.addEventListener('keyup', this.#handleKeyup)

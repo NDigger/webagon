@@ -50,7 +50,7 @@
 }
 
 #selected-level .title-name {
-    font-size: 5rem;
+    font-size: 3rem;
     width: 100%;
     padding: 10px;
     margin-bottom: 20px;
@@ -142,7 +142,7 @@
         backdrop-filter: blur(10px);
         background-color: rgba(0, 0, 0, 0);
         width: 100vw;
-        height: 100vh;
+        height: 100%;
         right: 0;
         border: 2px solid var(--main-color);
 
