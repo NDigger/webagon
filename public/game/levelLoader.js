@@ -17,8 +17,6 @@ const gamePulsingMsg = document.getElementById('game-pulsing-msg');
 const gamemodeMsg = document.getElementById('gamemode-msg');
 const gameMessage = document.getElementById('game-message');
 
-const timerElement = document.getElementById('timer');
-
 const levelRestartBtn = document.getElementById('level-restart-btn');
 const levelLeaveBtn = document.getElementById('level-leave-btn');
 
@@ -62,7 +60,6 @@ export default class LevelLoader {
         gameContentElement.style.display = 'none';
         levelSelectElement.style.display = 'flex';
 
-        timerElement.style.display = 'none';
         progressBarElement.style.display = 'none';
     }
 

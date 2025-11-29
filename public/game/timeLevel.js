@@ -28,9 +28,9 @@ const newPBMessages = [
     'how unlucky!',
 ];
 
+const gameScoreElement = document.getElementById('game-score');
 const getRandomNewPBMessage = () => newPBMessages[Math.floor(Math.random() * newPBMessages.length)]
 
-const timerElement = document.getElementById('timer');
 export default class TimeLevel extends Level {
     #config = getConfig();
     #updateId = undefined;
@@ -44,26 +44,26 @@ export default class TimeLevel extends Level {
         this.#levelData = levelData;
         this.#props = props;
         this.#updateId = requestAnimationFrame(() => this.#update());
-        timerElement.style.display = 'block';
     }
 
     #update() {
         const timerContent = String(Math.floor(this.getTime()*1000)/1000);
-        timerElement.textContent = this.#config.funModeEnabled ? timerContent.split("").reverse().join("") : timerContent;
+        gameScoreElement.textContent = this.#config.funModeEnabled ? timerContent.split("").reverse().join("") : timerContent;
         requestAnimationFrame(() => this.#update());
     }
+
+    #getNewBest() { return Math.floor(this.getTime()*1000)/1000; }
 
     #isNewBest() {
         const levelStats = getLevelStats(this.#levelData.key, this.#props.difficulty);
         const previousBest = levelStats?.best ?? 0;
-        const newBest = Math.floor(this._levelTime*1000)/1000;
-        return newBest > previousBest
+        return this.#getNewBest() > previousBest
     }
 
     #saveBest() {
         this.#isNewBestSaved = true
         const levelStats = getLevelStats(this.#levelData.key, this.#props.difficulty);
-        const newBest = Math.floor(this._levelTime*1000)/1000;
+        const newBest = this.#getNewBest();
         levelStats.best = newBest;
         writeLevelStats(this.#levelData.key, this.#props.difficulty, levelStats)
 
@@ -82,9 +82,7 @@ export default class TimeLevel extends Level {
 
     destroy() {
         super.destroy();
-
         if (this.#isNewBest() && !this.#isNewBestSaved && !this.#config.invincibleModeEnabled) this.#saveBest();
-
         cancelAnimationFrame(this.#updateId);
     }
 }

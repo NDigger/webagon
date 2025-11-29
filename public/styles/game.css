@@ -88,9 +88,8 @@
                /* , 0px 2px 10px rgba(0, 0, 0, .5); */
 }
 
-#timer {
+#game-score {
     margin-top: -12px;
-    display: none;
     font-size: 5rem; 
 }
 

@@ -35,11 +35,13 @@ const sounds = {};
 })()
 export { sounds };
 
+const bestScoreElement = selectedLevelInfo.querySelector('.best');
 export function setBestScore(score) {
-    let zeros = ''
-    if (parseFloat(score) < 10) zeros = 'OO';
-    else if (parseFloat(score) < 100) zeros = 'O';
-    selectedLevelInfo.querySelector('.best').innerHTML = `<span style="opacity:.5">${zeros}</span>${score.toFixed(3).toString().replaceAll('0', 'O')}`
+    // let zeros = ''
+    // if (parseFloat(score) < 10) zeros = 'OO';
+    // else if (parseFloat(score) < 100) zeros = 'O';
+    // bestScoreElement.innerHTML = `<span style="opacity:.5">${zeros}</span>${score.toFixed(3).toString().replaceAll('0', 'O')}`
+    bestScoreElement.textContent = score;
 }
 
 let level
