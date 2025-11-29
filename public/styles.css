@@ -79,11 +79,6 @@ canvas {
     inset: 0;
 }
 
-canvas:hover {
-    cursor:alias;
-
-}
-
 #menu {
     height: 100vh;
     width: 100vw;

@@ -29,6 +29,7 @@ settings.forEach((setting, i) => {
         getSelectedSetting().classList.remove('selected');
         selectedSettingIndex = i
         e.currentTarget.classList.add('selected');
+        sounds.levelSelect.play();
     })
 
     const settingType = setting.getAttribute('data-type');
@@ -96,7 +97,7 @@ document.addEventListener('keydown', e => {
     if (
         e.code === 'ArrowDown' || 
         e.code === 'ArrowUp' || 
-        e.code === 'Escape' || 
+        e.code === 'Enter' || 
         e.code === 'ArrowLeft' ||
         e.code === 'ArrowRight'
     ) sounds.levelSelect.play()

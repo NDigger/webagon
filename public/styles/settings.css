@@ -125,27 +125,37 @@
     position: relative;
     border-left: 5px solid var(--main-color);
     filter: hue-rotate(180deg);
-    backdrop-filter: hue-rotate(180deg);
+    /* backdrop-filter: hue-rotate(180deg); */
     /* color: rgba(0, 0, 0, .8); */
     animation: selected-animation .3s forwards;
+}
+
+@keyframes selected-animation {
+    from {
+        scale: 1.01;
+    } to {
+        scale: 1;
+    }
 }
 
 .setting.selected::after {
     content: '';
     position: absolute;
-    top: 0;
-    left: 0;
+    top: 0px;
+    right: 0px;
     width: 100%;
-    height: 100%;
-    opacity: .3;
+    opacity: .05;
     background-color: var(--main-color);
+    animation: selected-after-animation .3s ease-out forwards;
 }
 
-@keyframes selected-animation {
+@keyframes selected-after-animation {
     from {
-        left: 10px;
+        opacity: 1;
+        width: 0%;
     } to {
-        left: 0px;
+        opacity: 0.1;
+        width: 100%;
     }
 }
 

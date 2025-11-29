@@ -54,7 +54,7 @@
     width: 100%;
     padding: 10px;
     margin-bottom: 20px;
-    text-decoration: underline;
+    /* text-decoration: underline; */
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden; 

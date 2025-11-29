@@ -32,6 +32,13 @@ const sounds = {};
 
     sounds.levelLoad = new GameSound('./audio/levelLoad.ogg');
     sounds.levelLoad.startTime = 0.12;    
+
+    sounds.swap = new GameSound('./../audio/playerSwap.ogg');
+
+    sounds.death = new GameSound('./../audio/death.ogg');
+    sounds.death.startTime = .3;
+
+    sounds.increment = new GameSound('./../audio/increment.mp3');
 })()
 export { sounds };
 
@@ -87,4 +94,6 @@ headerButtonsAll.forEach(btn => btn.addEventListener('click', () => {
     menuWindow.style.display = 'flex';
     menuWindow.setAttribute('data-events-enabled', 'true');
     btn.classList.add('selected');
+
+    sounds.levelSelect.play();
 }))

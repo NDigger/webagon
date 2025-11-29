@@ -107,8 +107,8 @@ const beforeShift = () => {
     const selectedLevelElement = getSelectedLevelElement();
     if (selectedLevelElement == undefined) return
     selectedLevelElement.classList.remove('selected-animation');
-    void selectedLevelElement.offsetWidth;
-    selectedLevelElement.classList.add('unselected-animation');
+    // void selectedLevelElement.offsetWidth;
+    // selectedLevelElement.classList.add('unselected-animation');
 }
 
 let avaliableDifficulties = [1];
@@ -151,8 +151,8 @@ const updateSelectedLevelInfo = () => {
 const afterShift = () => {
     const selectedLevelElement = getSelectedLevelElement();
     if (selectedLevelElement == undefined) return
-    selectedLevelElement.classList.remove('unselected-animation');
-    void selectedLevelElement.offsetWidth;
+    // selectedLevelElement.classList.remove('unselected-animation');
+    // void selectedLevelElement.offsetWidth;
     selectedLevelElement.classList.add('selected-animation');
     selectedLevelElement.scrollIntoView({ behavior: 'instant', block: 'nearest' })
     

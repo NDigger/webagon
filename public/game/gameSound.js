@@ -14,4 +14,8 @@ export default class GameSound {
         this.#audio.currentTime = this.startTime;
         this.#audio.play()
     }
+
+    stop() {
+        this.#audio.pause();
+    }
 }

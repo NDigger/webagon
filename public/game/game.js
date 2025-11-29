@@ -8,9 +8,7 @@ import { getFPS } from "../frameCounter";
 import Lerp, { pingPong } from "../utils/interpolation";
 import ParticleEmitter from "./gameContent/particleEmitter";
 import { getConfig } from "../storage";
-import GameSound from "./gameSound";
-
-const levelSwapSound = new GameSound('./../audio/playerSwap.ogg');
+import { sounds } from "../script";
 
 const area = (a, b, c) => {
   return Math.abs(
@@ -347,6 +345,7 @@ export default class Game extends GameObject {
 
     kill() {
         if (this.isDestroyed() || this.#config.invincibleModeEnabled) return
+        sounds.death.play();
 
         const d = new Death(this.app);
         d.setSkew(this.#skew);
@@ -445,7 +444,7 @@ export default class Game extends GameObject {
 
     #swapPlayer() {
         if (this.#config.swapParticlesEnabled) this.#createPlayerSwapParticle();
-        levelSwapSound.play();
+        sounds.swap.play();
         this.#currentSwapReloadTime = this.#swapReloadTime;
         this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() + 180);
         this.#polygon.player.updatePosition();

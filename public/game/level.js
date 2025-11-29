@@ -4,6 +4,7 @@ import Lerp from "../utils/interpolation";
 import CustomWall from "./gameContent/customWall";
 import { getConfig } from "../storage";
 import { getLevelStats, writeLevelStats } from "../storage";
+import { sounds } from "../script";
 
 const gameMessage = document.getElementById('game-message');
 
@@ -110,6 +111,8 @@ export default class Level extends Game {
         } else {
             this.setRotationSpeed(cappedRotation);
         }
+
+        sounds.increment.play();
         this.onPreIncrement();
     }
 
@@ -170,6 +173,10 @@ export default class Level extends Game {
 
         this.clearIntervals();
         this.clearEvents();
+
+        sounds.death.stop();
+        sounds.increment.stop();
+        sounds.swap.stop();
         
         cancelAnimationFrame(this.#updateId)
         cancelAnimationFrame(this.#renderId)
