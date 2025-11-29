@@ -62,7 +62,7 @@
 
 #selected-level .difficulty-container {
     display: flex;
-    width: 100%;
+    width: 30%;
     justify-content: center;
 }
 
@@ -127,9 +127,12 @@
 }
 
 #selected-level .best {
-    font-size: 8rem;
+    font-size: 7rem;
+    background-color: var(--background-tile-color);
+    border: 2px solid var(--main-color);
     text-align: center;
-    width: 100%;
+    width: 90%;
+    margin: 20px 0;
 }
 
 @media (max-width: 1068px) {
