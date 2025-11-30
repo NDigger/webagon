@@ -254,8 +254,8 @@
     content: '';
     position: absolute;
     inset: 0;
-    background: linear-gradient(to right, var(--main-color), transparent);
-    opacity: .1;
+    background: linear-gradient(to left, var(--main-color), transparent);
+    opacity: .2;
 }
 
 #settings-container p {
