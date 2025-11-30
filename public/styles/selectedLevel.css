@@ -156,8 +156,7 @@
     2px 2px 0px var(--background-tile-color),
     3px 3px 0px var(--background-tile-color),
     4px 4px 0px var(--background-tile-color),
-    5px 5px 0px var(--background-tile-color),
-    5px 5px 3px var(--main-color);
+    5px 5px 0px var(--background-tile-color);
 }
 
 #selected-level .best::after {
@@ -195,7 +194,6 @@
 
     #selected-level .top {
         --anim-scale: 1;
-        
         border-left: 3px solid var(--main-color);
         transform: unset;
         display: flex;
