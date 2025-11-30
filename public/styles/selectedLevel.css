@@ -101,6 +101,8 @@
 }
 
 #selected-level .top {
+    --anim-scale: 1.04;
+
     position: relative;
     text-align: center;
     filter: brightness(0.97);
@@ -123,7 +125,7 @@
 @keyframes selected-level-top-anim {
     from {
         width: 97%;
-        scale: 1.04;
+        scale: var(--anim-scale);
     }
     to {
         width: 100%;
@@ -192,6 +194,8 @@
     }
 
     #selected-level .top {
+        --anim-scale: 1;
+        
         border-left: 3px solid var(--main-color);
         transform: unset;
         display: flex;

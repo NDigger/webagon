@@ -217,10 +217,11 @@ const keyDownMenuListener = e => {
     }
 }
 
-const playBtn = document.getElementById('play-btn')
+const playBtn = document.getElementById('play-btn');
+const difficultyContainer = document.querySelector('#selected-level .difficulty-container');
 playBtn.addEventListener('click', () => loadLevel(getSelectedLevelJSON()))
 document.getElementById('selected-level').addEventListener('click', e => {
-    if (e.target === playBtn) return
+    if ([playBtn, ...Array.from(difficultyContainer.children)].includes(e.target)) return
     selectedLevelInfo.classList.remove('show');
     void selectedLevelInfo.offsetWidth
     selectedLevelInfo.classList.add('hide');
