@@ -142,12 +142,55 @@
     text-align: right;
 }
 
+.setting.number .range-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.setting.number input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 90%;
+  height: 4px;
+  background: var(--main-color);
+  z-index: 1;
+}
+
+.setting.number input[type="range"]:focus {
+  outline: none;
+}
+
+/* Ползунок */
+.setting.number input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 6px;
+  height: 24px;
+  background: var(--main-color);
+  /* border: 5px solid var(--main-color); */
+  cursor: pointer;
+}
+
+/* Для Firefox */
+.setting.number input[type="range"]::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: var(--main-color);
+  cursor: pointer;
+}
+
+.setting.number input[type="range"]::-moz-range-track {
+  background: #ccc;
+  height: 4px;
+}
+
 .setting::after {
     content: '';
     position: absolute;
     top: 0;
     left: 0;
-    z-index: 999;
+    z-index: 0;
     height: 100%;
     width: 100%;
     opacity: 0;

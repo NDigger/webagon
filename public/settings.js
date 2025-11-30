@@ -92,15 +92,23 @@ class BooleanSetting extends Setting {
             </div>
         </div>`)
 
+        const revertValue = () => {
+            sounds.levelSelect.play();
+            
+            config[configProp] = !config[configProp];
+            const newProp = config[configProp];
+            this.element.querySelector('.light').style.setProperty('--after-bg-color', this.getLightContent(newProp))
+
+            compareAndUpdateSetting(this.element, configProp)
+            writeConfig(config)
+        }
+
+        this.element.addEventListener('click', () => revertValue())
+
         document.addEventListener('keydown', e => {
             if (getSelectedSetting() !== this.element || !getKeydownEventsEnabled()) return
             if (e.code === 'ArrowLeft' || e.code === 'ArrowRight' || e.code === 'Enter') {
-                config[configProp] = !config[configProp];
-                const newProp = config[configProp];
-                this.element.querySelector('.light').style.setProperty('--after-bg-color', this.getLightContent(newProp))
-
-                compareAndUpdateSetting(this.element, configProp)
-                writeConfig(config)
+                revertValue();
             }
         })
     }
@@ -119,8 +127,21 @@ class NumberSetting extends Setting {
             <div class="setting number" id=${configProp}>
                 <p>${name}</p>
                 <p class="value">${this.getDefaultValue()}</p>
+                <div class="range-container">
+                    <input type="range" min="${min}" max="${max}" step="${shift}" value="${this.getDefaultValue()}">
+                </div>
             </div>
         `)
+
+        const rangeInput = this.element.querySelector('input[type="range"]');
+        const valueElement = this.element.querySelector('.value')
+        rangeInput.addEventListener('input', e => {
+            const v = e.target.value;
+            valueElement.textContent = v;
+            config[configProp] = Number(v);
+            writeConfig(config)
+            compareAndUpdateSetting(this.element, configProp)
+        })
 
         document.addEventListener('keydown', e => {
             if (getSelectedSetting() !== this.element || !getKeydownEventsEnabled()) return
@@ -131,7 +152,8 @@ class NumberSetting extends Setting {
                 result = Math.max(min, Math.min(max, result))
                 config[configProp] = result
 
-                this.element.querySelector('.value').textContent = config[configProp].toString();
+                valueElement.textContent = config[configProp].toString();
+                rangeInput.value = result;
                 writeConfig(config)
                 compareAndUpdateSetting(this.element, configProp)
             }
