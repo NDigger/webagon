@@ -67,7 +67,7 @@ export default class TimeLevel extends Level {
         levelStats.best = newBest;
         writeLevelStats(this.#levelData.key, this.#props.difficulty, levelStats)
 
-        setBestScore(newBest)
+        setBestScore(newBest, this.#levelData?.completable);
     }
 
     kill() {
