@@ -43,12 +43,20 @@ const sounds = {};
 export { sounds };
 
 const bestScoreElement = selectedLevelInfo.querySelector('.best');
-export function setBestScore(score) {
+export function setBestScore(score, completable = false) {
     // let zeros = ''
     // if (parseFloat(score) < 10) zeros = 'OO';
     // else if (parseFloat(score) < 100) zeros = 'O';
     // bestScoreElement.innerHTML = `<span style="opacity:.5">${zeros}</span>${score.toFixed(3).toString().replaceAll('0', 'O')}`
-    bestScoreElement.textContent = score;
+    if (completable) {
+        const percent = `${score*100}%`;
+        bestScoreElement.textContent = score === 1 ? 'done' : percent;
+        bestScoreElement.style.setProperty('--percent', `${(1-score)*100}%`);
+    }
+    else {
+        bestScoreElement.textContent = score === 0 ? 'none' : score;
+        bestScoreElement.style.setProperty('--percent', '0%');
+    }
 }
 
 let level

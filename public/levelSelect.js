@@ -123,7 +123,7 @@ const shiftDifficulty = shift => {
     const levelStats = getLevelStats(getSelectedLevelJSON().key, getSelectedDifficultyMult());
     const selectedLevelJSON = getSelectedLevelJSON();
     const best = levelStats?.best ?? 0;
-    setBestScore(selectedLevelJSON.completable ? `${best*100}%` : best);
+    setBestScore(best, selectedLevelJSON?.completable);
     animateSelectedLevelTop();
     sounds.levelSelect.play();
 }
@@ -167,7 +167,7 @@ const afterShift = () => {
     
     const levelStats = getLevelStats(currentJson.key, getSelectedDifficultyMult());
     const best = levelStats?.best ?? 0;
-    setBestScore(currentJson?.completable ? `${best * 100}%` : best)
+    setBestScore(best, currentJson?.completable);
 
     animateSelectedLevelTop();
 }

@@ -48,7 +48,7 @@ export default class CompletableLevel extends Level {
         levelStats.best = newBest;
         writeLevelStats(this.#levelData.key, this.#props.difficulty, levelStats)
 
-        setBestScore(`${newBest*100}%`)
+        setBestScore(newBest, this.#levelData?.completable)
     }
 
     #update() {
