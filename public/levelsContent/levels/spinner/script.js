@@ -51,14 +51,14 @@ level.onUpdate = ft => {
         Color.hsvToRgb(colorTime + 4/12, .4, .7),
         Color.hsvToRgb(colorTime + 2/12, .5, .6),
     ])
-    // level.setOffset(new Vector2(Math.sin(time * 3) * 100, 0));
-    level.setCenterOffset(new Vector2(0, Math.sin(time * 3) * 100));
+    // level.setOffset(new Vector2(Math.sin(time * 300) * 1000, 0));
+    level.setCenterOffset(new Vector2(Math.cos(level.getRotation() * 0.01) * 100, Math.sin(level.getRotation() * 0.01) * 100));
 
-    level.setMainColor(Color.hsvToRgb(colorTime, 0, 1))
+    level.setMainColor(Color.hsvToRgb(colorTime, 0, 1));
 
     level.set3dColor(Color.hsvaToRgba(colorTime, 0, 1, 55));
     
-    const s = 1 - Utils.pingPong(time) * .5
+    const s = 1 - Utils.pingPong(time) * .1;
     level.setScale(new Vector2(s, s))
 }
 

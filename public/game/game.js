@@ -349,7 +349,8 @@ export default class Game extends GameObject {
 
         const d = new Death(this.app);
         d.setSkew(this.#skew);
-        d.setOffset(this.#polygon.player.getPointPosition());
+        console.log(this.#polygon.player.getPointPosition())
+        d.setOffset(this.#polygon.player.getOffset().add(this.#polygon.player.getPointPosition()));
         d.setRotation(this.#rotation)
         d.setCenterOffset(this.#centerOffset);
         d.set3dLayer(this.#get3dLayer());
@@ -436,7 +437,7 @@ export default class Game extends GameObject {
         particleEmitter.emit(10);
         const particles = particleEmitter.getParticles()
         particles.forEach(p => {
-            p.setOffset(this.#polygon.player.getVertexPos(0))
+            p.setOffset(this.#polygon.player.getPointPosition().add(this.#polygon.player.getOffset()))
             p.setLayer(this.#getPolygonLayer());
         })
         this.#playerSwapParticleEmitters.push(particleEmitter);
@@ -499,10 +500,6 @@ export default class Game extends GameObject {
             const degrees = safeAngle * 180 / Math.PI;
             this.#polygon.player.setRotationOffset(degrees);
             this.#polygon.player.updatePosition()
-            // if (this.#getCollidingWalls().length !== 0) {
-            //     this.#polygon.player.setRotationOffset(prevRotationOffset);
-            //     this.#polygon.player.updatePosition()
-            // }
         }
     }
 
@@ -517,7 +514,6 @@ export default class Game extends GameObject {
         this.#polygon.player.updatePosition();
         this.#walls.forEach(wall => {
             wall.setRotation(this.#rotation);
-            // wall.setRotation(this.#rotation + Math.pow(wall.getDistance() / 50, 1.5));
             wall.updatePosition();
         });
 

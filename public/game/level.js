@@ -7,6 +7,7 @@ import { getLevelStats, writeLevelStats } from "../storage";
 import { sounds } from "../script";
 
 const gameMessage = document.getElementById('game-message');
+const musicPlayer = new Audio();
 
 export default class Level extends Game { 
     onInit = () => {};
@@ -66,17 +67,14 @@ export default class Level extends Game {
     
     init() {
         if (this.#initialized) return;
-        const audio = new Audio(this.#levelData.musicPath);
-        audio.volume = this.#config.musicVolume;
-        audio.loop = true;
-        audio.oncanplay = () => {
-            this.#audio = audio;
-        }
+        musicPlayer.src = this.#levelData.musicPath;
+        musicPlayer.volume = this.#config.musicVolume;
+        musicPlayer.loop = true;
         const musicTimestamps = this.#levelData.musicTimestamps
         const timestamp = musicTimestamps[this.#props.attempt === 1 ? 0 : Math.floor(Math.random() * musicTimestamps.length)] ?? 0
         this.#audioTimestamp = timestamp;
-        audio.currentTime = timestamp
-        audio.play();
+        musicPlayer.currentTime = timestamp
+        musicPlayer.onloadeddata = () => musicPlayer.play();
 
         this.setShakePower(0);
         
@@ -181,7 +179,7 @@ export default class Level extends Game {
         cancelAnimationFrame(this.#updateId)
         cancelAnimationFrame(this.#renderId)
         document.removeEventListener('visibilitychange', this.#handleVisibilityChange);
-        if (this.#audio) this.#audio.pause()
+        musicPlayer.pause()
     }
     
     setBackgroundSwapTime(v) {
