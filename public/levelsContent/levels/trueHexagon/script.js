@@ -7,7 +7,7 @@ import GameLerp from '../../../game/gameLerp';
 
 // Pattern spawn conditions, uses level.onStep
 const addPattern = async pKey => {
-    const d = 300 * Math.max(1, level.getWallSpeedMult()/4);
+    const d = 300 * Math.max(1, getWallSpeedMult()/4);
     const de = d * .85;
     if (pKey === 0) await patterns.pInverseBarrage(Utils.mathRandom(2, 3), d, de);
     else if (pKey === 1) await patterns.pSpiralBarrage(Utils.mathRandom(4, 6), d*.5, de);
@@ -31,6 +31,8 @@ const addPattern = async pKey => {
 const diff = level.getDifficultyMult();
 const setSpeedMult = v => level.setWallSpeedMult(v * diff);
 const setRotationSpeed = v => level.setRotationSpeed(v * diff);
+const getRotationSpeed = () => level.getRotationSpeed() * diff;
+const getWallSpeedMult = () => level.getWallSpeedMult() * diff
 
 let pKeys = [];
 let activeKeys = [];
@@ -169,16 +171,16 @@ function createEvents(offset) {
         setRotationSpeed(0.07)
     })
     level.createEvent(getOffsTime(38.89), () => {
-        setRotationSpeed(-level.getRotationSpeed())
+        setRotationSpeed(-getRotationSpeed())
     })
     level.createEvent(getOffsTime(46.29), () => {
         setRotationSpeed(0.1)
     })
     level.createEvent(getOffsTime(61.06), () => {
-        setRotationSpeed(-level.getRotationSpeed());
+        setRotationSpeed(-getRotationSpeed());
     })
     level.createEvent(getOffsTime(68.63), () => {
-        setRotationSpeed(-level.getRotationSpeed());
+        setRotationSpeed(-getRotationSpeed());
     })
 
     level.createEvent(getOffsTime(76.26), () => {
@@ -188,24 +190,24 @@ function createEvents(offset) {
         backgroundValueLerp.run(backgroundValueLerp.value, .3, 3)
         depth3dLerp.run(0, .5, 2, Utils.easeOut)
         hueTimeMult = 0.42;
-        speedMultLerp.run(level.getWallSpeedMult(), 2.3, 2);
+        speedMultLerp.run(getWallSpeedMult(), 2.3, 2);
         setPatterns([0, 5, 4, 6, 7])
         // skewLerp.run(level.getSkew(), 0.3, 2, Utils.easeOut);
     })
 
     level.createEvent(getOffsTime(98.6), () => {
         setRotationSpeed(0.16)
-        speedMultLerp.run(level.getWallSpeedMult(), 2.5, 1.5);
+        speedMultLerp.run(getWallSpeedMult(), 2.5, 1.5);
     })
 
     level.createEvent(getOffsTime(113.03), () => {
         depth3dLerp.run(.5, 0, .5, Utils.easeOut)
         skewLerp.run(skewLerp.value, 0, 1, Utils.easeOut)
-        speedMultLerp.run(level.getWallSpeedMult(), 2.6, 1.5);
+        speedMultLerp.run(getWallSpeedMult(), 2.6, 1.5);
     })
     const dirChangeTimings = [113.06, 113.56, 113.76, 114.03, 114.23, 114.46, 114.96, 115.03, 115.16, 115.26, 115.4, 115.6, 115.9, 116, 116.06, 116.2, 116.33, 116.43, 116.79, 117.26, 118.16, 119.09, 120.03, 120.96, 121.86, 122.83, 123.76, 124.20, 124.6, 125.59, 126.53, 127.43, 128.43, 129.33, 130.23, 131.16];
     dirChangeTimings.forEach(t => level.createEvent(getOffsTime(t), () => {
-        setRotationSpeed(-level.getRotationSpeed())
+        setRotationSpeed(-getRotationSpeed())
     }))
 
     level.createEvent(getOffsTime(131.59), () => {
@@ -214,12 +216,12 @@ function createEvents(offset) {
         mainSaturationLerp.run(0.1, 0.5, .5);
 
         setPatterns([0, 1, 5, 3, 10, 11])
-        speedMultLerp.run(level.getWallSpeedMult(), 3, 2);
+        speedMultLerp.run(getWallSpeedMult(), 3, 2);
     })
 
     level.createEvent(getOffsTime(146.56), () => {
         setRotationSpeed(0.24);
-        speedMultLerp.run(level.getWallSpeedMult(), 3.15, 2);
+        speedMultLerp.run(getWallSpeedMult(), 3.15, 2);
     })
 
     level.createEvent(getOffsTime(161.43), () => {
@@ -229,12 +231,12 @@ function createEvents(offset) {
     const rot7 = [161.43, 161.86, 162.36, 162.83, 163.23, 163.76, 164.19, 164.66, 165.13, 165.59, 166.06, 166.53, 167, 167.43, 167.93, 168.36, 168.83, 169.33, 169.83, 170.23, 170.76, 171.23, 171.66, 172.16, 172.59, 173.06, 173.53, 174.03, 174.43, 174.93, 175.4, 175.83, 176.33];
     rot7.forEach(t => {
         level.createEvent(getOffsTime(t), () => {
-            setRotationSpeed(-level.getRotationSpeed())
+            setRotationSpeed(-getRotationSpeed())
         })
     })
 
     level.createEvent(getOffsTime(176.33), () => {
-        rotationSpeedLerp.run(level.getRotationSpeed() * 3, level.getRotationSpeed(), 2)
+        rotationSpeedLerp.run(getRotationSpeed() * 3, getRotationSpeed(), 2)
     })
 
     const depth3dTimings = [191.19, 191.33, 191.4, 191.56, 191.8, 191.86, 192.03, 192.06, 192.56, 193.03, 193.16, 193.26, 193.4, 193.53, 193.63, 193.76, 193.83, 194, 194.43, 194.9, 195.03, 195.26, 195.4, 195.53, 195.59, 195.76, 195.83, 196.3, 196.8, 196.86, 197, 197.13, 197.23, 197.4, 197.46, 197.59, 197.69, 198.19, 198.63, 198.83, 199, 199.06, 199.23, 199.33, 199.43, 199.56, 200.06, 200.53, 200.76, 200.83, 201, 201.06, 201.23, 201.33, 201.43, 201.86, 202.36, 202.46, 202.63, 202.66, 202.83, 202.93, 203.06, 203.19, 203.33, 203.8, 204.23, 204.33, 204.46, 204.63, 204.66, 204.8, 204.96, 205.03, 205.19, 205.63, 206.06, 206.19, 206.33, 206.43, 206.63, 206.66, 206.8, 206.86, 207.03, 207.23, 207.46, 208, 208.19, 208.26, 208.43, 208.53, 208.63, 208.76, 208.86, 209.13, 209.36, 209.83, 210.03, 210.16, 210.26, 210.4, 210.46, 210.59, 210.76, 211, 211.23, 211.66, 211.86, 212, 212.13, 212.23, 212.43, 212.59, 212.66, 212.83, 212.93, 213.03, 213.19, 213.26, 213.4, 213.53, 213.63, 213.76, 213.83, 214, 214.09, 214.23, 214.33, 214.43, 214.66, 214.93, 215.4, 215.53, 215.8, 216, 216.06, 216.23, 216.36, 216.56, 216.8, 217.23, 217.4, 217.46, 217.63, 217.73, 217.83, 217.96, 218.06, 218.19, 218.4, 218.63, 219.06, 219.46, 219.8, 220.03, 220.16, 220.23, 220.4, 220.46, 220.63, 220.73];
@@ -249,9 +251,9 @@ function createEvents(offset) {
         setRotationSpeed(0.33);
         backgroundValueLerp.run(1, .2, 1);
         mainSaturationLerp.run(mainSaturationLerp.value, .95, 1);
-        mainColorEndValueLerp.run(1, 0, 1);
+        mainColorEndValueLerp.run(1, 0.5, 1);
         depth3dLerp.run(0, .5, 1);
-        speedMultLerp.run(level.getWallSpeedMult(), 3.4, 2);
+        speedMultLerp.run(getWallSpeedMult(), 3.4, 2);
         setPatterns([8, 9, 12, 14, 15, 0, 3, 3])
     })
 
@@ -266,12 +268,12 @@ function createEvents(offset) {
     const rotTimings2 = [228.83, 229.73, 230.73, 231.63, 232.59, 233.53, 234.43, 235.4, 235.83]
     rotTimings2.forEach(t => {
         level.createEvent(getOffsTime(t), () => {
-            setRotationSpeed(-level.getRotationSpeed())
+            setRotationSpeed(-getRotationSpeed())
         })
     })
 
     level.createEvent(getOffsTime(235.83), () => {
-        speedMultLerp.run(level.getWallSpeedMult(), 3.7, 2);
+        speedMultLerp.run(getWallSpeedMult(), 3.7, 2);
 
         setRotationSpeed(0.43);
         hueTimeMult = 1.3421;
@@ -288,7 +290,7 @@ function createEvents(offset) {
 
     level.createEvent(getOffsTime(250.73), () => {
         setRotationSpeed(-0.47);
-        speedMultLerp.run(level.getWallSpeedMult(), 3.9, 2);
+        speedMultLerp.run(getWallSpeedMult(), 3.9, 2);
     })
 
     level.createEvent(getOffsTime(265.63), () => {
@@ -296,7 +298,7 @@ function createEvents(offset) {
         skewLerp.run(0.5, 0, .5)
         backgroundValueLerp.run(1, 0.13, .5);
         backgroundSaturationLerp.run(0.3, 0.1, 1);
-        speedMultLerp.run(level.getWallSpeedMult(), 3.5, 2);
+        speedMultLerp.run(getWallSpeedMult(), 3.5, 2);
     })
 
     level.createEvent(getOffsTime(280.46), () => {
@@ -317,7 +319,7 @@ function createEvents(offset) {
     })
 
     level.createEvent(getOffsTime(325.23), () => {
-        speedMultLerp.run(level.getWallSpeedMult(), 3, 2);
+        speedMultLerp.run(getWallSpeedMult(), 3, 2);
         rotationSpeedLerp.apply(.52);
         mainSaturationLerp.run(0, 0.8, 0.5);
         skewLerp.run(0, 0.1, 0.5);
@@ -328,7 +330,7 @@ function createEvents(offset) {
     })
 
     level.createEvent(getOffsTime(340), () => {
-        speedMultLerp.run(level.getWallSpeedMult(), 4, 2);
+        speedMultLerp.run(getWallSpeedMult(), 4, 2);
         mainSaturationEnd = 0;
         setPatterns([0, 4, 7, 8, 9, 3, 3, 3, 14, 15, 16])
     })
@@ -336,22 +338,22 @@ function createEvents(offset) {
     const rot8 = [326.6, 326.63, 326.8, 326.83, 327.03, 328.39, 328.46, 328.63, 328.73, 328.83, 330.23, 330.36, 330.46, 330.6, 330.76, 332.13, 332.23, 332.36, 332.43, 332.6, 333.53, 334, 334.23, 334.33, 334.43, 335.36, 335.83, 336, 336.03, 336.23, 336.33, 336.8];
     rot8.forEach(t => {
         level.createEvent(getOffsTime(t), () => {
-            setRotationSpeed(-level.getRotationSpeed());
+            setRotationSpeed(-getRotationSpeed());
         })
     })
 
     const rot4 = [340.03, 340.46, 340.96, 341.43, 341.86, 342.36, 342.83, 343.26, 343.76, 344.19, 344.66, 345.16, 345.66, 346.06, 346.53, 347, 347.43, 347.93, 348.39, 348.83, 349.26, 349.8, 350.23, 350.76, 351.23, 351.63, 352.16, 352.63, 353.06, 353.56, 354.03, 354.46, 354.93, 355.39, 355.83, 356.33, 356.8, 357.26, 357.73, 358.19, 358.63, 359.13, 359.6, 360.03, 360.53, 360.96, 361.43, 361.86, 362.39, 362.83, 363.26, 363.8, 364.23, 364.63, 365.16, 365.63, 366.06, 366.56, 337.03, 367.46, 367.93, 368.39, 368.86, 369.06, 369.23, 369.33, 369.46, 369.6, 369.66];
     rot4.forEach(t => {
         level.createEvent(getOffsTime(t), () => {
-            setRotationSpeed(-level.getRotationSpeed())
+            setRotationSpeed(-getRotationSpeed())
             skewLerp.run(0, 0.3, 0.8);
             depth3dLerp.run(0, 0.5, 0.8);
         })
     })
 
     level.createEvent(getOffsTime(368.83), () => {
-        rotationSpeedLerp.run(level.getRotationSpeed(), .3, level.getRotationSpeed() >= 0 ? .3 : -.3);
-        speedMultLerp.run(level.getWallSpeedMult(), 2.5, 3);
+        rotationSpeedLerp.run(getRotationSpeed(), .3, getRotationSpeed() >= 0 ? .3 : -.3);
+        speedMultLerp.run(getWallSpeedMult(), 2.5, 3);
         mainColorEndValueLerp.apply(0);
         mainSaturationEnd = undefined;
         backgroundDifferenceLerp.apply(0.1);
@@ -364,18 +366,18 @@ function createEvents(offset) {
     })
 
     level.createEvent(getOffsTime(377.23), () => {
-        setRotationSpeed(-level.getRotationSpeed());
+        setRotationSpeed(-getRotationSpeed());
     })
 
     level.createEvent(getOffsTime(384.66), () => {
-        speedMultLerp.run(level.getWallSpeedMult(), 3.7, 3);
-        setRotationSpeed(-level.getRotationSpeed() * 2);
+        speedMultLerp.run(getWallSpeedMult(), 3.7, 3);
+        setRotationSpeed(-getRotationSpeed() * 2);
     })
 
     const rot5 = [384.66, 385.19, 385.63, 386.1, 386.56, 387.03, 387.46, 388, 388.43, 388.86, 389.36, 389.83, 390.26, 390.73, 391.23, 391.66, 392.13, 392.6, 393.06, 393.53, 394, 394.46, 394.93, 395.39, 395.83, 396.33, 396.8, 397.23, 397.73, 398.19, 398.63, 399.06, 399.56, 400.03, 400.46, 401, 401.43, 401.86, 402.36, 402.83, 403.26, 403.76, 404.26, 404.63, 405.13, 405.63, 406.06, 406.53, 407, 407.46, 407.86, 408.36, 408.86, 409.33, 409.76, 410.23, 410.76, 411.23, 411.66, 412.16, 412.63, 413.03, 413.56, 414, 414.46, 414.96, 415.39, 415.86, 416.33, 416.83, 417.26, 417.73, 418.19, 418.66, 419.13, 419.6, 420.03, 420.53, 420.96, 421.43, 421.86, 422.39, 422.83, 423.26, 423.76, 424.23, 424.66, 425.16];
     rot5.forEach(t => {
         level.createEvent(getOffsTime(t), () => {
-            setRotationSpeed(-level.getRotationSpeed() * 1.001);
+            setRotationSpeed(-getRotationSpeed() * 1.001);
             skewLerp.apply(Math.random() * .5);
             distance3dLerp.apply(Math.random() * 200- 100);
             const rnd = Math.random() * .5 + .75
@@ -385,7 +387,7 @@ function createEvents(offset) {
     })
 
     level.createEvent(getOffsTime(425.6), () => {
-        speedMultLerp.run(level.getWallSpeedMult(), 3, 3);
+        speedMultLerp.run(getWallSpeedMult(), 3, 3);
         setPatterns([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
         mainSaturationLerp.run(1, 0.05, 3);
         mainColorEndValueLerp.run(.5, .8, 3);
@@ -393,7 +395,7 @@ function createEvents(offset) {
         skewLerp.run(level.getSkew(), 0, 3);
         distance3dLerp.run(100, 0, 3);
         falloff3dScaleLerp.run(level.get3dFalloffScale(), new Vector2(1, 1), 3);
-        rotationSpeedLerp.run(level.getRotationSpeed(), 0, 3);
+        rotationSpeedLerp.run(getRotationSpeed(), 0, 3);
     })
 
     const rot6 = [429.33, 429.8, 430.26, 430.73, 431.19, 431.63, 432.13, 432.63, 433.03, 433.53, 434.03, 434.43, 434.86, 435.39, 435.86, 436.26, 436.8, 437.23, 437.66, 438.16, 438.16, 439.06, 439.6, 440.03, 440.46, 441, 441.43, 441.93, 442.39, 442.83, 443.33, 443.39, 443.56, 443.63, 443.76, 443.83, 444, 444.06, 444.23, 444.66, 445.19, 445.63, 446.06, 446.6, 447.03, 447.46, 448, 448.43, 448.83, 449.36, 449.83, 450.23, 450.73, 451.23, 451.66, 452.13, 452.63, 453.06, 453.53, 454, 454.46, 454.93, 455.39, 455.83, 456.33, 456.8, 457.23, 457.73, 458.19, 458.33, 458.43, 458.56, 458.63, 458.8, 458.86, 459.03, 459.23, 459.46, 459.6, 459.8, 459.96, 460.16, 460.23, 460.46, 461, 461.06, 461.33, 461.43, 461.66, 461.8, 462.06, 462.13, 462.36, 462.83, 463, 463.19, 463.26, 463.53, 463.63, 463.86, 464, 464.23, 464.66, 464.83, 465.06, 465.16, 465.39, 465.53, 465.76, 465.83, 466.06, 466.19, 466.26, 466.43]
