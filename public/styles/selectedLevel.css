@@ -111,8 +111,7 @@
     2px 2px 0px var(--background-tile-color),
     3px 3px 0px var(--background-tile-color),
     4px 4px 0px var(--background-tile-color),
-    5px 5px 0px var(--background-tile-color),
-    0px 0px 2px var(--main-color);
+    5px 5px 0px var(--background-tile-color);
     transform: skewY(-2deg);
     padding: 0 0px;
     flex: 1;
@@ -156,7 +155,8 @@
     2px 2px 0px var(--background-tile-color),
     3px 3px 0px var(--background-tile-color),
     4px 4px 0px var(--background-tile-color),
-    5px 5px 0px var(--background-tile-color);
+    5px 5px 0px var(--background-tile-color),
+    5px 5px 3px var(--main-color);
 }
 
 #selected-level .best::after {
