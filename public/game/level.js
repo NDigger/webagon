@@ -221,8 +221,9 @@ export default class Level extends Game {
     getIncrementSpinPower() { return this.#incrementSpinPower }
 
     kill() {
-        if (this.#config.invincibleModeEnabled) return
-        
+        if (this.#config.invincibleModeEnabled) return        
+        musicPlayer.pause()
+
         super.kill()
         this.#games.forEach(game => game.kill())
         

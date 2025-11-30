@@ -227,7 +227,7 @@
     #selected-level .difficulty-container {
         position: relative;
         width: 100%;
-        font-size: 8rem;
+        font-size: 5rem;
         border-top: 2px solid var(--main-color)
     }
 
@@ -238,7 +238,7 @@
         width: 100%;
         height: 100%;
         background-color: var(--background-tile-color);
-        filter: brightness(.8);
+        filter: hue-rotate(180deg);
     }
 
     #selected-level .best::after {

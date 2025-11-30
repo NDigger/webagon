@@ -349,7 +349,6 @@ export default class Game extends GameObject {
 
         const d = new Death(this.app);
         d.setSkew(this.#skew);
-        console.log(this.#polygon.player.getPointPosition())
         d.setOffset(this.#polygon.player.getOffset().add(this.#polygon.player.getPointPosition()));
         d.setRotation(this.#rotation)
         d.setCenterOffset(this.#centerOffset);
