@@ -12,5 +12,7 @@
     "musicTimestamps": [1.5],
     "completable": true,
 
+    "difficulties": [0.5, 0.7, 1.2],
+
     "scriptPath": "script.js"
 }

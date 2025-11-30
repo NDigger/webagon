@@ -182,7 +182,7 @@ new NumberSetting('playerTiltMult', {
 });
 new BooleanSetting('swapHighlightEnabled', {name: 'Swap Highlight'});
 new BooleanSetting('displayFpsEnabled', {name: 'Display FPS'});
-// new BooleanSetting('displayUiEnabled', {name: 'Display UI'});
+new BooleanSetting('displayUiEnabled', {name: 'Display UI'});
 new BooleanSetting('flashOnDeathEnabled', {name: 'Flash Effect on death'});
 new BooleanSetting('swapParticlesEnabled', {name: 'Swap Particles'});
 new BooleanSetting('funModeEnabled', {name: 'How funny...'});

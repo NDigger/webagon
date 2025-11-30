@@ -91,7 +91,7 @@ export default class Level extends Game {
     async #step() {
         if (typeof this.onStep !== 'function' || this.onStep.toString() === 'async () => {}') return;
 
-        while (true && !this.died && !this.#isIncrementing) { // && !this.#isIncrementing
+            while (true && !this.died && !this.#isIncrementing) { // && !this.#isIncrementing
             await this.onStep();
         }
     }
