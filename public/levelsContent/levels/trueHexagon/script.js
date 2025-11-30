@@ -31,8 +31,8 @@ const addPattern = async pKey => {
 const diff = level.getDifficultyMult();
 const setSpeedMult = v => level.setWallSpeedMult(v * diff);
 const setRotationSpeed = v => level.setRotationSpeed(v * diff);
-const getRotationSpeed = () => level.getRotationSpeed() * diff;
-const getWallSpeedMult = () => level.getWallSpeedMult() * diff
+const getRotationSpeed = () => level.getRotationSpeed()/diff;
+const getWallSpeedMult = () => level.getWallSpeedMult()/diff;
 
 let pKeys = [];
 let activeKeys = [];
@@ -62,7 +62,7 @@ level.onInit = () => {
     level.setBackgroundSwapTime(9999999);
     level.setScale(new Vector2(1.5, 1.5));
 
-    const offset = 1.5 // 1.5;
+    const offset = 65.5 // 1.5;
     createEvents(offset)
 }
 
