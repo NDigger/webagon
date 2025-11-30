@@ -6,8 +6,8 @@ const config = getConfig()
 
 const round = v => Math.round(v * 100) / 100;
 
-const settings = document.getElementById('settings');
-const getKeydownEventsEnabled = () => settings.getAttribute('data-events-enabled') === 'true';
+const settings = document.getElementById('settings-container');
+const getKeydownEventsEnabled = () => document.getElementById('settings').getAttribute('data-events-enabled') === 'true';
 
 // const settings = Array.from(document.querySelectorAll('.setting'));
 const settingsList = [];
@@ -78,23 +78,26 @@ class Setting {
 }
 
 class BooleanSetting extends Setting {
-    getContent() { return this.getDefaultValue() === true ? 'Enabled' : 'Disabled' }
+    getLightContent(v) { return v === true ? 'var(--main-color)' : 'transparent'}
 
     constructor(configProp, props) {
         super(configProp, props);
         const name = props.name;
 
         this.insertHTML(`
-        <p id="${configProp}" class="setting">
-            ${name} 
-            <span class="value">${this.getContent()}</span>
-        </p>`)
+        <div id="${configProp}" class="setting boolean">
+            <div class="light" style="--after-bg-color: ${this.getLightContent(this.getDefaultValue())}"></div>
+            <div class="inner">
+                <p>${name}</p> 
+            </div>
+        </div>`)
 
         document.addEventListener('keydown', e => {
             if (getSelectedSetting() !== this.element || !getKeydownEventsEnabled()) return
             if (e.code === 'ArrowLeft' || e.code === 'ArrowRight' || e.code === 'Enter') {
                 config[configProp] = !config[configProp];
-                this.element.querySelector('.value').textContent = config[configProp] ? 'Enabled' : 'Disabled'
+                const newProp = config[configProp];
+                this.element.querySelector('.light').style.setProperty('--after-bg-color', this.getLightContent(newProp))
 
                 compareAndUpdateSetting(this.element, configProp)
                 writeConfig(config)
@@ -113,10 +116,10 @@ class NumberSetting extends Setting {
         const shift = props.shift;
 
         this.insertHTML(`
-            <p class="setting" id=${configProp}>
-                ${name}
-                <span class="value">${this.getDefaultValue()}</span>
-            </p>
+            <div class="setting number" id=${configProp}>
+                <p>${name}</p>
+                <p class="value">${this.getDefaultValue()}</p>
+            </div>
         `)
 
         document.addEventListener('keydown', e => {
@@ -145,8 +148,8 @@ const pushCategory = name => settings.insertAdjacentHTML('beforeend', `
 )
 
 pushCategory('Gameplay');
-new BooleanSetting('invincibleModeEnabled', {name: 'Invincible mode:'});
-new BooleanSetting('swapOnHold', {name: 'Swap on Hold:'});
+new BooleanSetting('invincibleModeEnabled', {name: 'Invincible mode'});
+new BooleanSetting('swapOnHold', {name: 'Swap on Hold'});
 
 pushCategory('Visuals');
 new NumberSetting('playerTiltMult', {
@@ -155,11 +158,11 @@ new NumberSetting('playerTiltMult', {
     max: 1.5,
     shift: 0.1
 });
-new BooleanSetting('swapHighlightEnabled', {name: 'Swap Highlight:'});
-new BooleanSetting('displayFpsEnabled', {name: 'Display FPS:'});
-new BooleanSetting('displayUiEnabled', {name: 'Display UI:'});
-new BooleanSetting('flashOnDeathEnabled', {name: 'Flash Effect on death:'});
-new BooleanSetting('swapParticlesEnabled', {name: 'Swap Particles:'});
+new BooleanSetting('swapHighlightEnabled', {name: 'Swap Highlight'});
+new BooleanSetting('displayFpsEnabled', {name: 'Display FPS'});
+// new BooleanSetting('displayUiEnabled', {name: 'Display UI'});
+new BooleanSetting('flashOnDeathEnabled', {name: 'Flash Effect on death'});
+new BooleanSetting('swapParticlesEnabled', {name: 'Swap Particles'});
 new BooleanSetting('funModeEnabled', {name: 'How funny...'});
 
 pushCategory('Audio');
