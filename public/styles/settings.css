@@ -233,7 +233,7 @@
     width: 100%;
     opacity: .05;
     background-color: var(--main-color);
-    animation: selected-after-animation .3s ease-out forwards;
+    animation: selected-after-animation .4s ease-out forwards;
 }
 
 @keyframes selected-after-animation {

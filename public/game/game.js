@@ -492,17 +492,17 @@ export default class Game extends GameObject {
         const collidingWalls = this.#getCollidingWalls();
         if (collidingWalls.length !== 0) {
             const wall = collidingWalls.sort((w1, w2) => quadArea2D(w2.getVertexPos4()) - quadArea2D(w1.getVertexPos4()))[0];
-            const vertexPos4 = wall.getVertexPos4().map(pos => pos.mul(wall.getScale()));
+            const vertexPos4 = wall.getVertexPos4().map(pos => pos.mul(wall.getScale().div(this.#scale)));
             const point = this.#polygon.player.getPointPosition();
             const safePoint = closestOutsidePointOnRadius(vertexPos4, point, Math.hypot(point.y, point.x));
             const safeAngle = Math.atan2(safePoint.y, safePoint.x);
             const degrees = safeAngle * 180 / Math.PI;
             this.#polygon.player.setRotationOffset(degrees);
             this.#polygon.player.updatePosition()
-            if (this.#getCollidingWalls().length !== 0) {
-                this.#polygon.player.setRotationOffset(prevRotationOffset);
-                this.#polygon.player.updatePosition()
-            }
+            // if (this.#getCollidingWalls().length !== 0) {
+            //     this.#polygon.player.setRotationOffset(prevRotationOffset);
+            //     this.#polygon.player.updatePosition()
+            // }
         }
     }
 
