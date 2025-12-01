@@ -1,4 +1,4 @@
 export default {
-    root: './public',
+    root: './src',
     mode: 'development',
 }
