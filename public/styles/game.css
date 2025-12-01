@@ -190,3 +190,9 @@
         transform: translateX(-50%) scaleX(1) scaleY(1);
     }
 }
+
+@media (max-width: 1068px) {
+    #game-ui {
+        font-size: 1.2rem;
+    }
+}

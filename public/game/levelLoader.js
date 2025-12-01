@@ -17,6 +17,7 @@ const gamePulsingMsg = document.getElementById('game-pulsing-msg');
 const gamemodeMsg = document.getElementById('gamemode-msg');
 const gameMessage = document.getElementById('game-message');
 const mobileButtons = document.querySelector('#game-ui .top-right');
+const difficultyMsg = document.getElementById('difficulty-msg');
 
 const levelRestartBtn = document.getElementById('level-restart-btn');
 const levelLeaveBtn = document.getElementById('level-leave-btn');
@@ -110,6 +111,7 @@ export default class LevelLoader {
             restartHelpMsg.style.display = 'none';
             swapEnabledMsg.style.display = 'none';
             gamemodeMsg.textContent = config.invincibleModeEnabled ? 'invincible mode' : 'official mode'
+            difficultyMsg.textContent = `Difficulty: ${levelProps.difficulty}`
             gamePulsingMsg.style.display = 'none';            
             fpsCounterElement.style.display = config.displayFpsEnabled ? 'block' : 'none';
 

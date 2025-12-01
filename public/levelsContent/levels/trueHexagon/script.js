@@ -189,7 +189,7 @@ function createEvents(offset) {
         depth3dLerp.run(0, .5, 2, Utils.easeOut)
         hueTimeMult = 0.42;
         speedMultLerp.run(getWallSpeedMult(), 2.3, 2);
-        setPatterns([0, 5, 4, 6, 7])
+        setPatterns([0, 5, 4, 6, 7, 13, 14, 15])
         // skewLerp.run(level.getSkew(), 0.3, 2, Utils.easeOut);
     })
 
