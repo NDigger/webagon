@@ -36,7 +36,8 @@ const sounds = {};
     sounds.swap = new GameSound('./../audio/playerSwap.ogg');
 
     sounds.death = new GameSound('./../audio/death.ogg');
-    sounds.death.startTime = .3;
+    sounds.death.startTime = .04;
+    sounds.death.volume = .3;
 
     sounds.increment = new GameSound('./../audio/increment.mp3');
 })()
