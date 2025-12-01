@@ -39,10 +39,6 @@ document.addEventListener('keydown', e => {
     if (!getKeydownEventsEnabled()) return
     if (e.code === 'ArrowDown') shiftSetting(1)
     else if (e.code === 'ArrowUp') shiftSetting(-1)
-    else if (e.code === 'Escape') {
-        getKeydownEventsEnabled() = false;
-        settings.style.display = 'none'
-    }
     if (
         e.code === 'ArrowDown' || 
         e.code === 'ArrowUp' || 
