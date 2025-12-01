@@ -28,7 +28,13 @@ const addPattern = async pKey => {
     else if (pKey === 7) await patterns.pTunnel(Utils.mathRandom(3, 4), d * 1.4, d);
 }
 
-const enableSwapOnHighSpeed = () => level.getWallSpeedMult() * level.getDifficultyMult() > 6 && level.setSwapEnabled(true);
+const enableSwapOnHighSpeed = () => {
+    const wasSwapEnabled = level.getSwapEnabled();
+    level.getWallSpeedMult() * level.getDifficultyMult() >= 6 && level.setSwapEnabled(true);
+    if (wasSwapEnabled !== level.getSwapEnabled())
+        level.showMessage('Speedmult >= 6\nSwap enabled!', 2)
+}
+
 
 const pKeys = [0, 1, 1, 2, 3, 4, 5, 6, 7];
 let activeKeys = [];

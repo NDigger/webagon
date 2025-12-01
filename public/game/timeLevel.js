@@ -48,7 +48,7 @@ export default class TimeLevel extends Level {
 
     #update() {
         const timerContent = String(Math.floor(this.getTime()*1000)/1000);
-        gameScoreElement.textContent = this.#config.funModeEnabled ? timerContent.split("").reverse().join("") : timerContent;
+        gameScoreElement.textContent = timerContent // this.#config.funModeEnabled ? timerContent.split("").reverse().join("");
         requestAnimationFrame(() => this.#update());
     }
 

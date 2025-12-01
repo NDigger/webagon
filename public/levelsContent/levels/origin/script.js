@@ -25,7 +25,7 @@ const enableSwapOnHighSpeed = () => {
     const wasSwapEnabled = level.getSwapEnabled();
     level.getWallSpeedMult() * level.getDifficultyMult() > 5.8 && level.setSwapEnabled(true);
     if (wasSwapEnabled !== level.getSwapEnabled())
-        level.showMessage('Speedmult > 5.8\nSwap enabled!', 120)
+        level.showMessage('Speedmult > 5.8\nSwap enabled!', 2)
 }
 
 level.onInit = () => {

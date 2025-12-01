@@ -167,6 +167,20 @@ header {
 header .title {
     text-decoration: none;
     color: var(--main-color);
+    position: relative;
+}
+
+#game-version {
+    font-size: 1.5rem;
+    position: absolute;
+    right: -55px;
+    text-align: left;
+    width: 50px;
+    bottom: 4px;
+    text-shadow: 
+    0px 0px 5px var(--background-tile-color),
+    0px 0px 3px var(--background-tile-color),
+    0px 0px 2px var(--background-tile-color)
 }
 
 header > div {
