@@ -16,8 +16,7 @@ export default class GameLerp {
   }
 
   static destroyAll() {
-    GameLerp.instances.forEach(i => i.destroy())
-    GameLerp.instances = []
+    [...GameLerp.instances].forEach(i => i.destroy());
   }
 
   destroy() {

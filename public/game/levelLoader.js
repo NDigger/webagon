@@ -103,12 +103,12 @@ export default class LevelLoader {
         setLevel(level);
         this.#level = level;
 
+        GameLerp.destroyAll();
+
         const config = getConfig();
         script.onload = () => {
             gameUIElement.style.display = config.displayUiEnabled ? 'block' : 'none'
-            
-            GameLerp.destroyAll();
-            
+                        
             mobileButtons.style.display = 'none';
             gameMessage.textContent = '';
             restartHelpMsg.style.display = 'none';
