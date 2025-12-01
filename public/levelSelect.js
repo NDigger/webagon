@@ -116,6 +116,8 @@ let selectedDifficultyIndex = 0;
 
 const getSelectedDifficultyMult = () => avaliableDifficulties[selectedDifficultyIndex]
 
+const getRoundPercent = percent => Math.floor(percent * 10000) / 10000;
+
 const selectedLevelDifficultyElement = document.getElementById('selected-level-difficulty');
 const shiftDifficulty = shift => {
     selectedDifficultyIndex = (selectedDifficultyIndex + shift + avaliableDifficulties.length) % avaliableDifficulties.length;
@@ -123,7 +125,7 @@ const shiftDifficulty = shift => {
     const levelStats = getLevelStats(getSelectedLevelJSON().key, getSelectedDifficultyMult());
     const selectedLevelJSON = getSelectedLevelJSON();
     const best = levelStats?.best ?? 0;
-    setBestScore(best, selectedLevelJSON?.completable);
+    setBestScore(selectedLevelJSON?.completable ? getRoundPercent(best) : best, selectedLevelJSON?.completable);
     animateSelectedLevelTop();
     sounds.levelSelect.play();
 }
@@ -167,7 +169,7 @@ const afterShift = () => {
     
     const levelStats = getLevelStats(currentJson.key, getSelectedDifficultyMult());
     const best = levelStats?.best ?? 0;
-    setBestScore(best, currentJson?.completable);
+    setBestScore(currentJson?.completable ? getRoundPercent(best) : best, currentJson?.completable);
 
     animateSelectedLevelTop();
 }
