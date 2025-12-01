@@ -12,5 +12,8 @@
   },
   "author": "NDagger",
   "license": "ISC",
-  "description": "Simple game inspired by Open Hexagon."
+  "description": "Simple game inspired by Open Hexagon.",
+  "devDependencies": {
+    "vite-plugin-static-copy": "^3.1.4"
+  }
 }
