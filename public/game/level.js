@@ -6,7 +6,13 @@ import { getConfig } from "../storage";
 import { getLevelStats, writeLevelStats } from "../storage";
 import { sounds } from "../script";
 
+const overrideFlashEffect = document.getElementById('override-flash-effect');
+
+const swapEnabledMsg = document.getElementById('swap-enabled-msg');
+const mobileButtons = document.querySelector('#game-ui .top-right');
+const restartHelpMsg = document.getElementById('restart-help-msg');
 const gameMessage = document.getElementById('game-message');
+
 const musicPlayer = new Audio();
 
 export default class Level extends Game { 
@@ -230,9 +236,9 @@ export default class Level extends Game {
         this.clearIntervals();
         this.clearEvents();
 
-        document.querySelector('#game-ui .top-right').style.display = 'block'
+        mobileButtons.style.display = 'block'
 
-        document.getElementById('restart-help-msg').style.display = 'block'
+        restartHelpMsg.style.display = 'block'
         if (this.#audio) this.#audio.pause()
         document.removeEventListener('visibilitychange', this.#handleVisibilityChange);
         this.#gameOver = true
@@ -247,7 +253,7 @@ export default class Level extends Game {
         new Lerp(v => this.setRotation(v)).apply(this.getRotation()).run(this.getRotation() + this.getRotationSpeed() * 400, 1.5, Lerp.Easing.EASE_OUT);
 
         if (this.#config.flashOnDeathEnabled) {
-            const flashLerp = new Lerp(v => document.getElementById('override-flash-effect').style.backgroundColor = v.getRGBAStyle());
+            const flashLerp = new Lerp(v => overrideFlashEffect.style.backgroundColor = v.getRGBAStyle());
             flashLerp.apply(new Color(255, 255, 255, .6))
             flashLerp.run(new Color(255, 255, 255, 0), 1)
         }
@@ -282,7 +288,7 @@ export default class Level extends Game {
     }
     setSwapEnabled(v) {
         super.setSwapEnabled(v);
-        document.getElementById('swap-enabled-msg').style.display = v ? 'block' : 'none';
+        swapEnabledMsg.style.display = v ? 'block' : 'none';
     }
 
     setRotationSpeedMax(v) {
