@@ -20,13 +20,12 @@ let activeKeys = [];
 level.onInit = () => {
     level.setMainColor(new Color(255, 0, 0));
     level.setRadius(70);
-    level.setRotationSpeed(0.035);
+    level.setRotationSpeed(0.2);
     level.setWallSpeedMult(2);
     level.setSides(6);
     level.set3dLayersCount(4);
     level.set3dDistance(50);
     level.setWallSpeedIncrement(0.2);
-    level.setWallSpeedIncrement(0.015);
     level.setRotationSpeedIncrement(0.015);
 }
 

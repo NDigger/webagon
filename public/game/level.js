@@ -107,7 +107,9 @@ export default class Level extends Game {
         this.#isIncrementing = true;
         const inc = this.getRotationSpeed() >= 0 ? this.#rotationSpeedIncrement : -this.#rotationSpeedIncrement
         const newRotation = (this.getRotationSpeed() + inc)*-1;
-        const cappedRotation = newRotation >= 0 ? Math.min(newRotation, this.#rotationSpeedMax) : Math.max(newRotation, -this.#rotationSpeedMax);
+        const diff = this.getDifficultyMult();
+        const rotationSpeedMax = diff !== 0 ? this.#rotationSpeedMax / diff : 0;
+        const cappedRotation = newRotation >= 0 ? Math.min(newRotation, rotationSpeedMax) : Math.max(newRotation, -rotationSpeedMax);
         if (this.#incrementSpinPower !== 0) {
             const rotationSpeedLerp = new Lerp(v => this.setRotationSpeed(v));
             rotationSpeedLerp.apply(cappedRotation > 0 ? cappedRotation + this.#incrementSpinPower : cappedRotation - this.#incrementSpinPower)
@@ -126,7 +128,10 @@ export default class Level extends Game {
 
     #increment() {
         this.#isIncrementing = false;
-        this.setWallSpeedMult(Math.min(this.getWallSpeedMult() + this.#wallSpeedIncrement, this.#wallSpeedMax));
+        const newSpeedMult = this.getWallSpeedMult() + this.#wallSpeedIncrement;
+        const diff = this.getDifficultyMult();
+        const maxSpeed = diff !== 0 ? this.#wallSpeedMax / diff : 0
+        this.setWallSpeedMult(Math.min(newSpeedMult, maxSpeed));
         this.onIncrement();
         this.#step();
     }
