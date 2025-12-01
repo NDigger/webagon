@@ -3,14 +3,13 @@
     "pixi.js": "^8.14.0",
     "vite": "^7.1.11"
   },
-  "name": "ohh",
+  "name": "webagon",
   "version": "1.0.0",
-  "main": "server.cjs",
   "scripts": {
     "start": "node --watch server.cjs",
     "build": "vite build"
   },
-  "author": "",
+  "author": "NDagger",
   "license": "ISC",
-  "description": ""
+  "description": "Simple game inspired by Open Hexagon."
 }
