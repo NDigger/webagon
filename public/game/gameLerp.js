@@ -15,6 +15,11 @@ export default class GameLerp {
     GameLerp.instances.push(this);
   }
 
+  static destroyAll() {
+    GameLerp.instances.forEach(i => i.destroy())
+    GameLerp.instances = []
+  }
+
   destroy() {
     const index = GameLerp.instances.indexOf(this);
     if (index !== -1) {
@@ -85,14 +90,12 @@ export default class GameLerp {
     }
   }
 
-  // Метод для обновления всех экземпляров
   static updateAll(mFrameTime) {
     for (const instance of GameLerp.instances) {
       instance.update(mFrameTime);
     }
   }
 
-  // Вспомогательные методы для проверки типа
   isColor(val) {
     return val && typeof val === 'object' &&
            'r' in val && 'g' in val && 'b' in val && 'a' in val;

@@ -4,6 +4,7 @@ import CompletableLevel from './completableLevel';
 import { setLevel } from '../script';
 import { getLevelStats, writeLevelStats } from '../storage';
 import { getConfig } from '../storage';
+import GameLerp from './gameLerp';
 
 const gameContentElement = document.getElementById('game-content');
 const menuElement = document.getElementById('menu');
@@ -105,6 +106,8 @@ export default class LevelLoader {
         const config = getConfig();
         script.onload = () => {
             gameUIElement.style.display = config.displayUiEnabled ? 'block' : 'none'
+            
+            GameLerp.destroyAll();
             
             mobileButtons.style.display = 'none';
             gameMessage.textContent = '';
