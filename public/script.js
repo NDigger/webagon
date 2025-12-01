@@ -108,3 +108,14 @@ headerButtonsAll.forEach(btn => btn.addEventListener('click', () => {
 
     sounds.levelSelect.play();
 }))
+
+const infoPopup = document.getElementById('info-popup');
+if (localStorage.getItem('webagon-first-popup-seen') !== 'true') {
+    infoPopup.style.display = 'block';
+    const fn = () => {
+        infoPopup.style.display = 'none';
+        document.removeEventListener('click', fn);
+    }
+    document.addEventListener('click', fn)
+}
+localStorage.setItem('webagon-first-popup-seen', 'true')

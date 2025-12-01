@@ -120,6 +120,7 @@ canvas {
     max-width: 80vw;
     max-height: 80vh;
     overflow-y: auto;
+    box-shadow: 0px 0px 1000px black;
 }
 
 #info-popup h1 {

@@ -7,7 +7,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "node --watch server.cjs",
-    "build": "vite build"
+    "build": "vite build --base=./"
   },
   "author": "NDagger",
   "license": "ISC",
