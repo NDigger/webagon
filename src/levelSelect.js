@@ -57,9 +57,10 @@ const levelJsons = []
 const getSelectedLevelJSON = () => levelJsons[selectedLevelIndex];
 
 const loadLevels = () => {
-    fetch('./levelPaths.json')
+    fetch('/levelPaths.json')
     .then(res => res.json())
     .then(levelPaths => {
+        console.log(levelPaths)
         levelPaths.forEach((levelPath, i) => {
         fetch(`${levelPath}/data.json`)
         .then(res => res.json())
