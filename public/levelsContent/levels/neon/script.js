@@ -135,9 +135,9 @@ level.onInit = () => {
 
     hueShift = (() => {
         const diff = level.getDifficultyMult();
-        if (diff === .75) return .4
-        if (diff === 1) return .6
-        if (diff === 1.5) return 0
+        if (diff === .7) return .3
+        if (diff === 1) return .45
+        if (diff === 1.4) return .6
     })()
 }
 
