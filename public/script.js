@@ -39,7 +39,9 @@ const sounds = {};
     sounds.death.startTime = .04;
     sounds.death.volume = .3;
 
-    sounds.increment = new GameSound('./../audio/increment.mp3');
+    sounds.increment = new GameSound('./../audio/increment.ogg');
+    sounds.increment.volume = 0;
+    sounds.increment.startTime = .07;
 })()
 export { sounds };
 

@@ -79,7 +79,7 @@ class Setting {
 
 class BooleanSetting extends Setting {
     getLightContent(v) { return v === true ? 'var(--main-color)' : 'transparent'}
-
+    onChange = () => {};
     constructor(configProp, props) {
         super(configProp, props);
         const name = props.name;
@@ -94,13 +94,7 @@ class BooleanSetting extends Setting {
 
         const revertValue = () => {
             sounds.levelSelect.play();
-            
-            config[configProp] = !config[configProp];
-            const newProp = config[configProp];
-            this.element.querySelector('.light').style.setProperty('--after-bg-color', this.getLightContent(newProp))
-
-            compareAndUpdateSetting(this.element, configProp)
-            writeConfig(config)
+            this.setValue(!config[configProp]);
         }
 
         this.element.addEventListener('click', () => revertValue())
@@ -111,6 +105,17 @@ class BooleanSetting extends Setting {
                 revertValue();
             }
         })
+    }
+
+    setValue(v) {
+        const configProp = this.getConfigProperty();
+        config[configProp] = v;
+        const newProp = config[configProp];
+        this.element.querySelector('.light').style.setProperty('--after-bg-color', this.getLightContent(newProp))
+
+        compareAndUpdateSetting(this.element, configProp)
+        writeConfig(config)
+        this.onChange();
     }
 }
 
@@ -182,7 +187,7 @@ new NumberSetting('playerTiltMult', {
 });
 new BooleanSetting('swapHighlightEnabled', {name: 'Swap Highlight'});
 new BooleanSetting('displayFpsEnabled', {name: 'Display FPS'});
-new BooleanSetting('displayUiEnabled', {name: 'Display UI'});
+// new BooleanSetting('displayUiEnabled', {name: 'Display UI'});
 new BooleanSetting('flashOnDeathEnabled', {name: 'Flash Effect on death'});
 new BooleanSetting('swapParticlesEnabled', {name: 'Swap Particles'});
 new BooleanSetting('funModeEnabled', {name: 'How funny...'});
@@ -196,4 +201,18 @@ const getAudioProps = name => { return {
 }}
 new NumberSetting('musicVolume', getAudioProps('Music Volume'));
 new NumberSetting('soundsVolume', getAudioProps('Sounds volume'));
+new BooleanSetting('deathSoundEnabled', {name: 'Death sound'});
+
+const elem = document.documentElement;
+const openFullscreen = () => {
+  if (elem.requestFullscreen) elem.requestFullscreen();
+  else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+  else if (elem.msRequestFullscreen) elem.msRequestFullscreen();
+}
+const closeFullscreen = () => {
+  if (document.exitFullscreen) document.exitFullscreen();
+  else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+  else if (document.msExitFullscreen) document.msExitFullscreen();
+}
+
 shiftSetting(0); // highlight selected setting

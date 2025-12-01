@@ -241,6 +241,8 @@ export default class Level extends Game {
         if (this.#config.invincibleModeEnabled) return        
         musicPlayer.pause()
 
+        if (this.#config.deathSoundEnabled) sounds.death.play();
+
         super.kill()
         this.#games.forEach(game => game.kill())
         
@@ -344,6 +346,9 @@ export default class Level extends Game {
         this.#intervals = []
     }
     showMessage(text, time) {
+        if (this.#props.attempt === 1) this.showMessageImportant(text, time)
+    }
+    showMessageImportant(text, time) {
         gameMessage.textContent = text;
         this.#messageHideTime = time;
     }

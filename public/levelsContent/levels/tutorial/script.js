@@ -40,25 +40,25 @@ level.onInit = () => {
     level.setCompletionTime(88);
     level.setPlayerSwapReloadTime(0.4);
     if (level.getDifficultyMult() === 1 && level.getAttempt() === 1) {
-        level.showMessage('Welcome!', 2);
+        level.showMessageImportant('Welcome!', 2);
 
-        level.createEvent(2, () => level.showMessage('To move use left and right arrows.', 3));
-        level.createEvent(5, () => level.showMessage('Try it out.', 2));
-        level.createEvent(10, () => level.showMessage('Avoid walls!', 3));
+        level.createEvent(2, () => level.showMessageImportant('To move use left and right arrows.', 3));
+        level.createEvent(5, () => level.showMessageImportant('Try it out.', 2));
+        level.createEvent(10, () => level.showMessageImportant('Avoid walls!', 3));
         
-        level.createEvent(30, () => level.showMessage('Get 60 seconds to complete the tutorial.', 4));
+        level.createEvent(30, () => level.showMessageImportant('Get 60 seconds to complete the tutorial.', 4));
         level.createEvent(60, () => extraIncMsg = true);
 
         level.createEvent(12, () => pKeys = [0, 1, 2, 3]);
     } else if (level.getDifficultyMult() === 1 && level.getAttempt() !== 1) {
-        level.createEvent(0, () => level.showMessage('Get 60 seconds to complete the tutorial.', 4));
+        level.createEvent(0, () => level.showMessageImportant('Get 60 seconds to complete the tutorial.', 4));
         level.createEvent(60, () => extraIncMsg = true);
     } else if (level.getDifficultyMult() === 2.5) {
-        level.showMessage('This is harder version of tutorial!', 2);
-        level.createEvent(2, () => level.showMessage('Get 88 seconds to complete!', 2));
+        level.showMessageImportant('This is harder version of tutorial!', 2);
+        level.createEvent(2, () => level.showMessageImportant('Get 88 seconds to complete!', 2));
     } else if (level.getDifficultyMult() === 5) {
         level.setSwapEnabled(true);
-        level.createEvent(15, () => level.showMessage('Good luck!', 2))
+        level.createEvent(15, () => level.showMessageImportant('Good luck!', 2))
     }
 
     if (level.getDifficultyMult() !== 1 || level.getAttempt() !== 1) pKeys = [0, 1, 2, 3];
@@ -92,15 +92,15 @@ level.onIncrement = () => {
     extraIncMsg = false;
     pKeys = [];
     activeKeys = [];
-    level.showMessage('Tutorial complete!', 2)
+    level.showMessageImportant('Tutorial complete!', 2)
     const t = level.getTime();
     level.createEvent(t + 2, () => {
-        level.showMessage('Before it\'s over, try to swap using "Space"!', 3);
+        level.showMessageImportant('Before it\'s over, try to swap using "Space"!', 3);
         level.setSwapEnabled(true);
     })
-    level.createEvent(t + 8, () => level.showMessage('You will find swap useful in future levels.', 3))
+    level.createEvent(t + 8, () => level.showMessageImportant('You will find swap useful in future levels.', 3))
 
-    level.createEvent(t + 11, () => level.showMessage('Levels have various difficulties. \nTry to change tutorial level difficulty in level select when tutorial is over!', 80))
+    level.createEvent(t + 11, () => level.showMessageImportant('Levels have various difficulties. \nTry to change tutorial level difficulty in level select when tutorial is over!', 80))
 }
 
 // onDeath is called when main player of level object touches deadly wall side

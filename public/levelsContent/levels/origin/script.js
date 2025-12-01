@@ -21,7 +21,12 @@ const addPattern = async pKey => {
 const pKeys = [0, 1, 2, 3];
 let activeKeys = [];
 
-const enableSwapOnHighSpeed = () => level.getWallSpeedMult() * level.getDifficultyMult() > 5.8 && level.setSwapEnabled(true);
+const enableSwapOnHighSpeed = () => {
+    const wasSwapEnabled = level.getSwapEnabled();
+    level.getWallSpeedMult() * level.getDifficultyMult() > 5.8 && level.setSwapEnabled(true);
+    if (wasSwapEnabled !== level.getSwapEnabled())
+        level.showMessage('Speedmult > 5.8\nSwap enabled!', 120)
+}
 
 level.onInit = () => {
     level.setMainColor(new Color(255, 0, 0));

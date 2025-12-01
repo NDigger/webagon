@@ -371,7 +371,6 @@ export default class Game extends GameObject {
 
     kill() {
         if (this.isDestroyed() || this.#config.invincibleModeEnabled) return
-        sounds.death.play();
 
         const d = new Death(this.app);
         d.setSkew(this.#skew);
@@ -769,7 +768,7 @@ export default class Game extends GameObject {
         if (typeof(v) !== 'boolean') return;
         this.#swapEnabled = v;
     }
-    getSwapEnabled() { return this.#polygon.player.getSwapEnabled(); }
+    getSwapEnabled() { return this.#swapEnabled }
     setPlayerSwapReloadTime(v) {
         if (typeof(v) !== 'number') return;
         this.#swapReloadTime = v;

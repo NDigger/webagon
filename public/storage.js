@@ -20,7 +20,7 @@ export const writeLevelStats = (levelKey, levelDiff, levelStats) => {
 export const defaultConfig = {
     playerTiltMult: 0.4,
     swapHighlightEnabled: true,
-    displayFpsEnabled: true,
+    displayFpsEnabled: false,
     displayUiEnabled: true,
     musicVolume: 0.8,
     soundsVolume: 0.8,
@@ -29,6 +29,7 @@ export const defaultConfig = {
     swapParticlesEnabled: true,
     invincibleModeEnabled: false,
     swapOnHold: false,
+    deathSoundEnabled: true,
 }
 
 export const getConfig = () => {

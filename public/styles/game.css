@@ -128,6 +128,7 @@
 #game-message {
     position: absolute;
     top: 20vh;
+    color: var(--main-color);
     left: 50vw;
     width: 166vw;
     transform-origin: left;
