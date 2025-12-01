@@ -236,7 +236,7 @@ export default class Level extends Game {
         this.clearIntervals();
         this.clearEvents();
 
-        mobileButtons.style.display = 'block'
+        mobileButtons.style.display = 'flex'
 
         restartHelpMsg.style.display = 'block'
         if (this.#audio) this.#audio.pause()

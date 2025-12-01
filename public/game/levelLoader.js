@@ -16,6 +16,7 @@ const swapEnabledMsg = document.getElementById('swap-enabled-msg');
 const gamePulsingMsg = document.getElementById('game-pulsing-msg');
 const gamemodeMsg = document.getElementById('gamemode-msg');
 const gameMessage = document.getElementById('game-message');
+const mobileButtons = document.querySelector('#game-ui .top-right');
 
 const levelRestartBtn = document.getElementById('level-restart-btn');
 const levelLeaveBtn = document.getElementById('level-leave-btn');
@@ -103,7 +104,8 @@ export default class LevelLoader {
         const config = getConfig();
         script.onload = () => {
             gameUIElement.style.display = config.displayUiEnabled ? 'block' : 'none'
-
+            
+            mobileButtons.style.display = 'none';
             gameMessage.textContent = '';
             restartHelpMsg.style.display = 'none';
             swapEnabledMsg.style.display = 'none';
