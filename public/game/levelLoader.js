@@ -111,7 +111,7 @@ export default class LevelLoader {
             restartHelpMsg.style.display = 'none';
             swapEnabledMsg.style.display = 'none';
             gamemodeMsg.textContent = config.invincibleModeEnabled ? 'invincible mode' : 'official mode'
-            difficultyMsg.textContent = `Difficulty: ${levelProps.difficulty}`
+            difficultyMsg.textContent = `Difficulty: ${levelProps.difficulty}x`
             gamePulsingMsg.style.display = 'none';            
             fpsCounterElement.style.display = config.displayFpsEnabled ? 'block' : 'none';
 

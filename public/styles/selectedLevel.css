@@ -241,6 +241,10 @@
         filter: hue-rotate(180deg);
     }
 
+    #selected-level .difficulty-container > * {
+        flex: 1
+    }
+
     #selected-level .best::after {
         display: none;
     }
