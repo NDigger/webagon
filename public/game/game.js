@@ -288,6 +288,11 @@ export default class Game extends GameObject {
         gameArrowRight.addEventListener('touchstart', this.#onGameArrowRightPressed, {passive: true})
         gameArrowRight.addEventListener('touchend', this.#onGameArrowRightReleased, {passive: true})
 
+        document.addEventListener('mousedown', this.#onMouseDown)
+        document.addEventListener('mouseup', this.#onMouseUp)
+
+        document.addEventListener('contextmenu', this.#contextMenuEvent);
+
         window.addEventListener('keydown', this.#onKeyDown);
         window.addEventListener('keyup', this.#onKeyUp);
     }
@@ -297,6 +302,11 @@ export default class Game extends GameObject {
         gameArrowLeft.removeEventListener('touchend', this.#onGameArrowLeftReleased)
         gameArrowRight.removeEventListener('touchstart', this.#onGameArrowRightPressed)
         gameArrowRight.removeEventListener('touchend', this.#onGameArrowRightReleased)
+
+        document.removeEventListener('mousedown', this.#onMouseDown)
+        document.removeEventListener('mouseup', this.#onMouseUp)
+
+        document.removeEventListener('contextmenu', this.#contextMenuEvent);
 
         window.removeEventListener('keydown', this.#onKeyDown);
         window.removeEventListener('keyup', this.#onKeyUp);
@@ -316,12 +326,28 @@ export default class Game extends GameObject {
             this.#swapKeyPressed = true;
         }
     }
-
     #onKeyUp = e => {
         if (e.code === 'ArrowLeft' || e.code === 'KeyA') this.#leftKeyPressed = false;
         if (e.code === 'ArrowRight' || e.code === 'KeyD') this.#rightKeyPressed = false;
         if (e.code === 'Space') this.#swapKeyPressed = false;
     }
+
+    #onMouseDown = e => {
+        if (e.button === 0) this.#leftKeyPressed = true;
+        if (e.button === 2) {
+            e.preventDefault();
+            this.#rightKeyPressed = true;
+        }
+    }
+    #onMouseUp = e => {
+        if (e.button === 0) this.#leftKeyPressed = false;
+        if (e.button === 2) {
+            e.preventDefault();
+            this.#rightKeyPressed = false;
+        }
+    }
+
+    #contextMenuEvent = e => e.preventDefault();
 
     #getPolygonLayer() { return this.#layer + 0.004}
     #getWallsLayer() { return this.#layer + 0.003}
