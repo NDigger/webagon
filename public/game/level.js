@@ -189,16 +189,22 @@ export default class Level extends Game {
     }
     
     setBackgroundSwapTime(v) {
-        if (!this.#initialized) super.setBackgroundSwapTime(v / this.#props.difficulty);
-        else super.setBackgroundSwapTime(v);
+        const diff = this.#props.difficulty;
+        super.setBackgroundSwapTime(diff !== 0 ? v / this.#props.difficulty : 0);
     }
     setWallSpeedMult(v) {
-        if (!this.#initialized) super.setWallSpeedMult(v * this.#props.difficulty);
-        else super.setWallSpeedMult(v);
+        super.setWallSpeedMult(v * this.#props.difficulty);
+    }
+    getWallSpeedMult() { 
+        const diff = this.#props.difficulty
+        return diff !== 0 ? super.getWallSpeedMult() / diff : 0
     }
     setRotationSpeed(v) {
-        if (!this.#initialized) super.setRotationSpeed(v * this.#props.difficulty);
-        else super.setRotationSpeed(v);
+        super.setRotationSpeed(v * this.#props.difficulty);
+    }
+    getRotationSpeed() {
+        const diff = this.#props.difficulty;
+        return diff !== 0 ? super.getRotationSpeed() / diff : 0;
     }
     setShakePower(v) {
         if (typeof(v) !== 'number') return

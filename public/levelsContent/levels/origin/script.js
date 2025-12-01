@@ -6,29 +6,35 @@ import initPatterns from '../../patterns';
 let patterns = initPatterns(level);
 
 const addPattern = async pKey => {
-    const d = 500 * Math.max(1, level.getWallSpeedMult() / 8);
+    const diff = level.getDifficultyMult();
+    const speed = level.getWallSpeedMult();
+    const wallSpeed = speed * diff;
+    const d = 500 * Math.max(1, wallSpeed / 8);
+    const spiralD = d * speed * diff * .07;
+    
     if (pKey === 0) await patterns.pInverseBarrage(Utils.mathRandom(2, 3), d, d * 1.4);
-    else if (pKey === 1) await patterns.pSpiralBarrage(Utils.mathRandom(4, 6), d * .6, d);
-    else if (pKey === 2) await patterns.pSpiral(Utils.mathRandom(7, 9), d * .2, d * .8, 1);
+    else if (pKey === 1) await patterns.pSpiralBarrage(Utils.mathRandom(4, 6), d * .5, d);
+    else if (pKey === 2) await patterns.pSpiral(Utils.mathRandom(7, 9), spiralD, d * .8, 1);
     else if (pKey === 3) await patterns.pTunnel(Utils.mathRandom(2, 3), d * 1.4, d * 1.2);
 }
 
 const pKeys = [0, 1, 2, 3];
 let activeKeys = [];
 
-const enableSwapOnHighSpeed = () => level.getWallSpeedMult() > 7 && level.setSwapEnabled(true);
+const enableSwapOnHighSpeed = () => level.getWallSpeedMult() * level.getDifficultyMult() > 5.8 && level.setSwapEnabled(true);
 
 level.onInit = () => {
     level.setMainColor(new Color(255, 0, 0));
     level.setRadius(70);
     level.setRotationSpeed(0.035);
     level.setWallSpeedMult(2.4);
-    level.setSides(5);
+    level.setSides(level.getDifficultyMult() > 2 ? 6 : 5);
     level.set3dLayersCount(8);
     level.set3dDistance(5);
     level.setWallSpeedIncrement(0.2);
     level.setRotationSpeedIncrement(0.015);
     level.setSkew(0);
+    level.setPlayerSwapReloadTime(.3);
     enableSwapOnHighSpeed();
 }
 
@@ -56,6 +62,7 @@ level.onUpdate = ft => {
 
 level.onIncrement = () => {
     enableSwapOnHighSpeed();
+    if (level.getDifficultyMult() > 2) return
     level.setSides(Utils.mathRandom(5, 6))
 }
 

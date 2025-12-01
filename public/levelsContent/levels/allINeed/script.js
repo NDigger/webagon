@@ -3,13 +3,11 @@ import * as Utils from '../../utils'
 import initPatterns from '../../patterns';
 const patterns = initPatterns(level);
 
-
 const longBarrage = async (delay, delayEnd) => {
     for(let i = 0; i < level.getSides() - 1; i++) level.createWall(i, delay);
     await level.distanceDelay(delay);
     await level.distanceDelay(delayEnd);
 }
-
 
 const longAlt = async (delay, delayEnd) => {
     for(let i = 0; i < level.getSides() - 1; i += 2) level.createWall(i, delay);
@@ -30,6 +28,8 @@ const addPattern = async pKey => {
     else if (pKey === 7) await patterns.pTunnel(Utils.mathRandom(3, 4), d * 1.4, d);
 }
 
+const enableSwapOnHighSpeed = () => level.getWallSpeedMult() * level.getDifficultyMult() > 5 && level.setSwapEnabled(true);
+
 const pKeys = [0, 1, 1, 2, 3, 4, 5, 6, 7];
 let activeKeys = [];
 
@@ -48,6 +48,8 @@ level.onInit = () => {
     level.setIncrementSpinPower(.4);
     level.set3dDepthMult(.5);
     level.set3dFalloffScale(new Vector2(.85, .85))
+
+    enableSwapOnHighSpeed();
 }
 
 // onStep must be async and use delays in order to work. No delays may cause crash.
@@ -89,7 +91,7 @@ level.onRender = ft => {
 level.onPreIncrement = () => {}
 
 // onIncrement is called every time walls are gone and level speed incremented
-level.onIncrement = () => {}
+level.onIncrement = () => { enableSwapOnHighSpeed() }
 
 // onDeath is called when main player of level object touches deadly wall side
 level.onDeath = () => {}

@@ -17,10 +17,10 @@ const pSpiral = async (times, delay, delayEnd = 0, extra = 1) => {
 // Pattern spawn conditions, uses level.onStep
 const addPattern = async pKey => {
     const d = 420 * Math.max(level.getWallSpeedMult()/8, 1);
-    const de = d * 1.3;
+    const de = d * 1.4;
     if (pKey === 0) await patterns.pInverseBarrage(Utils.mathRandom(2, 3), d * 1.3, de);
     else if (pKey === 1) await patterns.pSpiralBarrage(Utils.mathRandom(3, 4), d * .8, de);
-    else if (pKey === 2) await patterns.pTunnel(Utils.mathRandom(5, 7), d * 1.7, de, Utils.mathRandom(1, 2));
+    else if (pKey === 2) await patterns.pTunnel(Utils.mathRandom(5, 7), d * 1.85, de, Utils.mathRandom(1, 2));
     else if (pKey === 3) await patterns.pRandomBarrage(Utils.mathRandom(5, 6), d * .82, de);
     else if (pKey === 4) await patterns.pSpiral(Utils.mathRandom(3, 4), d * .5, de, 1);
     else if (pKey === 5) await patterns.pAltBarrage(Utils.mathRandom(3, 4), d * 0.8, de);
@@ -87,7 +87,7 @@ level.onRender = ft => {
     level.setSkew(Utils.pingPong(level.getTime() * 2) * .2)
 }
 
-let rotationSpeed = .3 * level.getDifficultyMult();
+let rotationSpeed = .3;
 let rotationDir = 1;
 // onPreIncrement is called immediately when inтcrement time is achieved
 level.onPreIncrement = () => {

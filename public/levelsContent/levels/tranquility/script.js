@@ -41,7 +41,8 @@ const tunnelSpecial = async(delay, delayEnd) => {
 
 // Pattern spawn conditions, uses level.onStep
 const addPattern = async pKey => {
-    const d = 500 * Math.max(1, level.getWallSpeedMult() / 7);
+    const wallSpeed = level.getWallSpeedMult() * level.getDifficultyMult();
+    const d = 500 * Math.max(1, wallSpeed / 7);
     if (pKey === 0) await patterns.pInverseBarrage(Utils.mathRandom(3, 4), d, d);
     else if (pKey === 1) await patterns.pSpiralBarrage(Utils.mathRandom(4, 6), d * .5, d);
     else if (pKey === 2) await patterns.pDoubleSpiral(Utils.mathRandom(7, 9), d * .25, d, 2);
@@ -53,7 +54,7 @@ const addPattern = async pKey => {
     // else if (pKey === 7) await tunnelSpecial(d * .2, d);
 }
 
-const enableSwapOnHighSpeed = () => level.getWallSpeedMult() >= 6 && level.setSwapEnabled(true);
+const enableSwapOnHighSpeed = () => level.getWallSpeedMult() * level.getDifficultyMult() >= 4.2 && level.setSwapEnabled(true);
 
 const pKeys = [0, 0, 0, 1, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 5, 6, 7];
 let activeKeys = [];

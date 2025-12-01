@@ -28,11 +28,10 @@ const addPattern = async pKey => {
     else if (pKey === 16) await patterns.pAltBarrage(Utils.mathRandom(5, 7), d * .5, de);
 }
 
-const diff = level.getDifficultyMult();
-const setSpeedMult = v => level.setWallSpeedMult(v * diff);
-const setRotationSpeed = v => level.setRotationSpeed(v * diff);
-const getRotationSpeed = () => level.getRotationSpeed()/diff;
-const getWallSpeedMult = () => level.getWallSpeedMult()/diff;
+const setSpeedMult = v => level.setWallSpeedMult(v);
+const setRotationSpeed = v => level.setRotationSpeed(v);
+const getRotationSpeed = () => level.getRotationSpeed();
+const getWallSpeedMult = () => level.getWallSpeedMult();
 
 let pKeys = [];
 let activeKeys = [];

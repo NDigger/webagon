@@ -6,7 +6,7 @@ let patterns = initPatterns(level); // Patterns require level object in order to
 
 // Pattern spawn conditions, uses level.onStep
 const addPattern = async pKey => {
-    const ws = level.getWallSpeedMult();
+    const ws = level.getWallSpeedMult() * level.getDifficultyMult();
     if (pKey === 0) await patterns.pDoubleInverseSpiral(9, ws * 25, ws * 50, 1);
     else if (pKey === 1) await patterns.pDoubleSpiral(Utils.mathRandom(7, 9), ws * 25, ws * 50, 1);
 }
@@ -24,9 +24,8 @@ level.onInit = () => {
     level.set3dDistance(6);
     level.setWallSpeedIncrement(0.25);
     level.setRotationSpeedIncrement(0.05);
-    level.setRotationSpeedMax(0.5);
+    level.setRotationSpeedMax(0.45);
     level.setIncrementTime(10);
-    level.setIncrementSpinPower(.5)
     level.setBackgroundSwapTime(999999);
     level.set3dFalloffScale(new Vector2(1, 1));
 }
@@ -39,6 +38,7 @@ level.onStep = async () => {
     await addPattern(activeKeys.splice(rndIndex, 1)[0])
 }
 
+const rndDir = Math.random() > .5 ? 1 : -1;
 // onUpdate is called every frame.
 level.onUpdate = ft => {
     const time = level.getTime();
@@ -52,7 +52,8 @@ level.onUpdate = ft => {
         Color.hsvToRgb(colorTime + 2/12, .5, .6),
     ])
     // level.setOffset(new Vector2(Math.sin(time * 300) * 1000, 0));
-    level.setCenterOffset(new Vector2(Math.cos(level.getRotation() * 0.01) * 100, Math.sin(level.getRotation() * 0.01) * 100));
+    const t = level.getTime() * level.getDifficultyMult() * rndDir;
+    level.setCenterOffset(new Vector2(Math.cos(t) * 100, Math.sin(t) * 100));
 
     level.setMainColor(Color.hsvToRgb(colorTime, 0, 1));
 

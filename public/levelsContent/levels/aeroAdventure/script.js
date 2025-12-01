@@ -6,16 +6,18 @@ let patterns = initPatterns(level); // Patterns require level object in order to
 
 // Pattern spawn conditions, uses level.onStep
 const addPattern = async pKey => {
-    const d = Math.max(level.getWallSpeedMult(), 7) * (45 - level.getWallSpeedMult() / 1.5);
-    if (pKey === 0) await patterns.pRandomBarrage(Utils.mathRandom(5, 9), d * 1.1, d * 1.7);
-    else if (pKey === 1) await patterns.pAltBarrage(Utils.mathRandom(3, 6), d, d * 1.7);
-    else if (pKey === 2) await patterns.pTunnel(Utils.mathRandom(3, 5), d * 2.5, d * 1.7);
-    else if (pKey === 3) await patterns.pLRBarrage(4, d, d * 1.7);
-    else if (pKey === 4) await patterns.pLeftRight(Utils.mathRandom(4, 5), d, d * 1.7);
-    else if (pKey === 5) await patterns.pSpiralBarrage(Utils.mathRandom(3, 6), d, d * 1.7);
-    else if (pKey === 6) await patterns.pDoubleSpiral(Utils.mathRandom(5, 7), d * 0.8, d * 1.7);
-    else if (pKey === 7) await patterns.pAltSpam(Utils.mathRandom(3, 4), 60, d * 1.7);
-    else if (pKey === 8) await patterns.pWallExSpam(Utils.mathRandom(3, 4), 60, d * 1.7);
+    const wallSpeed = level.getWallSpeedMult() * level.getDifficultyMult();
+    const d = Math.max(wallSpeed, 7) * (45 - wallSpeed / 1.5);
+    const de = d * 1.8;
+    if (pKey === 0) await patterns.pRandomBarrage(Utils.mathRandom(4, 5), d * 1.1, de);
+    else if (pKey === 1) await patterns.pAltBarrage(Utils.mathRandom(3, 6), d, de);
+    else if (pKey === 2) await patterns.pTunnel(Utils.mathRandom(3, 5), d * 2.7, de);
+    else if (pKey === 3) await patterns.pLRBarrage(4, d, de);
+    else if (pKey === 4) await patterns.pLeftRight(Utils.mathRandom(4, 5), d, de);
+    else if (pKey === 5) await patterns.pSpiralBarrage(Utils.mathRandom(3, 6), d, de);
+    else if (pKey === 6) await patterns.pDoubleSpiral(Utils.mathRandom(5, 7), d * 0.8, de);
+    else if (pKey === 7) await patterns.pAltSpam(Utils.mathRandom(3, 4), 60, de);
+    else if (pKey === 8) await patterns.pWallExSpam(Utils.mathRandom(3, 4), 60, de);
 }
 
 const pKeys = [0, 1, 2, 3, 4, 5, 6, 7, 8];
