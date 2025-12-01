@@ -82,8 +82,8 @@ export { levelLoader }
     const a = await createApp()
     app = a;
     levelLoader = new LevelLoader(a);
-    loadScript('./levelSelect.js')
-    loadScript('./settings.js');
+    await import('./levelSelect.js');
+    await import('./settings.js');
 })()
 
 const settingsElement = document.getElementById('settings');
