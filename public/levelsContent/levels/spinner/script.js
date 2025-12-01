@@ -16,12 +16,14 @@ let activeKeys = [];
 
 // onInit is called on the first frame when level is created.
 level.onInit = () => {
+    if (level.getDifficultyMult() === .65) level.setWallSpeedMax(7);
+
     level.setRadius(80);
     level.setRotationSpeed(0.1);
     level.setWallSpeedMult(3);
     level.setSides(6);
-    level.set3dLayersCount(2);
-    level.set3dDistance(6);
+    level.set3dLayersCount(1);
+    level.set3dDistance(20);
     level.setWallSpeedIncrement(0.25);
     level.setRotationSpeedIncrement(0.05);
     level.setRotationSpeedMax(0.55);
@@ -74,7 +76,8 @@ level.onRender = ft => {
 level.onPreIncrement = () => {}
 
 // onIncrement is called every time walls are gone and level speed incremented
-level.onIncrement = () => {}
+level.onIncrement = () => {
+}
 
 // onDeath is called when main player of level object touches deadly wall side
 level.onDeath = () => {}
