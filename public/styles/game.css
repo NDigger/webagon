@@ -130,7 +130,7 @@
     top: 20vh;
     color: var(--main-color);
     left: 50vw;
-    width: 166vw;
+    width: 100vw;
     transform-origin: left;
     transform: translateX(-50%);
     font-size: 2rem;
@@ -194,5 +194,9 @@
 @media (max-width: 1068px) {
     #game-ui {
         font-size: 1.2rem;
+    }
+
+    #restart-help-msg {
+        display: none !important;
     }
 }
