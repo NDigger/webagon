@@ -27,19 +27,19 @@ const createApp = async () => {
 
 const sounds = {};
 (function() {
-    sounds.levelSelect = new GameSound('./audio/levelSelect.mp3');
+    sounds.levelSelect = new GameSound('/audio/levelSelect.mp3');
     sounds.levelSelect.startTime = 0.12;
 
-    sounds.levelLoad = new GameSound('./audio/levelLoad.ogg');
+    sounds.levelLoad = new GameSound('/audio/levelLoad.ogg');
     sounds.levelLoad.startTime = 0.12;    
 
-    sounds.swap = new GameSound('./../audio/playerSwap.ogg');
+    sounds.swap = new GameSound('/audio/playerSwap.ogg');
 
-    sounds.death = new GameSound('./../audio/death.ogg');
+    sounds.death = new GameSound('/audio/death.ogg');
     sounds.death.startTime = .04;
     sounds.death.volume = .3;
 
-    sounds.increment = new GameSound('./../audio/increment.ogg');
+    sounds.increment = new GameSound('/audio/increment.ogg');
     sounds.increment.volume = 0;
     sounds.increment.startTime = .07;
 })()
