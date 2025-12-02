@@ -1,8 +1,8 @@
 
 import * as PIXI from 'pixi.js'
-import LevelLoader from './game/levelLoader';
-import './frameCounter';
-import GameSound from './game/gameSound';
+import LevelLoader from './game/levelLoader.js';
+import './frameCounter.js';
+import GameSound from './game/gameSound.js';
 
 const selectedLevelInfo = document.getElementById('selected-level')
 
