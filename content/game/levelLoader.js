@@ -8,6 +8,7 @@ import GameLerp from './gameLerp';
 
 import { Vector2, Color } from '../utils/structures';
 import * as Utils from '../levelsContent/utils';
+import initPatterns from '../levelsContent/patterns';
 
 const gameContentElement = document.getElementById('game-content');
 const menuElement = document.getElementById('menu');
@@ -160,43 +161,21 @@ export default class LevelLoader {
         // const text = await import(`${data.scriptPath.replace('.js', '.txt')}?raw`)
         // const script = text.default;
 
-        console.log(import.meta.url);
         const modules = import.meta.glob('../levelsContent/levels/**/script.txt', {query: '?raw', import: 'default'});
         // const jsonPath = `${levelPath}/data.json`;
         const loader = modules[`${data.scriptPath.replace('.js', '.txt')}`];
-        console.log(Object.keys(modules))
         if (loader) {
-            const text = await loader();
-            console.log(text)
-            const script = text;
-        // const importRegex = /import ('[^']+'|"[^"]+")/g;
-        // const imports = resScript.match(importRegex);
-        
-        // const importPromises = imports.map(importStatement => {
-        //     const path = importStatement.match(/('[^']+'|"[^"]+")/)[0].replaceAll('\'', '').replaceAll('"', '');
-        //     const fullPath = `${data.levelPath}/${path}.txt`;
-        //     return fetch(fullPath).then(res => res.text()).then(d => ({ importStatement, d }));
-        // });
-
-        //     const results = await Promise.all(importPromises);
-
-        //     results.forEach(({ importStatement, d }) => {
-        //         resScript = resScript.replace(importStatement, d);
-        //     });
-
-            console.log(script);
-            const fn = new Function('Vector2', 'Color', 'Utils', `
+            let script = await loader();
+            
+            const fn = new Function('Vector2', 'Color', 'Utils', 'patterns', `
                 "use strict";
                 ${script}
             `);
 
-            const boundFn = fn.bind(level, Vector2, Color, Utils);
+            const boundFn = fn.bind(level, Vector2, Color, Utils, initPatterns(level));
             boundFn();
             
-            level.init();
-
             // UI
-            
             gameUIElement.style.display = config.displayUiEnabled ? 'block' : 'none'
                         
             mobileButtons.style.display = 'none';
@@ -208,9 +187,10 @@ export default class LevelLoader {
             gamePulsingMsg.style.display = 'none';            
             fpsCounterElement.style.display = config.displayFpsEnabled ? 'block' : 'none';
 
+            this.#level.init()
             gameContentElement.style.display = 'block'
             menuElement.style.display = 'none'
-            
+
             window.addEventListener('keydown', this.#handleKeydown);
             window.addEventListener('keyup', this.#handleKeyup)
 
