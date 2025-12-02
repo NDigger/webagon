@@ -6,7 +6,7 @@ import { getLevelStats, writeLevelStats } from '../storage';
 import { getConfig } from '../storage';
 import GameLerp from './gameLerp';
 
-import { Vector2, Color } from '../utils/structures';
+import { Vector2, Color, Size } from '../utils/structures';
 import * as Utils from '../levelsContent/utils';
 import initPatterns from '../levelsContent/patterns';
 
@@ -154,8 +154,6 @@ export default class LevelLoader {
         setLevel(level);
         this.#level = level;
 
-        GameLerp.destroyAll();
-
         const config = getConfig();
 
         // const text = await import(`${data.scriptPath.replace('.js', '.txt')}?raw`)
@@ -167,12 +165,12 @@ export default class LevelLoader {
         if (loader) {
             let script = await loader();
             
-            const fn = new Function('Vector2', 'Color', 'Utils', 'patterns', `
+            const fn = new Function('level', 'Vector2', 'Color', 'Utils', 'Size', 'patterns', `
                 "use strict";
                 ${script}
             `);
 
-            const boundFn = fn.bind(level, Vector2, Color, Utils, initPatterns(level));
+            const boundFn = fn.bind(undefined, level, Vector2, Color, Utils, Size, initPatterns(level));
             boundFn();
             
             // UI

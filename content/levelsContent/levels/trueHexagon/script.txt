@@ -1,0 +1,521 @@
+class GameLerp {
+  static instances = [];
+
+  constructor(setter, destroyAfterRun = false) {
+    this.start = 0;
+    this.end_ = 0;
+    this.elapsed = 0;
+    this.time = 9999;
+    this.value = 0;
+    this.setter = setter || null;
+    this.easing = null;
+    this.updateEnabled = false;
+    this.destroyAfterRun = destroyAfterRun;
+
+    GameLerp.instances.push(this);
+  }
+
+  static destroyAll() {
+    [...GameLerp.instances].forEach(i => i.destroy());
+  }
+
+  destroy() {
+    const index = GameLerp.instances.indexOf(this);
+    if (index !== -1) {
+      GameLerp.instances.splice(index, 1);
+    }
+    this.updateEnabled = false;
+    this.setter = null;
+  }
+
+  run(start, end_, time, easing) {
+    this.start = start;
+    this.end_ = end_;
+    this.time = time;
+    this.easing = easing || null;
+    this.elapsed = 0;
+    if (!this.updateEnabled) this.updateEnabled = true;
+    return this;
+  }
+
+  apply(value) {
+    this.start = value;
+    this.end_ = value;
+    this.elapsed = 0;
+    if (this.setter) this.setter(value);
+    this.value = value;
+    this.updateEnabled = false;
+  }
+
+  update(mFrameTime) {
+    if (!this.updateEnabled || this.elapsed > this.time) return;
+
+    this.elapsed += mFrameTime;
+    let t = Math.min(this.elapsed / this.time, 1);
+    let easedT = this.easing ? this.easing(t) : t;
+
+    let newValue;
+    
+    if (this.isColor(this.start) && this.isColor(this.end_)) {
+      newValue = {
+        r: this.start.r + (this.end_.r - this.start.r) * easedT,
+        g: this.start.g + (this.end_.g - this.start.g) * easedT,
+        b: this.start.b + (this.end_.b - this.start.b) * easedT,
+        a: this.start.a + (this.end_.a - this.start.a) * easedT,
+      };
+    } else if (this.isVector2(this.start) && this.isVector2(this.end_)) {
+      newValue = {
+        x: this.start.x + (this.end_.x - this.start.x) * easedT,
+        y: this.start.y + (this.end_.y - this.start.y) * easedT,
+      };
+    } else if (this.isSize(this.start) && this.isSize(this.end_)) {
+      newValue = {
+        width: this.start.width + (this.end_.width - this.start.x) * easedT,
+        height: this.start.height + (this.end_.height - this.start.y) * easedT,
+      };
+    } else {
+        newValue = this.start + (this.end_ - this.start) * easedT;
+    }
+
+    if (this.setter) this.setter(newValue);
+    this.value = newValue;
+
+    if (this.elapsed >= this.time) {
+      if (this.destroyAfterRun) {
+        this.destroy();
+      } else {
+        this.updateEnabled = false;
+      }
+    }
+  }
+
+  static updateAll(mFrameTime) {
+    for (const instance of GameLerp.instances) {
+      instance.update(mFrameTime);
+    }
+  }
+
+  isColor(val) {
+    return val && typeof val === 'object' &&
+           'r' in val && 'g' in val && 'b' in val && 'a' in val;
+  }
+
+  isVector2(val) {
+    return val && typeof val === 'object' &&
+           'x' in val && 'y' in val;
+  }
+  isSize(val) {
+    return val && typeof val === 'object' &&
+           'width' in val && 'height' in val;
+  }
+}
+
+// Pattern spawn conditions, uses level.onStep
+const addPattern = async pKey => {
+    const d = 300 * Math.max(1, getWallSpeedMult()/4);
+    const de = d * .85;
+    if (pKey === 0) await patterns.pInverseBarrage(Utils.mathRandom(2, 3), d, de);
+    else if (pKey === 1) await patterns.pSpiralBarrage(Utils.mathRandom(4, 6), d*.5, de);
+    else if (pKey === 2) await patterns.pSpiral(Utils.mathRandom(6, 8), d * .25, d, 1);
+    else if (pKey === 3) await patterns.pRandomBarrage(Utils.mathRandom(3, 4), d*.5, de);
+    else if (pKey === 4) await patterns.pTunnel(Utils.mathRandom(2, 3), d * 1.25, de);
+    else if (pKey === 5) await patterns.pDoubleSpiral(Utils.mathRandom(6, 8), d * .25, de);
+    else if (pKey === 6) await patterns.pWallExTunnel(Utils.mathRandom(4, 5), d * .5, de);
+    else if (pKey === 7) await patterns.pAltSpam(3, 80, de);
+    else if (pKey === 8) await patterns.pBarrageSpam(3, 80, de);
+    else if (pKey === 9) await patterns.pWallExSpam(3, 80, de);
+    else if (pKey === 10) await patterns.pLRBarrage(Utils.mathRandom(4, 6), d*.5, de);
+    else if (pKey === 11) await patterns.pLeftRight(Utils.mathRandom(5, 7), d*.5, de);
+    else if (pKey === 12) await patterns.pDoubleInverseSpiral(Utils.mathRandom(5, 7), d * .25, de);
+    else if (pKey === 13) await patterns.pRandomLRBarrage(Utils.mathRandom(4, 5), d * .5, de);
+    else if (pKey === 14) await patterns.pWallExSpiral(4, d * .5, de);
+    else if (pKey === 15) await patterns.pWallExVortex(Utils.mathRandom(3, 4), d * .5, de);
+    else if (pKey === 16) await patterns.pAltBarrage(Utils.mathRandom(5, 7), d * .5, de);
+}
+
+const setSpeedMult = v => level.setWallSpeedMult(v);
+const setRotationSpeed = v => level.setRotationSpeed(v);
+const getRotationSpeed = () => level.getRotationSpeed();
+const getWallSpeedMult = () => level.getWallSpeedMult();
+
+let pKeys = [];
+let activeKeys = [];
+
+const setPatterns = arr => {
+    pKeys = arr;
+    activeKeys = [];
+}
+
+const mainColorLerp = new GameLerp(v => level.setMainColor(v));
+const backgroundFirstColorLerp = new GameLerp()
+const backgroundSecondColorLerp = new GameLerp()
+
+// onInit is called on the first frame when level is created.
+level.onInit = () => {
+    level.setRadius(50);
+    level.setWallSpeedMult(2);
+    level.setRotationSpeed(-0.01);
+    level.setSides(6);
+    level.set3dLayersCount(4);
+    level.set3dDistance(10);
+    level.setIncrementTime(999999);
+    level.setPlayerSize(new Size(15, 10))
+
+    level.setCompletionTime(482);
+
+    level.setBackgroundSwapTime(9999999);
+    level.setScale(new Vector2(1.5, 1.5));
+    const offset = 1.5 // 1.5;
+    createEvents(offset)
+}
+
+// onStep must be async and use delays in order to work. No delays may cause crash.
+// Insert your wall spawn logic here
+level.onStep = async () => {
+    if (activeKeys.length === 0) activeKeys = pKeys.slice();
+    const rndIndex = Math.floor(Math.random() * activeKeys.length);
+    await addPattern(activeKeys.splice(rndIndex, 1)[0])
+    await level.distanceDelay(0)
+}
+
+let time = 0;
+// onUpdate is called every frame.
+level.onUpdate = ft => {    
+    GameLerp.updateAll(ft);
+    level.setBackgroundTileColors([
+        backgroundFirstColorLerp.value,
+        backgroundSecondColorLerp.value
+    ])
+}
+
+// onRender is called every frame. It works when player is died.
+level.onRender = ft => {
+    time += ft;
+}
+
+// onPreIncrement is called immediately when increment time is achieved
+level.onPreIncrement = () => {}
+
+// onIncrement is called every time walls are gone and level speed incremented
+level.onIncrement = () => {}
+
+// onDeath is called when main player of level object touches deadly wall side
+level.onDeath = () => { GameLerp.destroyAll() }
+
+const createEvents = offset => {
+    const timings = [8.83, 9.33, 9.8, 10.2, 10.73, 11.19, 11.63, 12.13, 12.63, 13.03, 13.5, 14, 14.43, 14.9, 15.3, 15.83, 16.26, 16.8, 17.23, 17.66, 18.13, 18.63, 19.13, 19.6, 20.03, 20.5, 21, 21.43, 21.93, 22.39, 22.83, 23.33, 23.8, 24.23, 24.65, 25.16, 25.63, 26.06, 26.56, 27, 27.43, 27.96, 28.43, 28.8, 29.36, 29.6, 29.86, 30.06, 30.26, 30.46, 30.73, 30.83, 31, 31.06, 31.19, 31.43, 31.63, 32.13, 32.39, 32.6, 33.03, 33.26, 33.53, 34, 34.23, 34.46, 34.93, 35.16, 35.39, 35.83, 36.06, 36.33, 36.79, 37, 37.23, 37.73, 37.83, 37.96, 38.06, 38.2, 38.33, 38.39, 38.56, 38.63, 38.86, 39.06, 39.6, 39.79, 40.03, 40.4, 40.7, 40.96, 41.4, 41.66, 41.83, 42.36, 42.6, 42.79, 43.26, 43.46, 43.73, 44.23, 44.4, 44.63, 45.13, 45.36, 45.6, 45.76, 45.83, 46, 46.06, 46.26, 46.53, 47, 47.23, 47.43, 47.93, 48.16, 48.39, 48.83, 49.1, 49.39, 49.86, 50.03, 50.23, 50.76, 51, 51.23, 51.7, 51.93, 52.16, 52.63, 52.8, 53.06, 53.56, 53.73, 54, 54.46, 54.66, 54.93, 55.39, 55.63, 55.86, 56.33, 56.56, 56.79, 57.23, 57.4, 57.7, 58.2, 58.39, 58.63, 59.06, 59.36, 59.6, 60.03, 60.23, 60.53, 61, 61.2, 61.43, 61.86, 62.13, 62.39, 62.83, 63.03, 63.26, 63.76, 64, 64.23, 64.66, 64.93, 65.2, 65.6, 65.83, 66.06, 66.59, 66.76, 67.03, 67.46, 67.7, 67.93, 68.43, 68.63, 68.86, 69.36, 69.59, 69.83, 70.26, 70.5, 70.73, 71.2, 71.43, 71.66, 72.13, 72.36, 72.59, 73.03, 73.26, 73.53, 74, 74.23, 74.43, 74.93, 75.16, 75.4, 76.26, 77.23, 78.2, 79.1, 80.03, 81, 81.46, 81.66, 81.93, 82.13, 82.36, 82.59, 82.83, 83.06, 83.79, 84.66, 85.63, 86.63, 87.43, 88.4, 88.83, 89.09, 89.33, 89.56, 89.83, 90.03, 90.29, 90.53, 91.2, 92.13, 93.03, 94, 94.9, 95.8, 96.26, 96.53, 96.76, 97.03, 97.23, 97.43, 97.66, 97.93, 98.2, 98.6, 99.23, 99.33, 99.59, 100.03, 100.46, 101.09, 101.2, 101.46, 101.86, 102.33, 102.96, 103.03, 103.23, 103.76, 104.20, 104.79, 104.86, 105.13, 105.59, 106.03, 106.66, 106.76, 106.96, 107.43, 107.93, 108.56, 108.79, 109.33, 109.83, 110.36, 110.53, 110.79, 111.2, 111.6, 112.16, 112.59, 113.06, 113.56, 113.76, 114.03, 114.23, 114.46, 114.96, 115.03, 115.16, 115.26, 115.4, 115.6, 115.9, 116, 116.06, 116.2, 116.33, 116.43, 116.79, 117.26, 118.16, 119.09, 120.03, 120.96, 121.86, 122.83, 123.76, 124.20, 124.6, 125.59, 126.53, 127.43, 128.43, 129.33, 130.23, 131.16, 131.63, 132.13, 133, 133.96, 134.86, 135.83, 136.76, 137.66, 138.59, 139.03, 139.59, 140.53, 141.43, 142.36, 143.26, 144.23, 145.16, 146.06, 146.56, 147.03, 147.43, 147.93, 148.4, 148.9, 149.36, 149.83, 150.23, 150.76, 151.19, 151.66, 152.13, 152.59,
+        153.06, 153.53, 154.03, 154.43, 154.93, 155.36, 155.83, 156.33, 156.76, 157.23, 157.73, 158.16, 158.63, 159.06, 159.56, 160.03, 160.43, 161, 161.43, 161.86, 162.36, 162.83, 163.23, 163.76, 164.19, 164.66, 165.13, 165.59, 166.06, 166.53, 167, 167.43, 167.93, 168.36, 168.83, 169.33, 169.83, 170.23, 170.76, 171.23, 171.66, 172.16, 172.59, 173.06, 173.53, 174.03, 174.43, 174.93, 175.4, 175.83, 176.33, 176.8, 177.26, 177.73, 178.16, 178.63, 179.06, 179.56, 180.03, 180.46, 181, 181.43, 181.86, 182.4, 182.83, 183.26, 183.8, 184.23, 184.63, 185.16, 185.63, 186.06, 186.56, 187.03, 187.46, 187.93, 188.4, 188.83, 189.33, 189.8, 190.26, 190.73, 191.19, 191.33, 191.4, 191.56, 191.8, 191.86, 192.03, 192.06, 192.56, 193.03, 193.16, 193.26, 193.4, 193.53, 193.63, 193.76, 193.83, 194, 194.43, 194.9, 195.03, 195.26, 195.4, 195.53, 195.59, 195.76, 195.83, 196.3, 196.8, 196.86, 197, 197.13, 197.23, 197.4, 197.46, 197.59, 197.69, 198.19, 198.63, 198.83, 199, 199.06, 199.23, 199.33, 199.43, 199.56, 200.06, 200.53, 200.76, 200.83, 201, 201.06, 201.23, 201.33, 201.43, 201.86, 202.36, 202.46, 202.63, 202.66, 202.83, 202.93, 203.06, 203.19, 203.33, 203.8, 204.23, 204.33, 204.46, 204.63, 204.66, 204.8, 204.96, 205.03, 205.19, 205.63, 206.06, 206.19, 206.33, 206.43, 206.63, 206.66, 206.8, 206.86, 207.03, 207.23, 207.46, 208, 208.19, 208.26, 208.43, 208.53, 208.63, 208.76, 208.86, 209.13, 209.36, 209.83, 210.03, 210.16, 210.26, 210.4, 210.46, 210.59, 210.76, 211, 211.23, 211.66, 211.86, 212, 212.13, 212.23, 212.43, 212.59, 212.66, 212.83, 212.93, 213.03, 213.19, 213.26, 213.4, 213.53, 213.63, 213.76, 213.83, 214, 214.09, 214.23, 214.33, 214.43, 214.66, 214.93, 215.4, 215.53, 215.8, 216, 216.06, 216.23, 216.36, 216.56, 216.8, 217.23, 217.4, 217.46, 217.63, 217.73, 217.83, 217.96, 218.06, 218.19, 218.4, 218.63, 219.06, 219.46, 219.8, 220.03, 220.16, 220.23, 220.4, 220.46, 220.63, 220.73, 220.86, 221.43, 222.33, 223.23, 224.19, 225.13, 226.03, 227, 227.86, 228.83, 229.73, 230.73, 231.63, 232.59, 233.53, 234.43, 235.4, 235.83, 236.36, 236.59, 236.8, 236.93, 237.03, 237.13, 237.23, 237.4, 237.5, 237.59, 237.73, 238.16, 238.43, 238.53, 238.63, 238.76, 238.83, 239, 239.13, 239.19, 239.36, 239.43, 239.59, 240.03, 240.26, 240.4, 240.5, 240.59, 240.76, 240.83, 241, 241.06, 241.23, 241.26, 241.4, 241.93, 242.13, 242.23, 242.40, 242.43, 242.59, 242.66, 242.83, 242.93, 243.06, 243.16, 243.26, 243.8, 244, 244.06, 244.23, 244.33, 244.46, 244.56, 244.66, 244.8, 244.93, 245.03, 245.16,
+        245.63, 245.83, 246, 246.06, 246.23, 246.33, 246.43, 246.56, 246.66, 246.8, 246.93, 247.03, 247.46, 247.73, 247.83, 247.96, 248.03, 248.16, 248.33, 248.4, 248.56, 248.63, 248.8, 248.83, 249.33, 249.59, 249.66, 249.8, 249.93, 250.03, 250.19, 250.26, 250.4, 250.46, 250.63, 250.73, 251.19, 251.43, 251.59, 251.66, 251.8, 251.86, 252.03, 252.13, 252.26, 252.36, 252.46, 252.59, 253.03, 253.26, 253.43, 253.53, 253.63, 253.76, 253.86, 254, 254.13, 254.23, 254.36, 254.43, 254.83, 255.16, 255.26, 255.4, 255.53, 255.59, 255.76, 255.83, 256, 256.06, 256.19, 256.33, 256.8, 257, 257.13, 257.23, 257.43, 257.6, 257.66, 257,83, 257.93, 258.06, 258.16, 258.63, 258.83, 259, 259.06, 259.23, 259.33, 259.43, 259.56, 259.66, 259.8, 259.93, 260.06, 260.53, 260.76, 260.83, 261, 261.03, 261.23, 261.33, 261.46, 261.56, 261.66, 261.8, 261.86, 262.39, 262.63, 262.66, 262.83, 262.93, 263.03, 263.19, 263.33, 263.39, 263.56, 263.63, 263.8, 264.23, 264.46, 264.6, 264.66, 264.8, 264.93, 265.03, 265.19, 265.3, 265.39, 265.46, 265.63, 266.06, 266.56, 267.03, 267.46, 267.96, 268.43, 268.86, 269.36, 269.83, 270.23, 270.73, 271.19, 271.66, 272.13, 272.6, 273.03, 273.5, 274, 274.43, 274.93, 275.39, 275.83, 276.33, 276.8, 277.23, 277.63, 278.19, 278.63, 279.06, 279.56, 280.03, 280.46, 281.43, 282.36, 283.23, 284.19, 284.63, 285.13, 285.63, 286.03, 286.53, 287, 287.43, 287.93, 288.16, 288.36, 288.6, 288.83, 289.03, 289.26, 289.56, 289.76, 290.03, 290.26, 290.53, 290.76, 290.96, 291.19, 291.43, 291.63, 291.76, 291.86, 292, 292.16, 292.26, 292.39, 292.43, 292.63, 292.66, 292.83, 292.93, 293.1, 293.19, 293.26, 293.39, 293.56, 293.63, 293.8, 293.86, 294.03, 294.1, 294.23, 294.93, 295.03, 295.16, 295.23, 295.39, 295.86, 296.33, 296.8, 297.26, 297.73, 298.19, 298.63, 299.13, 299.56, 300.03, 300.53, 301, 301.43, 301.86, 302.39, 302.83, 303.26, 303.8, 304.23, 304.66, 305.16, 305.63, 306.06, 306.56, 307.03, 307.46, 307.93, 308.39, 308.86, 309.33, 309.43, 309.73, 309.8, 310.03, 310.26, 310.73, 311.19, 311.63, 312.13, 312.6, 313.03, 313.53, 314, 314.43, 314.93, 315.39, 315.83, 316.26, 316.8, 317.23, 317.66, 318.19, 318.63, 319.06, 319.56, 320.03, 320.53, 321, 321.43, 321.93, 322.39, 322.83, 323.33, 323.8, 324.23, 324.33, 324.6, 324.66, 324.93, 325.19, 326.6, 326.63, 326.8, 326.83, 327.03, 328.39, 328.46, 328.63, 328.73, 328.83, 330.23, 330.36, 330.46, 330.6, 330.76, 332.13, 332.23, 332.36, 332.43, 332.6, 333.53, 334, 334.23, 334.33, 334.43, 335.36, 335.83, 336, 336.03, 336.23, 336.33, 336.8,
+        337.23, 337.66, 338.19, 338.39, 338.63, 338.86, 339.06, 339.23, 339.33, 339.46, 339.6, 340.03, 340.46, 340.96, 341.43, 341.86, 342.36, 342.83, 343.26, 343.76, 344.19, 344.66, 345.16, 345.66, 346.06, 346.53, 347, 347.43, 347.93, 348.39, 348.83, 349.26, 349.8, 350.23, 350.76, 351.23, 351.63, 352.16, 352.63, 353.06, 353.56, 354.03, 354.46, 354.93, 355.39, 355.83, 356.33, 356.8, 357.26, 357.73, 358.19, 358.63, 359.13, 359.6, 360.03, 360.53, 360.96, 361.43, 361.86, 362.39, 362.83, 363.26, 363.8, 364.23, 364.63, 365.16, 365.63, 366.06, 366.56, 337.03, 367.46, 367.93, 368.39, 368.86, 369.06, 369.23, 369.33, 369.46, 369.6, 369.66, 369.83, 370.26, 370.73, 371.19, 371.63, 372.13, 372.56, 373.03, 373.53, 373.96, 374.43, 374.86, 375.39, 375.83, 376.26, 377, 377.23, 377.66, 378.16, 378.63, 379.06, 379.56, 380, 380.53, 381, 381.43, 381.93, 382.36, 382.83, 383.26, 383.76, 383.83, 384.03, 384.06, 384.66, 385.19, 385.63, 386.1, 386.56, 387.03, 387.46, 388, 388.43, 388.86, 389.36, 389.83, 390.26, 390.73, 391.23, 391.66, 392.13, 392.6, 393.06, 393.53, 394, 394.46, 394.93, 395.39, 395.83, 396.33, 396.8, 397.23, 397.73, 398.19, 398.63, 399.06, 399.56, 400.03, 400.46, 401, 401.43, 401.86, 402.36, 402.83, 403.26, 403.76, 404.26, 404.63, 405.13, 405.63, 406.06, 406.53, 407, 407.46, 407.86, 408.36, 408.86, 409.33, 409.76, 410.23, 410.76, 411.23, 411.66, 412.16, 412.63, 413.03, 413.56, 414, 414.46, 414.96, 415.39, 415.86, 416.33, 416.83, 417.26, 417.73, 418.19, 418.66, 419.13, 419.6, 420.03, 420.53, 420.96, 421.43, 421.86, 422.39, 422.83, 423.26, 423.76, 424.23, 424.66, 425.16, 425.6, 425.8, 426, 426.06, 426.23, 426.33, 426.43, 426.56, 426.66, 426.8, 426.93, 427.03, 427.43, 427.6, 427.66, 427.83, 427.93, 428.39, 428.86, 429.03, 429.06, 429.23, 429.33, 429.8, 430.26, 430.73, 431.19, 431.63, 432.13, 432.63, 433.03, 433.53, 434.03, 434.43, 434.86, 435.39, 435.86, 436.26, 436.8, 437.23, 437.66, 438.16, 438.16, 439.06, 439.6, 440.03, 440.46, 441, 441.43, 441.93, 442.39, 442.83, 443.33, 443.39, 443.56, 443.63, 443.76, 443.83, 444, 444.06, 444.23, 444.66, 445.19, 445.63, 446.06, 446.6, 447.03, 447.46, 448, 448.43, 448.83, 449.36, 449.83, 450.23, 450.73, 451.23, 451.66, 452.13, 452.63, 453.06, 453.53, 454, 454.46, 454.93, 455.39, 455.83, 456.33, 456.8, 457.23, 457.73, 458.19, 458.33, 458.43, 458.56, 458.63, 458.8, 458.86, 459.03, 459.23, 459.46, 459.6, 459.8, 459.96, 460.16, 460.23, 460.46, 461, 461.06, 461.33, 461.43, 461.66, 461.8, 462.06, 462.13, 462.36, 462.83, 463,
+        463.19, 463.26, 463.53, 463.63, 463.86, 464, 464.23, 464.66, 464.83, 465.06, 465.16, 465.39, 465.53, 465.76, 465.83, 466.06, 466.19, 466.26, 466.43, 466.53, 467.43, 468.39, 469.26, 470.23, 471.23, 472.13, 473.03, 474.03, 474.43, 474.93, 475.39, 475.86, 476.33, 476.8, 477.23, 477.73, 477.96, 478.19, 478.43, 478.63, 478.86, 479.13, 479.36, 479.6, 479.66, 479.83, 479.93, 480.06, 480.33, 480.43, 480.53, 480.76, 481.03, 481.43     
+    ]
+
+    if (offset < 2) {
+        level.createEvent(0, () => {
+            new GameLerp(v => level.setOffset(v)).run(new Vector2(0, 500), new Vector2(0, 0), 7, Utils.easeInOut)
+            new GameLerp(v => level.setCenterOffset(v)).run(new Vector2(0, 500), new Vector2(0, 0), 7, Utils.easeInOut)
+
+            backgroundFirstColorLerp.run(new Color(0, 0, 0), Color.hsvToRgb(.4, 1., .13), 9);
+            backgroundSecondColorLerp.run(new Color(0, 0, 0), Color.hsvToRgb(.4, 1., .18), 9);
+            mainColorLerp.run(new Color(0, 0, 0), Color.hsvToRgb(.4, 1, .5), 9)
+        })
+    }
+        
+    const wallAngleLeftLerp = new GameLerp(v => level.setWallAngleLeft(v));
+    const wallSkewLeftLerp = new GameLerp(v => level.setWallSkewLeft(v));
+    const distance3dLerp = new GameLerp(v => level.set3dDistance(v));
+    const depth3dLerp = new GameLerp(v => level.set3dDepthMult(v));
+    const playerRadiusLerp = new GameLerp(v => level.setRadius(v));
+    const wallScaleLerp = new GameLerp(v => level.setWallScale(v));
+    const skewLerp = new GameLerp(v => level.setSkew(v));
+    const scaleLerp = new GameLerp(v => level.setScale(v));
+    const mainSaturationLerp = new GameLerp();
+    mainSaturationLerp.value = 1;
+    const backgroundSaturationLerp = new GameLerp();
+    backgroundSaturationLerp.value = 1;
+    const backgroundValueLerp = new GameLerp();
+    backgroundValueLerp.value = 0.15
+    let hueTimeMult = 2.3492;
+    const backgroundDifferenceLerp = new GameLerp();
+    backgroundDifferenceLerp.value = 0.03;
+    const mainColorEndValueLerp = new GameLerp();
+    mainColorEndValueLerp.value = 0.5;
+    let backgroundSwapEnabled = true;
+    const rotationSpeedLerp = new GameLerp(v => setRotationSpeed(v));
+    const falloff3dScaleLerp = new GameLerp(v => level.set3dFalloffScale(v));
+    const speedMultLerp = new GameLerp(v => setSpeedMult(v));
+    let mainSaturationEnd = undefined;
+
+    timings.forEach((timing, i) => level.createEvent(timing - offset, () => {
+        const hue = Utils.fract(level.getTime() * hueTimeMult);
+        const t = Math.max(0, Math.min(.8, (timings[i+1]??0) - timing))
+
+        if (backgroundSwapEnabled) level.setBackgroundRotationOffset(level.getBackgroundRotationOffset() + 360/level.getSides())
+        // level.setMainColor(Color.hsvToRgb(hue, 1, .6))
+        mainColorLerp.run(Color.hsvToRgb(hue, mainSaturationLerp.value, 1), Color.hsvToRgb(hue, mainSaturationEnd ?? mainSaturationLerp.value, mainColorEndValueLerp.value), t);
+        backgroundFirstColorLerp.run(Color.hsvToRgb(hue, backgroundSaturationLerp.value, backgroundValueLerp.value), Color.hsvToRgb(hue, backgroundSaturationLerp.value, backgroundValueLerp.value - backgroundDifferenceLerp.value), t, Utils.easeOut);
+        backgroundSecondColorLerp.run(Color.hsvToRgb(hue, backgroundSaturationLerp.value, backgroundValueLerp.value + backgroundDifferenceLerp.value), Color.hsvToRgb(hue, backgroundSaturationLerp.value, backgroundValueLerp.value), t, Utils.easeOut);
+        playerRadiusLerp.run(50 + t * 20, 50, t, Utils.easeIn)
+        wallScaleLerp.run(new Vector2(1 + t*.2, 1 + t*.2), new Vector2(1, 1), t, Utils.easeInOut);
+    }))
+
+    const getOffsTime = t => t - offset
+    level.createEvent(getOffsTime(7), () => {
+        setPatterns([0, 1, 2, 4]);
+    })
+    level.createEvent(getOffsTime(8.83), () => {
+        setRotationSpeed(0.02)
+    })
+    level.createEvent(getOffsTime(16.23), () => {
+        skewLerp.run(0, 0.1, 1)
+        setRotationSpeed(-0.04)
+    })
+    level.createEvent(getOffsTime(31.19), () => {
+        setRotationSpeed(0.07)
+    })
+    level.createEvent(getOffsTime(38.89), () => {
+        setRotationSpeed(-getRotationSpeed())
+    })
+    level.createEvent(getOffsTime(46.29), () => {
+        setRotationSpeed(0.1)
+    })
+    level.createEvent(getOffsTime(61.06), () => {
+        setRotationSpeed(-getRotationSpeed());
+    })
+    level.createEvent(getOffsTime(68.63), () => {
+        setRotationSpeed(-getRotationSpeed());
+    })
+
+    level.createEvent(getOffsTime(76.26), () => {
+        setRotationSpeed(-0.14);
+        mainSaturationLerp.run(0, 0.1, 3);
+        backgroundSaturationLerp.run(1, 0.2, 3);
+        backgroundValueLerp.run(backgroundValueLerp.value, .3, 3)
+        depth3dLerp.run(0, .5, 2, Utils.easeOut)
+        hueTimeMult = 0.42;
+        speedMultLerp.run(getWallSpeedMult(), 2.3, 2);
+        setPatterns([0, 5, 4, 6, 7, 13, 14, 15])
+        // skewLerp.run(level.getSkew(), 0.3, 2, Utils.easeOut);
+    })
+
+    level.createEvent(getOffsTime(98.6), () => {
+        setRotationSpeed(0.16)
+        speedMultLerp.run(getWallSpeedMult(), 2.5, 1.5);
+    })
+
+    level.createEvent(getOffsTime(113.03), () => {
+        depth3dLerp.run(.5, 0, .5, Utils.easeOut)
+        skewLerp.run(skewLerp.value, 0, 1, Utils.easeOut)
+        speedMultLerp.run(getWallSpeedMult(), 2.6, 1.5);
+    })
+    const dirChangeTimings = [113.06, 113.56, 113.76, 114.03, 114.23, 114.46, 114.96, 115.03, 115.16, 115.26, 115.4, 115.6, 115.9, 116, 116.06, 116.2, 116.33, 116.43, 116.79, 117.26, 118.16, 119.09, 120.03, 120.96, 121.86, 122.83, 123.76, 124.20, 124.6, 125.59, 126.53, 127.43, 128.43, 129.33, 130.23, 131.16];
+    dirChangeTimings.forEach(t => level.createEvent(getOffsTime(t), () => {
+        setRotationSpeed(-getRotationSpeed())
+    }))
+
+    level.createEvent(getOffsTime(131.59), () => {
+        setRotationSpeed(-0.2)
+        backgroundValueLerp.run(0, 1, .5);
+        mainSaturationLerp.run(0.1, 0.5, .5);
+
+        setPatterns([0, 1, 5, 3, 10, 11])
+        speedMultLerp.run(getWallSpeedMult(), 3, 2);
+    })
+
+    level.createEvent(getOffsTime(146.56), () => {
+        setRotationSpeed(0.24);
+        speedMultLerp.run(getWallSpeedMult(), 3.15, 2);
+    })
+
+    level.createEvent(getOffsTime(161.43), () => {
+        skewLerp.run(0, 0.5, 40)
+    })
+
+    const rot7 = [161.43, 161.86, 162.36, 162.83, 163.23, 163.76, 164.19, 164.66, 165.13, 165.59, 166.06, 166.53, 167, 167.43, 167.93, 168.36, 168.83, 169.33, 169.83, 170.23, 170.76, 171.23, 171.66, 172.16, 172.59, 173.06, 173.53, 174.03, 174.43, 174.93, 175.4, 175.83, 176.33];
+    rot7.forEach(t => {
+        level.createEvent(getOffsTime(t), () => {
+            setRotationSpeed(-getRotationSpeed())
+        })
+    })
+
+    level.createEvent(getOffsTime(176.33), () => {
+        rotationSpeedLerp.run(getRotationSpeed() * 3, getRotationSpeed(), 2)
+    })
+
+    const depth3dTimings = [191.19, 191.33, 191.4, 191.56, 191.8, 191.86, 192.03, 192.06, 192.56, 193.03, 193.16, 193.26, 193.4, 193.53, 193.63, 193.76, 193.83, 194, 194.43, 194.9, 195.03, 195.26, 195.4, 195.53, 195.59, 195.76, 195.83, 196.3, 196.8, 196.86, 197, 197.13, 197.23, 197.4, 197.46, 197.59, 197.69, 198.19, 198.63, 198.83, 199, 199.06, 199.23, 199.33, 199.43, 199.56, 200.06, 200.53, 200.76, 200.83, 201, 201.06, 201.23, 201.33, 201.43, 201.86, 202.36, 202.46, 202.63, 202.66, 202.83, 202.93, 203.06, 203.19, 203.33, 203.8, 204.23, 204.33, 204.46, 204.63, 204.66, 204.8, 204.96, 205.03, 205.19, 205.63, 206.06, 206.19, 206.33, 206.43, 206.63, 206.66, 206.8, 206.86, 207.03, 207.23, 207.46, 208, 208.19, 208.26, 208.43, 208.53, 208.63, 208.76, 208.86, 209.13, 209.36, 209.83, 210.03, 210.16, 210.26, 210.4, 210.46, 210.59, 210.76, 211, 211.23, 211.66, 211.86, 212, 212.13, 212.23, 212.43, 212.59, 212.66, 212.83, 212.93, 213.03, 213.19, 213.26, 213.4, 213.53, 213.63, 213.76, 213.83, 214, 214.09, 214.23, 214.33, 214.43, 214.66, 214.93, 215.4, 215.53, 215.8, 216, 216.06, 216.23, 216.36, 216.56, 216.8, 217.23, 217.4, 217.46, 217.63, 217.73, 217.83, 217.96, 218.06, 218.19, 218.4, 218.63, 219.06, 219.46, 219.8, 220.03, 220.16, 220.23, 220.4, 220.46, 220.63, 220.73];
+    depth3dTimings.forEach(t => {
+        level.createEvent(getOffsTime(t), () => {
+            distance3dLerp.run(30, 0, .5, Utils.easeOut);
+        })
+    })
+
+    level.createEvent(getOffsTime(191.19), () => {
+        hueTimeMult = 3.321;
+        setRotationSpeed(0.33);
+        backgroundValueLerp.run(1, .2, 1);
+        mainSaturationLerp.run(mainSaturationLerp.value, .95, 1);
+        mainColorEndValueLerp.run(1, 0.5, 1);
+        depth3dLerp.run(0, .5, 1);
+        speedMultLerp.run(getWallSpeedMult(), 3.4, 2);
+        setPatterns([8, 9, 12, 14, 15, 0, 3, 3])
+    })
+
+    level.createEvent(getOffsTime(220.93), () => {
+        setRotationSpeed(-0.38);
+        skewLerp.run(level.getSkew(), 0, 1);
+        depth3dLerp.run(.5, 0, 1);
+        mainColorEndValueLerp.run(1, 0.6, 1);
+        setPatterns([7, 8, 9])
+    })
+
+    const rotTimings2 = [228.83, 229.73, 230.73, 231.63, 232.59, 233.53, 234.43, 235.4, 235.83]
+    rotTimings2.forEach(t => {
+        level.createEvent(getOffsTime(t), () => {
+            setRotationSpeed(-getRotationSpeed())
+        })
+    })
+
+    level.createEvent(getOffsTime(235.83), () => {
+        speedMultLerp.run(getWallSpeedMult(), 3.7, 2);
+
+        setRotationSpeed(0.43);
+        hueTimeMult = 1.3421;
+        skewLerp.run(0, 0.5, 1);
+        distance3dLerp.run(0, 300, 1);
+        backgroundValueLerp.run(0.1, 0.8, 1);
+        backgroundSaturationLerp.run(0.05, 0.3, 1);
+        mainSaturationLerp.run(1, 0.05, 1);
+        backgroundDifferenceLerp.run(0.03, 0.1, 1);
+        mainColorEndValueLerp.run(0.5, 0.9, 1);
+        backgroundSwapEnabled = false;
+        setPatterns([3, 16, 4, 1, 11, 10, 13, 3, 3])
+    })
+
+    level.createEvent(getOffsTime(250.73), () => {
+        setRotationSpeed(-0.47);
+        speedMultLerp.run(getWallSpeedMult(), 3.9, 2);
+    })
+
+    level.createEvent(getOffsTime(265.63), () => {
+        setRotationSpeed(0.1);
+        skewLerp.run(0.5, 0, .5)
+        backgroundValueLerp.run(1, 0.13, .5);
+        backgroundSaturationLerp.run(0.3, 0.1, 1);
+        speedMultLerp.run(getWallSpeedMult(), 3.5, 2);
+    })
+
+    level.createEvent(getOffsTime(280.46), () => {
+        setRotationSpeed(0.05);
+        rotationSpeedLerp.run(0, 0.5, 15, Utils.easeIn);
+        speedMultLerp.run(0, 3.5, 15, Utils.easeIn);
+    })
+
+    level.createEvent(getOffsTime(295.83), () => {
+        // rotationSpeedLerp.run(-0.5, 0, .5, Utils.easeOut);
+    })
+
+    const rot3 = [295.86, 296.33, 296.8, 297.26, 297.73, 298.19, 298.63, 299.13, 299.56, 300.03, 300.53, 301, 301.43, 301.86, 302.39, 302.83, 303.26, 303.8, 304.23, 304.66, 305.16, 305.63, 306.06, 306.56, 307.03, 307.46, 307.93, 308.39, 308.86, 309.33, 309.43, 309.73, 309.8, 310.03, 310.26, 310.73, 311.19, 311.63, 312.13, 312.6, 313.03, 313.53, 314, 314.43, 314.93, 315.39, 315.83, 316.26, 316.8, 317.23, 317.66, 318.19, 318.63, 319.06, 319.56, 320.03, 320.53, 321, 321.43, 321.93, 322.39, 322.83, 323.33, 323.8, 324.23, 324.33, 324.6, 324.66, 324.93, 325.19];
+    rot3.forEach(t => {
+        level.createEvent(getOffsTime(t), () => {
+            rotationSpeedLerp.run(Math.random() > .5 ? .9 : -.9, 0, 1, Utils.easeOut);
+        })
+    })
+
+    level.createEvent(getOffsTime(325.23), () => {
+        speedMultLerp.run(getWallSpeedMult(), 3, 2);
+        rotationSpeedLerp.apply(.52);
+        mainSaturationLerp.run(0, 0.8, 0.5);
+        skewLerp.run(0, 0.1, 0.5);
+        distance3dLerp.apply(10);
+        backgroundDifferenceLerp.run(0.1, 0.03, 0.5);
+        backgroundValueLerp.run(0.1, 0.2, 0.5);
+        backgroundSaturationLerp.run(0.05, 1, 0.5);
+    })
+
+    level.createEvent(getOffsTime(340), () => {
+        speedMultLerp.run(getWallSpeedMult(), 4, 2);
+        mainSaturationEnd = 0;
+        setPatterns([0, 4, 7, 8, 9, 3, 3, 3, 14, 15, 16])
+    })
+
+    const rot8 = [326.6, 326.63, 326.8, 326.83, 327.03, 328.39, 328.46, 328.63, 328.73, 328.83, 330.23, 330.36, 330.46, 330.6, 330.76, 332.13, 332.23, 332.36, 332.43, 332.6, 333.53, 334, 334.23, 334.33, 334.43, 335.36, 335.83, 336, 336.03, 336.23, 336.33, 336.8];
+    rot8.forEach(t => {
+        level.createEvent(getOffsTime(t), () => {
+            setRotationSpeed(-getRotationSpeed());
+        })
+    })
+
+    const rot4 = [340.03, 340.46, 340.96, 341.43, 341.86, 342.36, 342.83, 343.26, 343.76, 344.19, 344.66, 345.16, 345.66, 346.06, 346.53, 347, 347.43, 347.93, 348.39, 348.83, 349.26, 349.8, 350.23, 350.76, 351.23, 351.63, 352.16, 352.63, 353.06, 353.56, 354.03, 354.46, 354.93, 355.39, 355.83, 356.33, 356.8, 357.26, 357.73, 358.19, 358.63, 359.13, 359.6, 360.03, 360.53, 360.96, 361.43, 361.86, 362.39, 362.83, 363.26, 363.8, 364.23, 364.63, 365.16, 365.63, 366.06, 366.56, 337.03, 367.46, 367.93, 368.39, 368.86, 369.06, 369.23, 369.33, 369.46, 369.6, 369.66];
+    rot4.forEach(t => {
+        level.createEvent(getOffsTime(t), () => {
+            setRotationSpeed(-getRotationSpeed())
+            skewLerp.run(0, 0.3, 0.8);
+            depth3dLerp.run(0, 0.5, 0.8);
+        })
+    })
+
+    level.createEvent(getOffsTime(368.83), () => {
+        rotationSpeedLerp.run(getRotationSpeed(), .3, getRotationSpeed() >= 0 ? .3 : -.3);
+        speedMultLerp.run(getWallSpeedMult(), 2.5, 3);
+        mainColorEndValueLerp.apply(0);
+        mainSaturationEnd = undefined;
+        backgroundDifferenceLerp.apply(0.1);
+        backgroundValueLerp.apply(0);
+    })
+
+    level.createEvent(getOffsTime(371), () => {
+        skewLerp.run(0.3, 0, 0.5);
+        depth3dLerp.run(0.3, 0, .5);
+    })
+
+    level.createEvent(getOffsTime(377.23), () => {
+        setRotationSpeed(-getRotationSpeed());
+    })
+
+    level.createEvent(getOffsTime(384.66), () => {
+        speedMultLerp.run(getWallSpeedMult(), 3.7, 3);
+        setRotationSpeed(-getRotationSpeed() * 2);
+    })
+
+    const rot5 = [384.66, 385.19, 385.63, 386.1, 386.56, 387.03, 387.46, 388, 388.43, 388.86, 389.36, 389.83, 390.26, 390.73, 391.23, 391.66, 392.13, 392.6, 393.06, 393.53, 394, 394.46, 394.93, 395.39, 395.83, 396.33, 396.8, 397.23, 397.73, 398.19, 398.63, 399.06, 399.56, 400.03, 400.46, 401, 401.43, 401.86, 402.36, 402.83, 403.26, 403.76, 404.26, 404.63, 405.13, 405.63, 406.06, 406.53, 407, 407.46, 407.86, 408.36, 408.86, 409.33, 409.76, 410.23, 410.76, 411.23, 411.66, 412.16, 412.63, 413.03, 413.56, 414, 414.46, 414.96, 415.39, 415.86, 416.33, 416.83, 417.26, 417.73, 418.19, 418.66, 419.13, 419.6, 420.03, 420.53, 420.96, 421.43, 421.86, 422.39, 422.83, 423.26, 423.76, 424.23, 424.66, 425.16];
+    rot5.forEach(t => {
+        level.createEvent(getOffsTime(t), () => {
+            setRotationSpeed(-getRotationSpeed() * 1.001);
+            skewLerp.apply(Math.random() * .5);
+            distance3dLerp.apply(Math.random() * 200- 100);
+            const rnd = Math.random() * .5 + .75
+            falloff3dScaleLerp.apply(new Vector2(rnd, rnd));
+            level.set3dFalloffColor(new Color(0, 0, 0, 0))
+        })
+    })
+
+    level.createEvent(getOffsTime(425.6), () => {
+        speedMultLerp.run(getWallSpeedMult(), 3, 3);
+        setPatterns([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
+        mainSaturationLerp.run(1, 0.05, 3);
+        mainColorEndValueLerp.run(.5, .8, 3);
+        backgroundDifferenceLerp.apply(0);
+        skewLerp.run(level.getSkew(), 0, 3);
+        distance3dLerp.run(100, 0, 3);
+        falloff3dScaleLerp.run(level.get3dFalloffScale(), new Vector2(1, 1), 3);
+        rotationSpeedLerp.run(getRotationSpeed(), 0, 3);
+    })
+
+    const rot6 = [429.33, 429.8, 430.26, 430.73, 431.19, 431.63, 432.13, 432.63, 433.03, 433.53, 434.03, 434.43, 434.86, 435.39, 435.86, 436.26, 436.8, 437.23, 437.66, 438.16, 438.16, 439.06, 439.6, 440.03, 440.46, 441, 441.43, 441.93, 442.39, 442.83, 443.33, 443.39, 443.56, 443.63, 443.76, 443.83, 444, 444.06, 444.23, 444.66, 445.19, 445.63, 446.06, 446.6, 447.03, 447.46, 448, 448.43, 448.83, 449.36, 449.83, 450.23, 450.73, 451.23, 451.66, 452.13, 452.63, 453.06, 453.53, 454, 454.46, 454.93, 455.39, 455.83, 456.33, 456.8, 457.23, 457.73, 458.19, 458.33, 458.43, 458.56, 458.63, 458.8, 458.86, 459.03, 459.23, 459.46, 459.6, 459.8, 459.96, 460.16, 460.23, 460.46, 461, 461.06, 461.33, 461.43, 461.66, 461.8, 462.06, 462.13, 462.36, 462.83, 463, 463.19, 463.26, 463.53, 463.63, 463.86, 464, 464.23, 464.66, 464.83, 465.06, 465.16, 465.39, 465.53, 465.76, 465.83, 466.06, 466.19, 466.26, 466.43]
+    rot6.forEach(t => {
+        level.createEvent(getOffsTime(t), () => {
+            rotationSpeedLerp.run(Math.random() > .5 ? .3 : -.3, 0, 1, Utils.easeOut);
+        })
+    })
+
+    level.createEvent(getOffsTime(466.53), () => {
+        pKeys = [];
+        activeKeys = [];
+        rotationSpeedLerp.run(0, .5, 15, Utils.easeIn)
+        scaleLerp.run(level.getScale(), new Vector2(10, 10), 15, Utils.easeIn);
+    })
+
+    level.createEvent(getOffsTime(481.53), () => {
+        scaleLerp.run(level.getScale(), new Vector2(50, 50), 1, Utils.easeOut);
+    })
+}
