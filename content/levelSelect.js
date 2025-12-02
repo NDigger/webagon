@@ -62,39 +62,44 @@ const loadLevels = () => {
     .then(levelPaths => {
         console.log(levelPaths)
         levelPaths.forEach(async (levelPath, i) => {
-            await import(`${levelPath}/data.json`).then(data => {
-                const d = data.default;
-                const updateJSONPath = jsonLevelObject => {
-                    const levelJson = structuredClone(jsonLevelObject);
-                    levelJson.scriptPath = `${levelPath}/${levelJson.scriptPath}`
-                    levelJson.musicPath = `${levelPath}/${levelJson.musicPath}`
-                    return levelJson
-                }
-
-                const updatedJson = updateJSONPath(d)
-                levelJsons.push(updatedJson);
-
-                levelList.insertAdjacentHTML('beforeend', `
-                    <div class="level" id="level-${d.key}">
-                        <p class="name">${d.name}</p>
-                        <p class="author">${d.author}</p>
-                    </div>
-                `)
-
-                levelList.lastElementChild.addEventListener('click', e => {
-                    if (getSelectedLevelElement() !== e.currentTarget || (window.innerWidth < 1068 && !selectedLevelInfo.classList.contains('show'))) {
-                        sounds.levelSelect.play();
-                        setLevelListPosition(i);
-                        selectedLevelInfo.classList.remove('hide');
-                        void selectedLevelInfo.offsetWidth;
-                        selectedLevelInfo.classList.add('show');
+            const modules = import.meta.glob('./levelsContent/levels/**/data.json');
+            const jsonPath = `${levelPath}/data.json`;
+            const loader = modules[jsonPath];
+            if (loader) {
+                await loader().then(data => {
+                    const d = data.default;
+                    const updateJSONPath = jsonLevelObject => {
+                        const levelJson = structuredClone(jsonLevelObject);
+                        levelJson.scriptPath = `${levelPath}/${levelJson.scriptPath}`.replace('./', '../')
+                        levelJson.musicPath = `${levelPath}/${levelJson.musicPath}`
+                        return levelJson
                     }
-                    else loadLevel(updatedJson);
-                })
 
-                requestAnimationFrame(() => setLevelListPosition(parseInt(localStorage.getItem('webagon-selected-level') ?? 0)));
-                    loadMenu();
-            })
+                    const updatedJson = updateJSONPath(d)
+                    levelJsons.push(updatedJson);
+
+                    levelList.insertAdjacentHTML('beforeend', `
+                        <div class="level" id="level-${d.key}">
+                            <p class="name">${d.name}</p>
+                            <p class="author">${d.author}</p>
+                        </div>
+                    `)
+
+                    levelList.lastElementChild.addEventListener('click', e => {
+                        if (getSelectedLevelElement() !== e.currentTarget || (window.innerWidth < 1068 && !selectedLevelInfo.classList.contains('show'))) {
+                            sounds.levelSelect.play();
+                            setLevelListPosition(i);
+                            selectedLevelInfo.classList.remove('hide');
+                            void selectedLevelInfo.offsetWidth;
+                            selectedLevelInfo.classList.add('show');
+                        }
+                        else loadLevel(updatedJson);
+                    })
+
+                    requestAnimationFrame(() => setLevelListPosition(parseInt(localStorage.getItem('webagon-selected-level') ?? 0)));
+                        loadMenu();
+                })
+            }
         })
     })
 }

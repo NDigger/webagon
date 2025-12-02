@@ -101,12 +101,12 @@ export default class LevelPreview {
         requestAnimationFrame(t => this.#update(t));
     }
 
-    load(path) {
+    async load(path) {
         this.drop();
-        const script = document.createElement('script');
-        script.type = 'module';
-        script.src = `${path}?${new Date().getTime()}`
-        document.querySelector('body').appendChild(script);
+        // const script = document.createElement('script');
+        // script.type = 'module';
+        // script.src = `${path}?${new Date().getTime()}`
+        // document.querySelector('body').appendChild(script);
 
         const levelPreview = new Proxy(new LevelPreviewContent(), {
             get(target, prop) {
@@ -125,11 +125,21 @@ export default class LevelPreview {
         setLevel(levelPreview)
         this.#levelPreview = levelPreview
 
-        script.onload = () => {
-            levelPreview.init()
-            this.#lastTime = performance.now();
-            this.#updateId = requestAnimationFrame(t => this.#update(t));
+        const modules = import.meta.glob('.././levelsContent/levels/**/script.js');
+        const loader = modules[path];
+        if (loader) {
+            await loader().then(() => {
+                levelPreview.init()
+                this.#lastTime = performance.now();
+                this.#updateId = requestAnimationFrame(t => this.#update(t));
+            })
         }
+
+        // script.onload = () => {
+        //     levelPreview.init()
+        //     this.#lastTime = performance.now();
+        //     this.#updateId = requestAnimationFrame(t => this.#update(t));
+        // }
     }
 
     getStyle() { return this.#levelPreview?.style }
