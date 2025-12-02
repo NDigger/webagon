@@ -119,3 +119,14 @@ if (localStorage.getItem('webagon-first-popup-seen') !== 'true') {
     document.addEventListener('click', fn)
 }
 localStorage.setItem('webagon-first-popup-seen', 'true')
+
+// "./levelsContent/levels/tutorial",
+//  "./levelsContent/levels/tranquility",
+//  "./levelsContent/levels/spinner",
+//  "./levelsContent/levels/aeroAdventure",
+//  "./levelsContent/levels/jungle",
+//  "./levelsContent/levels/neon",
+//  "./levelsContent/levels/allINeed",
+//  "./levelsContent/levels/impulse",
+//  "./levelsContent/levels/ultravoice",
+//  "./levelsContent/levels/trueHexagon"
