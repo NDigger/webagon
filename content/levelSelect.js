@@ -60,7 +60,6 @@ const loadLevels = () => {
     fetch('/levelPaths.json')
     .then(res => res.json())
     .then(levelPaths => {
-        console.log(levelPaths)
         levelPaths.forEach(async (levelPath, i) => {
             const modules = import.meta.glob('./levelsContent/levels/**/data.json');
             const jsonPath = `${levelPath}/data.json`;
