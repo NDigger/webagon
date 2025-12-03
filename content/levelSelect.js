@@ -36,7 +36,7 @@ const levelPreviewUpdate = ft =>{
 }
 
 const loadLevel = levelData => {
-    levelPreview.drop();
+    levelPreview.destroy();
     sounds.levelLoad.play();
     levelLoader.start(levelData, getSelectedDifficultyMult());
     document.removeEventListener('keydown', keyDownMenuListener)

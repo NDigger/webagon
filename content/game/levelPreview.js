@@ -129,7 +129,7 @@ export default class LevelPreview {
 
     getStyle() { return this.#levelPreview?.style }
 
-    drop() {
+    destroy() {
         if (this.#levelPreview != null) {
             cancelAnimationFrame(this.#updateId)
             this.#levelPreview.destroy()
