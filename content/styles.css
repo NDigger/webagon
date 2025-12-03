@@ -47,7 +47,7 @@
 
 button { border: none; }
 button:hover { cursor: pointer; }
-button:focus { outline: none; }
+button:focus, a:focus { outline: none; }
 
 .screen-only { visibility: hidden; }
 
