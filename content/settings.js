@@ -79,11 +79,15 @@ class BooleanSetting extends Setting {
         super(configProp, props);
         const name = props.name;
 
+        const description = props.description;
         this.insertHTML(`
         <div id="${configProp}" class="setting boolean">
             <div class="light" style="--after-bg-color: ${this.getLightContent(this.getDefaultValue())}"></div>
             <div class="inner">
-                <p>${name}</p> 
+                <p class="name">${name}</p> 
+                ${description ? `
+                <p class="description">${description}</p>
+                ` : ''}
             </div>
         </div>`)
 
@@ -170,8 +174,18 @@ const pushCategory = name => settings.insertAdjacentHTML('beforeend', `
 )
 
 pushCategory('Gameplay');
-new BooleanSetting('invincibleModeEnabled', {name: 'Invincible mode'});
-new BooleanSetting('swapOnHold', {name: 'Swap on Hold'});
+new BooleanSetting('invincibleModeEnabled', {
+    name: 'Invincible mode',
+    description: 'Scores are invalidated when enabled'
+});
+new BooleanSetting('swapOnHold', {
+    name: 'Swap on Hold',
+    description: 'Instant swap on reload if button is hold'
+});
+new BooleanSetting('effect3dEnabled', {
+    name: '3D effect',
+    description: 'Disable to improve performance'
+});
 
 pushCategory('Visuals');
 new NumberSetting('playerTiltMult', {

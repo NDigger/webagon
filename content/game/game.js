@@ -632,6 +632,7 @@ export default class Game extends GameObject {
     setRadius(v) { if (typeof(v) === 'number') this.#polygon.setThickness(v); }
     getRadius() { return this.#polygon.getThickness() }
     setSkew(v) {
+        if (!this.#config.effect3dEnabled) return
         if (typeof(v) !== 'number') return
         this.#skew = v
         this.#background.setSkew(v);
@@ -701,6 +702,7 @@ export default class Game extends GameObject {
     }
     getWallSpeedMult() { return this.#wallSpeedMult }
     set3dLayersCount(v) {
+        if (!this.#config.effect3dEnabled) return
         if (typeof(v) !== 'number') return;
         const layersCount = Math.floor(v);
         this.#layersCount3d = layersCount;
@@ -748,6 +750,7 @@ export default class Game extends GameObject {
         if (this.#deathEffect !== undefined) this.#deathEffect.clear3dFalloffColor();
     }
     set3dDepthMult(v) {
+        if (!this.#config.effect3dEnabled) return
         if (typeof(v) !== 'number') return;
         this.#depthMult3d = v;
         this.#polygon.set3dDepthMult(v);

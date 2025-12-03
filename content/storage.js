@@ -30,6 +30,7 @@ export const defaultConfig = {
     invincibleModeEnabled: false,
     swapOnHold: false,
     deathSoundEnabled: true,
+    effect3dEnabled: true,
 }
 
 export const getConfig = () => {
