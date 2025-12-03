@@ -26,6 +26,7 @@ const newPBMessages = [
     'that best looks cute.',
     'bliss that bee!',
     'how unlucky!',
+    'fee'
 ];
 
 const gameScoreElement = document.getElementById('game-score');
