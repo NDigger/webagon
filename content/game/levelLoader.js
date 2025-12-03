@@ -10,6 +10,25 @@ import { Vector2, Color, Size } from '../utils/structures';
 import * as Utils from '../levelsContent/utils';
 import initPatterns from '../levelsContent/patterns';
 
+export const loadLevel = async (level, levelPath) => {
+    const modules = import.meta.glob('../levelsContent/levels/**/script.txt', {query: '?raw', import: 'default'});
+    const scriptPath = `.${levelPath}/script.txt`
+    const loader = modules[scriptPath];
+    if (loader) {
+        let script = await loader();
+        
+        const fn = new Function('level', 'Vector2', 'Color', 'Utils', 'Size', 'patterns', `
+            "use strict";
+            ${script}
+        `);
+
+        const boundFn = fn.bind(undefined, level, Vector2, Color, Utils, Size, initPatterns(level));
+        boundFn();
+
+        level.init()
+    }
+}
+
 const gameContentElement = document.getElementById('game-content');
 const menuElement = document.getElementById('menu');
 const gameUIElement = document.getElementById('game-ui');
@@ -156,46 +175,27 @@ export default class LevelLoader {
 
         const config = getConfig();
 
-        // const text = await import(`${data.scriptPath.replace('.js', '.txt')}?raw`)
-        // const script = text.default;
-
-        const modules = import.meta.glob('../levelsContent/levels/**/script.txt', {query: '?raw', import: 'default'});
-        // const jsonPath = `${levelPath}/data.json`;
-        const scriptPath = `.${data.levelPath}/script.txt`
-        const loader = modules[scriptPath];
-        if (loader) {
-            let script = await loader();
+        await loadLevel(level, data.levelPath);
             
-            const fn = new Function('level', 'Vector2', 'Color', 'Utils', 'Size', 'patterns', `
-                "use strict";
-                ${script}
-            `);
+        // UI
+        gameUIElement.style.display = config.displayUiEnabled ? 'block' : 'none'
+                    
+        mobileButtons.style.display = 'none';
+        gameMessage.textContent = '';
+        restartHelpMsg.style.display = 'none';
+        swapEnabledMsg.style.display = 'none';
+        gamemodeMsg.textContent = config.invincibleModeEnabled ? 'invincible mode' : 'official mode'
+        difficultyMsg.textContent = `Difficulty: ${levelProps.difficulty}x`
+        gamePulsingMsg.style.display = 'none';            
+        fpsCounterElement.style.display = config.displayFpsEnabled ? 'block' : 'none';
 
-            const boundFn = fn.bind(undefined, level, Vector2, Color, Utils, Size, initPatterns(level));
-            boundFn();
-            
-            // UI
-            gameUIElement.style.display = config.displayUiEnabled ? 'block' : 'none'
-                        
-            mobileButtons.style.display = 'none';
-            gameMessage.textContent = '';
-            restartHelpMsg.style.display = 'none';
-            swapEnabledMsg.style.display = 'none';
-            gamemodeMsg.textContent = config.invincibleModeEnabled ? 'invincible mode' : 'official mode'
-            difficultyMsg.textContent = `Difficulty: ${levelProps.difficulty}x`
-            gamePulsingMsg.style.display = 'none';            
-            fpsCounterElement.style.display = config.displayFpsEnabled ? 'block' : 'none';
+        gameContentElement.style.display = 'block'
+        menuElement.style.display = 'none'
 
-            this.#level.init()
-            gameContentElement.style.display = 'block'
-            menuElement.style.display = 'none'
+        window.addEventListener('keydown', this.#handleKeydown);
+        window.addEventListener('keyup', this.#handleKeyup)
 
-            window.addEventListener('keydown', this.#handleKeydown);
-            window.addEventListener('keyup', this.#handleKeyup)
-
-            window.addEventListener('keydown', this.#handleKeydown);
-            window.addEventListener('keyup', this.#handleKeyup)
-        // })
-        }
+        window.addEventListener('keydown', this.#handleKeydown);
+        window.addEventListener('keyup', this.#handleKeyup)
     }
 }
