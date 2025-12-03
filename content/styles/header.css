@@ -23,6 +23,7 @@ header .title {
 }
 
 #repo {
+    /* display: none; */
     font-size: .4em;
     position: absolute;
     top: -10px;

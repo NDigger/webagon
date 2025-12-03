@@ -44,6 +44,7 @@ export default class TimeLevel extends Level {
         super(app, levelData, props);
         this.#levelData = levelData;
         this.#props = props;
+        gameScoreElement.style.display = 'block';
         this.#updateId = requestAnimationFrame(() => this.#update());
     }
 

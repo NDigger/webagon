@@ -8,10 +8,18 @@ import { sounds } from "../script";
 
 const overrideFlashEffect = document.getElementById('override-flash-effect');
 
-const swapEnabledMsg = document.getElementById('swap-enabled-msg');
-const mobileButtons = document.querySelector('#game-ui .top-right');
+const gameContentElement = document.getElementById('game-content');
+const menuElement = document.getElementById('menu');
+const gameUIElement = document.getElementById('game-ui');
+
+const fpsCounterElement = document.getElementById('fps-counter');
 const restartHelpMsg = document.getElementById('restart-help-msg');
+const swapEnabledMsg = document.getElementById('swap-enabled-msg');
+const gamePulsingMsg = document.getElementById('game-pulsing-msg');
+const gamemodeMsg = document.getElementById('gamemode-msg');
 const gameMessage = document.getElementById('game-message');
+const mobileButtons = document.querySelector('#game-ui .top-right');
+const difficultyMsg = document.getElementById('difficulty-msg');
 
 const musicPlayer = new Audio();
 
@@ -73,6 +81,21 @@ export default class Level extends Game {
     
     init() {
         if (this.#initialized) return;
+
+        gameUIElement.style.display = this.#config.displayUiEnabled ? 'block' : 'none'
+                    
+        mobileButtons.style.display = 'none';
+        gameMessage.textContent = '';
+        restartHelpMsg.style.display = 'none';
+        swapEnabledMsg.style.display = 'none';
+        gamemodeMsg.textContent = this.#config.invincibleModeEnabled ? 'invincible mode' : 'official mode'
+        difficultyMsg.textContent = `Difficulty: ${this.#props.difficulty}x`
+        gamePulsingMsg.style.display = 'none';            
+        fpsCounterElement.style.display = this.#config.displayFpsEnabled ? 'block' : 'none';
+
+        gameContentElement.style.display = 'block'
+        menuElement.style.display = 'none'
+
         
         musicPlayer.src = `${this.#levelData.levelPath}/music.ogg`; 
 

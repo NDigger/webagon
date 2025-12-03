@@ -31,17 +31,10 @@ export const loadLevel = async (level, levelPath) => {
 
 const gameContentElement = document.getElementById('game-content');
 const menuElement = document.getElementById('menu');
-const gameUIElement = document.getElementById('game-ui');
 const progressBarElement = document.getElementById('completable-level-progress-bar');
+const gameScoreElement = document.getElementById('game-score');
 
-const fpsCounterElement = document.getElementById('fps-counter');
-const restartHelpMsg = document.getElementById('restart-help-msg');
-const swapEnabledMsg = document.getElementById('swap-enabled-msg');
 const gamePulsingMsg = document.getElementById('game-pulsing-msg');
-const gamemodeMsg = document.getElementById('gamemode-msg');
-const gameMessage = document.getElementById('game-message');
-const mobileButtons = document.querySelector('#game-ui .top-right');
-const difficultyMsg = document.getElementById('difficulty-msg');
 
 const levelRestartBtn = document.getElementById('level-restart-btn');
 const levelLeaveBtn = document.getElementById('level-leave-btn');
@@ -85,8 +78,8 @@ export default class LevelLoader {
         gamePulsingMsg.style.display = 'none'
         gameContentElement.style.display = 'none';
         menuElement.style.display = 'flex';
-
         progressBarElement.style.display = 'none';
+        gameScoreElement.style.display = 'none';
     }
 
     start(data, difficulty) {
@@ -123,21 +116,6 @@ export default class LevelLoader {
         const config = getConfig();
 
         loadLevel(level, data.levelPath);
-            
-        // UI
-        gameUIElement.style.display = config.displayUiEnabled ? 'block' : 'none'
-                    
-        mobileButtons.style.display = 'none';
-        gameMessage.textContent = '';
-        restartHelpMsg.style.display = 'none';
-        swapEnabledMsg.style.display = 'none';
-        gamemodeMsg.textContent = config.invincibleModeEnabled ? 'invincible mode' : 'official mode'
-        difficultyMsg.textContent = `Difficulty: ${levelProps.difficulty}x`
-        gamePulsingMsg.style.display = 'none';            
-        fpsCounterElement.style.display = config.displayFpsEnabled ? 'block' : 'none';
-
-        gameContentElement.style.display = 'block'
-        menuElement.style.display = 'none'
 
         window.addEventListener('keydown', this.#handleKeydown);
         window.addEventListener('keyup', this.#handleKeyup)
