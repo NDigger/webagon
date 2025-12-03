@@ -12,7 +12,6 @@ const createApp = async () => {
         resolution: devicePixelRatio,
         antialias: true
     });
-
     window.addEventListener('resize', () => {
         app.renderer.resolution = devicePixelRatio;
         app.renderer.resize(window.innerWidth, window.innerHeight);
@@ -26,7 +25,7 @@ const createApp = async () => {
 
 export const getPublicURL = () => import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
 
-const sounds = {};
+export const sounds = {};
 (function() {
     sounds.levelSelect = new GameSound(getPublicURL() + '/audio/levelSelect.mp3');
     sounds.levelSelect.startTime = 0.12;
@@ -44,14 +43,9 @@ const sounds = {};
     sounds.increment.volume = 0;
     sounds.increment.startTime = .07;
 })()
-export { sounds };
 
 const bestScoreElement = selectedLevelInfo.querySelector('.best');
-export function setBestScore(score, completable = false) {
-    // let zeros = ''
-    // if (parseFloat(score) < 10) zeros = 'OO';
-    // else if (parseFloat(score) < 100) zeros = 'O';
-    // bestScoreElement.innerHTML = `<span style="opacity:.5">${zeros}</span>${score.toFixed(3).toString().replaceAll('0', 'O')}`
+export const setBestScore = (score, completable = false) {
     if (completable) {
         const percent = `${score*100}%`;
         bestScoreElement.textContent = score === 1 ? 'done' : percent;
