@@ -49,8 +49,8 @@ const loadLevel = levelData => {
 const loadMenu = () => {
     levelPreview.onUpdate = ft => levelPreviewUpdate(ft);
     document.addEventListener('keydown', keyDownMenuListener)
-    const path = getSelectedLevelJSON()?.scriptPath ?? undefined
-    if (path != undefined) levelPreview.load(path)
+    const levelPath = getSelectedLevelJSON()?.levelPath ?? undefined
+    if (levelPath != undefined) levelPreview.load(levelPath)
 }
 
 const levelJsons = []
@@ -164,7 +164,7 @@ const afterShift = () => {
     selectedLevelElement.scrollIntoView({ behavior: 'instant', block: 'nearest' })
     
     const currentJson = getSelectedLevelJSON();
-    levelPreview.load(currentJson.scriptPath)
+    levelPreview.load(currentJson.levelPath);
 
     updateSelectedLevelInfo()
 
