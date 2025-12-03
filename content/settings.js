@@ -9,7 +9,6 @@ const round = v => Math.round(v * 100) / 100;
 const settings = document.getElementById('settings-container');
 const getKeydownEventsEnabled = () => document.getElementById('settings').getAttribute('data-events-enabled') === 'true';
 
-// const settings = Array.from(document.querySelectorAll('.setting'));
 const settingsList = [];
 let selectedSettingIndex = 0;
 

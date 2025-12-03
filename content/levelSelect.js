@@ -195,22 +195,7 @@ const setLevelListPosition = position => {
     afterShift();
 }
 
-const levelSelectElement = document.getElementById('level-select');
 const keyDownMenuListener = e => {
-    // if (e.code === 'Escape') {
-    //     if (keydownEventsEnabled === true) {
-    //         levelSelectElement.style.display = 'none';
-    //         keydownEventsEnabled = false;
-    //         setSettingsVisible(true);
-    //     }
-    //     else {
-    //         keydownEventsEnabled = true;
-    //         setSettingsVisible(false);
-    //         void levelList.offsetWidth;
-    //         levelSelectElement.style.display = 'flex';
-    //     }
-    // }
-
     if (!getKeydownEventsEnabled()) return
     if (e.code === 'ArrowUp' || e.code === 'KeyW') shiftLevelListPosition(-1)
     else if (e.code === 'ArrowDown' || e.code === 'KeyS') shiftLevelListPosition(1)

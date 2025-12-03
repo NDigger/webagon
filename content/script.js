@@ -77,9 +77,6 @@ export { levelLoader }
     await import('./settings.js');
 })()
 
-const settingsElement = document.getElementById('settings');
-const levelSelectElement = document.getElementById('level-select');
-
 const headerButtons = document.querySelector('header .buttons');
 const headerButtonsAll = Array.from(document.querySelectorAll('header .buttons > button'))
 const menuElements = Array.from(document.getElementById('menu-window').children);
