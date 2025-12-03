@@ -52,8 +52,6 @@ const loadLevels = () => {
                         const d = data.default;
                         const updateJSONPath = jsonLevelObject => {
                             const levelJson = structuredClone(jsonLevelObject);
-                            levelJson.scriptPath = `${levelPath}/${levelJson.scriptPath}`.replace('./', '../');
-                            levelJson.musicPath = `${levelPath}/${levelJson.musicPath}`;
                             levelJson.levelPath = levelPath;
                             return levelJson
                         }
