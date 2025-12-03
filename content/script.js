@@ -25,21 +25,23 @@ const createApp = async () => {
     return app;
 }
 
+export const getPublicURL = () => import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
+
 const sounds = {};
 (function() {
-    sounds.levelSelect = new GameSound(import.meta.env.BASE_URL + '/audio/levelSelect.mp3');
+    sounds.levelSelect = new GameSound(getPublicURL() + '/audio/levelSelect.mp3');
     sounds.levelSelect.startTime = 0.12;
 
-    sounds.levelLoad = new GameSound(import.meta.env.BASE_URL + '/audio/levelLoad.ogg');
+    sounds.levelLoad = new GameSound(getPublicURL() + '/audio/levelLoad.ogg');
     sounds.levelLoad.startTime = 0.12;    
 
-    sounds.swap = new GameSound(import.meta.env.BASE_URL + '/audio/playerSwap.ogg');
+    sounds.swap = new GameSound(getPublicURL() + '/audio/playerSwap.ogg');
 
-    sounds.death = new GameSound(import.meta.env.BASE_URL + '/audio/death.ogg');
+    sounds.death = new GameSound(getPublicURL() + '/audio/death.ogg');
     sounds.death.startTime = .04;
     sounds.death.volume = .3;
 
-    sounds.increment = new GameSound(import.meta.env.BASE_URL + '/audio/increment.ogg');
+    sounds.increment = new GameSound(getPublicURL() + '/audio/increment.ogg');
     sounds.increment.volume = 0;
     sounds.increment.startTime = .07;
 })()

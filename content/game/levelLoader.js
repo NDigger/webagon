@@ -161,7 +161,8 @@ export default class LevelLoader {
 
         const modules = import.meta.glob('../levelsContent/levels/**/script.txt', {query: '?raw', import: 'default'});
         // const jsonPath = `${levelPath}/data.json`;
-        const loader = modules[`${data.scriptPath.replace('.js', '.txt')}`];
+        const scriptPath = `.${data.levelPath}/script.txt`
+        const loader = modules[scriptPath];
         if (loader) {
             let script = await loader();
             

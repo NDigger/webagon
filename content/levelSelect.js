@@ -1,6 +1,6 @@
 import LevelPreview from './game/levelPreview';
 import Background from './game/gameContent/background';
-import { app, setBestScore, sounds, levelLoader } from './script';
+import { app, setBestScore, sounds, levelLoader, getPublicURL } from './script';
 import { Color } from './utils/structures';
 
 import { getLevelStats } from './storage';
@@ -57,7 +57,7 @@ const levelJsons = []
 const getSelectedLevelJSON = () => levelJsons[selectedLevelIndex];
 
 const loadLevels = () => {
-    fetch(import.meta.env.BASE_URL + '/levelPaths.json')
+    fetch(getPublicURL() + '/levelPaths.json')
     .then(res => res.json())
     .then(levelPaths => {
         levelPaths.forEach(async (levelPath, i) => {
