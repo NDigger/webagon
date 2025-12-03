@@ -27,19 +27,19 @@ const createApp = async () => {
 
 const sounds = {};
 (function() {
-    sounds.levelSelect = new GameSound('/audio/levelSelect.mp3');
+    sounds.levelSelect = new GameSound(import.meta.env.BASE_URL + '/audio/levelSelect.mp3');
     sounds.levelSelect.startTime = 0.12;
 
-    sounds.levelLoad = new GameSound('/audio/levelLoad.ogg');
+    sounds.levelLoad = new GameSound(import.meta.env.BASE_URL + '/audio/levelLoad.ogg');
     sounds.levelLoad.startTime = 0.12;    
 
-    sounds.swap = new GameSound('/audio/playerSwap.ogg');
+    sounds.swap = new GameSound(import.meta.env.BASE_URL + '/audio/playerSwap.ogg');
 
-    sounds.death = new GameSound('/audio/death.ogg');
+    sounds.death = new GameSound(import.meta.env.BASE_URL + '/audio/death.ogg');
     sounds.death.startTime = .04;
     sounds.death.volume = .3;
 
-    sounds.increment = new GameSound('/audio/increment.ogg');
+    sounds.increment = new GameSound(import.meta.env.BASE_URL + '/audio/increment.ogg');
     sounds.increment.volume = 0;
     sounds.increment.startTime = .07;
 })()
@@ -119,14 +119,3 @@ if (localStorage.getItem('webagon-first-popup-seen') !== 'true') {
     document.addEventListener('click', fn)
 }
 localStorage.setItem('webagon-first-popup-seen', 'true')
-
-// "./levelsContent/levels/tutorial",
-//  "./levelsContent/levels/tranquility",
-//  "./levelsContent/levels/spinner",
-//  "./levelsContent/levels/aeroAdventure",
-//  "./levelsContent/levels/jungle",
-//  "./levelsContent/levels/neon",
-//  "./levelsContent/levels/allINeed",
-//  "./levelsContent/levels/impulse",
-//  "./levelsContent/levels/ultravoice",
-//  "./levelsContent/levels/trueHexagon"

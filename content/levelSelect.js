@@ -57,7 +57,7 @@ const levelJsons = []
 const getSelectedLevelJSON = () => levelJsons[selectedLevelIndex];
 
 const loadLevels = () => {
-    fetch('/levelPaths.json')
+    fetch(import.meta.env.BASE_URL + '/levelPaths.json')
     .then(res => res.json())
     .then(levelPaths => {
         levelPaths.forEach(async (levelPath, i) => {

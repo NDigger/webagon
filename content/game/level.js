@@ -71,9 +71,15 @@ export default class Level extends Game {
         this.setBackgroundSwapTime(1);
     }
     
-    init() {
+    async init() {
         if (this.#initialized) return;
-        musicPlayer.src = this.#levelData.musicPath;
+        
+        const modules = import.meta.glob('../levelsContent/levels/**/music.ogg');
+        const jsonPath = `${this.#levelData.levelPath}/music.ogg`.replace('./', '../');
+        const loader = modules[jsonPath];
+
+        if (loader) await loader().then(d => musicPlayer.src = d.default); 
+
         musicPlayer.volume = this.#config.musicVolume;
         musicPlayer.loop = true;
         const musicTimestamps = this.#levelData.musicTimestamps
