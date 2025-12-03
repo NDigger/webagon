@@ -544,7 +544,6 @@ export default class Game extends GameObject {
         const fps = getFPS();
         const fpsSteps = Math.floor(1200/(fps !== 0 ? fps : 30));
         const steps = Math.max(fpsSteps, 30);
-        // const steps = 1;
 
         for (let i = 0; i < steps; i++) {
             if (this.#died) break
