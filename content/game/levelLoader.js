@@ -1,10 +1,8 @@
 import TimeLevel from './timeLevel';
 import CompletableLevel from './completableLevel';
 
-import { setLevel } from '../script';
 import { getLevelStats, writeLevelStats } from '../storage';
 import { getConfig } from '../storage';
-import GameLerp from './gameLerp';
 
 import { Vector2, Color, Size } from '../utils/structures';
 import * as Utils from '../levelsContent/utils';
@@ -120,7 +118,6 @@ export default class LevelLoader {
             else return new TimeLevel(this.app, this.#currentLevelData, levelProps);
         }
         const level = createLevel();
-        setLevel(level);
         this.#level = level;
 
         const config = getConfig();

@@ -1,4 +1,3 @@
-import { setLevel } from "../script";
 import { Color } from "../utils/structures";
 import { loadLevel } from "./levelLoader";
 
@@ -119,7 +118,6 @@ export default class LevelPreview {
                 return true;
             }
         });
-        setLevel(levelPreview)
         this.#levelPreview = levelPreview
 
         const result = await loadLevel(levelPreview, levelPath);

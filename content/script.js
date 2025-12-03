@@ -64,10 +64,6 @@ export function setBestScore(score, completable = false) {
     }
 }
 
-let level
-export { level }
-export function setLevel(v) { level = v }
-
 let app;
 export { app }
 
