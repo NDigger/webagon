@@ -67,13 +67,6 @@ export function setBestScore(score, completable = false) {
 let app;
 export { app }
 
-const loadScript = src => {
-    const script = document.createElement('script');
-    script.src = src;
-    script.type = 'module';
-    document.querySelector('body').appendChild(script);
-}
-
 let levelLoader
 export { levelLoader }
 (async () => {
