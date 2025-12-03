@@ -118,7 +118,8 @@ export default class LevelPreview {
                 return true;
             }
         });
-        this.#levelPreview = levelPreview
+        if (this.#levelPreview) this.#levelPreview.destroy();
+        this.#levelPreview = levelPreview;
 
         const result = await loadLevel(levelPreview, levelPath);
         if (!result) throw new Error('LevelPreview not loaded.');
