@@ -47,7 +47,7 @@ export const sounds = {};
 const bestScoreElement = selectedLevelInfo.querySelector('.best');
 export const setBestScore = (score, completable = false) => {
     if (completable) {
-        const percent = `${score*100}%`;
+        const percent = `${Math.floor(score*10000)/100}%`;
         bestScoreElement.textContent = score === 1 ? 'done' : percent;
         bestScoreElement.style.setProperty('--percent', `${(1-score)*100}%`);
     }
