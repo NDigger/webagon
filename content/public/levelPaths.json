@@ -1,13 +1,13 @@
 [
-    "./levelsContent/levels/tutorial",
-    "./levelsContent/levels/origin",
-    "./levelsContent/levels/tranquility",
-    "./levelsContent/levels/spinner",
-    "./levelsContent/levels/aeroAdventure",
-    "./levelsContent/levels/jungle",
-    "./levelsContent/levels/neon",
-    "./levelsContent/levels/allINeed",
-    "./levelsContent/levels/impulse",
-    "./levelsContent/levels/ultravoice",
-    "./levelsContent/levels/trueHexagon"
+    "/levels/tutorial",
+    "/levels/origin",
+    "/levels/tranquility",
+    "/levels/spinner",
+    "/levels/aeroAdventure",
+    "/levels/jungle",
+    "/levels/neon",
+    "/levels/allINeed",
+    "/levels/impulse",
+    "/levels/ultravoice",
+    "/levels/trueHexagon"
 ]

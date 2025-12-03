@@ -132,8 +132,7 @@ export default class LevelPreview {
         if (this.#content) this.#content.destroy();
         this.#content = content;
 
-        const result = await loadLevel(content, levelPath);
-        if (!result) throw new Error('LevelPreview content not loaded.');
+        await loadLevel(content, levelPath);
         this.#updateId = requestAnimationFrame(() => this.#update());
     }
 

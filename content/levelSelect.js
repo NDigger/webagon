@@ -44,40 +44,34 @@ const loadLevels = () => {
     .then(async levelPaths => {
         await Promise.all(
             levelPaths.map(async (levelPath, i) => {
-                const modules = import.meta.glob('./levelsContent/levels/**/data.json');
-                const jsonPath = `${levelPath}/data.json`;
-                const loader = modules[jsonPath];
-                if (loader) {
-                    await loader().then(data => {
-                        const d = data.default;
-                        const updateJSONPath = jsonLevelObject => {
-                            const levelJson = structuredClone(jsonLevelObject);
-                            levelJson.levelPath = levelPath;
-                            return levelJson
-                        }
-
-                        const updatedJson = updateJSONPath(d)
-                        levelJsons.push(updatedJson);
-
-                        levelList.insertAdjacentHTML('beforeend', `
-                            <div class="level" id="level-${d.key}">
-                                <p class="name">${d.name}</p>
-                                <p class="author">${d.author}</p>
-                            </div>
-                        `)
-
-                        levelList.lastElementChild.addEventListener('click', e => {
-                            if (getSelectedLevelElement() !== e.currentTarget || (window.innerWidth < 1068 && !selectedLevelInfo.classList.contains('show'))) {
-                                sounds.levelSelect.play();
-                                setLevelListPosition(i);
-                                selectedLevelInfo.classList.remove('hide');
-                                void selectedLevelInfo.offsetWidth;
-                                selectedLevelInfo.classList.add('show');
-                            }
-                            else loadLevel(updatedJson);
-                        })
-                    })
+                const res = await fetch(`${getPublicURL()}${levelPath}/data.json`);
+                const d = await res.json();
+                const updateJSONPath = jsonLevelObject => {
+                    const levelJson = structuredClone(jsonLevelObject);
+                    levelJson.levelPath = levelPath;
+                    return levelJson
                 }
+
+                const updatedJson = updateJSONPath(d)
+                levelJsons.push(updatedJson);
+
+                levelList.insertAdjacentHTML('beforeend', `
+                    <div class="level" id="level-${d.key}">
+                        <p class="name">${d.name}</p>
+                        <p class="author">${d.author}</p>
+                    </div>
+                `)
+
+                levelList.lastElementChild.addEventListener('click', e => {
+                    if (getSelectedLevelElement() !== e.currentTarget || (window.innerWidth < 1068 && !selectedLevelInfo.classList.contains('show'))) {
+                        sounds.levelSelect.play();
+                        setLevelListPosition(i);
+                        selectedLevelInfo.classList.remove('hide');
+                        void selectedLevelInfo.offsetWidth;
+                        selectedLevelInfo.classList.add('show');
+                    }
+                    else loadLevel(updatedJson);
+                })
             })
         )
 

@@ -8,25 +8,25 @@ import { Vector2, Color, Size } from '../utils/structures';
 import * as Utils from '../levelsContent/utils';
 import initPatterns from '../levelsContent/patterns';
 
+import { getPublicURL } from '../script';
+
 export const loadLevel = async (level, levelPath) => {
-    const modules = import.meta.glob('../levelsContent/levels/**/script.txt', {query: '?raw', import: 'default'});
-    const scriptPath = `.${levelPath}/script.txt`
-    const loader = modules[scriptPath];
-    if (!loader) {
-        return false; // Loading failed
+    try {
+        const res = await fetch(`${getPublicURL()}${levelPath}/script.txt`);
+        const script = await res.text();
+
+        const fn = new Function('level', 'Vector2', 'Color', 'Utils', 'Size', 'patterns', `
+            "use strict";
+            ${script}
+        `);
+
+        const boundFn = fn.bind(undefined, level, Vector2, Color, Utils, Size, initPatterns(level));
+        boundFn();
+
+        level.init()
+    } catch(e) {
+        console.error(e)
     }
-
-    let script = await loader();
-    const fn = new Function('level', 'Vector2', 'Color', 'Utils', 'Size', 'patterns', `
-        "use strict";
-        ${script}
-    `);
-
-    const boundFn = fn.bind(undefined, level, Vector2, Color, Utils, Size, initPatterns(level));
-    boundFn();
-
-    level.init()
-    return true; // Loading succeeded
 }
 
 const gameContentElement = document.getElementById('game-content');
@@ -100,7 +100,7 @@ export default class LevelLoader {
         this.#load(this.#currentLevelData);
     }
 
-    async #load(data) {
+    #load(data) {
         this.#currentLevelData = data;
 
         const levelStats = getLevelStats(data.key, this.#currentLevelDifficulty);
@@ -122,8 +122,7 @@ export default class LevelLoader {
 
         const config = getConfig();
 
-        const result = await loadLevel(level, data.levelPath);
-        if (!result) throw new Error('Level not loaded.');
+        loadLevel(level, data.levelPath);
             
         // UI
         gameUIElement.style.display = config.displayUiEnabled ? 'block' : 'none'
