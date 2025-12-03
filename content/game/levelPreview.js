@@ -122,7 +122,8 @@ export default class LevelPreview {
         setLevel(levelPreview)
         this.#levelPreview = levelPreview
 
-        loadLevel(levelPreview, levelPath);
+        const result = await loadLevel(levelPreview, levelPath);
+        if (!result) throw new Error('LevelPreview not loaded.');
         this.#lastTime = performance.now();
         this.#updateId = requestAnimationFrame(t => this.#update(t));
         // const modules = import.meta.glob('.././levelsContent/levels/**/script.js');

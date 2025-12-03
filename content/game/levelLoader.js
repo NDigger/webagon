@@ -14,19 +14,21 @@ export const loadLevel = async (level, levelPath) => {
     const modules = import.meta.glob('../levelsContent/levels/**/script.txt', {query: '?raw', import: 'default'});
     const scriptPath = `.${levelPath}/script.txt`
     const loader = modules[scriptPath];
-    if (loader) {
-        let script = await loader();
-        
-        const fn = new Function('level', 'Vector2', 'Color', 'Utils', 'Size', 'patterns', `
-            "use strict";
-            ${script}
-        `);
-
-        const boundFn = fn.bind(undefined, level, Vector2, Color, Utils, Size, initPatterns(level));
-        boundFn();
-
-        level.init()
+    if (!loader) {
+        return false; // Loading failed
     }
+
+    let script = await loader();
+    const fn = new Function('level', 'Vector2', 'Color', 'Utils', 'Size', 'patterns', `
+        "use strict";
+        ${script}
+    `);
+
+    const boundFn = fn.bind(undefined, level, Vector2, Color, Utils, Size, initPatterns(level));
+    boundFn();
+
+    level.init()
+    return true; // Loading succeeded
 }
 
 const gameContentElement = document.getElementById('game-content');
@@ -100,58 +102,6 @@ export default class LevelLoader {
         this.#load(this.#currentLevelData);
     }
 
-    // #load(data) {
-    //     this.#currentLevelData = data;
-
-    //     const script = document.createElement('script');
-    //     script.type = 'module';
-    //     script.src = `${data.scriptPath}?${new Date().getTime()}`
-    //     document.querySelector('body').appendChild(script);
-
-    //     const levelStats = getLevelStats(data.key, this.#currentLevelDifficulty);
-    //     levelStats.attempts = levelStats?.attempts ? levelStats.attempts += 1 : 1
-    //     writeLevelStats(data.key, this.#currentLevelDifficulty, levelStats);
-
-    //     if (this.#level != null) this.#level.destroy();
-
-    //     const levelProps = {
-    //         difficulty: this.#currentLevelDifficulty,
-    //         attempt: this.#attempt,
-    //     }
-    //     const createLevel = () => {
-    //         if (data?.completable) return new CompletableLevel(this.app, this.#currentLevelData, levelProps)
-    //         else return new TimeLevel(this.app, this.#currentLevelData, levelProps);
-    //     }
-    //     const level = createLevel();
-    //     setLevel(level);
-    //     this.#level = level;
-
-    //     GameLerp.destroyAll();
-
-    //     const config = getConfig();
-    //     script.onload = () => {
-    //         gameUIElement.style.display = config.displayUiEnabled ? 'block' : 'none'
-                        
-    //         mobileButtons.style.display = 'none';
-    //         gameMessage.textContent = '';
-    //         restartHelpMsg.style.display = 'none';
-    //         swapEnabledMsg.style.display = 'none';
-    //         gamemodeMsg.textContent = config.invincibleModeEnabled ? 'invincible mode' : 'official mode'
-    //         difficultyMsg.textContent = `Difficulty: ${levelProps.difficulty}x`
-    //         gamePulsingMsg.style.display = 'none';            
-    //         fpsCounterElement.style.display = config.displayFpsEnabled ? 'block' : 'none';
-
-    //         this.#level.init()
-    //         gameContentElement.style.display = 'block'
-    //         menuElement.style.display = 'none'
-            
-    //         window.addEventListener('keydown', this.#handleKeydown);
-    //         window.addEventListener('keyup', this.#handleKeyup)
-    //         // this.level.onLoad();
-            
-    //     }
-    // }
-
     async #load(data) {
         this.#currentLevelData = data;
 
@@ -175,7 +125,8 @@ export default class LevelLoader {
 
         const config = getConfig();
 
-        await loadLevel(level, data.levelPath);
+        const result = await loadLevel(level, data.levelPath);
+        if (!result) throw new Error('Level not loaded.');
             
         // UI
         gameUIElement.style.display = config.displayUiEnabled ? 'block' : 'none'
