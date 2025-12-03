@@ -126,15 +126,6 @@ export default class LevelPreview {
         if (!result) throw new Error('LevelPreview not loaded.');
         this.#lastTime = performance.now();
         this.#updateId = requestAnimationFrame(t => this.#update(t));
-        // const modules = import.meta.glob('.././levelsContent/levels/**/script.js');
-        // const loader = modules[path];
-        // if (loader) {
-        //     await loader().then(() => {
-        //         levelPreview.init()
-        //         this.#lastTime = performance.now();
-        //         this.#updateId = requestAnimationFrame(t => this.#update(t));
-        //     })
-        // }
     }
 
     getStyle() { return this.#levelPreview?.style }
