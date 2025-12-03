@@ -8,10 +8,7 @@
     "musicName": "Imagination (Ultravoice vs Tactic Mind Remix)",
     "musicAuthor": "Illumination",
     "musicAlbum": "The Imagination",
-    "musicPath": "music.ogg",
     "musicTimestamps": [106, 170, 230, 320],
 
-    "difficulties": [0.4, 0.7, 1.4],
-
-    "scriptPath": "script.js"
+    "difficulties": [0.4, 0.7, 1.4]
 }

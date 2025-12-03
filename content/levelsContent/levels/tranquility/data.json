@@ -2,16 +2,12 @@
     "key": "tranquility", 
 
     "name": "Tranquility",
-    "description": "Calm simple nice dimple",
     "author": "NDagger",
 
     "musicName": "Peace and Tranquility",
     "musicAuthor": "Pascal Michael Stiefel",
     "musicAlbum": "A Hat in Time (Seal the Deal + Nyakuza Metro)",
-    "musicPath": "music.ogg",
     "musicTimestamps": [0, 30, 80],
 
-    "difficulties": [0.6, 1.5, 2.2],
-
-    "scriptPath": "script.js"
+    "difficulties": [0.6, 1.5, 2.2]
 }

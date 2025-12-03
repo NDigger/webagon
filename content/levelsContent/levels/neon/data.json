@@ -2,16 +2,12 @@
     "key": "neon", 
 
     "name": "Neon",
-    "description": "",
     "author": "NDagger",
 
     "musicName": "Automaton",
     "musicAuthor": "HattLab / Hatthakon Thaothong / Kanyarat Satthai",
     "musicAlbum": "",
-    "musicPath": "music.ogg",
     "musicTimestamps": [13, 73, 110],
 
-    "difficulties": [0.7, 1.4],
-
-    "scriptPath": "script.js"
+    "difficulties": [0.7, 1.4]
 }

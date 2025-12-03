@@ -2,17 +2,13 @@
     "key": "trueHexagon", 
 
     "name": "True Hexagon",
-    "description": "",
     "author": "NDagger",
 
     "musicName": "Hexagon And On",
     "musicAuthor": "Zanzlanz",
     "musicAlbum": "",
-    "musicPath": "music.ogg",
     "musicTimestamps": [1.5],
     "completable": true,
 
-    "difficulties": [0.6, 0.8, 1.2],
-
-    "scriptPath": "script.js"
+    "difficulties": [0.6, 0.8, 1.2]
 }

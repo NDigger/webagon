@@ -2,7 +2,6 @@
     "key": "allINeed", 
 
     "name": "All I Need",
-    "description": "",
     "author": "NDagger",
 
     "difficulties": [0.6, 1.4, 1.8],
@@ -10,8 +9,5 @@
     "musicName": "All I Need",
     "musicAuthor": "Dezza",
     "musicAlbum": "Unified Vol.8",
-    "musicPath": "music.ogg",
-    "musicTimestamps": [33, 126],
-
-    "scriptPath": "script.js"
+    "musicTimestamps": [33, 126]
 }
