@@ -151,9 +151,6 @@ canvas {
 }
 
 header {
-    /* position: absolute; */
-    /* top: 0; */
-    /* left: 0; */
     width: 100vw;
     height: var(--header-height);
     z-index: 0;
@@ -198,7 +195,6 @@ header .buttons {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /* gap: 30px; */
     height: 100%;
 }
 

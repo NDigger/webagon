@@ -36,19 +36,6 @@
     display: none;
 }
 
-/* #settings-container::-webkit-scrollbar {
-    display: block;
-    width: 4px;
-}
-
-#settings-container::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, .1);
-}
-
-#settings-container::-webkit-scrollbar-thumb {
-    background: var(--main-color);
-} */
-
 @keyframes show-settings {
     from {
         gap: 100px;
@@ -161,18 +148,15 @@
   outline: none;
 }
 
-/* Ползунок */
 .setting.number input[type="range"]::-webkit-slider-thumb {
   -webkit-appearance: none;
   appearance: none;
   width: 6px;
   height: 24px;
   background: var(--main-color);
-  /* border: 5px solid var(--main-color); */
   cursor: pointer;
 }
 
-/* Для Firefox */
 .setting.number input[type="range"]::-moz-range-thumb {
   width: 16px;
   height: 16px;
