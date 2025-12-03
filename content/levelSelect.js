@@ -82,7 +82,7 @@ const loadLevels = () => {
                 }
             })
         )
-        
+
         loadMenu();
         setLevelListPosition(parseInt(localStorage.getItem('webagon-selected-level') ?? 0));
     })
@@ -201,5 +201,6 @@ document.getElementById('selected-level').addEventListener('click', e => {
     selectedLevelInfo.classList.remove('show');
     void selectedLevelInfo.offsetWidth
     selectedLevelInfo.classList.add('hide');
-    sounds.levelSelect.play();
+    const isMobile = window.matchMedia("(max-width: 1068px)").matches;
+    if (isMobile) sounds.levelSelect.play();
 })

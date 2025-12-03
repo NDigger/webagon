@@ -100,7 +100,6 @@ export default class LevelPreview {
         const style = this.getStyle()
         if (style == null) return
 
-        console.log(1)
         const b = this.#background;
         b.setTileColors(style.backgroundTileColors);
         b.setRotation(style.rotation);
