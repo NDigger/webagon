@@ -169,6 +169,17 @@
     background-color: var(--main-color);
 }
 
+#play-btn {
+    display: none;
+    z-index: 1;
+    position: relative;
+    width: 100%;
+    height: 100px;
+    background-color: var(--main-color);
+    color: var(--background-tile-color);
+    font-size: 6rem;
+}
+
 @media (max-width: 1068px) {
     #selected-level .tab {
         background-color: unset;
@@ -261,5 +272,9 @@
 
     #selected-level .centered {
         flex: 1
+    }
+
+    #play-btn {
+        display: block;
     }
 }

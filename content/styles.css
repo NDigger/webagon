@@ -96,17 +96,6 @@ canvas {
     height: calc(100px - var(--header-height));
 }
 
-#play-btn {
-    display: none;
-    z-index: 1;
-    position: relative;
-    width: 100%;
-    height: 100px;
-    background-color: var(--main-color);
-    color: var(--background-tile-color);
-    font-size: 6rem;
-}
-
 #info-popup {
     display: none;
     position: absolute;
@@ -242,10 +231,6 @@ header .buttons > button.selected {
     
     html {
         font-size: .5rem;
-    }
-
-    #play-btn {
-        display: block;
     }
 
     .screen-only {
