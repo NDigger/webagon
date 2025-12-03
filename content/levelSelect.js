@@ -1,7 +1,11 @@
 import LevelPreview from './game/levelPreview';
-import { setBestScore, sounds, levelLoader, getPublicURL } from './script';
+import { app, setBestScore, sounds, getPublicURL } from './script';
+import LevelLoader from './game/levelLoader';
 
 import { getLevelStats } from './storage';
+
+const levelLoader = new LevelLoader(app);
+levelLoader.onLeave = () => loadMenu();
 
 const getKeydownEventsEnabled = () => document.getElementById('level-select').getAttribute('data-events-enabled') === 'true';
 
@@ -15,8 +19,6 @@ levelList.addEventListener('keydown', e => {
     if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) e.preventDefault();
 });
 
-levelLoader.onLeave = () => loadMenu();
-
 // let levelPreview = new LevelPreview()
 let levelPreview;
 
@@ -28,7 +30,7 @@ const loadLevel = levelData => {
     document.removeEventListener('keydown', keyDownMenuListener)
 }
 
-const loadMenu = () => {
+export const loadMenu = () => {
     levelPreview = new LevelPreview();
     document.addEventListener('keydown', keyDownMenuListener)
     const levelPath = getSelectedLevelJSON()?.levelPath

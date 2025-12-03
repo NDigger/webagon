@@ -1,8 +1,7 @@
 
 import * as PIXI from 'pixi.js'
-import LevelLoader from './game/levelLoader.js';
-import './frameCounter.js';
 import GameSound from './game/gameSound.js';
+import './frameCounter.js';
 
 const selectedLevelInfo = document.getElementById('selected-level')
 
@@ -67,12 +66,9 @@ export function setBestScore(score, completable = false) {
 let app;
 export { app }
 
-let levelLoader
-export { levelLoader }
 (async () => {
     const a = await createApp()
     app = a;
-    levelLoader = new LevelLoader(a);
     await import('./levelSelect.js');
     await import('./settings.js');
 })()
