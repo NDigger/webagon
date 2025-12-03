@@ -1,7 +1,5 @@
 import LevelPreview from './game/levelPreview';
-import Background from './game/gameContent/background';
-import { app, setBestScore, sounds, levelLoader, getPublicURL } from './script';
-import { Color } from './utils/structures';
+import { setBestScore, sounds, levelLoader, getPublicURL } from './script';
 
 import { getLevelStats } from './storage';
 
@@ -19,38 +17,22 @@ levelList.addEventListener('keydown', e => {
 
 levelLoader.onLeave = () => loadMenu();
 
-// Menu background
-const background = new Background(app);
-background.setLayer(-999);
+// let levelPreview = new LevelPreview()
+let levelPreview;
 
-const levelPreview = new LevelPreview()
-const levelPreviewUpdate = ft =>{
-    const style = levelPreview.getStyle()
-    background.setTileColors(style.backgroundTileColors);
-    background.setRotation(style.rotation);
-    background.setDarkenUnevenChunkEnabled(style.backgroundDarkenUnevenChunkEnabled);
-    background.setSwapTime(style.backgroundSwapTime);
-    document.documentElement.style.setProperty('--main-color', style.fontColor ? style.fontColor.getRGBAStyle() : style.mainColor.getRGBAStyle());
-    background.setSides(style.sides);
-    background.draw();
-}
-
+// setTimeout(() => levelPreview.destroy(), 300);
 const loadLevel = levelData => {
     levelPreview.destroy();
     sounds.levelLoad.play();
     levelLoader.start(levelData, getSelectedDifficultyMult());
     document.removeEventListener('keydown', keyDownMenuListener)
-
-    levelPreview.onUpdate = () => {}
-    background.setTileColors([new Color(0, 0, 0, 0)]);
-    background.draw();
 }
 
 const loadMenu = () => {
-    levelPreview.onUpdate = ft => levelPreviewUpdate(ft);
+    levelPreview = new LevelPreview();
     document.addEventListener('keydown', keyDownMenuListener)
-    const levelPath = getSelectedLevelJSON()?.levelPath ?? undefined
-    if (levelPath != undefined) levelPreview.load(levelPath)
+    const levelPath = getSelectedLevelJSON()?.levelPath
+    levelPreview.load(levelPath)
 }
 
 const levelJsons = []
@@ -59,48 +41,50 @@ const getSelectedLevelJSON = () => levelJsons[selectedLevelIndex];
 const loadLevels = () => {
     fetch(getPublicURL() + '/levelPaths.json')
     .then(res => res.json())
-    .then(levelPaths => {
-        levelPaths.forEach(async (levelPath, i) => {
-            const modules = import.meta.glob('./levelsContent/levels/**/data.json');
-            const jsonPath = `${levelPath}/data.json`;
-            const loader = modules[jsonPath];
-            if (loader) {
-                await loader().then(data => {
-                    const d = data.default;
-                    const updateJSONPath = jsonLevelObject => {
-                        const levelJson = structuredClone(jsonLevelObject);
-                        levelJson.scriptPath = `${levelPath}/${levelJson.scriptPath}`.replace('./', '../');
-                        levelJson.musicPath = `${levelPath}/${levelJson.musicPath}`;
-                        levelJson.levelPath = levelPath;
-                        return levelJson
-                    }
-
-                    const updatedJson = updateJSONPath(d)
-                    levelJsons.push(updatedJson);
-
-                    levelList.insertAdjacentHTML('beforeend', `
-                        <div class="level" id="level-${d.key}">
-                            <p class="name">${d.name}</p>
-                            <p class="author">${d.author}</p>
-                        </div>
-                    `)
-
-                    levelList.lastElementChild.addEventListener('click', e => {
-                        if (getSelectedLevelElement() !== e.currentTarget || (window.innerWidth < 1068 && !selectedLevelInfo.classList.contains('show'))) {
-                            sounds.levelSelect.play();
-                            setLevelListPosition(i);
-                            selectedLevelInfo.classList.remove('hide');
-                            void selectedLevelInfo.offsetWidth;
-                            selectedLevelInfo.classList.add('show');
+    .then(async levelPaths => {
+        await Promise.all(
+            levelPaths.map(async (levelPath, i) => {
+                const modules = import.meta.glob('./levelsContent/levels/**/data.json');
+                const jsonPath = `${levelPath}/data.json`;
+                const loader = modules[jsonPath];
+                if (loader) {
+                    await loader().then(data => {
+                        const d = data.default;
+                        const updateJSONPath = jsonLevelObject => {
+                            const levelJson = structuredClone(jsonLevelObject);
+                            levelJson.scriptPath = `${levelPath}/${levelJson.scriptPath}`.replace('./', '../');
+                            levelJson.musicPath = `${levelPath}/${levelJson.musicPath}`;
+                            levelJson.levelPath = levelPath;
+                            return levelJson
                         }
-                        else loadLevel(updatedJson);
-                    })
 
-                    requestAnimationFrame(() => setLevelListPosition(parseInt(localStorage.getItem('webagon-selected-level') ?? 0)));
-                        loadMenu();
-                })
-            }
-        })
+                        const updatedJson = updateJSONPath(d)
+                        levelJsons.push(updatedJson);
+
+                        levelList.insertAdjacentHTML('beforeend', `
+                            <div class="level" id="level-${d.key}">
+                                <p class="name">${d.name}</p>
+                                <p class="author">${d.author}</p>
+                            </div>
+                        `)
+
+                        levelList.lastElementChild.addEventListener('click', e => {
+                            if (getSelectedLevelElement() !== e.currentTarget || (window.innerWidth < 1068 && !selectedLevelInfo.classList.contains('show'))) {
+                                sounds.levelSelect.play();
+                                setLevelListPosition(i);
+                                selectedLevelInfo.classList.remove('hide');
+                                void selectedLevelInfo.offsetWidth;
+                                selectedLevelInfo.classList.add('show');
+                            }
+                            else loadLevel(updatedJson);
+                        })
+                    })
+                }
+            })
+        )
+        
+        loadMenu();
+        setLevelListPosition(parseInt(localStorage.getItem('webagon-selected-level') ?? 0));
     })
 }
 

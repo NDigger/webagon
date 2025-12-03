@@ -40,6 +40,8 @@ export default class Background extends PolygonObject {
     }
 
     #update(time) {
+        if (this.isDestroyed()) return;
+
         const frameTime = time - this.#lasttime;
         this.#lasttime = time;
         
@@ -53,7 +55,7 @@ export default class Background extends PolygonObject {
             }
         }
 
-        this.#updateId = requestAnimationFrame(t => this.#update(t));
+        if (!this.isDestroyed()) this.#updateId = requestAnimationFrame(t => this.#update(t));
     }
 
     setSwapEnabled(v) {

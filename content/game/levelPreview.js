@@ -1,5 +1,7 @@
 import { Color } from "../utils/structures";
 import { loadLevel } from "./levelLoader";
+import Background from "./gameContent/background";
+import { app } from "../script";
 
 class LevelPreviewContent {
     onInit = () => {};
@@ -85,26 +87,36 @@ class LevelPreviewContent {
 }
 
 export default class LevelPreview {
-    #levelPreview = null;
-
-    #lastTime;
+    #content = null;
+    #background = undefined;
+    
     #updateId;
 
-    onUpdate = () => {}
-    
-    #update(time) { // Created to conveniently apply styles 
+    constructor() {
+        this.#background = new Background(app);
+    }
+
+    #update() { // Created to conveniently apply styles 
         const style = this.getStyle()
         if (style == null) return
-        const frameTime = time - this.#lastTime;
-        this.#lastTime = time;
-        this.onUpdate(frameTime/1000)
-        requestAnimationFrame(t => this.#update(t));
+
+        console.log(1)
+        const b = this.#background;
+        b.setTileColors(style.backgroundTileColors);
+        b.setRotation(style.rotation);
+        b.setDarkenUnevenChunkEnabled(style.backgroundDarkenUnevenChunkEnabled);
+        b.setSwapTime(style.backgroundSwapTime);
+        document.documentElement.style.setProperty('--main-color', style.fontColor ? style.fontColor.getRGBAStyle() : style.mainColor.getRGBAStyle());
+        b.setSides(style.sides);
+        b.draw();
+
+        this.#updateId = requestAnimationFrame(() => this.#update());
     }
 
     async load(levelPath) {
-        this.drop();
+        cancelAnimationFrame(this.#updateId)
 
-        const levelPreview = new Proxy(new LevelPreviewContent(), {
+        const content = new Proxy(new LevelPreviewContent(), {
             get(target, prop) {
                 if (prop in target) {
                     const value = target[prop];
@@ -118,22 +130,21 @@ export default class LevelPreview {
                 return true;
             }
         });
-        if (this.#levelPreview) this.#levelPreview.destroy();
-        this.#levelPreview = levelPreview;
+        if (this.#content) this.#content.destroy();
+        this.#content = content;
 
-        const result = await loadLevel(levelPreview, levelPath);
-        if (!result) throw new Error('LevelPreview not loaded.');
-        this.#lastTime = performance.now();
-        this.#updateId = requestAnimationFrame(t => this.#update(t));
+        const result = await loadLevel(content, levelPath);
+        if (!result) throw new Error('LevelPreview content not loaded.');
+        this.#updateId = requestAnimationFrame(() => this.#update());
     }
 
-    getStyle() { return this.#levelPreview?.style }
+    getStyle() { return this.#content?.style }
 
     destroy() {
-        if (this.#levelPreview != null) {
-            cancelAnimationFrame(this.#updateId)
-            this.#levelPreview.destroy()
-            this.#levelPreview = null
-        }
+        cancelAnimationFrame(this.#updateId);
+        this.#content.destroy();
+        this.#content = undefined;
+        this.#background.destroy();
+        this.#background = undefined;
     }
 }
