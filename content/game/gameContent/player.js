@@ -11,7 +11,7 @@ export default class Player extends CustomWall {
 
     constructor(app) {
         super(app)
-        this.setColor(new Color(0, 0, 0))
+        this.setColor(new Color(0, 0, 0, 0))
     }
 
     getPointPosition() { 
@@ -67,9 +67,5 @@ export default class Player extends CustomWall {
     draw() {
         this.updatePosition();
         super.draw();
-    }
-
-    destroy() {
-        super.destroy()
     }
 }
