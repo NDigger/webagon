@@ -35,7 +35,7 @@ const pTunnel = async (times, delay, delayEnd = 0) => {
 // Pattern spawn conditions, uses level.onStep
 const addPattern = async pKey => {
     const speedMult = level.getDifficultyMult() * level.getWallSpeedMult();
-    const d = 240 * Math.max(speedMult/8.25, 1);
+    const d = 230 * Math.max(speedMult/8.25, 1);
     const de = d * 2.3;
     if (pKey === 0) await patterns.pInverseBarrage(Utils.mathRandom(3, 5), de, de);
     else if (pKey === 1) await patterns.pSpiralBarrage(Utils.mathRandom(5, 9), d, de);

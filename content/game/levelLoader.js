@@ -100,7 +100,7 @@ export default class LevelLoader {
         levelStats.attempts = levelStats?.attempts ? levelStats.attempts += 1 : 1
         writeLevelStats(data.key, this.#currentLevelDifficulty, levelStats);
 
-        if (this.#level != null) this.#level.destroy();
+        if (this.#level != undefined) this.#level.destroy();
 
         const levelProps = {
             difficulty: this.#currentLevelDifficulty,
@@ -113,14 +113,11 @@ export default class LevelLoader {
         const level = createLevel();
         this.#level = level;
 
-        const config = getConfig();
-
         loadLevel(level, data.levelPath);
 
-        window.addEventListener('keydown', this.#handleKeydown);
-        window.addEventListener('keyup', this.#handleKeyup)
-
-        window.addEventListener('keydown', this.#handleKeydown);
-        window.addEventListener('keyup', this.#handleKeyup)
+        requestAnimationFrame(() => {
+            window.addEventListener('keydown', this.#handleKeydown);
+            window.addEventListener('keyup', this.#handleKeyup)
+        })
     }
 }

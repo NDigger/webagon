@@ -96,14 +96,12 @@ export default class Level extends Game {
         gameContentElement.style.display = 'block'
         menuElement.style.display = 'none'
 
-        
         musicPlayer.src = `${this.#levelData.levelPath}/music.ogg`; 
 
         musicPlayer.volume = this.#config.musicVolume;
         musicPlayer.loop = true;
         const musicTimestamps = this.#levelData.musicTimestamps
         const timestamp = musicTimestamps[this.#props.attempt === 1 ? 0 : Math.floor(Math.random() * musicTimestamps.length)] ?? 0
-        console.log(this.#props.attempt)
         this.#audioTimestamp = timestamp;
         musicPlayer.currentTime = timestamp
         musicPlayer.onloadeddata = () => musicPlayer.play();

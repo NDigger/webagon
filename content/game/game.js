@@ -270,8 +270,9 @@ export default class Game extends GameObject {
     constructor(app) {
         super(app)
         this.#background = new Background(app);
-        this.#background.setLayer(this.#getBackgroundLayer());
         this.#polygon = new Polygon(app);
+
+        this.#background.setLayer(this.#getBackgroundLayer());
         this.#polygon.setLayer(this.#getPolygonLayer());
         this.#polygon.set3dLayer(this.#get3dLayer());
 

@@ -19,10 +19,8 @@ levelList.addEventListener('keydown', e => {
     if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) e.preventDefault();
 });
 
-// let levelPreview = new LevelPreview()
 let levelPreview;
 
-// setTimeout(() => levelPreview.destroy(), 300);
 const loadLevel = levelData => {
     levelPreview.destroy();
     sounds.levelLoad.play();
