@@ -1,0 +1,56 @@
+const addPattern = async pKey => {
+    if (pKey === 0) await patterns.pInverseBarrage(Utils.mathRandom(2, 3), d, d * 1.4);
+}
+
+const pKeys = [0, 1, 2, 3];
+let activeKeys = [];
+
+level.onInit = () => {
+    level.setMainColor(new Color(255, 0, 0));
+    level.setRadius(70);
+    level.setRotationSpeed(0.035);
+    level.setWallSpeedMult(2.4);
+    level.setSides(level.getDifficultyMult() > 2 ? 6 : 5);
+    level.set3dLayersCount(8);
+    level.set3dDistance(5);
+    level.setWallSpeedIncrement(0.2);
+    level.setRotationSpeedIncrement(0.015);
+    level.setSkew(0);
+    level.setPlayerSwapReloadTime(.3);
+    update();
+}
+
+// onStep must be async and use delays in order to work. No delays may cause crash.
+level.onStep = async () => {
+    if (activeKeys.length === 0) activeKeys = pKeys.slice();
+    const rndIndex = Math.floor(Math.random() * activeKeys.length)
+    await addPattern(activeKeys.splice(rndIndex, 1)[0])
+    await level.distanceDelay(0);
+}
+
+const update = () => {
+    level.setBackgroundTileColors([
+        new Color(75, 75, 75),
+        new Color(85, 85, 85),
+    ])
+    const t = level.getTime();
+    level.setMainColor(Color.hsvToRgb(t * 0.2, 1, 1))
+    level.setScale(new Vector2(
+        Utils.pingPong(t * .5) * .2 + 1, 
+        Utils.pingPong(t * .5) * .2 + 1)
+    )
+}
+// onUpdate is called every frame.
+level.onUpdate = ft => {
+    update();
+}
+
+level.onIncrement = () => {
+    enableSwapOnHighSpeed();
+    if (level.getDifficultyMult() > 2) return
+    level.setSides(Utils.mathRandom(5, 6))
+}
+
+level.onRender = ft => {
+    level.setSkew(Utils.pingPong(level.getTime()*.07)*.5)
+}

@@ -18,6 +18,7 @@ const pseudoRndShake = (power) => {
     return new Vector2(Math.sin(shakeTimer * 2.4104) * power, Math.cos(shakeTimer * 42.4215) * power);
 }
 
+const clampColorValue = v => Math.max(0, Math.min(255, v));
 export default class Mesh extends GameObject {
     #object;
     _geometry;
@@ -48,7 +49,12 @@ export default class Mesh extends GameObject {
     }
 
     setColor({r, g, b, a}) {
-        this.#color = new Color(r, g, b, a);
+        this.#color = new Color(
+            clampColorValue(255, r), 
+            clampColorValue(255, g), 
+            clampColorValue(255, b), 
+            clampColorValue(255, a)
+        );
         this.#object.tint = Color.rgbToHex(r, g, b);
         if (typeof(a) === "number") this.#object.alpha = a/255;
     }

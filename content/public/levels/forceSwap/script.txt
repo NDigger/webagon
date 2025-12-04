@@ -1,0 +1,128 @@
+const lr = async (times, delay, delayEnd) => {
+    const side = Utils.getRandomSide(level);
+    for(let i = 0; i < times; i++) {
+        patterns.wallEx(side);
+        await level.distanceDelay(40);
+        await level.distanceDelay(delay);
+        level.createWall(side + 2, 40);
+        level.createWall(side - 1, 40);
+        if (i !== times - 1) {
+            await level.distanceDelay(40);
+            await level.distanceDelay(delay);
+        }
+    }
+    await level.distanceDelay(delayEnd);
+}
+
+const thickness = 40;
+const pSwapper = async (delay, delayEnd, side = getRandomSide(level)) => {
+    patterns.barrage(side);
+    level.createWall(side - 2, delay + thickness);
+    level.createWall(side, delay + thickness);
+    await level.distanceDelay(delay);
+    level.createWall(side - 1, 40);
+    level.createWall(side - 2, 40);
+    level.createWall(side, 40);
+    await level.distanceDelay(delayEnd);
+}
+
+const pSwappers = async (times, delay, delayEnd) => {
+    let side = Utils.getRandomSide(level);
+    for (let i = 0; i < times; i++) {
+        await pSwapper(delay, 0, side)
+        side += Utils.mathRandom(2, level.getSides() - 2);
+    }
+    await level.distanceDelay(delayEnd)
+}
+
+const addPattern = async pKey => {
+    const mult = level.getDifficultyMult() === 1.5 ? 1.5 : 1.2;
+    const d = 120 / mult * level.getWallSpeedMult();
+    const de = d * 1.4;
+    if (pKey === 0) await patterns.pInverseBarrage(Utils.mathRandom(4, 5), de, de);
+    else if (pKey === 1) await patterns.pSpiralBarrage(Utils.mathRandom(3, 4), d * 1.5, de, Utils.mathRandom(1, 2));
+    else if (pKey === 2) await patterns.pDoubleSpiral(Utils.mathRandom(7, 8), d * .6, de);
+    else if (pKey === 3) await patterns.pWallExVortex(Utils.mathRandom(3, 4), d, de);
+    else if (pKey === 4) await patterns.pAltBarrage(Utils.mathRandom(4, 5), d, de);
+    else if (pKey === 5) await pSwappers(Utils.mathRandom(3, 4), d * 1.4, de);
+    else if (pKey === 6) await lr(Utils.mathRandom(4, 5), d, de);
+    else if (pKey === 7) await patterns.pWallExTunnel(Utils.mathRandom(5, 6), d, de);
+    else if (pKey === 8) await patterns.pTunnel(Utils.mathRandom(4, 5), d * 1.6, de);
+    else if (pKey === 9) await patterns.pDoubleInverseSpiral(Utils.mathRandom(4, 5), d * 0.6, de);
+}
+
+const pKeys = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+let activeKeys = [];
+
+let visibility = 1;
+level.onInit = () => {
+    level.setSwapEnabled(true);
+    level.setMainColor(new Color(255, 0, 0));
+    level.setRadius(90);
+    level.setRotationSpeed(0.13);
+    level.setWallSpeedMult(3.3);
+    level.setSides(6);
+    level.set3dLayersCount(4);
+    level.set3dDistance(50);
+    level.setWallSpeedIncrement(0.16);
+    level.setRotationSpeedIncrement(0.02);
+    level.setPlayerSwapReloadTime(.1);
+    level.setSkew(.5);
+    level.setIncrementTime(10);
+    level.set3dFalloffColor(new Color(0, 0, 0, 0));
+    update(0);
+    level.setBackgroundSwapTime(999999999);
+}
+
+// onStep must be async and use delays in order to work. No delays may cause crash.
+level.onStep = async () => {
+    if (activeKeys.length === 0) activeKeys = pKeys.slice();
+    const rndIndex = Math.floor(Math.random() * activeKeys.length)
+    await addPattern(activeKeys.splice(rndIndex, 1)[0])
+    await level.distanceDelay(0);
+}
+
+let hue = Math.random();
+const update = ft => {
+    visibility = Math.max(0, visibility - ft * .8 * level.getDifficultyMult());
+
+    const sync = Utils.pingPong(level.getTime() * 2.2);
+    const syncF = Utils.fract(level.getTime() * 2.2);
+
+    const visibilityMult = Utils.easeOut(visibility);
+    const bgP = Utils.easeOut(1-visibility);
+
+    const offsHue = hue;
+
+    const pulse = Utils.pingPong(level.getTime() * 10)
+    level.setBackgroundTileColors([
+        Utils.interpolate(Color.hsvToRgb(hue, bgP, .08 * visibilityMult), Color.hsvToRgb(offsHue, bgP, .08 * visibilityMult), pulse),
+        Utils.interpolate(Color.hsvToRgb(hue, bgP, .1 * visibilityMult), Color.hsvToRgb(offsHue, bgP, .1 * visibilityMult), pulse),
+    ])
+
+    level.setMainColor(Utils.interpolate(
+        Color.hsvToRgb(hue, bgP, 1 * visibilityMult),
+        Color.hsvToRgb(offsHue, bgP, 1 * visibilityMult), 
+        pulse
+        )
+    )
+    level.setRadius(100 - syncF * 10)
+    level.set3dDistance(Math.sin(level.getTime() * 4) * 50)
+    // level.setBackgroundRotationOffset(level.getPlayerRotationOffset());
+    const s = 1.2 - sync * .3;
+    level.setWallScale(new Vector2(s, s));
+}
+// onUpdate is called every frame.
+level.onUpdate = ft => {
+    update(ft);
+}
+
+level.onIncrement = () => {}
+
+level.onSwap = () => {
+    hue = Math.random();
+    visibility = 1;
+    level.setRotationSpeed(-level.getRotationSpeed());
+}
+
+level.onRender = ft => {}
