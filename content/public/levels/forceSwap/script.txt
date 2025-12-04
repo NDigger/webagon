@@ -125,4 +125,13 @@ level.onSwap = () => {
     level.setRotationSpeed(-level.getRotationSpeed());
 }
 
+level.onMenuUpdate = () => {
+    const hue = Utils.fract(level.getTime() * .2);
+    level.setMainColor(Color.hsvToRgb(hue, 1, 1));
+    level.setBackgroundTileColors([
+        Color.hsvToRgb(Utils.fract(level.getTime()), 1, .08),
+        Color.hsvToRgb(Utils.fract(level.getTime()), 1, .1),
+    ])
+}
+
 level.onRender = ft => {}

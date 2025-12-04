@@ -7,6 +7,7 @@ class LevelPreviewContent {
     onInit = () => {};
     onUpdate = () => {};
     onRender = () => {};
+    onMenuUpdate = () => {};
 
     #updateId;
     #lastTime;
@@ -37,6 +38,7 @@ class LevelPreviewContent {
 
         this.onRender(frameTime/1000);
         this.onUpdate(frameTime/1000);
+        this.onMenuUpdate(frameTime/1000);
         this.#updateId = requestAnimationFrame(t => this.#update(t));
     }
 
