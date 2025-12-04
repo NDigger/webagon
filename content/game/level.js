@@ -110,6 +110,7 @@ export default class Level extends Game {
         
         this.onInit();
         this.#step();
+        this.draw();
 
         this.#updateId = requestAnimationFrame(t => this.#update(t));
         this.#renderId = requestAnimationFrame(t => this.#render(t));

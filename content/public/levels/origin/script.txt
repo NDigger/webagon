@@ -34,6 +34,7 @@ level.onInit = () => {
     level.setSkew(0);
     level.setPlayerSwapReloadTime(.3);
     enableSwapOnHighSpeed();
+    update();
 }
 
 // onStep must be async and use delays in order to work. No delays may cause crash.
@@ -44,8 +45,7 @@ level.onStep = async () => {
     await level.distanceDelay(0);
 }
 
-// onUpdate is called every frame.
-level.onUpdate = ft => {
+const update = () => {
     level.setBackgroundTileColors([
         new Color(75, 75, 75),
         new Color(85, 85, 85),
@@ -56,6 +56,10 @@ level.onUpdate = ft => {
         Utils.pingPong(t * .5) * .2 + 1, 
         Utils.pingPong(t * .5) * .2 + 1)
     )
+}
+// onUpdate is called every frame.
+level.onUpdate = ft => {
+    update();
 }
 
 level.onIncrement = () => {

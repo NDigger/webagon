@@ -24,11 +24,11 @@ level.onInit = () => {
     level.setIncrementSpinPower(.4);
     level.set3dFalloffColor(new Color(0, 0, 0, 0));
     level.set3dDepthMult(1);
+    update();
+    level.setSkew(1.5);
 }
 
-let time = 0;
-// onUpdate is called every frame.
-level.onUpdate = ft => {
+const update = () => {
     level.setBackgroundTileColors([
             Color.hsvToRgb(.4 - Utils.pingPong(time * 10) * .2, 1, .5  - Utils.pingPong(time * 2) * .4),
             Color.hsvToRgb(.4 - Utils.pingPong(time * 10) * .2, 1, .4 - Utils.pingPong(time * 2) * .2),
@@ -41,6 +41,9 @@ level.onUpdate = ft => {
 
     level.setBackgroundRadius(1000 + Utils.pingPong(time * 1.8) * 1500);
 }
+let time = 0;
+// onUpdate is called every frame.
+level.onUpdate = ft => { update() }
 
 level.onRender = ft => {
     time += ft;

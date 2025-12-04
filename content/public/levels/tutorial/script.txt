@@ -68,8 +68,7 @@ level.onStep = async () => {
 }
 
 // onUpdate is called every frame.
-level.onUpdate = ft => {
-}
+level.onUpdate = ft => {}
 
 // onRender is called every frame. It works when player is died.
 level.onRender = ft => {

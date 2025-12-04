@@ -40,6 +40,8 @@ level.onInit = () => {
     level.set3dDepthMult(0.5);
     level.set3dFalloffScale(new Vector2(.8, 2.1))
     level.setWallSkewLeft(40);
+    level.setSkew(.5);
+    update();
 }
 
 // onStep must be async and use delays in order to work. No delays may cause crash.
@@ -51,8 +53,7 @@ level.onStep = async () => {
     await addPattern(activeKeys.splice(rndIndex, 1)[0])
 }
 
-// onUpdate is called every frame.
-level.onUpdate = ft => {
+const update = () => {
     const p = Utils.pingPong(level.getTime() * 2.5) * 20;
     level.setBackgroundTileColors([
         new Color(105, 105 - p, 235 + p),
@@ -71,6 +72,10 @@ level.onUpdate = ft => {
 
     const wallScale = Math.sin(t * 20) * .04 + 1
     level.setWallScale(new Vector2(wallScale * (1 - sync * .05), wallScale * (1 - sync * .05)))
+}
+// onUpdate is called every frame.
+level.onUpdate = ft => {
+    update()
 }
 
 // onRender is called every frame. It works when player is died.

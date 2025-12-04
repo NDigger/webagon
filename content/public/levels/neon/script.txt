@@ -135,6 +135,7 @@ level.onInit = () => {
         if (diff === 1) return .45
         if (diff === 1.4) return .6
     })()
+    level.setSkew(.5);
 }
 
 // onStep must be async and use delays in order to work. No delays may cause crash.

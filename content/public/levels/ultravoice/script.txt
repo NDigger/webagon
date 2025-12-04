@@ -65,11 +65,20 @@ level.onInit = () => {
     level.setRotationSpeedIncrement(0.017);
     level.set3dDepthMult(0);
     level.setScale(new Vector2(1.4, 1.4));
-    // level.setWallSkewRight(20);
+    // level.setWallSkewRight(80);
     level.set3dFalloffColor(new Color(0, 0, 0, 0));
     // level.set3dFalloffScale(new Vector2(.5, .5))
     level.setIncrementTime(12);
     level.setIncrementSpinPower(.3);
+
+    level.setSkew(.3)
+    level.setBackgroundTileColors([
+        new Color(25, 25, 0),
+        Color.BLACK()
+    ])
+    const mainColor = new Color(255, 255, 0);
+    level.setMainColor(mainColor)
+    level.set3dColor(new Color(mainColor.r, mainColor.g, mainColor.b, 105));
 }
 
 // onStep must be async and use delays in order to work. No delays may cause crash.

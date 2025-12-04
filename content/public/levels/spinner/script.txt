@@ -26,6 +26,7 @@ level.onInit = () => {
     level.setBackgroundSwapTime(999999);
     level.set3dFalloffScale(new Vector2(1, 1));
     level.setIncrementSpinPower(.2);
+    render();
 }
 
 // onStep must be async and use delays in order to work. No delays may cause crash.
@@ -62,10 +63,11 @@ level.onUpdate = ft => {
 }
 
 // onRender is called every frame. It works when player is died.
-level.onRender = ft => {
+const render = () => {
     level.setSkew(Utils.pingPong(level.getTime()) * .2 + .5)
     level.set3dDepthMult(level.getSkew() / 2);
 }
+level.onRender = ft => { render() }
 
 // onPreIncrement is called immediately when increment time is achieved
 level.onPreIncrement = () => {}
