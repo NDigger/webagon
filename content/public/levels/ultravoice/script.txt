@@ -36,33 +36,35 @@ const pTunnel = async (times, delay, delayEnd = 0) => {
 const addPattern = async pKey => {
     const speedMult = level.getDifficultyMult() * level.getWallSpeedMult();
     const d = 230 * Math.max(speedMult/8.25, 1);
-    const de = d * 2.3;
+    const d2 = d * 1.35;
+    const de = d * 2.45;
     if (pKey === 0) await patterns.pInverseBarrage(Utils.mathRandom(3, 5), de, de);
     else if (pKey === 1) await patterns.pSpiralBarrage(Utils.mathRandom(5, 9), d, de);
-    else if (pKey === 2) await patterns.pSpiral(Utils.mathRandom(7, 9), d, d * 1.5, Utils.mathRandom(1, 2));
+    else if (pKey === 2) await patterns.pSpiral(Utils.mathRandom(7, 9), d, d2, Utils.mathRandom(1, 2));
     else if (pKey === 3) await patterns.pRandomBarrage(Utils.mathRandom(4, 9), d, de);
-    else if (pKey === 4) await pTunnel(Utils.mathRandom(4, 5), de, de);
-    else if (pKey === 5) await patterns.pAltBarrage(Utils.mathRandom(4, 7), d * 1.5, de);
-    else if (pKey === 6) await specialLR(Utils.mathRandom(4, 6), d * 1.5, de);
-    else if (pKey === 7) await patterns.pLRBarrage(Utils.mathRandom(4, 6), d * 1.5, de);
-    else if (pKey === 8) await patterns.pLeftRight(Utils.mathRandom(4, 6), d * 1.5, de);
+    else if (pKey === 4) await pTunnel(Utils.mathRandom(4, 5), d * 1.8, de);
+    else if (pKey === 5) await patterns.pAltBarrage(Utils.mathRandom(4, 7), d2, de);
+    else if (pKey === 6) await specialLR(Utils.mathRandom(4, 6), d2, de);
+    else if (pKey === 7) await patterns.pLRBarrage(Utils.mathRandom(4, 6), d2, de);
+    else if (pKey === 8) await patterns.pLeftRight(Utils.mathRandom(4, 6), d2, de);
     else if (pKey === 9) await patterns.pAltSpam(3, 80, de);
+    else if (pKey === 10) await patterns.pRandomLRBarrage(Utils.mathRandom(5, 8), d2, de);
 }
 
-const pKeys = [0, 0, 1, 1, 1, 2, 2, 4, 5, 5, 5, 6, 6, 7, 7, 8, 8, 9];
+const pKeys = [0, 0, 1, 1, 1, 2, 2, 3, 3, 3, 3, 4, 5, 5, 5, 6, 6, 7, 7, 8, 8, 9, 10, 10, 10];
 let activeKeys = [];
 
 // onInit is called on the first frame when level is created.
 level.onInit = () => {
     level.setMainColor(new Color(255, 0, 0));
     level.setRadius(60);
-    level.setRotationSpeed(0.3);
+    level.setRotationSpeed(0.35);
     level.setWallSpeedMult(5.5);
     level.setSides(4);
     level.set3dLayersCount(4);
-    level.set3dDistance(100);
+    level.set3dDistance(10);
     level.setWallSpeedIncrement(0.2);
-    level.setRotationSpeedIncrement(0.017);
+    level.setRotationSpeedIncrement(0.015);
     level.set3dDepthMult(0);
     level.setScale(new Vector2(1.4, 1.4));
     // level.setWallSkewRight(80);
@@ -117,7 +119,7 @@ level.onUpdate = ft => {
 
 // onRender is called every frame. It works when player is died.
 level.onRender = ft => {
-    level.setSkew(Utils.pingPong(level.getTime() * 3) * .1 + .3)
+    level.setSkew(Utils.pingPong(level.getTime() * 3) * .15 + .5)
 }
 
 // onPreIncrement is called immediately when increment time is achieved

@@ -27,8 +27,8 @@ level.onInit = () => {
     level.setRotationSpeed(0.035);
     level.setWallSpeedMult(2.4);
     level.setSides(level.getDifficultyMult() > 2 ? 6 : 5);
-    level.set3dLayersCount(8);
-    level.set3dDistance(5);
+    level.set3dLayersCount(6);
+    level.set3dDistance(6.5);
     level.setWallSpeedIncrement(0.2);
     level.setRotationSpeedIncrement(0.015);
     level.setSkew(0);

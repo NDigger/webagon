@@ -18,7 +18,7 @@ let activeKeys = [];
 
 level.onInit = () => {
     level.setWallSpawnDistance(3000);
-    level.setBackgroundRadius(4000);
+    level.setBackgroundRadius(5000);
     level.setMainColor(new Color(255, 0, 0));
     level.setRotationSpeed(0);
     level.setRadius(70);
@@ -50,7 +50,7 @@ const diff = level.getDifficultyMult();
 const update = ft => {
     level.setWallSpeedMult(level.getWallSpeedMult() + ft * 0.007);
     rotationMult += ft * diff * 2;
-    const hue = Utils.pingPong(level.getTime() ?? 0) * .05 + .6;
+    const hue = Utils.pingPong(level.getTime() ?? 0) * .05 + .0;
     level.setBackgroundTileColors([
         Color.hsvToRgb(hue, .4, .9 + getBgTileInc(1/8)),
         Color.hsvToRgb(hue, .4, .9 + getBgTileInc(2/8)),
@@ -63,7 +63,7 @@ const update = ft => {
     ])
     level.setRotation(Math.sin(level.getTime()) * rotationMult);
 
-    const sync = level.getTime() * 2;
+    const sync = level.getTime() * 2.05;
 
     const ws = Utils.pingPong(Utils.easeOut(Utils.fract(sync))) * .2 + .6;
     // level.setRadius(90 - Utils.fract(sync) * 20);
