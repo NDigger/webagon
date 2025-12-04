@@ -22,6 +22,7 @@ const mobileButtons = document.querySelector('#game-ui .top-right');
 const difficultyMsg = document.getElementById('difficulty-msg');
 
 const musicPlayer = new Audio();
+const flashLerp = new Lerp(v => overrideFlashEffect.style.backgroundColor = v.getRGBAStyle());
 
 export default class Level extends Game { 
     onInit = () => {};
@@ -211,6 +212,8 @@ export default class Level extends Game {
         sounds.death.stop();
         sounds.increment.stop();
         sounds.swap.stop();
+
+        flashLerp.apply(new Color(0, 0, 0, 0))
         
         cancelAnimationFrame(this.#updateId)
         cancelAnimationFrame(this.#renderId)
@@ -291,7 +294,6 @@ export default class Level extends Game {
         new Lerp(v => this.setRotation(v)).apply(this.getRotation()).run(this.getRotation() + this.getRotationSpeed() * 400, 1.5, Lerp.Easing.EASE_OUT);
 
         if (this.#config.flashOnDeathEnabled) {
-            const flashLerp = new Lerp(v => overrideFlashEffect.style.backgroundColor = v.getRGBAStyle());
             flashLerp.apply(new Color(255, 255, 255, .6))
             flashLerp.run(new Color(255, 255, 255, 0), 1)
         }
