@@ -30,7 +30,8 @@ export default class Background extends PolygonObject {
             const color = (i === (this.getSides() - 1) && this.getSides() % 2 === 1 && this.#darkenUnevenChunkEnabled) 
                         ? new Color(tileColor.r * brightness, tileColor.g * brightness, tileColor.b * brightness, tileColor.a)
                         : tileColor
-            wall.setColor(color)
+            const gsc = v => isNaN(v) ? 0 : v;
+            wall.setColor(new Color(gsc(color.r), gsc(color.g), gsc(color.b), gsc(color.a)))
         })
     }
 

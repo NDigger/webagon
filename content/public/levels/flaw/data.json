@@ -1,0 +1,13 @@
+{
+    "key": "flaw", 
+
+    "name": "Flaw",
+    "author": "NDagger",
+
+    "musicName": "",
+    "musicAuthor": "",
+    "musicAlbum": "",
+    "musicTimestamps": [0, 60, 120, 180, 240, 300, 360],
+
+    "difficulties": [0.6, 1.5, 2]
+}

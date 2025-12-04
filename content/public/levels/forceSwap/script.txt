@@ -97,7 +97,7 @@ const update = ft => {
     const pulse = Utils.pingPong(level.getTime() * 10)
     level.setBackgroundTileColors([
         Utils.interpolate(Color.hsvToRgb(hue, bgP, .08 * visibilityMult), Color.hsvToRgb(offsHue, bgP, .08 * visibilityMult), pulse),
-        Utils.interpolate(Color.hsvToRgb(hue, bgP, .1 * visibilityMult), Color.hsvToRgb(offsHue, bgP, .1 * visibilityMult), pulse),
+        Utils.interpolate(Color.hsvToRgb(hue, bgP, .12 * visibilityMult), Color.hsvToRgb(offsHue, bgP, .12 * visibilityMult), pulse),
     ])
 
     level.setMainColor(Utils.interpolate(

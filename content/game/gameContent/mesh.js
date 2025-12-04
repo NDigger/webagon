@@ -49,14 +49,15 @@ export default class Mesh extends GameObject {
     }
 
     setColor({r, g, b, a}) {
-        this.#color = new Color(
-            clampColorValue(255, r), 
-            clampColorValue(255, g), 
-            clampColorValue(255, b), 
-            clampColorValue(255, a)
+        const color = new Color(
+            clampColorValue(r), 
+            clampColorValue(g), 
+            clampColorValue(b), 
+            clampColorValue(a)
         );
-        this.#object.tint = Color.rgbToHex(r, g, b);
-        if (typeof(a) === "number") this.#object.alpha = a/255;
+        this.#color = color;
+        this.#object.tint = Color.rgbToHex(color.r, color.g, color.b);
+        if (typeof(a) === "number") this.#object.alpha = color.a/255;
     }
 
     getColor() {
