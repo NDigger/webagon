@@ -1,0 +1,23 @@
+import{g as D,s as x,w as v,d as $}from"./index-DoCehc7F.js";const s=D(),S=t=>Math.round(t*100)/100,m=document.getElementById("settings-container"),f=()=>document.getElementById("settings").getAttribute("data-events-enabled")==="true",h=[];let p=0;const g=()=>h[p],w=(t,e)=>{s[e]===$[e]?t.classList.remove("edited"):t.classList.add("edited")};m.addEventListener("keydown",t=>{f()&&["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(t.key)&&t.preventDefault()});const E=t=>{g().classList.remove("selected");const e=(t+p+h.length)%h.length;p=isNaN(e)?0:e;const n=g();n.classList.add("selected"),n.scrollIntoView({behavior:"smooth",block:"nearest"})};document.addEventListener("keydown",t=>{f()&&(t.code==="ArrowDown"?E(1):t.code==="ArrowUp"&&E(-1),(t.code==="ArrowDown"||t.code==="ArrowUp"||t.code==="Enter"||t.code==="ArrowLeft"||t.code==="ArrowRight")&&x.levelSelect.play())});class F{element;#e;#t;#n;constructor(e,n){this.#e=e,this.#t=n,this.#n=s[e]}getConfigProperty(){return this.#e}getDefaultValue(){return this.#n}getProps(){return this.#t}insertHTML(e){m.insertAdjacentHTML("beforeend",e),this.element=m.lastElementChild,h.push(this.element),w(this.element,this.#e)}}class l extends F{getLightContent(e){return e===!0?"var(--main-color)":"transparent"}onChange=()=>{};constructor(e,n){super(e,n);const d=n.name,c=n.description;this.insertHTML(`
+        <div id="${e}" class="setting boolean">
+            <div class="light" style="--after-bg-color: ${this.getLightContent(this.getDefaultValue())}"></div>
+            <div class="inner">
+                <p class="name">${d}</p> 
+                ${c?`
+                <p class="description">${c}</p>
+                `:""}
+            </div>
+        </div>`);const u=()=>{x.levelSelect.play(),this.setValue(!s[e])};this.element.addEventListener("click",()=>u()),document.addEventListener("keydown",o=>{g()!==this.element||!f()||(o.code==="ArrowLeft"||o.code==="ArrowRight"||o.code==="Enter")&&u()})}setValue(e){const n=this.getConfigProperty();s[n]=e;const d=s[n];this.element.querySelector(".light").style.setProperty("--after-bg-color",this.getLightContent(d)),w(this.element,n),v(s),this.onChange()}}class b extends F{constructor(e,n){super(e,n);const d=n.name,c=n.min,u=n.max,o=n.shift;this.insertHTML(`
+            <div class="setting number" id=${e}>
+                <p>${d}</p>
+                <p class="value">${this.getDefaultValue()}</p>
+                <div class="range-container">
+                    <input type="range" min="${c}" max="${u}" step="${o}" value="${this.getDefaultValue()}">
+                </div>
+            </div>
+        `);const L=this.element.querySelector('input[type="range"]'),A=this.element.querySelector(".value");L.addEventListener("input",r=>{const i=r.target.value;A.textContent=i,s[e]=Number(i),v(s),w(this.element,e)}),document.addEventListener("keydown",r=>{if(!(g()!==this.element||!f())&&(r.code==="ArrowLeft"||r.code==="ArrowRight")){let i;r.code==="ArrowLeft"?i=S(s[e]-o):r.code==="ArrowRight"&&(i=S(s[e]+o)),i=Math.max(c,Math.min(u,i)),s[e]=i,A.textContent=s[e].toString(),L.value=i,v(s),w(this.element,e)}})}}const y=t=>m.insertAdjacentHTML("beforeend",`
+    <div class="category">
+        <span></span>
+        <h2>${t}</h2>
+        <span></span>
+    </div>`);y("Gameplay");new l("invincibleModeEnabled",{name:"Invincible mode",description:"Scores are invalidated when enabled"});new l("swapOnHold",{name:"Swap on Hold",description:"Instant swap on reload if button is hold"});new l("effect3dEnabled",{name:"3D effect",description:"Disable to improve performance"});y("Visuals");new b("playerTiltMult",{name:"Player tilt mult:",min:0,max:1.5,shift:.1});new l("swapHighlightEnabled",{name:"Swap Highlight"});new l("displayFpsEnabled",{name:"Display FPS"});new l("flashOnDeathEnabled",{name:"Flash Effect on death"});new l("swapParticlesEnabled",{name:"Swap Particles"});new l("funModeEnabled",{name:"How funny..."});y("Audio");const C=t=>({name:t,min:0,max:1,shift:.1});new b("musicVolume",C("Music Volume"));new b("soundsVolume",C("Sounds volume"));new l("deathSoundEnabled",{name:"Death sound"});const a=document.documentElement,k=()=>{a.requestFullscreen?a.requestFullscreen():a.webkitRequestFullscreen?a.webkitRequestFullscreen():a.msRequestFullscreen&&a.msRequestFullscreen()},M=()=>{document.exitFullscreen?document.exitFullscreen():document.webkitExitFullscreen?document.webkitExitFullscreen():document.msExitFullscreen&&document.msExitFullscreen()};document.getElementById("request-fullscreen-mode-setting").addEventListener("click",()=>{document.fullscreenElement===null?k():M()});E(0);
