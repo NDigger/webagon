@@ -48,7 +48,7 @@ level.onStep = async () => {
 const getBgTileInc = v => (Math.sin(level.getTime() * Math.PI * 2 + v * Math.PI * 2) * .5 + .5) * .1;
 const diff = level.getDifficultyMult();
 const update = ft => {
-    level.setWallSpeedMult(level.getWallSpeedMult() + ft * 0.007);
+    level.setWallSpeedMult(level.getWallSpeedMult() + ft * 0.012);
     rotationMult += ft * diff * 2;
     const hue = Utils.pingPong(level.getTime() ?? 0) * .05 + .0;
     level.setBackgroundTileColors([
