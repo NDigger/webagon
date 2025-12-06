@@ -47,6 +47,10 @@ const loadLevels = () => {
             const res = await fetch(`${getPublicURL()}${levelPath}/data.json`);
             const d = await res.json();
 
+            const audio = new Audio();
+            audio.src = getPublicURL() + `${d.levelPath}/music.ogg`;
+            audio.load();
+
             const updatedJson = { ...d, levelPath };
             levelJsons.push(updatedJson);
 
