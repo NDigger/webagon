@@ -37,7 +37,7 @@ export default class Level extends Game {
     #config = getConfig();
 
     #initialized = false;
-    #levelInitTime = performance.now();
+    #levelInitTime = 0;
 
     #timeouts = [];
     #intervals = [];
@@ -110,6 +110,8 @@ export default class Level extends Game {
         musicPlayer.currentTime = timestamp
         musicPlayer.onloadeddata = () => {
             if (this.isDestroyed()) return
+            this.#levelInitTime = performance.now();
+
             musicPlayer.play();
 
             this.setShakePower(0);
