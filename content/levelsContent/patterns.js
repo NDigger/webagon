@@ -128,7 +128,7 @@ export default function initPatterns(level) {
         for (let i = 0; i < times - 1; i++) {
             shift -= dir;
             wallEx(side + shift);
-            if (i !== times - 1) await level.distanceDelay(delay);
+            if (i !== times - 2) await level.distanceDelay(delay);
         }
         await level.distanceDelay(delayEnd);
     }

@@ -40,7 +40,7 @@ const addPattern = async pKey => {
     const d = 120 / mult * level.getWallSpeedMult();
     const de = d * 1.4;
     if (pKey === 0) await patterns.pInverseBarrage(Utils.mathRandom(4, 5), de, de);
-    else if (pKey === 1) await patterns.pSpiralBarrage(Utils.mathRandom(3, 4), d * 1.5, de, Utils.mathRandom(1, 2));
+    else if (pKey === 1) await patterns.pSpiralBarrage(Utils.mathRandom(3, 4), d * 1.5, de, 2);
     else if (pKey === 2) await patterns.pDoubleSpiral(Utils.mathRandom(7, 8), d * .6, de);
     else if (pKey === 3) await patterns.pWallExVortex(Utils.mathRandom(3, 4), d, de);
     else if (pKey === 4) await patterns.pAltBarrage(Utils.mathRandom(4, 5), d, de);
