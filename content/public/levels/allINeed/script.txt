@@ -21,6 +21,8 @@ const addPattern = async pKey => {
     else if (pKey === 5) await longBarrage(d * .5, d);
     else if (pKey === 6) await longAlt(d * .5, d);
     else if (pKey === 7) await patterns.pTunnel(Utils.mathRandom(3, 4), d * 1.4, d);
+    else if (pKey === 8) await patterns.pTunnel(Utils.mathRandom(3, 4), d * .7, d, 4);
+    else if (pKey === 9) await patterns.pAltTunnel(Utils.mathRandom(3, 4), d * .7, d, 3);
 }
 
 const enableSwapOnHighSpeed = () => {
@@ -31,7 +33,7 @@ const enableSwapOnHighSpeed = () => {
 }
 
 
-const pKeys = [0, 1, 1, 2, 3, 4, 5, 6, 7];
+const pKeys = [0, 0, 1, 1, 2, 2, 3, 3, 4, 5, 6, 7, 8, 9];
 let activeKeys = [];
 
 // onInit is called on the first frame when level is created.
