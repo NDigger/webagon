@@ -292,8 +292,6 @@ export default class Game extends GameObject {
         document.addEventListener('mousedown', this.#onMouseDown)
         document.addEventListener('mouseup', this.#onMouseUp)
 
-        document.addEventListener('contextmenu', this.#contextMenuEvent);
-
         window.addEventListener('keydown', this.#onKeyDown);
         window.addEventListener('keyup', this.#onKeyUp);
     }
@@ -306,8 +304,6 @@ export default class Game extends GameObject {
 
         document.removeEventListener('mousedown', this.#onMouseDown)
         document.removeEventListener('mouseup', this.#onMouseUp)
-
-        document.removeEventListener('contextmenu', this.#contextMenuEvent);
 
         window.removeEventListener('keydown', this.#onKeyDown);
         window.removeEventListener('keyup', this.#onKeyUp);
@@ -347,8 +343,6 @@ export default class Game extends GameObject {
             this.#rightKeyPressed = false;
         }
     }
-
-    #contextMenuEvent = e => e.preventDefault();
 
     #getPolygonLayer() { return this.#layer + 0.004}
     #getWallsLayer() { return this.#layer + 0.003}

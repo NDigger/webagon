@@ -79,6 +79,8 @@ export default class Level extends Game {
 
         this.setBackgroundSwapTime(1);
     }
+
+    #contextMenuEvent = e => e.preventDefault();
     
     init() {
         if (this.#initialized) return;
@@ -112,6 +114,8 @@ export default class Level extends Game {
         this.onInit();
         this.#step();
         this.draw();
+
+        document.addEventListener('contextmenu', this.#contextMenuEvent);
 
         this.#updateId = requestAnimationFrame(t => this.#update(t));
         this.#renderId = requestAnimationFrame(t => this.#render(t));
@@ -212,6 +216,8 @@ export default class Level extends Game {
         sounds.death.stop();
         sounds.increment.stop();
         sounds.swap.stop();
+
+        document.removeEventListener('contextmenu', this.#contextMenuEvent);
 
         flashLerp.apply(new Color(0, 0, 0, 0))
         
