@@ -5,6 +5,7 @@ import CustomWall from "./gameContent/customWall";
 import { getConfig } from "../storage";
 import { getLevelStats, writeLevelStats } from "../storage";
 import { sounds } from "../script";
+import { getPublicURL } from "../script";
 
 const overrideFlashEffect = document.getElementById('override-flash-effect');
 
@@ -99,7 +100,7 @@ export default class Level extends Game {
         gameContentElement.style.display = 'block'
         menuElement.style.display = 'none'
 
-        musicPlayer.src = `${this.#levelData.levelPath}/music.ogg`; 
+        musicPlayer.src = getPublicURL() + `${this.#levelData.levelPath}/music.ogg`; 
 
         musicPlayer.volume = this.#config.musicVolume;
         musicPlayer.loop = true;
