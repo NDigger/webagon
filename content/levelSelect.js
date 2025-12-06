@@ -42,14 +42,11 @@ const loadLevels = () => {
     fetch(getPublicURL() + '/levelPaths.json')
     .then(res => res.json())
     .then(async levelPaths => {
+        let musicPaths = [];
         for (let i = 0; i < levelPaths.length; i++) {
             const levelPath = levelPaths[i];
             const res = await fetch(`${getPublicURL()}${levelPath}/data.json`);
             const d = await res.json();
-
-            const audio = new Audio();
-            audio.src = getPublicURL() + `${d.levelPath}/music.ogg`;
-            audio.load();
 
             const updatedJson = { ...d, levelPath };
             levelJsons.push(updatedJson);
@@ -72,7 +69,22 @@ const loadLevels = () => {
                     loadLevel(updatedJson);
                 }
             });
+            musicPaths.push(getPublicURL() + `${d.levelPath}/music.ogg`)
         }
+
+        const fn = () => {
+            musicPaths.forEach(mp => {
+                const audio = new Audio(mp);
+                audio.load();
+            })
+            document.removeEventListener('click', fn);
+            document.removeEventListener('touchstart', fn);
+            document.removeEventListener('keydown', fn);
+        }
+
+        document.addEventListener('click', fn);
+        document.addEventListener('touchstart', fn);
+        document.addEventListener('keydown', fn);
 
         loadMenu();
         setLevelListPosition(parseInt(localStorage.getItem('webagon-selected-level') ?? 0));
