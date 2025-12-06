@@ -15,15 +15,18 @@ header {
 }
 
 header .title {
-    font-size: 3rem;
+    font-size: 4rem;
     text-decoration: none;
     color: var(--main-color);
     position: relative;
-    top: 8px;
+    /* top: 8px; */
 }
 
+
 #repo {
-    /* display: none; */
+    display: none;
+}
+/* #repo {
     font-size: .4em;
     position: absolute;
     top: -10px;
@@ -36,7 +39,7 @@ header .title {
     0px 0px 5px var(--background-tile-color),
     0px 0px 3px var(--background-tile-color),
     0px 0px 2px var(--background-tile-color)
-}
+} */
 
 header > div {
     width: 100%;
