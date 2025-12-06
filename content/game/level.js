@@ -109,6 +109,7 @@ export default class Level extends Game {
         this.#audioTimestamp = timestamp;
         musicPlayer.currentTime = timestamp
         musicPlayer.onloadeddata = () => {
+            if (this.isDestroyed()) return
             musicPlayer.play();
 
             this.setShakePower(0);
