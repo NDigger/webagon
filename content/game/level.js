@@ -108,21 +108,23 @@ export default class Level extends Game {
         const timestamp = musicTimestamps[this.#props.attempt === 1 ? 0 : Math.floor(Math.random() * musicTimestamps.length)] ?? 0
         this.#audioTimestamp = timestamp;
         musicPlayer.currentTime = timestamp
-        musicPlayer.onloadeddata = () => musicPlayer.play();
+        musicPlayer.onloadeddata = () => {
+            musicPlayer.play();
 
-        this.setShakePower(0);
-        
-        this.onInit();
-        this.#step();
-        this.draw();
+            this.setShakePower(0);
+            
+            this.onInit();
+            this.#step();
+            this.draw();
 
-        document.addEventListener('contextmenu', this.#contextMenuEvent);
+            document.addEventListener('contextmenu', this.#contextMenuEvent);
 
-        this.#updateId = requestAnimationFrame(t => this.#update(t));
-        this.#renderId = requestAnimationFrame(t => this.#render(t));
-        document.addEventListener('visibilitychange', this.#handleVisibilityChange);
+            this.#updateId = requestAnimationFrame(t => this.#update(t));
+            this.#renderId = requestAnimationFrame(t => this.#render(t));
+            document.addEventListener('visibilitychange', this.#handleVisibilityChange);
 
-        this.#initialized = true;
+            this.#initialized = true;
+        }
     }
     
     async #step() {
