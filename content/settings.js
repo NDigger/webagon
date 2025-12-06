@@ -224,4 +224,10 @@ const closeFullscreen = () => {
   else if (document.msExitFullscreen) document.msExitFullscreen();
 }
 
+document.getElementById('request-fullscreen-mode-setting')
+.addEventListener('click', () => {
+    if (document.fullscreenElement === null) openFullscreen()
+    else closeFullscreen();
+})
+
 shiftSetting(0); // highlight selected setting
