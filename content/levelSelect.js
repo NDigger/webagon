@@ -42,38 +42,33 @@ const loadLevels = () => {
     fetch(getPublicURL() + '/levelPaths.json')
     .then(res => res.json())
     .then(async levelPaths => {
-        await Promise.all(
-            levelPaths.map(async (levelPath, i) => {
-                const res = await fetch(`${getPublicURL()}${levelPath}/data.json`);
-                const d = await res.json();
-                const updateJSONPath = jsonLevelObject => {
-                    const levelJson = structuredClone(jsonLevelObject);
-                    levelJson.levelPath = levelPath;
-                    return levelJson
+        for (let i = 0; i < levelPaths.length; i++) {
+            const levelPath = levelPaths[i];
+            const res = await fetch(`${getPublicURL()}${levelPath}/data.json`);
+            const d = await res.json();
+
+            const updatedJson = { ...d, levelPath };
+            levelJsons.push(updatedJson);
+
+            levelList.insertAdjacentHTML('beforeend', `
+                <div class="level" id="level-${d.key}">
+                    <p class="name">${d.name}</p>
+                    <p class="author">${d.author}</p>
+                </div>
+            `);
+
+            levelList.lastElementChild.addEventListener('click', e => {
+                if (getSelectedLevelElement() !== e.currentTarget || (window.innerWidth < 1068 && !selectedLevelInfo.classList.contains('show'))) {
+                    sounds.levelSelect.play();
+                    setLevelListPosition(i);
+                    selectedLevelInfo.classList.remove('hide');
+                    void selectedLevelInfo.offsetWidth;
+                    selectedLevelInfo.classList.add('show');
+                } else {
+                    loadLevel(updatedJson);
                 }
-
-                const updatedJson = updateJSONPath(d)
-                levelJsons.push(updatedJson);
-
-                levelList.insertAdjacentHTML('beforeend', `
-                    <div class="level" id="level-${d.key}">
-                        <p class="name">${d.name}</p>
-                        <p class="author">${d.author}</p>
-                    </div>
-                `)
-
-                levelList.lastElementChild.addEventListener('click', e => {
-                    if (getSelectedLevelElement() !== e.currentTarget || (window.innerWidth < 1068 && !selectedLevelInfo.classList.contains('show'))) {
-                        sounds.levelSelect.play();
-                        setLevelListPosition(i);
-                        selectedLevelInfo.classList.remove('hide');
-                        void selectedLevelInfo.offsetWidth;
-                        selectedLevelInfo.classList.add('show');
-                    }
-                    else loadLevel(updatedJson);
-                })
-            })
-        )
+            });
+        }
 
         loadMenu();
         setLevelListPosition(parseInt(localStorage.getItem('webagon-selected-level') ?? 0));
