@@ -6,16 +6,18 @@ const addPattern = async pKey => {
     const de = d * 1.8;
     if (pKey === 0) await patterns.pRandomBarrage(Utils.mathRandom(4, 5), d * 1.1, de);
     else if (pKey === 1) await patterns.pAltBarrage(Utils.mathRandom(3, 6), d, de);
-    else if (pKey === 2) await patterns.pTunnel(Utils.mathRandom(3, 5), d * 2.7, de);
+    else if (pKey === 2) await patterns.pTunnel(Utils.mathRandom(3, 5), d * 2.7, de, 1);
     else if (pKey === 3) await patterns.pLRBarrage(4, d, de);
     else if (pKey === 4) await patterns.pLeftRight(Utils.mathRandom(4, 5), d, de);
     else if (pKey === 5) await patterns.pSpiralBarrage(Utils.mathRandom(3, 6), d, de);
     else if (pKey === 6) await patterns.pDoubleSpiral(Utils.mathRandom(5, 7), d * 0.8, de);
     else if (pKey === 7) await patterns.pAltSpam(Utils.mathRandom(3, 4), 60, de);
     else if (pKey === 8) await patterns.pWallExSpam(Utils.mathRandom(3, 4), 60, de);
+    else if (pKey === 9) await patterns.pTunnel(Utils.mathRandom(3, 5), d * 2, de, 3);
+    else if (pKey === 10) await patterns.pWallExVortex(Utils.mathRandom(3, 4), d, de);
 }
 
-const pKeys = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+const pKeys = [0, 0, 0, 1, 1, 1, 2, 2, 3, 3, 4, 4, 5, 6, 7, 8, 9, 10];
 let activeKeys = [];
 
 // onInit is called on the first frame when level is created.

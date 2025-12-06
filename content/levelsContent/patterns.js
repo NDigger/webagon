@@ -133,13 +133,13 @@ export default function initPatterns(level) {
         await level.distanceDelay(delayEnd);
     }
 
-    const pTunnel = async (times, delay, delayEnd = 0) => {
+    const pTunnel = async (times, delay, delayEnd = 0, extra = 1) => {
         const side = getRandomSide(level);
         const shift = getShift();
         for(let i = 0; i < times; i++) {
-            barrage(((i + shift) % 2 === 0) ? side : side - 2);
+            barrage(((i + shift) % 2 === 0) ? side : side - 1 - extra);
             if (i !== times - 1) {
-                level.createWall(side - 2, delay + extraTunnelThickness);
+                for (let k = 0; k < extra; k++) level.createWall(side - 2 - k, delay + extraTunnelThickness);
                 await level.distanceDelay(delay);
             }
         }

@@ -111,9 +111,10 @@ const addPattern = async pKey => {
     else if (pKey === 5) await pSwapTunnel2(Utils.mathRandom(3, 4), d*0.8, d);
     else if (pKey === 6) await pSwapperInverse(d*0.8, d);
     else if (pKey === 7) await pSwapSpiral2(Utils.mathRandom(4, 6), d * .5, d);
+    else if (pKey === 8) await patterns.pTunnel(Utils.mathRandom(3, 4), d, d, 3);
 }
 
-const pKeys = [0, 1, 2, 3, 4, 5, 6, 7];
+const pKeys = [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8];
 let activeKeys = [];
 let hueShift;
 // onInit is called on the first frame when level is created.
@@ -132,8 +133,8 @@ level.onInit = () => {
     hueShift = (() => {
         const diff = level.getDifficultyMult();
         if (diff === .7) return .3
-        if (diff === 1) return .45
-        if (diff === 1.4) return .6
+        if (diff === 1) return .6
+        if (diff === 1.4) return 0
     })()
     level.setSkew(.5);
 }
