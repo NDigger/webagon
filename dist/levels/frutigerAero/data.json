@@ -1,0 +1,13 @@
+{
+    "key": "frutigerAero", 
+
+    "name": "frutiger aero",
+    "author": "NDagger",
+
+    "musicName": "Lepton Head (Deedrah Remix)",
+    "musicAuthor": "Shakta",
+    "musicAlbum": "Distance To Goa 5, no. 5",
+    "musicTimestamps": [52, 360, 240, 300],
+
+    "difficulties": [0.5, 1.4, 1.7]
+}

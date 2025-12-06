@@ -1,0 +1,13 @@
+{
+    "key": "origin", 
+
+    "name": "Origin",
+    "author": "NDagger",
+
+    "musicName": "Hybrid Song",
+    "musicAuthor": "Quazar / Sanxion",
+    "musicAlbum": "",
+    "musicTimestamps": [3, 25, 50],
+
+    "difficulties": [0.5, 1.6, 2.5]
+}

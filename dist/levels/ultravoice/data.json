@@ -1,0 +1,14 @@
+{
+    "key": "ultravoice", 
+
+    "name": "Ultravoice",
+    "description": "",
+    "author": "NDagger",
+
+    "musicName": "Imagination (Ultravoice vs Tactic Mind Remix)",
+    "musicAuthor": "Illumination",
+    "musicAlbum": "The Imagination",
+    "musicTimestamps": [106, 170, 230, 320],
+
+    "difficulties": [0.4, 0.7, 1.4]
+}

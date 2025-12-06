@@ -1,0 +1,14 @@
+{
+    "key": "trueHexagon", 
+
+    "name": "True Hexagon",
+    "author": "NDagger",
+
+    "musicName": "Hexagon And On",
+    "musicAuthor": "Zanzlanz",
+    "musicAlbum": "",
+    "musicTimestamps": [1.5],
+    "completable": true,
+
+    "difficulties": [0.6, 0.8]
+}

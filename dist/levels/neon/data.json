@@ -1,0 +1,13 @@
+{
+    "key": "neon", 
+
+    "name": "Neon",
+    "author": "NDagger",
+
+    "musicName": "Automaton",
+    "musicAuthor": "HattLab / Hatthakon Thaothong / Kanyarat Satthai",
+    "musicAlbum": "",
+    "musicTimestamps": [13, 73, 110],
+
+    "difficulties": [0.7, 1.4]
+}

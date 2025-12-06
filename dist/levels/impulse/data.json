@@ -1,0 +1,13 @@
+{
+    "key": "impulse", 
+
+    "name": "Impulse",
+    "author": "NDagger",
+
+    "musicName": "Encounter",
+    "musicAuthor": "F.O.O.L & Waveshaper",
+    "musicAlbum": "",
+    "musicTimestamps": [8, 78, 108, 148, 160],
+
+    "difficulties": [0.6, 1.6]
+}

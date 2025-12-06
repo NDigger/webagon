@@ -1,0 +1,85 @@
+const addPattern = async pKey => {
+    const d = 400 * Math.max(1, level.getWallSpeedMult() * level.getDifficultyMult() / 9);
+    const de = d * 1.7;
+    if (pKey === 0) await patterns.pInverseBarrage(Utils.mathRandom(3, 4), d * 1.8, de);
+    else if (pKey === 1) await patterns.pLeftRight(Utils.mathRandom(4, 5), d, de);
+    else if (pKey === 2) await patterns.pAltBarrage(Utils.mathRandom(4, 6), d, de);
+    else if (pKey === 3) await patterns.pTunnel(Utils.mathRandom(4, 5), d * 2.8, de);
+    else if (pKey === 4) await patterns.pRandomBarrage(Utils.mathRandom(5, 7), d * 1.3, de);
+    else if (pKey === 5) {
+        const s = Utils.mathRandom(1, 3);
+        await patterns.pSpiralBarrage(Utils.mathRandom(6, 8), d * s, de, s);
+    }
+    else if (pKey === 6) await patterns.pWallExTunnel(Utils.mathRandom(4, 6), d * 1.3, de);
+}
+
+const pKeys = [0, 1, 2, 3, 4, 5, 6];
+let activeKeys = [];
+
+level.onInit = () => {
+    level.setWallSpawnDistance(3000);
+    level.setBackgroundRadius(5000);
+    level.setMainColor(new Color(255, 0, 0));
+    level.setRotationSpeed(0);
+    level.setRadius(70);
+    level.setWallSpeedMult(4.2);
+    level.setSides(8);
+    level.set3dDistance(5);
+    level.setWallSpeedIncrement(0.2);
+    level.setIncrementTime(999999);
+    level.setRotationSpeedIncrement(0.015);
+    level.set3dLayersCount(2);
+    level.setScale(new Vector2(.6, .6));
+    level.setMainColor(new Color(255, 255, 255));
+    level.setBackgroundDarkenUnevenChunkEnabled(false);
+    level.set3dDepthMult(.3);
+    update(0);
+}
+
+let rotationMult = level.getDifficultyMult() * 240;
+// onStep must be async and use delays in order to work. No delays may cause crash.
+level.onStep = async () => {
+    if (activeKeys.length === 0) activeKeys = pKeys.slice();
+    const rndIndex = Math.floor(Math.random() * activeKeys.length)
+    await addPattern(activeKeys.splice(rndIndex, 1)[0])
+    await level.distanceDelay(0);
+}
+
+const getBgTileInc = v => (Math.sin(level.getTime() * Math.PI * 2 + v * Math.PI * 2) * .5 + .5) * .1;
+const diff = level.getDifficultyMult();
+const update = ft => {
+    level.setWallSpeedMult(level.getWallSpeedMult() + ft * 0.012);
+    rotationMult += ft * diff * 2;
+    const hue = Utils.pingPong(level.getTime() ?? 0) * .05 + .0;
+    level.setBackgroundTileColors([
+        Color.hsvToRgb(hue, .4, .9 + getBgTileInc(1/8)),
+        Color.hsvToRgb(hue, .4, .9 + getBgTileInc(2/8)),
+        Color.hsvToRgb(hue, .4, .9 + getBgTileInc(3/8)),
+        Color.hsvToRgb(hue, .4, .9 + getBgTileInc(4/8)),
+        Color.hsvToRgb(hue, .4, .9 + getBgTileInc(5/8)),
+        Color.hsvToRgb(hue, .4, .9 + getBgTileInc(6/8)),
+        Color.hsvToRgb(hue, .4, .9 + getBgTileInc(7/8)),
+        Color.hsvToRgb(hue, .4, .9 + getBgTileInc(8/8)),
+    ])
+    level.setRotation(Math.sin(level.getTime()) * rotationMult);
+
+    const sync = level.getTime() * 2.05;
+
+    const ws = Utils.pingPong(Utils.easeOut(Utils.fract(sync))) * .2 + .6;
+    // level.setRadius(90 - Utils.fract(sync) * 20);
+    level.setScale(new Vector2(ws, ws));
+}
+// onUpdate is called every frame.
+level.onUpdate = ft => {
+    update(ft);
+}
+
+level.onMenuUpdate = () => {}
+
+level.onIncrement = () => {
+    level.setSides(Utils.mathRandom(9, 10))
+}
+
+level.onRender = ft => {
+    level.setSkew(Utils.pingPong(level.getTime()*.07)*.2 + .5)
+}

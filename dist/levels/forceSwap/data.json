@@ -1,0 +1,13 @@
+{
+    "key": "forceSwap", 
+
+    "name": "triaswap",
+    "author": "NDagger",
+
+    "musicName": "",
+    "musicAuthor": "",
+    "musicAlbum": "",
+    "musicTimestamps": [29, 58.1, 101.7],
+
+    "difficulties": [0.5, 1.5]
+}

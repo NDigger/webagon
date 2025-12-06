@@ -1,0 +1,13 @@
+{
+    "key": "jungle", 
+
+    "name": "Jungle",
+    "author": "NDagger",
+
+    "musicName": "Scarab",
+    "musicAuthor": "Trancentral",
+    "musicAlbum": "Prana",
+    "musicTimestamps": [54, 132.8, 159.8, 270, 363],
+
+    "difficulties": [0.6, 1.4]
+}
