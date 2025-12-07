@@ -510,20 +510,14 @@ export default class Game extends GameObject {
                 prevRotationOffset += 180;
                 this.#swapRequested = false;
             }
-            this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() + playerSpeed * this.#playerDir);
-            if (this.#leftKeyPressed) {
-                if (this.#polygon.player.getTilt() > -maxTilt)
-                    this.#polygon.player.setTilt(this.#polygon.player.getTilt() - tiltSpeed)
-            }
-            if (this.#rightKeyPressed) {
-                if (this.#polygon.player.getTilt() < maxTilt)
-                    this.#polygon.player.setTilt(this.#polygon.player.getTilt() + tiltSpeed)
-            }
-            if (!this.#leftKeyPressed && !this.#rightKeyPressed) {
-                if (this.#polygon.player.getTilt() > 0) 
-                    this.#polygon.player.setTilt(Math.max(0, this.#polygon.player.getTilt() - tiltSpeed))
-                else if (this.#polygon.player.getTilt() < 0) 
-                    this.#polygon.player.setTilt(Math.min(0, this.#polygon.player.getTilt() + tiltSpeed))
+            const dir = this.#playerDir;
+            const tilt = this.#polygon.player.getTilt();
+            this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() + playerSpeed * dir);
+            if (dir === -1 && tilt > -maxTilt) this.#polygon.player.setTilt(tilt - tiltSpeed)
+            if (dir === 1 && tilt < maxTilt) this.#polygon.player.setTilt(tilt + tiltSpeed)
+            if (!dir === 0) {
+                if (tilt > 0) this.#polygon.player.setTilt(Math.max(0, tilt - tiltSpeed))
+                else if (tilt < 0) this.#polygon.player.setTilt(Math.min(0, tilt + tiltSpeed))
             }
             this.#polygon.player.updatePosition()
         }

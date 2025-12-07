@@ -23,7 +23,7 @@ const createApp = async () => {
     return app;
 }
 
-export const getPublicURL = () => import.meta.env.BASE_URL;
+export const getPublicURL = () => import.meta.env.BASE_URL === '/' ? '' : import.meta.env.BASE_URL;
 
 export const sounds = {};
 (function() {
