@@ -39,13 +39,14 @@ const levelJsons = []
 const getSelectedLevelJSON = () => levelJsons[selectedLevelIndex];
 
 const loadLevels = () => {
-    fetch(getPublicURL() + '/levelPaths.json')
+    const publicUrl = getPublicURL();
+    fetch(publicUrl + '/levelPaths.json')
     .then(res => res.json())
     .then(async levelPaths => {
         let musicPaths = [];
         for (let i = 0; i < levelPaths.length; i++) {
             const levelPath = levelPaths[i];
-            const res = await fetch(`${getPublicURL()}${levelPath}/data.json`);
+            const res = await fetch(`${publicUrl}${levelPath}/data.json`);
             const d = await res.json();
 
             const updatedJson = { ...d, levelPath };
@@ -69,22 +70,22 @@ const loadLevels = () => {
                     loadLevel(updatedJson);
                 }
             });
-            musicPaths.push(getPublicURL() + `${d.levelPath}/music.ogg`)
+            musicPaths.push(publicUrl + `${levelPath}/music.ogg`)
         }
 
-        const fn = () => {
-            musicPaths.forEach(mp => {
-                const audio = new Audio(mp);
-                audio.load();
-            })
-            document.removeEventListener('click', fn);
-            document.removeEventListener('touchstart', fn);
-            document.removeEventListener('keydown', fn);
-        }
+        // const ls = () => {
+        //     musicPaths.forEach(mp => {
+        //         const audio = new Audio(mp);
+        //         audio.load();
+        //     })
+        //     document.removeEventListener('click', ls);
+        //     document.removeEventListener('touchstart', ls);
+        //     document.removeEventListener('keydown', ls);
+        // }
 
-        document.addEventListener('click', fn);
-        document.addEventListener('touchstart', fn);
-        document.addEventListener('keydown', fn);
+        // document.addEventListener('click', ls);
+        // document.addEventListener('touchstart', ls);
+        // document.addEventListener('keydown', ls);
 
         loadMenu();
         setLevelListPosition(parseInt(localStorage.getItem('webagon-selected-level') ?? 0));

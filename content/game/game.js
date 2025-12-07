@@ -251,6 +251,7 @@ export default class Game extends GameObject {
 
     #leftKeyPressed = false;
     #rightKeyPressed = false;
+    #playerDir = 0;
     #swapKeyPressed = false;
     #swapEnabled = false;
     #swapRequested = false;
@@ -309,38 +310,56 @@ export default class Game extends GameObject {
         window.removeEventListener('keyup', this.#onKeyUp);
     }
 
-    #onGameArrowLeftPressed = () => this.#leftKeyPressed = true;
-    #onGameArrowLeftReleased = () => this.#leftKeyPressed = false;
-    #onGameArrowRightPressed = () => this.#rightKeyPressed = true;
-    #onGameArrowRightReleased = () => this.#rightKeyPressed = false;
-    
-    #onKeyDown = e => {
-        if (e.code === 'ArrowLeft' || e.code === 'KeyA') this.#leftKeyPressed = true;
-        if (e.code === 'ArrowRight' || e.code === 'KeyD') this.#rightKeyPressed = true;
+    #leftKeyPress() {
+        this.#leftKeyPressed = true;
+        this.#playerDir = -1;
+    }
+    #rightKeyPress() {
+        this.#rightKeyPressed = true;
+        this.#playerDir = 1;
+    }
+    #leftKeyRelease() {
+        this.#leftKeyPressed = false;
+        if (this.#rightKeyPressed === true) this.#playerDir = 1;
+        else this.#playerDir = 0;
+    }
+    #rightKeyRelease() {
+        this.#rightKeyPressed = false;
+        if (this.#leftKeyPressed === true) this.#playerDir = -1;
+        else this.#playerDir = 0;
+    }
 
+    #onGameArrowLeftPressed = () => this.#leftKeyPress();
+    #onGameArrowLeftReleased = () => this.#leftKeyRelease();
+    #onGameArrowRightPressed = () => this.#rightKeyPress();
+    #onGameArrowRightReleased = () => this.#rightKeyRelease();
+
+    #onKeyDown = e => {
+        if (e.code === 'ArrowLeft' || e.code === 'KeyA') this.#leftKeyPress()
+        if (e.code === 'ArrowRight' || e.code === 'KeyD') this.#rightKeyPress()
         if (e.code === 'Space' && this.#swapEnabled && !this.#swapKeyPressed && this.#currentSwapReloadTime < 0) {
             this.#swapRequested = true;
             this.#swapKeyPressed = true;
         }
     }
     #onKeyUp = e => {
-        if (e.code === 'ArrowLeft' || e.code === 'KeyA') this.#leftKeyPressed = false;
-        if (e.code === 'ArrowRight' || e.code === 'KeyD') this.#rightKeyPressed = false;
+        if (e.code === 'ArrowLeft' || e.code === 'KeyA') this.#leftKeyRelease();
+        if (e.code === 'ArrowRight' || e.code === 'KeyD') this.#rightKeyRelease();
         if (e.code === 'Space') this.#swapKeyPressed = false;
     }
 
     #onMouseDown = e => {
-        if (e.button === 0) this.#leftKeyPressed = true;
+        if (e.button === 0) this.#leftKeyPress();
         if (e.button === 2) {
             e.preventDefault();
-            this.#rightKeyPressed = true;
+            this.#rightKeyPress();
         }
     }
     #onMouseUp = e => {
-        if (e.button === 0) this.#leftKeyPressed = false;
+        if (e.button === 0) this.#leftKeyRelease();
         if (e.button === 2) {
             e.preventDefault();
-            this.#rightKeyPressed = false;
+            this.#rightKeyRelease();
         }
     }
 
@@ -491,13 +510,12 @@ export default class Game extends GameObject {
                 prevRotationOffset += 180;
                 this.#swapRequested = false;
             }
+            this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() + playerSpeed * this.#playerDir);
             if (this.#leftKeyPressed) {
-                this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() - playerSpeed);
                 if (this.#polygon.player.getTilt() > -maxTilt)
                     this.#polygon.player.setTilt(this.#polygon.player.getTilt() - tiltSpeed)
             }
             if (this.#rightKeyPressed) {
-                this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() + playerSpeed);
                 if (this.#polygon.player.getTilt() < maxTilt)
                     this.#polygon.player.setTilt(this.#polygon.player.getTilt() + tiltSpeed)
             }
