@@ -43,11 +43,19 @@ const loadLevels = () => {
     fetch(publicUrl + '/levelPaths.json')
     .then(res => res.json())
     .then(async levelPaths => {
-        let musicPaths = [];
-        for (let i = 0; i < levelPaths.length; i++) {
-            const levelPath = levelPaths[i];
+        const levelPromises = levelPaths.map(async (levelPath) => {
             const res = await fetch(`${publicUrl}${levelPath}/data.json`);
             const d = await res.json();
+            return { d, levelPath };
+        });
+
+        const results = await Promise.all(levelPromises);
+
+        let musicPaths = [];
+        for (let i = 0; i < results.length; i++) {
+            const { d, levelPath } = results[i];
+            // const res = await fetch(`${publicUrl}${levelPath}/data.json`);
+            // const d = await res.json();
 
             const updatedJson = { ...d, levelPath };
             levelJsons.push(updatedJson);
@@ -73,19 +81,25 @@ const loadLevels = () => {
             musicPaths.push(publicUrl + `${levelPath}/music.ogg`)
         }
 
-        // const ls = () => {
-        //     musicPaths.forEach(mp => {
-        //         const audio = new Audio(mp);
-        //         audio.load();
-        //     })
-        //     document.removeEventListener('click', ls);
-        //     document.removeEventListener('touchstart', ls);
-        //     document.removeEventListener('keydown', ls);
-        // }
+        const ls = async () => {
+            Promise.all(musicPaths.map(path => {
+                return new Promise(resolve => {
+                    const audio = new Audio();
+                    audio.src = path;
+                    audio.preload = "auto";
+                    audio.oncanplaythrough = resolve;
+                    audio.onerror = resolve;
+                });
+            }));
+                    
+            document.removeEventListener('click', ls);
+            document.removeEventListener('touchstart', ls);
+            document.removeEventListener('keydown', ls);
+        };
 
-        // document.addEventListener('click', ls);
-        // document.addEventListener('touchstart', ls);
-        // document.addEventListener('keydown', ls);
+        document.addEventListener('click', ls);
+        document.addEventListener('touchstart', ls);
+        document.addEventListener('keydown', ls);
 
         loadMenu();
         setLevelListPosition(parseInt(localStorage.getItem('webagon-selected-level') ?? 0));
