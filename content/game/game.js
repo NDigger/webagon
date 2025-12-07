@@ -515,7 +515,7 @@ export default class Game extends GameObject {
             this.#polygon.player.setRotationOffset(this.#polygon.player.getRotationOffset() + playerSpeed * dir);
             if (dir === -1 && tilt > -maxTilt) this.#polygon.player.setTilt(tilt - tiltSpeed)
             if (dir === 1 && tilt < maxTilt) this.#polygon.player.setTilt(tilt + tiltSpeed)
-            if (!dir === 0) {
+            if (dir === 0) {
                 if (tilt > 0) this.#polygon.player.setTilt(Math.max(0, tilt - tiltSpeed))
                 else if (tilt < 0) this.#polygon.player.setTilt(Math.min(0, tilt + tiltSpeed))
             }
