@@ -138,6 +138,15 @@ canvas {
     margin-top: 20px;
 }
 
+#status {
+    position: absolute;
+    background-color: var(--background-tile-color);
+    bottom: 0;
+    left: 0;
+    color: var(--main-color);
+    font-size: 2rem;
+}
+
 @media (max-width: 1068px) {
     html {
         font-size: .5rem;

@@ -49,7 +49,6 @@ class LevelPreviewContent {
     setBackgroundTileColors(arr) {
         const v = arr.map(c => new Color(c.r, c.g, c.b, c.a));
         this.style.backgroundTileColors = v;
-        document.documentElement.style.setProperty('--background-tile-color', v[0].getRGBAStyle());
     }
     getBackgroundTileColors() { return this.style.backgroundTileColors; }
     setBackgroundDarkenUnevenChunkEnabled(v) {
@@ -108,6 +107,7 @@ export default class LevelPreview {
         b.setDarkenUnevenChunkEnabled(style.backgroundDarkenUnevenChunkEnabled);
         b.setSwapTime(style.backgroundSwapTime);
         document.documentElement.style.setProperty('--main-color', style.fontColor ? style.fontColor.getRGBAStyle() : style.mainColor.getRGBAStyle());
+        document.documentElement.style.setProperty('--background-tile-color', style.backgroundTileColors[0].getRGBAStyle());
         b.setSides(style.sides);
         b.draw();
 

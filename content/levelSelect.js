@@ -81,28 +81,29 @@ const loadLevels = () => {
             musicPaths.push(publicUrl + `${levelPath}/music.ogg`)
         }
 
-        const ls = async () => {
-            Promise.all(musicPaths.map(path => {
-                return new Promise(resolve => {
-                    const audio = new Audio();
-                    audio.src = path;
-                    audio.preload = "auto";
-                    audio.oncanplaythrough = resolve;
-                    audio.onerror = resolve;
-                });
-            }));
-                    
-            document.removeEventListener('click', ls);
-            document.removeEventListener('touchstart', ls);
-            document.removeEventListener('keydown', ls);
-        };
+        loadMenu();
+        setLevelListPosition(parseInt(localStorage.getItem('webagon-selected-level') ?? 0));
 
         document.addEventListener('click', ls);
         document.addEventListener('touchstart', ls);
         document.addEventListener('keydown', ls);
 
-        loadMenu();
-        setLevelListPosition(parseInt(localStorage.getItem('webagon-selected-level') ?? 0));
+        async function ls() {
+            document.removeEventListener('click', ls);
+            document.removeEventListener('touchstart', ls);
+            document.removeEventListener('keydown', ls);
+            const status = document.getElementById('status');
+            status.textContent = 'Loading audio...';
+            await Promise.all([musicPaths].map(path => new Promise(resolve => {
+                    const audio = new Audio();
+                    audio.src = path;
+                    audio.preload = "metadata";
+                    audio.onloadedmetadata = resolve;
+                    audio.onerror = resolve;
+                })
+            ));
+            status.textContent = '';
+        };
     })
 }
 
